@@ -47,5 +47,19 @@
     "title": "Welcome to My Python Blog",
     "section": "",
     "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
+  },
+  {
+    "objectID": "posts/blog.html",
+    "href": "posts/blog.html",
+    "title": "My Python Blog",
+    "section": "",
+    "text": "⏱ Benchmarking in R: microbenchmark, profvis, and bench — with examples\nLearn how to profile and optimize your R code using modern tools."
+  },
+  {
+    "objectID": "posts/blog.html#my-latest-posts",
+    "href": "posts/blog.html#my-latest-posts",
+    "title": "My Python Blog",
+    "section": "",
+    "text": "⏱ Benchmarking in R: microbenchmark, profvis, and bench — with examples\nLearn how to profile and optimize your R code using modern tools."
   }
 ]

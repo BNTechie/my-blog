@@ -1,0 +1,12 @@
+---
+title: "Blog"
+format: html
+---
+
+## 📝 My Blog Posts
+
+- [⏱ Benchmarking in R: microbenchmark, profvis, and bench — with examples](https://medium.com/@your-username/benchmarking-in-r-microbenchmark-profvis-and-bench-abc123)  
+  *Learn how to profile and optimize your R code using modern tools.*
+
+More coming soon!
+

@@ -1,0 +1,26 @@
+---
+title: "About Me"
+format: html
+---
+
+Hi, I’m Shruti — a Senior Data Scientist with a background in physics, computational modeling, and large-scale data systems. I’ve worked extensively across healthcare, biotech, and research labs, blending data engineering with deep learning and statistical modeling.
+
+On this blog, I share real-world tutorials, hands-on notebooks, and lessons I’ve learned while solving data problems in production. My aim is to make complex topics digestible — whether it's Dask, NLP with Transformers, or robust ML pipelines.
+
+### 👩‍💻 Areas I write about
+- Python and R for data science
+- Machine learning in production
+- Scalable data pipelines (Dask, Spark, SQL)
+- Natural Language Processing
+- Working with biomedical and -omics data
+- Career advice for researchers moving into tech
+
+### 💬 Connect with Me
+- GitHub: [BNTechie](https://github.com/BNTechie)
+- LinkedIn: [Nivedita Bhadra](https://www.linkedin.com/in/nivedita-bhadra-ph-d-b5149130/)
+- Email: nivedita.home@gmail.com
+
+---
+
+If you’ve found something helpful here, feel free to share it or reach out!
+

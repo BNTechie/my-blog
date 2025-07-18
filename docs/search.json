@@ -1,17 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome to My Python Blog",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About Me",
     "section": "",
-    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
-  },
-  {
-    "objectID": "index.html#about-this-blog",
-    "href": "index.html#about-this-blog",
-    "title": "Welcome to My Python Blog",
-    "section": "",
-    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
+    "text": "Hi, I’m Shruti — a Senior Data Scientist with a background in physics, computational modeling, and large-scale data systems. I’ve worked extensively across healthcare, biotech, and research labs, blending data engineering with deep learning and statistical modeling.\nOn this blog, I share real-world tutorials, hands-on notebooks, and lessons I’ve learned while solving data problems in production. My aim is to make complex topics digestible — whether it’s Dask, NLP with Transformers, or robust ML pipelines.\n\n👩‍💻 Areas I write about\n\nPython and R for data science\nMachine learning in production\nScalable data pipelines (Dask, Spark, SQL)\nNatural Language Processing\nWorking with biomedical and -omics data\nCareer advice for researchers moving into tech\n\n\n\n💬 Connect with Me\n\nGitHub: BNTechie\nLinkedIn: Nivedita Bhadra\nEmail: nivedita.home@gmail.com\n\n\nIf you’ve found something helpful here, feel free to share it or reach out!"
   },
   {
     "objectID": "posts/welcome/posts_welcome_welcome.html",
@@ -42,17 +35,17 @@
     "text": "Try It Yourself\nCopy the code into your Python environment or modify the numbers to test different inputs. Stay tuned for more Python tutorials!"
   },
   {
-    "objectID": "about.qmd.html",
-    "href": "about.qmd.html",
-    "title": "About",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to My Python Blog",
     "section": "",
-    "text": "I’m a Python enthusiast who writes tutorials to make programming accessible. This blog is built with Quarto to showcase Python code with clear examples and outputs. Connect with me on Medium or reach out via email at your.email@example.com."
+    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
   },
   {
-    "objectID": "about.qmd.html#about-me",
-    "href": "about.qmd.html#about-me",
-    "title": "About",
+    "objectID": "index.html#about-this-blog",
+    "href": "index.html#about-this-blog",
+    "title": "Welcome to My Python Blog",
     "section": "",
-    "text": "I’m a Python enthusiast who writes tutorials to make programming accessible. This blog is built with Quarto to showcase Python code with clear examples and outputs. Connect with me on Medium or reach out via email at your.email@example.com."
+    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
   }
 ]

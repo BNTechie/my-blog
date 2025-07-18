@@ -7,5 +7,8 @@
   },
   "about.markdown": {
     "about.html": "270ce3db"
+  },
+  "about.qmd.markdown": {
+    "about.qmd.html": "14c4ebe4"
   }
 }

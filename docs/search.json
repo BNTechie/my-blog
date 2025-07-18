@@ -1,17 +1,17 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to My Python Blog",
     "section": "",
-    "text": "I’m a Python enthusiast who writes tutorials to make programming accessible. This blog is built with Quarto to showcase Python code with clear examples and outputs. Connect with me on Medium or reach out via email at your.email@example.com."
+    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
   },
   {
-    "objectID": "about.html#about-me",
-    "href": "about.html#about-me",
-    "title": "About",
+    "objectID": "index.html#about-this-blog",
+    "href": "index.html#about-this-blog",
+    "title": "Welcome to My Python Blog",
     "section": "",
-    "text": "I’m a Python enthusiast who writes tutorials to make programming accessible. This blog is built with Quarto to showcase Python code with clear examples and outputs. Connect with me on Medium or reach out via email at your.email@example.com."
+    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
   },
   {
     "objectID": "posts/welcome/posts_welcome_welcome.html",
@@ -42,17 +42,17 @@
     "text": "Try It Yourself\nCopy the code into your Python environment or modify the numbers to test different inputs. Stay tuned for more Python tutorials!"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome to My Python Blog",
+    "objectID": "about.qmd.html",
+    "href": "about.qmd.html",
+    "title": "About",
     "section": "",
-    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
+    "text": "I’m a Python enthusiast who writes tutorials to make programming accessible. This blog is built with Quarto to showcase Python code with clear examples and outputs. Connect with me on Medium or reach out via email at your.email@example.com."
   },
   {
-    "objectID": "index.html#about-this-blog",
-    "href": "index.html#about-this-blog",
-    "title": "Welcome to My Python Blog",
+    "objectID": "about.qmd.html#about-me",
+    "href": "about.qmd.html#about-me",
+    "title": "About",
     "section": "",
-    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
+    "text": "I’m a Python enthusiast who writes tutorials to make programming accessible. This blog is built with Quarto to showcase Python code with clear examples and outputs. Connect with me on Medium or reach out via email at your.email@example.com."
   }
 ]

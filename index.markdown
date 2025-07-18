@@ -1,0 +1,9 @@
+---
+title: "Welcome to My Python Blog"
+---
+
+## About This Blog
+
+Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my [first tutorial on adding numbers](posts/welcome/welcome.qmd) or visit my [Medium profile](https://medium.com/@yourusername) for more content.
+
+Happy coding!

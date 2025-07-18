@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I’m a Python enthusiast who writes tutorials to make programming accessible. This blog is built with Quarto to showcase Python code with clear examples and outputs. Connect with me on Medium or reach out via email at your.email@example.com."
+  },
+  {
+    "objectID": "about.html#about-me",
+    "href": "about.html#about-me",
+    "title": "About",
+    "section": "",
+    "text": "I’m a Python enthusiast who writes tutorials to make programming accessible. This blog is built with Quarto to showcase Python code with clear examples and outputs. Connect with me on Medium or reach out via email at your.email@example.com."
+  },
+  {
+    "objectID": "posts/welcome/posts_welcome_welcome.html",
+    "href": "posts/welcome/posts_welcome_welcome.html",
+    "title": "Adding Two Numbers in Python",
+    "section": "",
+    "text": "This tutorial shows how to add two numbers in Python using a simple function. It’s perfect for beginners learning basic programming concepts."
+  },
+  {
+    "objectID": "posts/welcome/posts_welcome_welcome.html#introduction",
+    "href": "posts/welcome/posts_welcome_welcome.html#introduction",
+    "title": "Adding Two Numbers in Python",
+    "section": "",
+    "text": "This tutorial shows how to add two numbers in Python using a simple function. It’s perfect for beginners learning basic programming concepts."
+  },
+  {
+    "objectID": "posts/welcome/posts_welcome_welcome.html#python-code",
+    "href": "posts/welcome/posts_welcome_welcome.html#python-code",
+    "title": "Adding Two Numbers in Python",
+    "section": "Python Code",
+    "text": "Python Code\nBelow is a Python function that takes two numbers as input and returns their sum.\ndef add_numbers(a, b):\n    return a + b\n\n# Example usage\nnum1 = 10\nnum2 = 20\nresult = add_numbers(num1, num2)\nprint(f\"The sum of {num1} and {num2} is {result}\")\nThe code: 1. Defines a function add_numbers that accepts two parameters, a and b. 2. Returns their sum using a + b. 3. Demonstrates the function with num1 = 10 and num2 = 20, printing the result.\nWhen you run this code, the output is:\nThe sum of 10 and 20 is 30"
+  },
+  {
+    "objectID": "posts/welcome/posts_welcome_welcome.html#try-it-yourself",
+    "href": "posts/welcome/posts_welcome_welcome.html#try-it-yourself",
+    "title": "Adding Two Numbers in Python",
+    "section": "Try It Yourself",
+    "text": "Try It Yourself\nCopy the code into your Python environment or modify the numbers to test different inputs. Stay tuned for more Python tutorials!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to My Python Blog",
+    "section": "",
+    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
+  },
+  {
+    "objectID": "index.html#about-this-blog",
+    "href": "index.html#about-this-blog",
+    "title": "Welcome to My Python Blog",
+    "section": "",
+    "text": "Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my first tutorial on adding numbers or visit my Medium profile for more content.\nHappy coding!"
+  }
+]

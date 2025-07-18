@@ -1,0 +1,12 @@
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 1.5em;
+}
+
+pre {
+  background: #f4f4f4;
+  padding: 1em;
+  border-radius: 5px;
+}

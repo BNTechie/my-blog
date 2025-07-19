@@ -1,9 +1,22 @@
-navbar:
-  left:
-    - href: index.qmd
-      text: Home
-    - href: about.qmd
-      text: About
-    - href: posts/index.qmd
-      text: Blog
+project:
+  type: website
 
+format:
+  html:
+    css: styles.css
+
+
+website:
+  title: "Data Science Blog"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "About Me"
+        href: about.qmd
+      - text: "Blog"
+        href: blog/index.qmd
+      - text: "Publications"
+        href: publications.qmd
+      - text: Tutorials
+        href: tutorials/index.qmd 

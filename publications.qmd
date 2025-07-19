@@ -1,0 +1,29 @@
+---
+title: "Publications"
+format: html
+---
+
+## Selected Publications
+
+1. **Predicting Individual Responses in Phase I Oncology Trials Using Routinely Collected Clinical Biomarkers**  
+   N Bhadra, M Boyd, S Smith, J Espirito, J Trent, C Powell, K Koktavy, *2024*
+
+![](image/pred_phase1.png){fig-align="center" width="70%"}
+
+
+
+2. **Single-Cell Patch-Clamp/Proteomics of Human Alzheimer's Disease iPSC-Derived Excitatory Neurons Versus Isogenic Wild-Type Controls Suggests Novel Causation and Therapeutic Targets**  
+   S Ghatak, JK Diedrich, M Talantova, N Bhadra, H Scott, M Sharma, *Advanced Science (Weinheim, Baden-Württemberg, Germany)*, e2400545, *2024*
+
+![](image/singlecell_median.png){fig-align="center" width="70%"}
+
+
+3. **DISTANCE-BASED ANALYSIS OF LONGEVITY-RELATED METABOLOMIC PROFILES**  
+   N Schork, A Podder, N Bhadra, J Don, A Raju, *Innovation in Aging*, 7, 632–632, *2023*
+
+4. 
+
+![](image/multiclass.png){fig-align="center" width="70%"}
+
+
+

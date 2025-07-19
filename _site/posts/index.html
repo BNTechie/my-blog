@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Your Name">
-<meta name="dcterms.date" content="2025-07-18">
 
-<title>Adding Two Numbers in Python</title>
+<title>Blog – Data Science Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,53 +23,112 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="posts_welcome_welcome_files/libs/clipboard/clipboard.min.js"></script>
-<script src="posts_welcome_welcome_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="posts_welcome_welcome_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="posts_welcome_welcome_files/libs/quarto-html/popper.min.js"></script>
-<script src="posts_welcome_welcome_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="posts_welcome_welcome_files/libs/quarto-html/anchor.min.js"></script>
-<link href="posts_welcome_welcome_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="posts_welcome_welcome_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="posts_welcome_welcome_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="posts_welcome_welcome_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="posts_welcome_welcome_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-a14e3238c51140e99ccc48519b6ed9ce.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
 
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Data Science Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog/index.qmd"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../publications.qmd"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Adding Two Numbers in Python</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">Python</div>
-    <div class="quarto-category">Tutorial</div>
-  </div>
-  </div>
+<h1 class="title">Blog</h1>
+</div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Your Name </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">July 18, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -81,32 +138,18 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>This tutorial shows how to add two numbers in Python using a simple function. It’s perfect for beginners learning basic programming concepts.</p>
-</section>
-<section id="python-code" class="level2">
-<h2 class="anchored" data-anchor-id="python-code">Python Code</h2>
-<p>Below is a Python function that takes two numbers as input and returns their sum.</p>
-<pre class="{python}"><code>def add_numbers(a, b):
-    return a + b
+<section id="my-blog-posts" class="level2">
+<h2 class="anchored" data-anchor-id="my-blog-posts">📝 My Blog Posts</h2>
+<ul>
+<li><a href="https://medium.com/@your-username/benchmarking-in-r-microbenchmark-profvis-and-bench-abc123">⏱ Benchmarking in R: microbenchmark, profvis, and bench — with examples</a><br>
+<em>Learn how to profile and optimize your R code using modern tools.</em></li>
+</ul>
+<p>More coming soon!</p>
 
-# Example usage
-num1 = 10
-num2 = 20
-result = add_numbers(num1, num2)
-print(f"The sum of {num1} and {num2} is {result}")</code></pre>
-<p>The code: 1. Defines a function <code>add_numbers</code> that accepts two parameters, <code>a</code> and <code>b</code>. 2. Returns their sum using <code>a + b</code>. 3. Demonstrates the function with <code>num1 = 10</code> and <code>num2 = 20</code>, printing the result.</p>
-<p>When you run this code, the output is:</p>
-<pre><code>The sum of 10 and 20 is 30</code></pre>
-</section>
-<section id="try-it-yourself" class="level2">
-<h2 class="anchored" data-anchor-id="try-it-yourself">Try It Yourself</h2>
-<p>Copy the code into your Python environment or modify the numbers to test different inputs. Stay tuned for more Python tutorials!</p>
+
 </section>
 
-</main>
-<!-- /main column -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

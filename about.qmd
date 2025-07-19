@@ -2,8 +2,11 @@
 title: "About Me"
 format: html
 ---
+![Senior Data Scientist](image/nivedita.jpeg){width=150px style="border-radius: 50%; float: right; margin-left: 1em;"}
 
-Hi, I’m Shruti — a Senior Data Scientist with a background in physics, computational modeling, and large-scale data systems. I’ve worked extensively across healthcare, biotech, and research labs, blending data engineering with deep learning and statistical modeling.
+
+
+Hi, I’m Nivedita — a Senior Data Scientist with a background in physics, computational modeling, and large-scale data systems. I’ve worked extensively across healthcare, biotech, and research labs, blending data engineering with deep learning and statistical modeling.
 
 On this blog, I share real-world tutorials, hands-on notebooks, and lessons I’ve learned while solving data problems in production. My aim is to make complex topics digestible — whether it's Dask, NLP with Transformers, or robust ML pipelines.
 

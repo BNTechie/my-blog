@@ -25,5 +25,29 @@
   },
   "posts/index.qmd": {
     "index.html": "be6e4f6d"
+  },
+  "publications.qmd": {
+    "publications.html": "b0cef8bd"
+  },
+  "blogs/index.qmd": {
+    "index.html": "6200baf8"
+  },
+  "blog/index.qmd": {
+    "index.html": "aa78e607"
+  },
+  "tutorial/index.qmd": {
+    "index.html": "bd55efaf"
+  },
+  "tutorial/Execution_time_in_R.ipynb": {
+    "Execution_time_in_R.html": "750f8aa5"
+  },
+  "tutorials/index.qmd": {
+    "index.html": "3cef9045"
+  },
+  "tutorials/Execution_time_in_R.ipynb": {
+    "Execution_time_in_R.html": "240100e3"
+  },
+  "tutorials/Sample_Python_Tutorial.ipynb": {
+    "Sample_Python_Tutorial.html": "718889c0"
   }
 }

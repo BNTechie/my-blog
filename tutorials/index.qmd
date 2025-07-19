@@ -1,0 +1,23 @@
+---
+title: "Tutorials"
+listing: 
+  type: default
+  contents: .
+  sort: "date desc"
+  categories: false
+page-layout: article
+title-block-banner: false
+title-block-style: default
+format:
+  html:
+    toc: true
+    number-sections: true
+    title-block: true
+    title-block-categories: false
+
+
+
+---
+
+Welcome to the tutorials section! Below you'll find notebook-based guides covering Python and R.
+

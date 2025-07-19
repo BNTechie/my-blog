@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Welcome to My Data Science Blog – Data Science Blog</title>
+<title>Tutorials – Data Science Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +23,25 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a14e3238c51140e99ccc48519b6ed9ce.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-listing/list.min.js"></script>
+<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-a14e3238c51140e99ccc48519b6ed9ce.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -67,19 +69,77 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-<link rel="stylesheet" href="styles.css">
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Data Science Blog</span>
     </a>
   </div>
@@ -90,23 +150,23 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog/index.html"> 
+    <a class="nav-link" href="../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./publications.html"> 
+    <a class="nav-link" href="../publications.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./tutorials/index.html"> 
+    <a class="nav-link active" href="../tutorials/index.html" aria-current="page"> 
 <span class="menu-text">Tutorials</span></a>
   </li>  
 </ul>
@@ -120,13 +180,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Welcome to My Data Science Blog</h1>
+<h1 class="title">Tutorials</h1>
 </div>
 
 
@@ -143,15 +205,44 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="about-this-blog" class="level2">
-<h2 class="anchored" data-anchor-id="about-this-blog">About This Blog</h2>
-<p>Welcome to my blog, where I share Python tutorials for beginners and enthusiasts. This site features hands-on examples to help you learn programming concepts. Check out my <a href="posts/welcome/welcome.qmd">first tutorial on adding numbers</a> or visit my <a href="https://medium.com/@nivedita.home">Medium profile</a> for more content.</p>
-<p>Happy coding!</p>
+<p>Welcome to the tutorials section! Below you’ll find notebook-based guides covering Python and R.</p>
 
 
-</section>
 
-</main> <!-- /main -->
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="UiUyQ0RhdGElMjBTY2llbmNl" data-listing-date-sort="1752872400000" data-listing-file-modified-sort="1752912048944" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
+<div class="thumbnail"><a href="../tutorials/Execution_time_in_R.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../tutorials/Execution_time_in_R.html" class="no-external">How to Compute Execution time in R</a>
+</h3>
+<div class="delink listing-description"><a href="../tutorials/Execution_time_in_R.html" class="no-external">
+
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co"># timed_pipeline.R</span></span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="fu">cat</span>(<span class="st">"===== R Script Execution Started =====</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-4"><span class="fu">cat</span>(<span class="st">"Start time:"</span>, <span class="fu">format</span>(<span class="fu">Sys.time</span>()), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb1-5"></span>
+<span id="cb1-6"><span class="co"># ----------- Helper Function to Time Each Block…</span></span><span id="cb1-7"><span class="ot"></span><span class="cf"></span><span class="at"></span><span class="st"></span></span><span id="cb1-8"><span class="ot"></span><span class="fu"></span><span class="ot"></span><span class="fu"></span></span><span id="cb1-9"><span class="fu"></span><span class="fu"></span><span class="st"></span><span class="sc"></span><span class="st"></span><span class="st"></span></span><span id="cb1-10"><span class="fu"></span></span><span id="cb1-11"></span><span id="cb1-12"></span><span id="cb1-13"><span class="co"></span></span><span id="cb1-14"><span class="ot"></span><span class="cf"></span><span class="at"></span><span class="dv"></span></span><span id="cb1-15"><span class="fu"></span><span class="dv"></span></span><span id="cb1-16"><span class="fu"></span></span><span id="cb1-17"><span class="at"></span><span class="dv"></span><span class="sc"></span></span><span id="cb1-18"><span class="at"></span><span class="fu"></span></span><span id="cb1-19"><span class="at"></span><span class="fu"></span></span><span id="cb1-20"><span class="at"></span><span class="fu"></span><span class="dv"></span><span class="sc"></span><span class="dv"></span><span class="at"></span><span class="cn"></span></span><span id="cb1-21"></span><span id="cb1-22"></span><span id="cb1-23"></span><span id="cb1-24"><span class="fu"></span><span class="st"></span><span class="sc"></span><span class="st"></span></span><span id="cb1-25"><span class="ot"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="st"></span></span><span id="cb1-26"></span><span id="cb1-27"><span class="co"></span></span><span id="cb1-28"><span class="ot"></span><span class="cf"></span></span><span id="cb1-29"><span class="sc"></span><span class="ot"></span><span class="fu"></span><span class="sc"></span></span><span id="cb1-30"><span class="sc"></span><span class="ot"></span><span class="fu"></span><span class="sc"></span></span><span id="cb1-31"></span><span id="cb1-32"></span><span id="cb1-33"></span><span id="cb1-34"><span class="fu"></span><span class="st"></span><span class="sc"></span><span class="st"></span><span class="sc"></span><span class="st"></span></span><span id="cb1-35"><span class="ot"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="st"></span></span><span id="cb1-36"></span><span id="cb1-37"><span class="co"></span></span><span id="cb1-38"><span class="ot"></span><span class="cf"></span></span><span id="cb1-39"><span class="ot"></span><span class="fu"></span><span class="sc"></span><span class="sc"></span><span class="at"></span><span class="at"></span><span class="st"></span></span><span id="cb1-40"><span class="fu"></span></span><span id="cb1-41"></span><span id="cb1-42"></span><span id="cb1-43"><span class="fu"></span><span class="st"></span><span class="sc"></span><span class="st"></span><span class="sc"></span><span class="st"></span></span><span id="cb1-44"><span class="ot"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="st"></span></span><span id="cb1-45"></span><span id="cb1-46"><span class="co"></span></span><span id="cb1-47"><span class="ot"></span><span class="cf"></span></span><span id="cb1-48"><span class="ot"></span><span class="fu"></span><span class="at"></span><span class="at"></span><span class="st"></span></span><span id="cb1-49"><span class="sc"></span><span class="ot"></span><span class="fu"></span><span class="sc"></span><span class="fl"></span><span class="dv"></span><span class="dv"></span></span><span id="cb1-50"><span class="fu"></span></span><span id="cb1-51"></span><span id="cb1-52"></span><span id="cb1-53"><span class="fu"></span><span class="st"></span><span class="sc"></span><span class="st"></span><span class="sc"></span><span class="st"></span></span><span id="cb1-54"><span class="ot"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="st"></span></span><span id="cb1-55"></span><span id="cb1-56"><span class="co"></span></span><span id="cb1-57"><span class="ot"></span><span class="cf"></span><span class="at"></span><span class="st"></span></span><span id="cb1-58"><span class="fu"></span><span class="at"></span><span class="cn"></span></span><span id="cb1-59"></span><span id="cb1-60"></span><span id="cb1-61"><span class="fu"></span><span class="st"></span><span class="sc"></span><span class="st"></span><span class="sc"></span><span class="st"></span></span><span id="cb1-62"><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="st"></span></span><span id="cb1-63"></span><span id="cb1-64"><span class="fu"></span><span class="st"></span><span class="sc"></span><span class="st"></span><span class="sc"></span><span class="st"></span></span><span id="cb1-65"><span class="fu"></span><span class="st"></span><span class="fu"></span><span class="fu"></span><span class="st"></span><span class="sc"></span><span class="st"></span></span></code></pre></div><div class="cell-output cell-output-stdout"><pre><code></code></pre></div><div class="cell-output cell-output-display"><pre><code></code></pre></div><div class="cell-output cell-output-stdout"><pre><code></code></pre></div>
+</a></div>
+</div>
+<div class="metadata">
+<a href="../tutorials/Execution_time_in_R.html" class="no-external">
+<div class="listing-date">
+Jul 19, 2025
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

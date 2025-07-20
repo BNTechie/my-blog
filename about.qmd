@@ -10,6 +10,22 @@ Hi, I’m Nivedita — a Senior Data Scientist with a background in physics, com
 
 On this blog, I share real-world tutorials, hands-on notebooks, and lessons I’ve learned while solving data problems in production. My aim is to make complex topics digestible — whether it's Dask, NLP with Transformers, or robust ML pipelines.
 
+## 🎓 Education
+
+**PhD in Computational Physics**  
+*Indian Institute of Science Education and Research (IISER), Kolkata, India*  
+2012 – 2018
+
+**M.Sc. in Physics**  
+*Indian Institute of Technology (IIT), Delhi, India*  
+2009 – 2011
+
+**Master of Engineering in Big Data Analytics**  
+*Arcada University of Applied Sciences, Finland*  
+2024 – 2025 (expected)
+
+
+
 ### 👩‍💻 Areas I write about
 - Python and R for data science
 - Machine learning in production

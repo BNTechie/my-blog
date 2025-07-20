@@ -18,7 +18,14 @@
     "href": "about.html",
     "title": "About Me",
     "section": "",
-    "text": "Senior Data Scientist\n\n\nHi, I’m Nivedita — a Senior Data Scientist with a background in physics, computational modeling, and large-scale data systems. I’ve worked extensively across healthcare, biotech, and research labs, blending data engineering with deep learning and statistical modeling.\nOn this blog, I share real-world tutorials, hands-on notebooks, and lessons I’ve learned while solving data problems in production. My aim is to make complex topics digestible — whether it’s Dask, NLP with Transformers, or robust ML pipelines.\n\n👩‍💻 Areas I write about\n\nPython and R for data science\nMachine learning in production\nScalable data pipelines (Dask, Spark, SQL)\nNatural Language Processing\nWorking with biomedical and -omics data\nCareer advice for researchers moving into tech\n\n\n\n💬 Connect with Me\n\nGitHub: BNTechie\nLinkedIn: Nivedita Bhadra\nEmail: nivedita.home@gmail.com\n\n\nIf you’ve found something helpful here, feel free to share it or reach out!"
+    "text": "Senior Data Scientist\nHi, I’m Nivedita — a Senior Data Scientist with a background in physics, computational modeling, and large-scale data systems. I’ve worked extensively across healthcare, biotech, and research labs, blending data engineering with deep learning and statistical modeling.\nOn this blog, I share real-world tutorials, hands-on notebooks, and lessons I’ve learned while solving data problems in production. My aim is to make complex topics digestible — whether it’s Dask, NLP with Transformers, or robust ML pipelines."
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "About Me",
+    "section": "🎓 Education",
+    "text": "🎓 Education\nPhD in Computational Physics\nIndian Institute of Science Education and Research (IISER), Kolkata, India\n2012 – 2018\nM.Sc. in Physics\nIndian Institute of Technology (IIT), Delhi, India\n2009 – 2011\nMaster of Engineering in Big Data Analytics\nArcada University of Applied Sciences, Finland\n2024 – 2025 (expected)\n\n👩‍💻 Areas I write about\n\nPython and R for data science\nMachine learning in production\nScalable data pipelines (Dask, Spark, SQL)\nNatural Language Processing\nWorking with biomedical and -omics data\nCareer advice for researchers moving into tech\n\n\n\n💬 Connect with Me\n\nGitHub: BNTechie\nLinkedIn: Nivedita Bhadra\nEmail: nivedita.home@gmail.com\n\n\nIf you’ve found something helpful here, feel free to share it or reach out!"
   },
   {
     "objectID": "blog/index.html",

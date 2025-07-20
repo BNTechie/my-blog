@@ -15,9 +15,12 @@ format:
     title-block: true
     title-block-categories: false
 
-
-
+css: style.css  # This links the local CSS file
 ---
 
-Welcome to the tutorials section! Below you'll find notebook-based guides covering Python and R.
+Welcome to the tutorials section! Below you’ll find notebook-based guides covering Python and R.
+
+...
+
+
 

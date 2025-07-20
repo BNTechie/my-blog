@@ -49,5 +49,14 @@
   },
   "tutorials/Sample_Python_Tutorial.ipynb": {
     "Sample_Python_Tutorial.html": "718889c0"
+  },
+  "tutorials/Parallelize_in_python.ipynb": {
+    "Parallelize_in_python.html": "e4e98eb0"
+  },
+  "tutorials/Hello.ipynb": {
+    "Hello.html": "4b1ffd5c"
+  },
+  "tutorials/Imputation_in_Python.ipynb": {
+    "Imputation_in_Python.html": "5145a398"
   }
 }

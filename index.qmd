@@ -1,5 +1,11 @@
 ---
-title: "Welcome to My Data Science Blog"
+title: "Home"
+---
+
+![Blog Banner](image/theme.jpg){width=100%}
+
+
+---
 ---
 
 ## About This Blog

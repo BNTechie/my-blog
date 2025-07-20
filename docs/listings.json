@@ -2,6 +2,8 @@
   {
     "listing": "/tutorials/index.html",
     "items": [
+      "/tutorials/Hello.html",
+      "/tutorials/Imputation_in_Python.html",
       "/tutorials/Execution_time_in_R.html"
     ]
   }

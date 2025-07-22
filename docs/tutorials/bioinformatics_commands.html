@@ -155,8 +155,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="searching-with-grep" class="level1">
-<h1>Searching with <code>grep</code></h1>
+<section id="searching-with-grep" class="level2">
+<h2 class="anchored" data-anchor-id="searching-with-grep">Searching with <code>grep</code></h2>
 <ul>
 <li><code>grep "ACTG" &lt;filename&gt;</code> – Find lines containing ACTG<br>
 </li>
@@ -169,8 +169,8 @@ ul.task-list li input[type="checkbox"] {
 <li><code>zgrep "chr1" &lt;filename&gt;.vcf.gz</code> – Grep inside gzipped VCF file</li>
 </ul>
 </section>
-<section id="column-operations-with-awk" class="level1">
-<h1>Column Operations with <code>awk</code></h1>
+<section id="column-operations-with-awk" class="level2">
+<h2 class="anchored" data-anchor-id="column-operations-with-awk">Column Operations with <code>awk</code></h2>
 <ul>
 <li><code>awk '{print $1}' &lt;filename&gt;</code> – Print 1st column<br>
 </li>
@@ -181,8 +181,8 @@ ul.task-list li input[type="checkbox"] {
 <li><code>awk 'BEGIN{FS="\t"} {print $2,$3}' &lt;filename&gt;</code> – Tab-delimited input</li>
 </ul>
 </section>
-<section id="finding-files-with-find" class="level1">
-<h1>Finding Files with <code>find</code></h1>
+<section id="finding-files-with-find" class="level2">
+<h2 class="anchored" data-anchor-id="finding-files-with-find">Finding Files with <code>find</code></h2>
 <ul>
 <li><code>find . -name "*.vcf"</code> – Find all .vcf files<br>
 </li>
@@ -193,8 +193,8 @@ ul.task-list li input[type="checkbox"] {
 <li><code>find . -exec grep "rs123" {} \;</code> – Search “rs123” in all files</li>
 </ul>
 </section>
-<section id="text-processing-essentials" class="level1">
-<h1>Text Processing Essentials</h1>
+<section id="text-processing-essentials" class="level2">
+<h2 class="anchored" data-anchor-id="text-processing-essentials">Text Processing Essentials</h2>
 <ul>
 <li><code>cut -f1,3 &lt;filename&gt;</code> – Cut fields 1 and 3<br>
 </li>
@@ -209,8 +209,8 @@ ul.task-list li input[type="checkbox"] {
 <li><code>wc -l &lt;filename&gt;</code> – Count lines in a file</li>
 </ul>
 </section>
-<section id="genomic-data-tools" class="level1">
-<h1>Genomic Data Tools</h1>
+<section id="genomic-data-tools" class="level2">
+<h2 class="anchored" data-anchor-id="genomic-data-tools">Genomic Data Tools</h2>
 <ul>
 <li><code>samtools view &lt;file&gt;.bam</code> – View alignment data<br>
 </li>

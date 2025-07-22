@@ -130,6 +130,41 @@
     "href": "tutorials/bioinformatics_commands.html",
     "title": "Bioinformatics Terminal Command Cheat Sheet",
     "section": "",
-    "text": "Searching with grep\n\ngrep \"ACTG\" &lt;filename&gt; – Find lines containing ACTG\n\ngrep -v \"N\" &lt;filename&gt; – Exclude lines with “N”\n\ngrep -c \"rs\" &lt;filename&gt; – Count lines with “rs”\n\ngrep -w \"chr1\" &lt;filename&gt; – Match whole word “chr1”\n\nzgrep \"chr1\" &lt;filename&gt;.vcf.gz – Grep inside gzipped VCF file\n\n\n\nColumn Operations with awk\n\nawk '{print $1}' &lt;filename&gt; – Print 1st column\n\nawk '$5 &gt; 0.05' &lt;filename&gt; – Filter rows with 5th column &gt; 0.05\n\nawk 'NR&gt;1' &lt;filename&gt; – Skip header (first row)\n\nawk 'BEGIN{FS=\"\\t\"} {print $2,$3}' &lt;filename&gt; – Tab-delimited input\n\n\n\nFinding Files with find\n\nfind . -name \"*.vcf\" – Find all .vcf files\n\nfind /data -type f -size +1G – Files &gt;1GB in /data\n\nfind . -mtime -1 – Modified in last 24 hrs\n\nfind . -exec grep \"rs123\" {} \\; – Search “rs123” in all files\n\n\n\nText Processing Essentials\n\ncut -f1,3 &lt;filename&gt; – Cut fields 1 and 3\n\nsort &lt;filename&gt; – Sort lines\n\nsort -k2,2n &lt;filename&gt; – Sort by 2nd column numerically\n\nuniq -c &lt;filename&gt; – Count unique lines\n\npaste &lt;file1&gt; &lt;file2&gt; – Merge files side by side\n\nwc -l &lt;filename&gt; – Count lines in a file\n\n\n\nGenomic Data Tools\n\nsamtools view &lt;file&gt;.bam – View alignment data\n\nbcftools view &lt;file&gt;.vcf.gz – View VCF data\n\nbedtools intersect -a &lt;a.bed&gt; -b &lt;b.bed&gt; – Genomic region overlap\n\nplink --bfile &lt;data&gt; --assoc – Run basic association test"
+    "text": "grep \"ACTG\" &lt;filename&gt; – Find lines containing ACTG\n\ngrep -v \"N\" &lt;filename&gt; – Exclude lines with “N”\n\ngrep -c \"rs\" &lt;filename&gt; – Count lines with “rs”\n\ngrep -w \"chr1\" &lt;filename&gt; – Match whole word “chr1”\n\nzgrep \"chr1\" &lt;filename&gt;.vcf.gz – Grep inside gzipped VCF file"
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#searching-with-grep",
+    "href": "tutorials/bioinformatics_commands.html#searching-with-grep",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "",
+    "text": "grep \"ACTG\" &lt;filename&gt; – Find lines containing ACTG\n\ngrep -v \"N\" &lt;filename&gt; – Exclude lines with “N”\n\ngrep -c \"rs\" &lt;filename&gt; – Count lines with “rs”\n\ngrep -w \"chr1\" &lt;filename&gt; – Match whole word “chr1”\n\nzgrep \"chr1\" &lt;filename&gt;.vcf.gz – Grep inside gzipped VCF file"
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#column-operations-with-awk",
+    "href": "tutorials/bioinformatics_commands.html#column-operations-with-awk",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "Column Operations with awk",
+    "text": "Column Operations with awk\n\nawk '{print $1}' &lt;filename&gt; – Print 1st column\n\nawk '$5 &gt; 0.05' &lt;filename&gt; – Filter rows with 5th column &gt; 0.05\n\nawk 'NR&gt;1' &lt;filename&gt; – Skip header (first row)\n\nawk 'BEGIN{FS=\"\\t\"} {print $2,$3}' &lt;filename&gt; – Tab-delimited input"
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#finding-files-with-find",
+    "href": "tutorials/bioinformatics_commands.html#finding-files-with-find",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "Finding Files with find",
+    "text": "Finding Files with find\n\nfind . -name \"*.vcf\" – Find all .vcf files\n\nfind /data -type f -size +1G – Files &gt;1GB in /data\n\nfind . -mtime -1 – Modified in last 24 hrs\n\nfind . -exec grep \"rs123\" {} \\; – Search “rs123” in all files"
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#text-processing-essentials",
+    "href": "tutorials/bioinformatics_commands.html#text-processing-essentials",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "Text Processing Essentials",
+    "text": "Text Processing Essentials\n\ncut -f1,3 &lt;filename&gt; – Cut fields 1 and 3\n\nsort &lt;filename&gt; – Sort lines\n\nsort -k2,2n &lt;filename&gt; – Sort by 2nd column numerically\n\nuniq -c &lt;filename&gt; – Count unique lines\n\npaste &lt;file1&gt; &lt;file2&gt; – Merge files side by side\n\nwc -l &lt;filename&gt; – Count lines in a file"
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#genomic-data-tools",
+    "href": "tutorials/bioinformatics_commands.html#genomic-data-tools",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "Genomic Data Tools",
+    "text": "Genomic Data Tools\n\nsamtools view &lt;file&gt;.bam – View alignment data\n\nbcftools view &lt;file&gt;.vcf.gz – View VCF data\n\nbedtools intersect -a &lt;a.bed&gt; -b &lt;b.bed&gt; – Genomic region overlap\n\nplink --bfile &lt;data&gt; --assoc – Run basic association test"
   }
 ]

@@ -18,6 +18,35 @@ format: html
 - `awk 'NR>1' <filename>` – Skip header (first row)  
 - `awk 'BEGIN{FS="\t"} {print $2,$3}' <filename>` – Tab-delimited input  
 
+# Working with `.vcf.gz` Files
+
+- `zcat file.vcf.gz | head`  
+  *Shows the top lines including headers and first few variants*
+
+- `zcat file.vcf.gz | tail`  
+  *Shows the last few lines — useful for trailing info*
+
+- `zcat file.vcf.gz | grep '^#'`  
+  *Shows all header lines (metadata + column names)*
+
+- `zcat file.vcf.gz | grep -v '^#'`  
+  *Skips headers and shows actual variant records*
+
+- `zcat file.vcf.gz | grep -v '^#' | cut -f10 | head`  
+  *Displays the contents of the FORMAT/sample column*
+
+- `zcat file.vcf.gz | grep -v '^#' | wc -l`  
+  *Counts the number of data (variant) rows*
+
+- `zcat file.vcf.gz | grep -m1 '^#CHROM' | cut -f9`  
+  *Extracts FORMAT field labels (e.g., ES:SE:EP:AF:AFKG)*
+
+- `zcat file.vcf.gz | grep -v '^#' | awk 'NR <= 5 { print $3, $4, $5 }'`  
+  *Prints rsID, REF, and ALT for the first 5 variants*
+
+
+
+
 ## Finding Files with `find`
 
 - `find . -name "*.vcf"` – Find all .vcf files  

@@ -127,9 +127,12 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#searching-with-grep" id="toc-searching-with-grep" class="nav-link active" data-scroll-target="#searching-with-grep">Searching with <code>grep</code></a></li>
   <li><a href="#column-operations-with-awk" id="toc-column-operations-with-awk" class="nav-link" data-scroll-target="#column-operations-with-awk">Column Operations with <code>awk</code></a></li>
+  <li><a href="#working-with-.vcf.gz-files" id="toc-working-with-.vcf.gz-files" class="nav-link" data-scroll-target="#working-with-.vcf.gz-files">Working with <code>.vcf.gz</code> Files</a>
+  <ul class="collapse">
   <li><a href="#finding-files-with-find" id="toc-finding-files-with-find" class="nav-link" data-scroll-target="#finding-files-with-find">Finding Files with <code>find</code></a></li>
   <li><a href="#text-processing-essentials" id="toc-text-processing-essentials" class="nav-link" data-scroll-target="#text-processing-essentials">Text Processing Essentials</a></li>
   <li><a href="#genomic-data-tools" id="toc-genomic-data-tools" class="nav-link" data-scroll-target="#genomic-data-tools">Genomic Data Tools</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -181,6 +184,26 @@ ul.task-list li input[type="checkbox"] {
 <li><code>awk 'BEGIN{FS="\t"} {print $2,$3}' &lt;filename&gt;</code> – Tab-delimited input</li>
 </ul>
 </section>
+<section id="working-with-.vcf.gz-files" class="level1">
+<h1>Working with <code>.vcf.gz</code> Files</h1>
+<ul>
+<li><p><code>zcat file.vcf.gz | head</code><br>
+<em>Shows the top lines including headers and first few variants</em></p></li>
+<li><p><code>zcat file.vcf.gz | tail</code><br>
+<em>Shows the last few lines — useful for trailing info</em></p></li>
+<li><p><code>zcat file.vcf.gz | grep '^#'</code><br>
+<em>Shows all header lines (metadata + column names)</em></p></li>
+<li><p><code>zcat file.vcf.gz | grep -v '^#'</code><br>
+<em>Skips headers and shows actual variant records</em></p></li>
+<li><p><code>zcat file.vcf.gz | grep -v '^#' | cut -f10 | head</code><br>
+<em>Displays the contents of the FORMAT/sample column</em></p></li>
+<li><p><code>zcat file.vcf.gz | grep -v '^#' | wc -l</code><br>
+<em>Counts the number of data (variant) rows</em></p></li>
+<li><p><code>zcat file.vcf.gz | grep -m1 '^#CHROM' | cut -f9</code><br>
+<em>Extracts FORMAT field labels (e.g., ES:SE:EP:AF:AFKG)</em></p></li>
+<li><p><code>zcat file.vcf.gz | grep -v '^#' | awk 'NR &lt;= 5 { print $3, $4, $5 }'</code><br>
+<em>Prints rsID, REF, and ALT for the first 5 variants</em></p></li>
+</ul>
 <section id="finding-files-with-find" class="level2">
 <h2 class="anchored" data-anchor-id="finding-files-with-find">Finding Files with <code>find</code></h2>
 <ul>
@@ -222,6 +245,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -58,5 +58,8 @@
   },
   "tutorials/Imputation_in_Python.ipynb": {
     "Imputation_in_Python.html": "5145a398"
+  },
+  "tutorials/bioinformatics_commands.qmd": {
+    "bioinformatics_commands.html": "fd30dddd"
   }
 }

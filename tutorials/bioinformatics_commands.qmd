@@ -1,0 +1,43 @@
+---
+title: "Bioinformatics Terminal Command Cheat Sheet"
+format: html
+---
+
+# Searching with `grep`
+
+- `grep "ACTG" <filename>` – Find lines containing ACTG  
+- `grep -v "N" <filename>` – Exclude lines with "N"  
+- `grep -c "rs" <filename>` – Count lines with "rs"  
+- `grep -w "chr1" <filename>` – Match whole word "chr1"  
+- `zgrep "chr1" <filename>.vcf.gz` – Grep inside gzipped VCF file  
+
+# Column Operations with `awk`
+
+- `awk '{print $1}' <filename>` – Print 1st column  
+- `awk '$5 > 0.05' <filename>` – Filter rows with 5th column > 0.05  
+- `awk 'NR>1' <filename>` – Skip header (first row)  
+- `awk 'BEGIN{FS="\t"} {print $2,$3}' <filename>` – Tab-delimited input  
+
+# Finding Files with `find`
+
+- `find . -name "*.vcf"` – Find all .vcf files  
+- `find /data -type f -size +1G` – Files >1GB in `/data`  
+- `find . -mtime -1` – Modified in last 24 hrs  
+- `find . -exec grep "rs123" {} \;` – Search "rs123" in all files  
+
+# Text Processing Essentials
+
+- `cut -f1,3 <filename>` – Cut fields 1 and 3  
+- `sort <filename>` – Sort lines  
+- `sort -k2,2n <filename>` – Sort by 2nd column numerically  
+- `uniq -c <filename>` – Count unique lines  
+- `paste <file1> <file2>` – Merge files side by side  
+- `wc -l <filename>` – Count lines in a file  
+
+# Genomic Data Tools
+
+- `samtools view <file>.bam` – View alignment data  
+- `bcftools view <file>.vcf.gz` – View VCF data  
+- `bedtools intersect -a <a.bed> -b <b.bed>` – Genomic region overlap  
+- `plink --bfile <data> --assoc` – Run basic association test  
+

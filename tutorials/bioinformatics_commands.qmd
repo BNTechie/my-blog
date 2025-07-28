@@ -3,6 +3,10 @@ title: "Bioinformatics Terminal Command Cheat Sheet"
 format: html
 ---
 
+Bioinformatics often involves working with large datasets, sequencing files, and command-line tools to process and analyze biological data efficiently. Mastering a few essential commands can significantly speed up routine tasks like inspecting FASTQ files, counting sequences, or handling compressed genomic data. These commands are widely used in daily bioinformatics workflows, especially on high-performance computing (HPC) systems or Linux environments. By learning them, you can automate repetitive tasks, quickly validate datasets, and prepare inputs for downstream analyses. This tutorial will cover some of the most common bioinformatics commands that every researcher or data scientist in life sciences should know. Whether you’re managing raw sequencing data or manipulating biological file formats, these basics will help streamline your bioinformatics work.
+
+
+
 
 ## Basic Linux Commands
 

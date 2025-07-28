@@ -165,35 +165,61 @@ ul.task-list li input[type="checkbox"] {
 <section id="basic-linux-commands" class="level2">
 <h2 class="anchored" data-anchor-id="basic-linux-commands">Basic Linux Commands</h2>
 <ul>
-<li><code>cd &lt;path/to/dir&gt;</code> – Change working directory<br>
-</li>
-<li><code>pwd</code> – Print working directory<br>
-</li>
-<li><code>ll</code> (alias for <code>ls -l</code>) – Show the contents of the current directory as a list<br>
-</li>
-<li><code>head -n X &lt;filename&gt;</code> – Print the first X lines of a file<br>
-</li>
-<li><code>cat &lt;filename&gt;</code> – Print the full content of a file<br>
-</li>
-<li><code>less &lt;filename&gt;</code> – Display the file and scroll through lines (exit by pressing <code>q</code>)<br>
-</li>
-<li><code>zcat &lt;filename.gz&gt; | head</code> – Print the head of a <code>.gz</code> file (pipes full content to <code>head</code>)<br>
-</li>
-<li><code>cp &lt;from_file.xyz&gt; &lt;to_file.xyz&gt;</code> – Copy a file from one location to another<br>
-</li>
-<li><code>mv &lt;old_file.xyz&gt; &lt;new_file.xyz&gt;</code> – Move a file (also used for renaming)<br>
-</li>
-<li><code>rm &lt;file&gt;</code> – Remove a file<br>
-</li>
-<li><code>rmdir &lt;directory_name&gt;</code> – Remove a directory (must be empty)<br>
-</li>
-<li><code>mkdir &lt;directory_name&gt;</code> – Make a new directory<br>
-</li>
-<li><code>grep &lt;pattern&gt; &lt;filename&gt;</code> – Print lines in a file containing a pattern<br>
-</li>
-<li><code>find . -name "*.txt"</code> – Search for files in the current directory matching <code>*.txt</code><br>
-</li>
-<li><code>nano &lt;file&gt;</code> – Open the Nano text editor to create or edit files</li>
+<li><p><code>cd &lt;path/to/dir&gt;</code> – Change working directory<br>
+</p></li>
+<li><p><code>pwd</code> – Print working directory<br>
+</p></li>
+<li><p><code>ll</code> (alias for <code>ls -l</code>) – Show the contents of the current directory as a list<br>
+</p></li>
+<li><p><code>head -n X &lt;filename&gt;</code> – Print the first X lines of a file<br>
+</p></li>
+<li><p><code>cat &lt;filename&gt;</code> – Print the full content of a file<br>
+</p></li>
+<li><p><code>less &lt;filename&gt;</code> – Display the file and scroll through lines (exit by pressing <code>q</code>)<br>
+</p></li>
+<li><p><code>zcat &lt;filename.gz&gt; | head</code> – Print the head of a <code>.gz</code> file (pipes full content to <code>head</code>)<br>
+</p></li>
+<li><p><code>cp &lt;from_file.xyz&gt; &lt;to_file.xyz&gt;</code> – Copy a file from one location to another<br>
+</p></li>
+<li><p><code>mv &lt;old_file.xyz&gt; &lt;new_file.xyz&gt;</code> – Move a file (also used for renaming)<br>
+</p></li>
+<li><p><code>rm &lt;file&gt;</code> – Remove a file<br>
+</p></li>
+<li><p><code>rmdir &lt;directory_name&gt;</code> – Remove a directory (must be empty)<br>
+</p></li>
+<li><p><code>mkdir &lt;directory_name&gt;</code> – Make a new directory<br>
+</p></li>
+<li><p><code>grep &lt;pattern&gt; &lt;filename&gt;</code> – Print lines in a file containing a pattern<br>
+</p></li>
+<li><p><code>find . -name "*.txt"</code> – Search for files in the current directory matching <code>*.txt</code><br>
+</p></li>
+<li><p><code>nano &lt;file&gt;</code> – Open the Nano text editor to create or edit files</p></li>
+<li><p><code>ls | head -20</code> – Show the <strong>first 20 files</strong> in the current folder<br>
+</p></li>
+<li><p><code>ls | tail -20</code> – Show the <strong>last 20 files</strong> in the current folder<br>
+</p></li>
+<li><p><code>ls -lt | head -20</code> – Show the <strong>20 most recently modified files</strong><br>
+</p></li>
+<li><p><code>ls -ltr | head -20</code> – Show the <strong>20 oldest files (by modification time)</strong><br>
+</p></li>
+<li><p><code>ls -1 | wc -l</code> – Count the <strong>total number of files</strong> in the directory<br>
+</p></li>
+<li><p><code>ls -a | head -20</code> – Show the first 20 files, including hidden files (those starting with <code>.</code>)</p></li>
+<li><p><code>ls -d $PWD/* | head -20</code> – Show the first 20 files with full pathnames</p></li>
+<li><p><code>du -sh *</code> – Show the size of all files and folders in the current directory (human-readable format)<br>
+</p></li>
+<li><p><code>du -sh &lt;folder_name&gt;</code> – Display the size of a specific folder<br>
+</p></li>
+<li><p><code>du -sh .</code> – Show the total size of the current directory</p></li>
+<li><p><code>du -sh * | sort -h</code> – Sort files and folders by size (smallest to largest)<br>
+</p></li>
+<li><p><code>du -sh * | sort -hr | head -20</code> – Show the <strong>20 largest files/folders</strong> in the current directory</p></li>
+<li><p><code>ls -lhS | head -20</code> – Show the <strong>20 largest files</strong> in the current directory<br>
+</p></li>
+<li><p><code>find . -type f -exec du -h {} + | sort -hr | head -20</code> – List the <strong>20 largest files</strong> recursively in current and subdirectories</p></li>
+<li><p><code>df -h</code> – Display disk space usage for all mounted file systems (human-readable format)<br>
+</p></li>
+<li><p><code>df -h /path/to/dir</code> – Show available disk space for a specific directory path</p></li>
 </ul>
 </section>
 <section id="basic-vim-commands" class="level2">
@@ -283,15 +309,24 @@ ul.task-list li input[type="checkbox"] {
 <section id="finding-files-with-find" class="level2">
 <h2 class="anchored" data-anchor-id="finding-files-with-find">Finding Files with <code>find</code></h2>
 <ul>
-<li><code>find . -name "*.vcf"</code> – Find all .vcf files<br>
-</li>
-<li><code>find /data -type f -size +1G</code> – Files &gt;1GB in <code>/data</code><br>
-</li>
-<li><code>find . -mtime -1</code> – Modified in last 24 hrs<br>
-</li>
-<li><code>find . -exec grep "rs123" {} \;</code> – Search “rs123” in all files<br>
-</li>
-<li><code>find . -mindepth 1 -maxdepth 1 -type d | wc -l</code> - Count the number of folder inside a folder</li>
+<li><p><code>find . -name "*.vcf"</code> – Find all .vcf files<br>
+</p></li>
+<li><p><code>find /data -type f -size +1G</code> – Files &gt;1GB in <code>/data</code><br>
+</p></li>
+<li><p><code>find . -mtime -1</code> – Modified in last 24 hrs<br>
+</p></li>
+<li><p><code>find . -exec grep "rs123" {} \;</code> – Search “rs123” in all files<br>
+</p></li>
+<li><p><code>find . -mindepth 1 -maxdepth 1 -type d | wc -l</code> - Count the number of folder inside a folder</p></li>
+<li><p><code>find . -name "filename.txt"</code> – Search for a file named <strong>filename.txt</strong> in the current directory and subdirectories<br>
+</p></li>
+<li><p><code>find /path/to/search -name "filename.txt"</code> – Search for a file in a specific directory path<br>
+</p></li>
+<li><p><code>find / -name "filename.txt" 2&gt;/dev/null</code> – Search the entire system (suppress “Permission denied” errors)<br>
+</p></li>
+<li><p><code>locate filename.txt</code> – Quickly search for a file using the system’s file index (requires <code>mlocate</code> or <code>plocate</code> installed)<br>
+</p></li>
+<li><p><code>find . -iname "filename.txt"</code> – Case-insensitive search for the file name</p></li>
 </ul>
 </section>
 <section id="text-processing-essentials" class="level2">
@@ -326,23 +361,30 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="common-hpc-command">Common HPC command</h2>
 <p>-<code>srun --time=02:00:00 --mem=8G --cpus-per-task=2 --pty bash</code> - to start an interactive session in HPC</p>
 <ul>
-<li><code>squeue</code> – View the job queue<br>
-</li>
-<li><code>squeue -u &lt;user_id&gt;</code> – View jobs from a specific user<br>
-</li>
-<li><code>squeue --help</code> – View additional options for <code>squeue</code><br>
-</li>
-<li><code>sacct -j &lt;job_id&gt;</code> – Get the status of a specific job<br>
-</li>
-<li><code>scontrol show job &lt;job_id&gt;</code> – View extended information for a specific job<br>
-</li>
-<li><code>seff &lt;job_id&gt;</code> – View running jobs with estimated CPU usage efficiency<br>
-</li>
-<li><code>scancel &lt;job_id&gt;</code> – Cancel a specific job<br>
-</li>
-<li><code>scancel -u &lt;user_id&gt;</code> – Cancel all running jobs for a user<br>
-</li>
-<li><code>sinfo -N</code> – View the current load on the queuing system</li>
+<li><p><code>squeue</code> – View the job queue<br>
+</p></li>
+<li><p><code>squeue -u &lt;user_id&gt;</code> – View jobs from a specific user<br>
+</p></li>
+<li><p><code>squeue --help</code> – View additional options for <code>squeue</code><br>
+</p></li>
+<li><p><code>sacct -j &lt;job_id&gt;</code> – Get the status of a specific job<br>
+</p></li>
+<li><p><code>scontrol show job &lt;job_id&gt;</code> – View extended information for a specific job<br>
+</p></li>
+<li><p><code>seff &lt;job_id&gt;</code> – View running jobs with estimated CPU usage efficiency<br>
+</p></li>
+<li><p><code>scancel &lt;job_id&gt;</code> – Cancel a specific job<br>
+</p></li>
+<li><p><code>scancel -u &lt;user_id&gt;</code> – Cancel all running jobs for a user<br>
+</p></li>
+<li><p><code>sinfo -N</code> – View the current load on the queuing system</p></li>
+<li><p><code>squeue --states=PENDING</code> – Show only pending jobs in the queue<br>
+</p></li>
+<li><p><code>squeue -u &lt;user_id&gt; --states=PD</code> – Show only your pending jobs<br>
+</p></li>
+<li><p><code>squeue | grep PD | wc -l</code> – Count how many jobs are pending system-wide<br>
+</p></li>
+<li><p><code>squeue -u &lt;user_id&gt; | grep PD | wc -l</code> – Count how many of your jobs are pending</p></li>
 </ul>
 
 

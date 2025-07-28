@@ -61,5 +61,8 @@
   },
   "tutorials/bioinformatics_commands.qmd": {
     "bioinformatics_commands.html": "fd30dddd"
+  },
+  "tutorials/snakemake.qmd": {
+    "snakemake.html": "f882da64"
   }
 }

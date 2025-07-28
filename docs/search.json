@@ -116,7 +116,7 @@
     "href": "tutorials/index.html",
     "title": "Tutorials",
     "section": "",
-    "text": "Welcome to the tutorials section! Below you’ll find notebook-based guides covering Python and R.\n…\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBioinformatics Terminal Command Cheat Sheet\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMissing Data Imputation in Data Analysis\n\n\n\n\n\n\n\n\nJul 19, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHow to Compute Execution time in R\n\n\n\n\n\n\n\n\nJul 19, 2025\n\n\n\n\n\nNo matching items"
+    "text": "Welcome to the tutorials section! Below you’ll find notebook-based guides covering Python and R.\n…\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBioinformatics Terminal Command Cheat Sheet\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMissing Data Imputation in Data Analysis\n\n\n\n\n\n\n\n\nJul 19, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHow to Compute Execution time in R\n\n\n\n\n\n\n\n\nJul 19, 2025\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "tutorials/Imputation_in_Python.html",
@@ -130,14 +130,14 @@
     "href": "tutorials/bioinformatics_commands.html",
     "title": "Bioinformatics Terminal Command Cheat Sheet",
     "section": "",
-    "text": "grep \"ACTG\" &lt;filename&gt; – Find lines containing ACTG\n\ngrep -v \"N\" &lt;filename&gt; – Exclude lines with “N”\n\ngrep -c \"rs\" &lt;filename&gt; – Count lines with “rs”\n\ngrep -w \"chr1\" &lt;filename&gt; – Match whole word “chr1”\n\nzgrep \"chr1\" &lt;filename&gt;.vcf.gz – Grep inside gzipped VCF file"
+    "text": "cd &lt;path/to/dir&gt; – Change working directory\n\npwd – Print working directory\n\nll (alias for ls -l) – Show the contents of the current directory as a list\n\nhead -n X &lt;filename&gt; – Print the first X lines of a file\n\ncat &lt;filename&gt; – Print the full content of a file\n\nless &lt;filename&gt; – Display the file and scroll through lines (exit by pressing q)\n\nzcat &lt;filename.gz&gt; | head – Print the head of a .gz file (pipes full content to head)\n\ncp &lt;from_file.xyz&gt; &lt;to_file.xyz&gt; – Copy a file from one location to another\n\nmv &lt;old_file.xyz&gt; &lt;new_file.xyz&gt; – Move a file (also used for renaming)\n\nrm &lt;file&gt; – Remove a file\n\nrmdir &lt;directory_name&gt; – Remove a directory (must be empty)\n\nmkdir &lt;directory_name&gt; – Make a new directory\n\ngrep &lt;pattern&gt; &lt;filename&gt; – Print lines in a file containing a pattern\n\nfind . -name \"*.txt\" – Search for files in the current directory matching *.txt\n\nnano &lt;file&gt; – Open the Nano text editor to create or edit files"
   },
   {
     "objectID": "tutorials/bioinformatics_commands.html#searching-with-grep",
     "href": "tutorials/bioinformatics_commands.html#searching-with-grep",
     "title": "Bioinformatics Terminal Command Cheat Sheet",
-    "section": "",
-    "text": "grep \"ACTG\" &lt;filename&gt; – Find lines containing ACTG\n\ngrep -v \"N\" &lt;filename&gt; – Exclude lines with “N”\n\ngrep -c \"rs\" &lt;filename&gt; – Count lines with “rs”\n\ngrep -w \"chr1\" &lt;filename&gt; – Match whole word “chr1”\n\nzgrep \"chr1\" &lt;filename&gt;.vcf.gz – Grep inside gzipped VCF file"
+    "section": "Searching with grep",
+    "text": "Searching with grep\n\ngrep \"ACTG\" &lt;filename&gt; – Find lines containing ACTG\n\ngrep -v \"N\" &lt;filename&gt; – Exclude lines with “N”\n\ngrep -c \"rs\" &lt;filename&gt; – Count lines with “rs”\n\ngrep -w \"chr1\" &lt;filename&gt; – Match whole word “chr1”\n\nzgrep \"chr1\" &lt;filename&gt;.vcf.gz – Grep inside gzipped VCF file"
   },
   {
     "objectID": "tutorials/bioinformatics_commands.html#column-operations-with-awk",
@@ -151,7 +151,7 @@
     "href": "tutorials/bioinformatics_commands.html#finding-files-with-find",
     "title": "Bioinformatics Terminal Command Cheat Sheet",
     "section": "Finding Files with find",
-    "text": "Finding Files with find\n\nfind . -name \"*.vcf\" – Find all .vcf files\n\nfind /data -type f -size +1G – Files &gt;1GB in /data\n\nfind . -mtime -1 – Modified in last 24 hrs\n\nfind . -exec grep \"rs123\" {} \\; – Search “rs123” in all files"
+    "text": "Finding Files with find\n\nfind . -name \"*.vcf\" – Find all .vcf files\n\nfind /data -type f -size +1G – Files &gt;1GB in /data\n\nfind . -mtime -1 – Modified in last 24 hrs\n\nfind . -exec grep \"rs123\" {} \\; – Search “rs123” in all files\n\nfind . -mindepth 1 -maxdepth 1 -type d | wc -l - Count the number of folder inside a folder"
   },
   {
     "objectID": "tutorials/bioinformatics_commands.html#text-processing-essentials",
@@ -166,5 +166,47 @@
     "title": "Bioinformatics Terminal Command Cheat Sheet",
     "section": "Genomic Data Tools",
     "text": "Genomic Data Tools\n\nsamtools view &lt;file&gt;.bam – View alignment data\n\nbcftools view &lt;file&gt;.vcf.gz – View VCF data\n\nbedtools intersect -a &lt;a.bed&gt; -b &lt;b.bed&gt; – Genomic region overlap\n\nplink --bfile &lt;data&gt; --assoc – Run basic association test"
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#common-hpc-command",
+    "href": "tutorials/bioinformatics_commands.html#common-hpc-command",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "Common HPC command",
+    "text": "Common HPC command\n-srun --time=02:00:00 --mem=8G --cpus-per-task=2 --pty bash - to start an interactive session in HPC\n\nsqueue – View the job queue\n\nsqueue -u &lt;user_id&gt; – View jobs from a specific user\n\nsqueue --help – View additional options for squeue\n\nsacct -j &lt;job_id&gt; – Get the status of a specific job\n\nscontrol show job &lt;job_id&gt; – View extended information for a specific job\n\nseff &lt;job_id&gt; – View running jobs with estimated CPU usage efficiency\n\nscancel &lt;job_id&gt; – Cancel a specific job\n\nscancel -u &lt;user_id&gt; – Cancel all running jobs for a user\n\nsinfo -N – View the current load on the queuing system"
+  },
+  {
+    "objectID": "tutorials/snakemake.html",
+    "href": "tutorials/snakemake.html",
+    "title": "Data Science Blog",
+    "section": "",
+    "text": "Snakemake is especially useful for data scientists handling multi-step preprocessing, model training pipelines, or large-scale data analysis. It encourages clean, maintainable, and shareable code, which is crucial in collaborative and research environments.\nSnakemake is a Python-based workflow management system that helps automate complex data processing pipelines. It allows data scientists to define workflows as a series of rules, where each rule specifies how to produce output files from input files using command-line tools or scripts.\n\n\nSnakemake enables automation by tracking file dependencies, eliminating the need to manually rerun each step of a data pipeline. It ensures reproducibility by capturing the entire workflow in a clear, version-controlled format, making it easy to repeat and share analyses. The system is highly scalable, allowing workflows to run seamlessly on local machines, computing clusters, or the cloud. Snakemake also improves organization by structuring complex pipelines into manageable, readable components. Additionally, it enhances efficiency by only rerunning steps when input files have changed, saving both time and computational resources.\nWithout any further ado, let’s dive into a simple toy example to show how Snakemake works in practice. This will give you a hands-on feel for how to define rules, manage dependencies, and automate your data processing steps with just a few lines of code."
+  },
+  {
+    "objectID": "tutorials/snakemake.html#beginners-tutorial-for-snakemake",
+    "href": "tutorials/snakemake.html#beginners-tutorial-for-snakemake",
+    "title": "Data Science Blog",
+    "section": "",
+    "text": "Snakemake is especially useful for data scientists handling multi-step preprocessing, model training pipelines, or large-scale data analysis. It encourages clean, maintainable, and shareable code, which is crucial in collaborative and research environments.\nSnakemake is a Python-based workflow management system that helps automate complex data processing pipelines. It allows data scientists to define workflows as a series of rules, where each rule specifies how to produce output files from input files using command-line tools or scripts.\n\n\nSnakemake enables automation by tracking file dependencies, eliminating the need to manually rerun each step of a data pipeline. It ensures reproducibility by capturing the entire workflow in a clear, version-controlled format, making it easy to repeat and share analyses. The system is highly scalable, allowing workflows to run seamlessly on local machines, computing clusters, or the cloud. Snakemake also improves organization by structuring complex pipelines into manageable, readable components. Additionally, it enhances efficiency by only rerunning steps when input files have changed, saving both time and computational resources.\nWithout any further ado, let’s dive into a simple toy example to show how Snakemake works in practice. This will give you a hands-on feel for how to define rules, manage dependencies, and automate your data processing steps with just a few lines of code."
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#common-hpc-commands",
+    "href": "tutorials/bioinformatics_commands.html#common-hpc-commands",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "Common HPC Commands",
+    "text": "Common HPC Commands\n\nsqueue – View the job queue\n\nsqueue -u &lt;user_id&gt; – View jobs from a specific user\n\nsqueue --help – View additional options for squeue\n\nsacct -j &lt;job_id&gt; – Get the status of a specific job\n\nscontrol show job &lt;job_id&gt; – View extended information for a specific job\n\nseff &lt;job_id&gt; – View running jobs with estimated CPU usage efficiency\n\nscancel &lt;job_id&gt; – Cancel a specific job\n\nscancel -u &lt;user_id&gt; – Cancel all running jobs for a user\n\nsinfo -N – View the current load on the queuing system"
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#basic-linux-commands",
+    "href": "tutorials/bioinformatics_commands.html#basic-linux-commands",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "",
+    "text": "cd &lt;path/to/dir&gt; – Change working directory\n\npwd – Print working directory\n\nll (alias for ls -l) – Show the contents of the current directory as a list\n\nhead -n X &lt;filename&gt; – Print the first X lines of a file\n\ncat &lt;filename&gt; – Print the full content of a file\n\nless &lt;filename&gt; – Display the file and scroll through lines (exit by pressing q)\n\nzcat &lt;filename.gz&gt; | head – Print the head of a .gz file (pipes full content to head)\n\ncp &lt;from_file.xyz&gt; &lt;to_file.xyz&gt; – Copy a file from one location to another\n\nmv &lt;old_file.xyz&gt; &lt;new_file.xyz&gt; – Move a file (also used for renaming)\n\nrm &lt;file&gt; – Remove a file\n\nrmdir &lt;directory_name&gt; – Remove a directory (must be empty)\n\nmkdir &lt;directory_name&gt; – Make a new directory\n\ngrep &lt;pattern&gt; &lt;filename&gt; – Print lines in a file containing a pattern\n\nfind . -name \"*.txt\" – Search for files in the current directory matching *.txt\n\nnano &lt;file&gt; – Open the Nano text editor to create or edit files"
+  },
+  {
+    "objectID": "tutorials/bioinformatics_commands.html#basic-vim-commands",
+    "href": "tutorials/bioinformatics_commands.html#basic-vim-commands",
+    "title": "Bioinformatics Terminal Command Cheat Sheet",
+    "section": "Basic Vim Commands",
+    "text": "Basic Vim Commands\n\nvim &lt;filename&gt; – Open a file in Vim (creates it if it doesn’t exist)\n\ni – Switch to Insert mode (to start editing text)\n\nEsc – Exit Insert mode and return to Normal mode\n\n:w – Save (write) the file\n\n:q – Quit Vim\n\n:wq – Save and quit Vim\n\n:q! – Quit without saving changes\n\nx – Delete the character under the cursor\n\ndd – Delete the current line\n\nyy – Yank (copy) the current line\n\np – Paste the copied or deleted text below the cursor\n\n/pattern – Search forward for a pattern in the file\n\nn – Repeat the last search in the same direction\n\nu – Undo the last action\n\nCtrl + r – Redo an undone action\n\ngg – Go to the beginning of the file\n\nG – Go to the end of the file"
   }
 ]

@@ -3,6 +3,48 @@ title: "Bioinformatics Terminal Command Cheat Sheet"
 format: html
 ---
 
+
+## Basic Linux Commands
+
+- `cd <path/to/dir>` – Change working directory  
+- `pwd` – Print working directory  
+- `ll` (alias for `ls -l`) – Show the contents of the current directory as a list  
+- `head -n X <filename>` – Print the first X lines of a file  
+- `cat <filename>` – Print the full content of a file  
+- `less <filename>` – Display the file and scroll through lines (exit by pressing `q`)  
+- `zcat <filename.gz> | head` – Print the head of a `.gz` file (pipes full content to `head`)  
+- `cp <from_file.xyz> <to_file.xyz>` – Copy a file from one location to another  
+- `mv <old_file.xyz> <new_file.xyz>` – Move a file (also used for renaming)  
+- `rm <file>` – Remove a file  
+- `rmdir <directory_name>` – Remove a directory (must be empty)  
+- `mkdir <directory_name>` – Make a new directory  
+- `grep <pattern> <filename>` – Print lines in a file containing a pattern  
+- `find . -name "*.txt"` – Search for files in the current directory matching `*.txt`  
+- `nano <file>` – Open the Nano text editor to create or edit files  
+
+
+## Basic Vim Commands
+
+- `vim <filename>` – Open a file in Vim (creates it if it doesn’t exist)  
+- `i` – Switch to **Insert mode** (to start editing text)  
+- `Esc` – Exit Insert mode and return to Normal mode  
+- `:w` – Save (write) the file  
+- `:q` – Quit Vim  
+- `:wq` – Save and quit Vim  
+- `:q!` – Quit without saving changes  
+- `x` – Delete the character under the cursor  
+- `dd` – Delete the current line  
+- `yy` – Yank (copy) the current line  
+- `p` – Paste the copied or deleted text below the cursor  
+- `/pattern` – Search forward for a pattern in the file  
+- `n` – Repeat the last search in the same direction  
+- `u` – Undo the last action  
+- `Ctrl + r` – Redo an undone action  
+- `gg` – Go to the beginning of the file  
+- `G` – Go to the end of the file  
+
+
+
 ## Searching with `grep`
 
 - `grep "ACTG" <filename>` – Find lines containing ACTG  
@@ -53,6 +95,8 @@ format: html
 - `find /data -type f -size +1G` – Files >1GB in `/data`  
 - `find . -mtime -1` – Modified in last 24 hrs  
 - `find . -exec grep "rs123" {} \;` – Search "rs123" in all files  
+- `find . -mindepth 1 -maxdepth 1 -type d | wc -l` - Count the number of folder inside a folder 
+
 
 ## Text Processing Essentials
 
@@ -69,4 +113,20 @@ format: html
 - `bcftools view <file>.vcf.gz` – View VCF data  
 - `bedtools intersect -a <a.bed> -b <b.bed>` – Genomic region overlap  
 - `plink --bfile <data> --assoc` – Run basic association test  
+
+
+## Common HPC command
+
+-`srun --time=02:00:00 --mem=8G --cpus-per-task=2 --pty bash` - to start an interactive session in HPC
+
+- `squeue` – View the job queue  
+- `squeue -u <user_id>` – View jobs from a specific user  
+- `squeue --help` – View additional options for `squeue`  
+- `sacct -j <job_id>` – Get the status of a specific job  
+- `scontrol show job <job_id>` – View extended information for a specific job  
+- `seff <job_id>` – View running jobs with estimated CPU usage efficiency  
+- `scancel <job_id>` – Cancel a specific job  
+- `scancel -u <user_id>` – Cancel all running jobs for a user  
+- `sinfo -N` – View the current load on the queuing system  
+
 

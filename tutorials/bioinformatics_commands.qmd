@@ -26,6 +26,27 @@ Bioinformatics often involves working with large datasets, sequencing files, and
 - `find . -name "*.txt"` – Search for files in the current directory matching `*.txt`  
 - `nano <file>` – Open the Nano text editor to create or edit files  
 
+- `ls | head -20` – Show the **first 20 files** in the current folder  
+- `ls | tail -20` – Show the **last 20 files** in the current folder  
+- `ls -lt | head -20` – Show the **20 most recently modified files**  
+- `ls -ltr | head -20` – Show the **20 oldest files (by modification time)**  
+- `ls -1 | wc -l` – Count the **total number of files** in the directory  
+- `ls -a | head -20` – Show the first 20 files, including hidden files (those starting with `.`)
+- `ls -d $PWD/* | head -20` – Show the first 20 files with full pathnames  
+
+- `du -sh *` – Show the size of all files and folders in the current directory (human-readable format)  
+- `du -sh <folder_name>` – Display the size of a specific folder  
+- `du -sh .` – Show the total size of the current directory  
+
+- `du -sh * | sort -h` – Sort files and folders by size (smallest to largest)  
+- `du -sh * | sort -hr | head -20` – Show the **20 largest files/folders** in the current directory  
+
+- `ls -lhS | head -20` – Show the **20 largest files** in the current directory  
+- `find . -type f -exec du -h {} + | sort -hr | head -20` – List the **20 largest files** recursively in current and subdirectories  
+
+- `df -h` – Display disk space usage for all mounted file systems (human-readable format)  
+- `df -h /path/to/dir` – Show available disk space for a specific directory path  
+
 
 ## Basic Vim Commands
 
@@ -101,6 +122,12 @@ Bioinformatics often involves working with large datasets, sequencing files, and
 - `find . -exec grep "rs123" {} \;` – Search "rs123" in all files  
 - `find . -mindepth 1 -maxdepth 1 -type d | wc -l` - Count the number of folder inside a folder 
 
+- `find . -name "filename.txt"` – Search for a file named **filename.txt** in the current directory and subdirectories  
+- `find /path/to/search -name "filename.txt"` – Search for a file in a specific directory path  
+- `find / -name "filename.txt" 2>/dev/null` – Search the entire system (suppress "Permission denied" errors)  
+- `locate filename.txt` – Quickly search for a file using the system’s file index (requires `mlocate` or `plocate` installed)  
+- `find . -iname "filename.txt"` – Case-insensitive search for the file name  
+
 
 ## Text Processing Essentials
 
@@ -133,4 +160,8 @@ Bioinformatics often involves working with large datasets, sequencing files, and
 - `scancel -u <user_id>` – Cancel all running jobs for a user  
 - `sinfo -N` – View the current load on the queuing system  
 
+- `squeue --states=PENDING` – Show only pending jobs in the queue  
+- `squeue -u <user_id> --states=PD` – Show only your pending jobs  
+- `squeue | grep PD | wc -l` – Count how many jobs are pending system-wide  
+- `squeue -u <user_id> | grep PD | wc -l` – Count how many of your jobs are pending  
 

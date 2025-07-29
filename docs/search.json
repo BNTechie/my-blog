@@ -116,7 +116,7 @@
     "href": "tutorials/index.html",
     "title": "Tutorials",
     "section": "",
-    "text": "Welcome to the tutorials section! Below you’ll find notebook-based guides covering Python and R.\n…\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBeginner’s tutorial for snakemake\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBioinformatics Terminal Command Cheat Sheet\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMissing Data Imputation in Data Analysis\n\n\n\n\n\n\n\n\nJul 19, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHow to Compute Execution time in R\n\n\n\n\n\n\n\n\nJul 19, 2025\n\n\n\n\n\nNo matching items"
+    "text": "Welcome to the tutorials section! Below you’ll find notebook-based guides covering Python and R.\n…\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCreating and Managing a GitHub Repository\n\n\nStep-by-step guide to creating a local Git repository, linking it to GitHub, and pushing changes.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCreating and Managing a GitHub Repository\n\n\nStep-by-step guide to creating a local Git repository, linking it to GitHub, and pushing changes.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBeginner’s tutorial for snakemake\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBioinformatics Terminal Command Cheat Sheet\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMissing Data Imputation in Data Analysis\n\n\n\n\n\n\n\n\nJul 19, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHow to Compute Execution time in R\n\n\n\n\n\n\n\n\nJul 19, 2025\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "tutorials/Imputation_in_Python.html",
@@ -208,5 +208,68 @@
     "title": "Bioinformatics Terminal Command Cheat Sheet",
     "section": "Basic Vim Commands",
     "text": "Basic Vim Commands\n\nvim &lt;filename&gt; – Open a file in Vim (creates it if it doesn’t exist)\n\ni – Switch to Insert mode (to start editing text)\n\nEsc – Exit Insert mode and return to Normal mode\n\n:w – Save (write) the file\n\n:q – Quit Vim\n\n:wq – Save and quit Vim\n\n:q! – Quit without saving changes\n\nx – Delete the character under the cursor\n\ndd – Delete the current line\n\nyy – Yank (copy) the current line\n\np – Paste the copied or deleted text below the cursor\n\n/pattern – Search forward for a pattern in the file\n\nn – Repeat the last search in the same direction\n\nu – Undo the last action\n\nCtrl + r – Redo an undone action\n\ngg – Go to the beginning of the file\n\nG – Go to the end of the file"
+  },
+  {
+    "objectID": "tutorials/Tutiral_for_creating_github_repo.html",
+    "href": "tutorials/Tutiral_for_creating_github_repo.html",
+    "title": "Creating and Managing a GitHub Repository",
+    "section": "",
+    "text": "This tutorial provides a step-by-step guide to creating a local Git repository and pushing it to your GitHub account. It covers initializing a project folder, linking it to a remote GitHub repository, and committing your files. You will also learn how to update your repository when changes are made locally. These commands are beginner-friendly and can be directly copied and executed in your terminal. By the end, you’ll have your project successfully version-controlled and hosted on GitHub."
+  },
+  {
+    "objectID": "tutorials/Tutiral_for_creating_github_repo.html#github-for-complete-beginners",
+    "href": "tutorials/Tutiral_for_creating_github_repo.html#github-for-complete-beginners",
+    "title": "git remote add origin git@github.com:/my_project.git",
+    "section": "",
+    "text": "This tutorial provides a step-by-step guide to creating a local Git repository and pushing it to your GitHub account. It covers initializing a project folder, linking it to a remote GitHub repository, and committing your files. You will also learn how to update your repository when changes are made locally. These commands are beginner-friendly and can be directly copied and executed in your terminal. By the end, you’ll have your project successfully version-controlled and hosted on GitHub.\n\n\nmkdir my_project # Create project folder cd my_project # Navigate into folder git init # Initialize Git\necho “# My Project” &gt;&gt; README.md # Create a README file\ngit add README.md # Stage file git commit -m “Initial commit” # Commit file\n\n\n\n\n\n\n\n\n\ngit remote add origin https://github.com//my_project.git"
+  },
+  {
+    "objectID": "tutorials/Tutiral_for_creating_github_repo.html#create-a-new-local-project",
+    "href": "tutorials/Tutiral_for_creating_github_repo.html#create-a-new-local-project",
+    "title": "Creating and Managing a GitHub Repository",
+    "section": "Create a New Local Project",
+    "text": "Create a New Local Project\n```bash mkdir my_project # Create project folder cd my_project # Navigate into folder git init # Initialize Git"
+  },
+  {
+    "objectID": "tutorials/github_tutorial.html",
+    "href": "tutorials/github_tutorial.html",
+    "title": "Creating and Managing a GitHub Repository",
+    "section": "",
+    "text": "This tutorial provides a step-by-step guide to creating a local Git repository and pushing it to your GitHub account. It covers initializing a project folder, linking it to a remote GitHub repository, and committing your files. You will also learn how to update your repository when changes are made locally. These commands are beginner-friendly and can be directly copied and executed in your terminal. By the end, you’ll have your project successfully version-controlled and hosted on GitHub."
+  },
+  {
+    "objectID": "tutorials/github_tutorial.html#create-a-new-local-project",
+    "href": "tutorials/github_tutorial.html#create-a-new-local-project",
+    "title": "Creating and Managing a GitHub Repository",
+    "section": "Create a New Local Project",
+    "text": "Create a New Local Project\nmkdir my_project                  # Create project folder\ncd my_project                     # Navigate into folder\ngit init                          # Initialize Git\necho \"# My Project\" &gt;&gt; README.md  # Create a README file\ngit add README.md                 # Stage file\ngit commit -m \"Initial commit\"    # Commit file"
+  },
+  {
+    "objectID": "tutorials/github_tutorial.html#link-to-github-repository",
+    "href": "tutorials/github_tutorial.html#link-to-github-repository",
+    "title": "Creating and Managing a GitHub Repository",
+    "section": "Link to GitHub Repository",
+    "text": "Link to GitHub Repository\n(Create a repository on GitHub first: https://github.com/new)\n\nMethod 1: Using HTTPS\ngit remote add origin https://github.com/&lt;username&gt;/my_project.git\n\n\nMethod 2: Using SSH (if keys are configured)\ngit remote add origin git@github.com:&lt;username&gt;/my_project.git"
+  },
+  {
+    "objectID": "tutorials/github_tutorial.html#push-code-to-github",
+    "href": "tutorials/github_tutorial.html#push-code-to-github",
+    "title": "Creating and Managing a GitHub Repository",
+    "section": "Push Code to GitHub",
+    "text": "Push Code to GitHub\ngit branch -M main                # Ensure branch is 'main'\ngit push -u origin main           # Push to GitHub"
+  },
+  {
+    "objectID": "tutorials/github_tutorial.html#update-changes-to-github-later",
+    "href": "tutorials/github_tutorial.html#update-changes-to-github-later",
+    "title": "Creating and Managing a GitHub Repository",
+    "section": "Update Changes to GitHub Later",
+    "text": "Update Changes to GitHub Later\nWhen you make changes locally:\ngit status                        # Check modified files\ngit add .                         # Stage all changes\ngit commit -m \"Describe your changes here\"\ngit push                          # Push updates to GitHub"
+  },
+  {
+    "objectID": "tutorials/github_tutorial.html#clone-an-existing-repository-optional",
+    "href": "tutorials/github_tutorial.html#clone-an-existing-repository-optional",
+    "title": "Creating and Managing a GitHub Repository",
+    "section": "Clone an Existing Repository (Optional)",
+    "text": "Clone an Existing Repository (Optional)\nIf you want to work on an existing repo:\ngit clone https://github.com/&lt;username&gt;/existing_repo.git\ncd existing_repo\nMake changes, then:\ngit add .\ngit commit -m \"Updated files\"\ngit push"
   }
 ]

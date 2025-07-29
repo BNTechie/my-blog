@@ -64,5 +64,11 @@
   },
   "tutorials/snakemake.qmd": {
     "snakemake.html": "f882da64"
+  },
+  "tutorials/Tutiral_for_creating_github_repo.qmd": {
+    "Tutiral_for_creating_github_repo.html": "2be08768"
+  },
+  "tutorials/github_tutorial.qmd": {
+    "github_tutorial.html": "cd3bbf26"
   }
 }

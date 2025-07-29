@@ -1,0 +1,50 @@
+# ================================
+# 1️⃣ Create a New Local Project
+# ================================
+mkdir my_project                  # Create project folder
+cd my_project                     # Navigate into folder
+git init                          # Initialize Git
+
+echo "# My Project" >> README.md  # Create a README file
+
+git add README.md                 # Stage file
+git commit -m "Initial commit"    # Commit file
+
+# ================================
+# 2️⃣ Link to GitHub Repository
+# ================================
+# (Create a repository on GitHub first: https://github.com/new)
+
+# Using HTTPS (replace <username> and repo name)
+git remote add origin https://github.com/<username>/my_project.git
+
+# OR using SSH (if keys are configured)
+# git remote add origin git@github.com:<username>/my_project.git
+
+# ================================
+# 3️⃣ Push Code to GitHub
+# ================================
+git branch -M main                # Ensure branch is 'main'
+git push -u origin main           # Push to GitHub
+
+# ================================
+# 4️⃣ Update Changes to GitHub Later
+# ================================
+# When you make changes locally:
+git status                        # Check modified files
+git add .                         # Stage all changes
+git commit -m "Describe your changes here"
+git push                          # Push updates to GitHub
+
+# ================================
+# 5️⃣ Clone Existing Repository (Optional)
+# ================================
+# If you want to work on an existing repo:
+git clone https://github.com/<username>/existing_repo.git
+cd existing_repo
+
+# Make changes, then:
+git add .
+git commit -m "Updated files"
+git push
+

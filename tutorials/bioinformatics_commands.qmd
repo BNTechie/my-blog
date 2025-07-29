@@ -11,6 +11,15 @@ Bioinformatics often involves working with large datasets, sequencing files, and
 ## Basic Linux Commands
 
 - `cd <path/to/dir>` – Change working directory  
+- `count=0
+for dir in sumstats_FG*/; do
+    if ! ls "$dir"/*.gz >/dev/null 2>&1; then
+        echo "No .gz file in: $dir"
+        ((count++))
+    fi
+done
+echo "Total folders without .gz files: $count"` - to find the number of folder with missing .gz files
+
 - `pwd` – Print working directory  
 - `ll` (alias for `ls -l`) – Show the contents of the current directory as a list  
 - `head -n X <filename>` – Print the first X lines of a file  

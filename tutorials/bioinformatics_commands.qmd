@@ -34,7 +34,7 @@ echo "Total folders without .gz files: $count"` - to find the number of folder w
 - `grep <pattern> <filename>` – Print lines in a file containing a pattern  
 - `find . -name "*.txt"` – Search for files in the current directory matching `*.txt`  
 - `nano <file>` – Open the Nano text editor to create or edit files  
-
+- `find /path/to/folder -type f | wc -l` - Count the total number of files in a specific folders.
 - `ls | head -20` – Show the **first 20 files** in the current folder  
 - `ls | tail -20` – Show the **last 20 files** in the current folder  
 - `ls -lt | head -20` – Show the **20 most recently modified files**  

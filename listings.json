@@ -1,0 +1,15 @@
+[
+  {
+    "listing": "/tutorials/index.html",
+    "items": [
+      "/tutorials/Examplecases_Llama2.html",
+      "/tutorials/github_tutorial.html",
+      "/tutorials/probit_logit/logit_probit.html",
+      "/tutorials/snakemake.html",
+      "/tutorials/bioinformatics_commands.html",
+      "/tutorials/probit_logit/index.html",
+      "/tutorials/Imputation_in_Python.html",
+      "/tutorials/Execution_time_in_R.html"
+    ]
+  }
+]

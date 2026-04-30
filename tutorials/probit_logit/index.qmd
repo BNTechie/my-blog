@@ -1,0 +1,31 @@
+---
+title: "Logit vs Probit: When Should You Use Which?"
+author: "Nivedita Bhadra"
+date: "2026-04-30"
+categories: [statistics, data science, genetics]
+format: html
+---
+
+We are often interested in questions that have only two possible answers: a patient either develops a disease or does not, a user either clicks a link or ignores it, a system either fails or continues to operate. Despite their simplicity, such outcomes require careful modeling because the underlying processes that generate them are rarely simple. These are essentially ‘classification’ problems.
+
+Two of the most commonly used approaches for handling these situations are logistic regression (logit) and probit regression. Sometimes or most of the time, they appear interchangeable. In fact, if you fit both models on the same dataset, you will usually obtain very similar predicted probabilities. This is why, in many applied workflows, the distinction between them is sometimes overlooked.
+
+However, this similarity can be misleading. The two models are built on fundamentally different assumptions about how the data are generated. Logistic regression models the relationship through odds, while probit regression assumes the existence of an underlying latent variable that follows a normal distribution and is only observed after crossing a threshold. These differences become important when you move beyond routine prediction and start interpreting results, especially in fields such as statistical genetics, or risk modeling.
+
+In this article, we will take a step-by-step approach to understand these models. We will try to understand how logit and probit work, explore their mathematical foundations, and explore when one may be more appropriate than the other. Along the way, we will also work through a simulation in Python, using visualizations to make these differences more concrete.
+
+The Core Idea: Modeling Probabilities
+Both logit and probit models try to answer the same question:
+
+How does a set of predictors map to the probability of an event?
+
+Instead of modeling probability directly, they transform it into a linear form: Logit uses log-odds an Probit: uses a latent normal variable.
+
+
+
+Logistic Regression (Logit)
+Logistic regression approaches the binary outcome problem by modeling how the log-odds of an event change with the predictors. Instead of working directly with probabilities (which are constrained between 0 and 1), it transforms them into a scale where a linear relationship can be established.
+
+Rather than starting with the equation, it is more intuitive to understand the model through its shape. The logistic function maps any real-valued input into a probability, producing a smooth S-shaped curve(Example, Figure 1).
+
+As the predictor increases, the probability of the outcome transitions gradually from values close to 0 toward 1. The curve is symmetric around 0.5, and compared to the probit model, it has slightly heavier tails, meaning probabilities change more gradually at extreme values.

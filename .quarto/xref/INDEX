@@ -70,5 +70,50 @@
   },
   "tutorials/github_tutorial.qmd": {
     "github_tutorial.html": "cd3bbf26"
+  },
+  "tutorials/Examplecases_Llama2.ipynb": {
+    "Examplecases_Llama2.html": "fd51b1f6"
+  },
+  "tutorials/probit_logit/index.qmd": {
+    "index.html": "3ed40d1f"
+  },
+  "tutorials/probit_logit/logit_probit.ipynb": {
+    "logit_probit.html": "c53e56af"
+  },
+  "tutorials/R2_liability_scale.ipynb": {
+    "R2_liability_scale.html": "37861cd8"
+  },
+  "tutorials/R2_liability_scale_files/R2_liability_scale.ipynb": {
+    "R2_liability_scale.html": "54171cda"
+  },
+  "tutorials/blog_github/github_tutorial.qmd": {
+    "github_tutorial.html": "79419cc8"
+  },
+  "tutorials/blog_imputation/Imputation_in_Python.ipynb": {
+    "Imputation_in_Python.html": "9d07bbd7"
+  },
+  "tutorials/blog_Execution_time_R/Execution_time_in_R.ipynb": {
+    "Execution_time_in_R.html": "e21cdef5"
+  },
+  "tutorials/blog_probit_logic/logit_probit.ipynb": {
+    "logit_probit.html": "6be13f5a"
+  },
+  "tutorials/blog_probit_logic/index.qmd": {
+    "index.html": "745d6c4a"
+  },
+  "tutorials/llama2/Examplecases_Llama2.ipynb": {
+    "Examplecases_Llama2.html": "775515ee"
+  },
+  "tutorials/bioinformatics_commands/bioinformatics_commands.qmd": {
+    "bioinformatics_commands.html": "1a671bc0"
+  },
+  "tutorials/index_old.qmd": {
+    "index_old.html": "31db2e8d"
+  },
+  "index_old.qmd": {
+    "index_old.html": "e77863dd"
+  },
+  "tutorials/blog_awk/awk_tutorial.ipynb": {
+    "awk_tutorial.html": "1be089b2"
   }
 }

@@ -6,7 +6,15 @@
   {
     "listing": "/tutorials/index.html",
     "items": [
-      "/tutorials/Execution_time_in_R.html"
+      "/tutorials/Examplecases_Llama2.html",
+      "/tutorials/blog_probit_logic/logit_probit.html",
+      "/tutorials/snakemake.html",
+      "/tutorials/bioinformatics_commands.html",
+      "/tutorials/R2_liability_scale_files/R2_liability_scale.html",
+      "/tutorials/blog_probit_logic/index.html",
+      "/tutorials/blog_imputation/Imputation_in_Python.html",
+      "/tutorials/blog_Execution_time_R/Execution_time_in_R.html",
+      "/tutorials/blog_github/github_tutorial.html"
     ]
   }
 ]

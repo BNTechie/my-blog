@@ -3,23 +3,19 @@ project:
   output-dir: docs
 
 
-format:
-  html:
-    theme: cosmo
-    css: styles.css
-    toc: true
-
 website:
-  title: "Data Science Blog"
+  title: "Nivedita’s Blog"
   navbar:
     left:
       - text: "Home"
         href: index.qmd
-      - text: "About Me"
+      - text: "Tutorials"
+        href: tutorials/index.qmd
+      - text: "About"
         href: about.qmd
-      - text: "Blog"
-        href: blog/index.qmd
-      - text: "Publications"
-        href: publications.qmd
-      - text: Tutorials
-        href: tutorials/index.qmd 
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    css: style.css

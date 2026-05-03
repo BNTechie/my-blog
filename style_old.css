@@ -1,0 +1,115 @@
+/* ===== GENERAL LAYOUT ===== */
+body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7;
+  font-size: 17px;
+  color: #2c2c2c;
+  background-color: #ffffff;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ===== TITLES ===== */
+h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-top: 40px;
+}
+
+h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* ===== PARAGRAPHS ===== */
+p {
+  margin-bottom: 16px;
+}
+
+/* ===== LINKS ===== */
+a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ===== CODE BLOCKS ===== */
+pre {
+  background-color: #f7f7f7;
+  padding: 15px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 14px;
+}
+
+code {
+  background-color: #f1f1f1;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+/* ===== CALLOUT / QUOTE ===== */
+blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 15px;
+  color: #555;
+  margin: 20px 0;
+}
+
+/* ===== IMAGE ===== */
+img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 20px 0;
+}
+
+/* ===== TABLE OF CONTENTS (RIGHT SIDE FIX) ===== */
+#TOC {
+  position: sticky;
+  top: 100px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-left: 10px;
+}
+
+/* ===== REMOVE OVERLAP ISSUE ===== */
+.quarto-sidebar {
+  z-index: 1;
+}
+
+/* ===== TITLE BLOCK ===== */
+.quarto-title-block .title {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.quarto-title-block .subtitle {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* ===== CODE COPY BUTTON ===== */
+.code-copy-button {
+  opacity: 0.6;
+}
+
+.code-copy-button:hover {
+  opacity: 1;
+}
+
+/* ===== HORIZONTAL RULE ===== */
+hr {
+  margin: 40px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}

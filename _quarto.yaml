@@ -11,8 +11,6 @@ website:
         href: index.qmd
       - text: "Tutorials"
         href: tutorials/index.qmd
-      - text: "About"
-        href: about.qmd
 
 format:
   html:

@@ -11,11 +11,17 @@ format:
 ::: {.hero-text}
 
 
-Hi, I’m **Nivedita Bhadra** — a Senior Data Scientist with a background in physics, computational modeling, biomedical data science, and large-scale data systems.
+Hi, I’m Nivedita Bhadra — a **Senior Data Scientist** with a background in physics, computational modeling, and biomedical data science.
 
-This is my learning and writing space. I document what I am building, debugging, and understanding as I grow in data science, machine learning, statistical genetics, NLP, and modern AI tools.
+My journey began with physics training at IIT Delhi and continued through JNU and a PhD in Computational Physics at IISER Kolkata. Over time, my focus gradually shifted from theoretical systems to real-world data, leading me into large-scale analytics and machine learning.
 
-Many posts are written while I am learning something myself: testing code, fixing errors, building examples, and turning scattered notes into reusable tutorials.
+I spent several years at Translational Genomics Research Institute (TGen) working on high-dimensional biomedical data, predictive modeling, and clinical applications. I am now working at the Institute of Biological Psychiatry in Denmark, where I focus on statistical genetics, risk prediction, and large-scale data-driven modeling.
+
+In this blog,  I document what I am building, debugging, and understanding along the way—across data science, machine learning, statistical genetics, NLP, and modern AI tools. Many of the posts here are written as I learn: testing ideas, fixing things that break, and turning working notes into structured, reusable tutorials.
+
+My aim is to make complex technical topics easier to understand through practical examples, readable code, and honest notes from real learning.
+
+
 
 [Explore Tutorials](tutorials/index.qmd){.btn .btn-primary} [Connect on LinkedIn](https://www.linkedin.com/in/nivedita-bhadra-b5149130/){.btn .btn-secondary}
 
@@ -32,11 +38,20 @@ Many posts are written while I am learning something myself: testing code, fixin
 
 ---
 
-## About Me
+## 🎓 Education
 
-I work at the intersection of **data science, machine learning, biomedical research, and computational analysis**. My background is in physics and computational modeling, and over time I have moved toward applied machine learning, NLP, statistical genetics, and production-oriented data workflows.
+**PhD in Computational Physics**
+*Indian Institute of Science Education and Research (IISER), Kolkata, India*
+2012 – 2018
 
-My aim is to make complex technical topics easier to understand through practical examples, readable code, and honest notes from real learning.
+**M.Sc. in Physics**
+*Indian Institute of Technology (IIT), Delhi, India*
+2009 – 2011
+
+**Master of Engineering in Big Data Analytics**
+*Arcada University of Applied Sciences, Finland*
+2024 – 2025
+
 
 ---
 

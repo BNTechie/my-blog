@@ -228,14 +228,7 @@
     "href": "index.html#areas-i-write-about",
     "title": "Welcome to Nivedita’s Blog",
     "section": "Areas I Write About",
-    "text": "Areas I Write About\n\n\nData Science & ML\nPython, R, model evaluation, robust ML workflows, and production-oriented analysis.\n\n\nNLP & LLMs\nTransformers, local LLMs, sentiment analysis, topic modeling, and applied text analytics.\n\n\nStatistical Genetics\nLiability-scale models, GWAS notes, polygenic scores, and biomedical data analysis.\n\n\nTechnical Workflows\nGitHub, SQL, Dask, Snakemake, Quarto, reproducible notebooks, and data pipelines."
-  },
-  {
-    "objectID": "index.html#why-i-write",
-    "href": "index.html#why-i-write",
-    "title": "Welcome to Nivedita’s Blog",
-    "section": "Why I Write",
-    "text": "Why I Write\nI write because learning becomes deeper when it is explained clearly.\nThis blog is for people who are trying to build a similar path: researchers moving into data science, scientists strengthening computational skills, beginners learning Python or R, and professionals trying to understand modern machine learning workflows.\n\nYou can find my research publications here:\n👉 Google Scholar Profile"
+    "text": "Areas I Write About\n\n\nData Science & ML\nPython, R, model evaluation, robust ML workflows, and production-oriented analysis.\n\n\nNLP & LLMs\nTransformers, local LLMs, sentiment analysis, topic modeling, and applied text analytics.\n\n\nStatistical Genetics\nLiability-scale models, GWAS notes, polygenic scores, and biomedical data analysis.\n\n\nTechnical Workflows\nGitHub, SQL, Dask, Snakemake, Quarto, reproducible notebooks, and data pipelines.\n\n\n\nGoogle Scholar Profile"
   },
   {
     "objectID": "index.html#subscribe-follow",

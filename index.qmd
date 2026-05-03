@@ -81,16 +81,7 @@ GitHub, SQL, Dask, Snakemake, Quarto, reproducible notebooks, and data pipelines
 
 ---
 
-## Why I Write
-
-I write because learning becomes deeper when it is explained clearly.
-
-This blog is for people who are trying to build a similar path: researchers moving into data science, scientists strengthening computational skills, beginners learning Python or R, and professionals trying to understand modern machine learning workflows.
-
----
-
-You can find my research publications here:  
-👉 [Google Scholar Profile](https://scholar.google.com/citations?hl=en&user=EWoE7sgAAAAJ&view_op=list_works&sortby=pubdate)
+[Google Scholar Profile](https://scholar.google.com/citations?hl=en&user=EWoE7sgAAAAJ&view_op=list_works&sortby=pubdate)
 
 ---
 

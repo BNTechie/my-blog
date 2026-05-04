@@ -8,18 +8,40 @@ body {
   background-color: #ffffff;
 }
 
-/* Main readable content width */
+/* Make article content wider */
+.page-columns {
+  grid-template-columns:
+    [screen-start] 1fr
+    [screen-start-inset] 5fr
+    [page-start] minmax(0, 1100px)
+    [page-end] 260px
+    [screen-end-inset] 5fr
+    [screen-end] 1fr;
+}
+
+/* Improve main article readability */
 main.content {
   max-width: 1100px;
-  margin: auto;
-  padding: 2rem;
 }
 
-
-#TOC {
-  position: sticky;
-  top: 80px;
+/* Keep right TOC smaller and cleaner */
+#quarto-margin-sidebar {
+  width: 240px;
+  font-size: 0.85rem;
 }
+
+/* Prevent TOC from overlapping text */
+.sidebar.margin-sidebar {
+  margin-left: 1.5rem;
+}
+
+/* Make code blocks fit better */
+pre.sourceCode,
+div.sourceCode {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 
 /* ===== TITLE BLOCK ===== */
 
@@ -70,65 +92,60 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ===== HERO SECTION (FIXED) ===== */
+/* ===== HERO SECTION ===== */
 
 .hero {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 4rem;
+  display: flex;
   align-items: center;
-  margin-top: 2.5rem;
-  margin-bottom: 3rem;
+  gap: 3rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .hero-text {
-  max-width: 650px;
+  flex: 2;
+  min-width: 0;
 }
 
 .hero-image {
+  flex: 1;
   text-align: center;
   color: #6c757d;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 22px;
-  padding: 2rem 1.5rem;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
 }
 
 .hero-image img {
-  width: 260px;
+  width: 220px;
   max-width: 100%;
-  border-radius: 18px;
-  margin-bottom: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
 }
 
 /* ===== BUTTONS ===== */
 
 .btn {
   display: inline-block;
-  padding: 0.65rem 1.1rem;
-  margin-right: 0.6rem;
-  margin-top: 1.2rem;
-  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin-right: 0.5rem;
+  margin-top: 1rem;
+  border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
-  transition: all 0.2s ease;
 }
 
 .btn-primary {
-  background-color: #1f3b57;
+  background-color: #2f3a4a;
   color: #ffffff;
 }
 
 .btn-primary:hover {
-  background-color: #14283d;
+  background-color: #1f2937;
   color: #ffffff;
   text-decoration: none;
 }
 
 .btn-secondary {
-  border: 1px solid #1f3b57;
-  color: #1f3b57;
+  border: 1px solid #2f3a4a;
+  color: #2f3a4a;
   background-color: #ffffff;
 }
 
@@ -148,15 +165,11 @@ a:hover {
 
 .card {
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 1.3rem;
+  border-radius: 10px;
+  padding: 1.2rem;
   background-color: #fafafa;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .card h3 {
@@ -204,25 +217,21 @@ img {
   overflow-y: auto;
 }
 
-/* ===== MOBILE (IMPROVED) ===== */
+/* ===== MOBILE ===== */
 
 @media (max-width: 768px) {
   main.content {
     max-width: 100%;
-    padding: 1.5rem;
   }
 
   .hero {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .hero-text {
-    max-width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
   }
 
   .hero-image {
-    text-align: center;
+    text-align: left;
   }
 
   .grid {

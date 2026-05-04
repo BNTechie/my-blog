@@ -1,7 +1,7 @@
 ---
 title: "Welcome to Nivedita’s Blog"
 subtitle: "Learning, building, and sharing data science one tutorial at a time"
-page-layout: article
+page-layout: full
 format:
   html:
     toc: false

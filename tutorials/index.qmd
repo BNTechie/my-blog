@@ -1,26 +1,11 @@
 ---
 title: "Tutorials"
-listing: 
-  type: default
-  contents: .
+listing:
+  contents: "**/*.{ipynb,qmd}"
   sort: "date desc"
-  categories: false
-page-layout: article
-title-block-banner: false
-title-block-style: default
-format:
-  html:
-    toc: true
-    number-sections: true
-    title-block: true
-    title-block-categories: false
-
-css: style.css  # This links the local CSS file
+  type: default
 ---
 
-Welcome to the tutorials section! Below you’ll find notebook-based guides covering Python and R.
-
-...
 
 
 

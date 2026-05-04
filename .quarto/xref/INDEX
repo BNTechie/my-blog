@@ -115,5 +115,14 @@
   },
   "tutorials/blog_awk/awk_tutorial.ipynb": {
     "awk_tutorial.html": "1be089b2"
+  },
+  "tutorials/blog_working_with_HPC/working_with_HPC.ipynb": {
+    "working_with_HPC.html": "5658e757"
+  },
+  "tutorials/tutorials.qmd": {
+    "tutorials.html": "f1ed0379"
+  },
+  "tutorials/blog_probit_logic/logit_probit_tutorial.ipynb": {
+    "logit_probit_tutorial.html": "a0aeaf9b"
   }
 }

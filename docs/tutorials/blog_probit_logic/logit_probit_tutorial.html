@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-04-30">
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-05-04">
 
-<title>Logit vs Probit: When Should You Use Each? – Nivedita’s Blog</title>
+<title>Logit or Probit- which one ? – Nivedita’s Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -141,7 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -149,9 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#logit-vs-probit-when-should-you-use-each" id="toc-logit-vs-probit-when-should-you-use-each" class="nav-link active" data-scroll-target="#logit-vs-probit-when-should-you-use-each">Logit vs Probit: When Should You Use Each?</a>
-  <ul class="collapse">
-  <li><a href="#the-core-idea-modeling-probabilities" id="toc-the-core-idea-modeling-probabilities" class="nav-link" data-scroll-target="#the-core-idea-modeling-probabilities">The Core Idea: Modeling Probabilities</a></li>
+  <li><a href="#the-core-idea-modeling-probabilities" id="toc-the-core-idea-modeling-probabilities" class="nav-link active" data-scroll-target="#the-core-idea-modeling-probabilities">The Core Idea: Modeling Probabilities</a></li>
   <li><a href="#logistic-regression-logit" id="toc-logistic-regression-logit" class="nav-link" data-scroll-target="#logistic-regression-logit">Logistic Regression (Logit)</a></li>
   <li><a href="#probit-regression" id="toc-probit-regression" class="nav-link" data-scroll-target="#probit-regression">Probit Regression</a>
   <ul class="collapse">
@@ -168,10 +167,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#compare-predicted-probabilities" id="toc-compare-predicted-probabilities" class="nav-link" data-scroll-target="#compare-predicted-probabilities">Compare predicted probabilities</a></li>
   </ul></li>
-  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a>
-  <ul class="collapse">
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
   <li><a href="#note-1" id="toc-note-1" class="nav-link" data-scroll-target="#note-1">Note:</a></li>
-  </ul></li>
   <li><a href="#when-should-you-use-logit" id="toc-when-should-you-use-logit" class="nav-link" data-scroll-target="#when-should-you-use-logit">When Should You Use Logit?</a></li>
   <li><a href="#when-should-you-use-probit" id="toc-when-should-you-use-probit" class="nav-link" data-scroll-target="#when-should-you-use-probit">When Should You Use Probit?</a>
   <ul class="collapse">
@@ -183,34 +180,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#repeat-the-simulation-many-times" id="toc-repeat-the-simulation-many-times" class="nav-link" data-scroll-target="#repeat-the-simulation-many-times">Repeat the Simulation Many Times</a></li>
   <li><a href="#visualize-the-latent-liability-threshold" id="toc-visualize-the-latent-liability-threshold" class="nav-link" data-scroll-target="#visualize-the-latent-liability-threshold">Visualize the Latent Liability Threshold</a></li>
   </ul></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page-left" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Logit vs Probit: When Should You Use Each?</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">Logit</div>
-    <div class="quarto-category">Probit</div>
-    <div class="quarto-category">liability scale</div>
-    <div class="quarto-category">Python</div>
-    <div class="quarto-category">Data Science</div>
+<h1 class="title">Logit or Probit- which one ?</h1>
+<p class="subtitle lead">Understanding the key differences between logistic and probit regression for binary classification.</p>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
   </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-04-30</p>
+      <p class="date">May 4, 2026</p>
     </div>
   </div>
   
@@ -222,8 +218,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="logit-vs-probit-when-should-you-use-each" class="level1" style="font-size:18px; line-height:1.7;">
-<h1>Logit vs Probit: When Should You Use Each?</h1>
 <p>We are often interested in questions that have only two possible answers: a patient either develops a disease or does not, a user either clicks a link or ignores it, a system either fails or continues to operate. Despite their simplicity, such outcomes require careful modeling because the underlying processes that generate them are rarely simple. These are essentially ‘classification’ problems.</p>
 <p>Two of the most commonly used approaches for handling these situations are <strong>logistic regression (logit)</strong> and <strong>probit regression</strong>. Sometimes, or most of the time, they appear interchangeable. In fact, if you fit both models on the same dataset, you will usually obtain very similar predicted probabilities. This is why, in many applied workflows, the distinction between them is sometimes overlooked.</p>
 <p>However, this similarity can be misleading. The two models are built on fundamentally different assumptions about how the data are generated. Logistic regression models the relationship through odds, while probit regression assumes the existence of an underlying latent variable that follows a normal distribution and is only observed after crossing a threshold.</p>
@@ -240,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="logistic-regression-logit">Logistic Regression (Logit)</h2>
 <p>Logistic regression approaches the binary outcome problem by modeling how the <strong>log-odds</strong> of an event change with the predictors. Instead of working directly with probabilities (which are constrained between 0 and 1), it transforms them into a scale where a linear relationship can be established.</p>
 <p>Rather than starting with the equation, it is more intuitive to understand the model through its shape. The logistic function maps any real-valued input into a probability, producing a smooth S-shaped curve.</p>
-<div id="41798bf4-c978-4817-a8b7-e36f70601004" class="cell" data-execution_count="1">
+<div id="d046893e-68f1-4e7f-98b3-5ca0611bda47" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -253,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-2-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-2-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -265,7 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Probit regression is based on a slightly different way of thinking about binary outcomes. Instead of modeling the probability directly, it assumes that there is an underlying continuous (latent) variable that we do not observe. What we observe is only the final outcome , whether this hidden variable crosses a certain threshold.</p>
 <p>For instance, in mental health studies, an individual may have an underlying liability or risk level, but we only observe a diagnosis as either present or absent. Similarly, a person may have a continuous risk score for a disease, but the recorded outcome is simply whether the disease occurs or not.</p>
 <p>In the probit framework, this unobserved latent variable is assumed to follow a normal distribution (Example Figure 2), and the binary outcome arises from thresholding this continuous process.</p>
-<div id="48dbb14a-2a30-4ea1-a1dc-50569a57244c" class="cell" data-execution_count="2">
+<div id="05981389-abe4-44cb-b2fa-3454676fea92" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
@@ -294,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -312,7 +306,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The distinction between logit and probit ultimately comes down to the link function they use:</p>
 <p>Logit → logistic cumulative distribution function (CDF) Probit → normal (Gaussian) cumulative distribution function (CDF)</p>
 <p>Visually, however, these two functions are remarkably similar.</p>
-<div id="6b8d7051-2940-43f0-84e0-172060e28a55" class="cell" data-execution_count="3">
+<div id="965cfbb5-020f-4f6f-a8e1-2627b0011989" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
@@ -342,7 +336,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -353,7 +347,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The logistic curve has slightly heavier tails, meaning probabilities change more gradually as we move toward extreme values. The probit curve, based on the normal distribution, is steeper in the middle and flattens more quickly in the extremes. In simple terms:</p>
 <p>Logit spreads probability changes more evenly across the range Probit concentrates changes more tightly around the center This subtle difference is usually negligible for standard datasets, but it can matter when:</p>
 <p>probabilities are very close to 0 or 1 predictors are highly skewed or when modeling assumptions about an underlying latent normal process are important</p>
-<div id="1bf31425-cc69-47b0-b8aa-e63f7c022729" class="cell" data-execution_count="4">
+<div id="cdd1aba2-0c24-4762-81b5-c764f06b1e3e" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
@@ -384,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -400,7 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Logistic coefficients are approximately 1.6 times the probit coefficients</p>
 <p>But the figure also shows why this is only an approximation. The scaling is not perfectly uniform across all values of (x), especially away from the center.</p>
 <p>For moderate predictor values, logit and probit behave almost identically For extreme values or rare events, their differences become more noticeable If your interpretation depends on a latent normal structure, probit aligns more naturally If you prefer odds-based interpretation, logit is more convenient</p>
-<div id="1e820ea9-c193-4026-8377-d8368deac38c" class="cell" data-execution_count="5">
+<div id="01212e92-5a77-42ce-a3a7-47ca68df175e" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
@@ -439,7 +433,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -452,7 +446,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s simulate a dataset and fit both models.</p>
 <section id="generate-synthetic-data" class="level3">
 <h3 class="anchored" data-anchor-id="generate-synthetic-data">Generate synthetic data</h3>
-<div id="015f8aeb-3f64-4256-a294-9920bd95356d" class="cell" data-execution_count="6">
+<div id="0e9db6e1-be47-49a8-aacd-16d1cba195ac" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -467,7 +461,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="fit-logit-and-probit-models" class="level3">
 <h3 class="anchored" data-anchor-id="fit-logit-and-probit-models">Fit Logit and Probit models</h3>
-<div id="7e07e999-8ce8-4daa-824a-ae41f5834c41" class="cell" data-execution_count="7">
+<div id="b7a6bb1f-24a9-480f-947c-951f6e3ac603" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>X_design <span class="op">=</span> sm.add_constant(df[<span class="st">'X'</span>])</span>
@@ -495,7 +489,7 @@ dtype: float64</code></pre>
 <p>But predictions are very similar</p>
 <section id="compare-predicted-probabilities" class="level3">
 <h3 class="anchored" data-anchor-id="compare-predicted-probabilities">Compare predicted probabilities</h3>
-<div id="9a3e1c05-679e-4f6e-95af-0e158d340c6e" class="cell" data-execution_count="8">
+<div id="0cb3fc91-28b0-4544-8eff-34eb4b065a2b" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>x_vals <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">100</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>X_plot <span class="op">=</span> sm.add_constant(x_vals)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -506,7 +500,7 @@ dtype: float64</code></pre>
 </section>
 <section id="visualization" class="level2">
 <h2 class="anchored" data-anchor-id="visualization">Visualization</h2>
-<div id="039d8f19-1ec1-4c78-98fa-358bcb0a14ac" class="cell" data-execution_count="9">
+<div id="a00e2435-ebd0-4062-acd2-5d85c52311b5" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">'X'</span>], df[<span class="st">'y'</span>], alpha<span class="op">=</span><span class="fl">0.2</span>, label<span class="op">=</span><span class="st">"Data"</span>)</span>
@@ -520,16 +514,16 @@ dtype: float64</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<section id="note-1" class="level3">
-<h3 class="anchored" data-anchor-id="note-1">Note:</h3>
+</section>
+<section id="note-1" class="level2">
+<h2 class="anchored" data-anchor-id="note-1">Note:</h2>
 <p>Nearly overlapping curves</p>
 <p>Small differences at extremes</p>
-</section>
 </section>
 <section id="when-should-you-use-logit" class="level2">
 <h2 class="anchored" data-anchor-id="when-should-you-use-logit">When Should You Use Logit?</h2>
@@ -554,7 +548,7 @@ dtype: float64</code></pre>
 </section>
 <section id="create-a-non-gaussian-predictor" class="level3">
 <h3 class="anchored" data-anchor-id="create-a-non-gaussian-predictor">Create a Non-Gaussian Predictor</h3>
-<div id="4b5a3d78-aab8-4005-86c3-3ea7039f8267" class="cell" data-execution_count="10">
+<div id="d72b312e-d813-4d90-b43e-fe625eabab29" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -571,7 +565,7 @@ dtype: float64</code></pre>
 </section>
 <section id="generate-a-binary-outcome-from-a-latent-liability-model" class="level3">
 <h3 class="anchored" data-anchor-id="generate-a-binary-outcome-from-a-latent-liability-model">Generate a Binary Outcome from a Latent Liability Model</h3>
-<div id="63f2493d-1c3f-4614-be18-fc1d0515d5af" class="cell" data-execution_count="11">
+<div id="3d9b0d17-a9e5-4c7a-a82d-59861dc2c755" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>latent_liability <span class="op">=</span> <span class="fl">1.2</span> <span class="op">*</span> X <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -585,7 +579,7 @@ dtype: float64</code></pre>
 </section>
 <section id="fit-logit-and-probit" class="level3">
 <h3 class="anchored" data-anchor-id="fit-logit-and-probit">Fit Logit and Probit</h3>
-<div id="9aecb4f1-5d93-493c-a8ce-991a486eef75" class="cell" data-execution_count="12">
+<div id="a1053c6a-1d4f-4eb7-a744-cc8201edb597" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -615,7 +609,7 @@ dtype: float64</code></pre>
 </section>
 <section id="compare-predicted-probabilities-1" class="level3">
 <h3 class="anchored" data-anchor-id="compare-predicted-probabilities-1">Compare Predicted Probabilities</h3>
-<div id="5b621209-21f8-4e1b-9db2-de14788f4c2e" class="cell" data-execution_count="13">
+<div id="82c068bd-feee-4620-bacc-72bc1118d0a7" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -635,19 +629,18 @@ dtype: float64</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>You can see (Figure 7 ) that both models still follow the same broad pattern. But they can diverge at the extremes, especially for very high predictor values.</p>
-<p>Press enter or click to view image in full size</p>
 <p>This is where instability begins to matter.</p>
 </section>
 <section id="repeat-the-simulation-many-times" class="level3">
 <h3 class="anchored" data-anchor-id="repeat-the-simulation-many-times">Repeat the Simulation Many Times</h3>
 <p>One simulation is not enough. To see stability, we repeat the analysis many times and compare the variability of the estimated coefficients.</p>
-<div id="2315d39f-3aac-4b6c-8f64-d5fbee38d074" class="cell" data-execution_count="14">
+<div id="9f488524-7d4a-4a5f-8cb8-82dbbffefd34" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> skew</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -688,7 +681,7 @@ max      2.504311     1.322372    2.554531   1.000000e-01</code></pre>
 </div>
 </div>
 <p>Now visualize the coefficient variability (Figure 8 ).</p>
-<div id="9533738e-21d3-462d-a8d9-b255d27999e2" class="cell" data-execution_count="15">
+<div id="4fdf7c48-3c89-4bbf-be64-242a637133b1" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plt.hist(results_df[<span class="st">"logit_beta"</span>], bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Logit beta"</span>)</span>
@@ -701,13 +694,13 @@ max      2.504311     1.322372    2.554531   1.000000e-01</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Because the two models are on different scales, we should also rescale the probit coefficient (Figure 9).</p>
-<div id="5df7c7f9-1cd2-4459-825c-cdbd16896d1d" class="cell" data-execution_count="16">
+<div id="c72f0421-33c5-496d-8dc7-1cc5331d4b0f" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>results_df[<span class="st">"probit_beta_scaled"</span>] <span class="op">=</span> <span class="fl">1.6</span> <span class="op">*</span> results_df[<span class="st">"probit_beta"</span>]</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -722,7 +715,7 @@ max      2.504311     1.322372    2.554531   1.000000e-01</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-20-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -739,7 +732,7 @@ max      2.504311     1.322372    2.554531   1.000000e-01</code></pre>
 <section id="visualize-the-latent-liability-threshold" class="level3">
 <h3 class="anchored" data-anchor-id="visualize-the-latent-liability-threshold">Visualize the Latent Liability Threshold</h3>
 <p>This plot (Figure 10) helps connect the simulation to the idea of disease liability.</p>
-<div id="3705f639-827a-4709-8dfb-101393b22f1e" class="cell" data-execution_count="17">
+<div id="664d65a7-8932-41e7-84c5-409c47b3e4c9" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.hist(latent_liability[y <span class="op">==</span> <span class="dv">0</span>], bins<span class="op">=</span><span class="dv">40</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Controls"</span>)</span>
@@ -753,7 +746,7 @@ max      2.504311     1.322372    2.554531   1.000000e-01</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="logit_probit_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="logit_probit_tutorial_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -761,7 +754,6 @@ max      2.504311     1.322372    2.554531   1.000000e-01</code></pre>
 <p>The disease outcome is binary, but the process underneath is continuous. This is why probit is attractive in liability-threshold settings.</p>
 
 
-</section>
 </section>
 </section>
 

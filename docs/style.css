@@ -10,8 +10,15 @@ body {
 
 /* Main readable content width */
 main.content {
-  max-width: 950px;
+  max-width: 1100px;
   margin: auto;
+  padding: 2rem;
+}
+
+
+#TOC {
+  position: sticky;
+  top: 80px;
 }
 
 /* ===== TITLE BLOCK ===== */
@@ -63,60 +70,65 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ===== HERO SECTION ===== */
+/* ===== HERO SECTION (FIXED) ===== */
 
 .hero {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 4rem;
   align-items: center;
-  gap: 3rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 3rem;
 }
 
 .hero-text {
-  flex: 2;
-  min-width: 0;
+  max-width: 650px;
 }
 
 .hero-image {
-  flex: 1;
   text-align: center;
   color: #6c757d;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
 }
 
 .hero-image img {
-  width: 220px;
+  width: 260px;
   max-width: 100%;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
+  border-radius: 18px;
+  margin-bottom: 1rem;
 }
 
 /* ===== BUTTONS ===== */
 
 .btn {
   display: inline-block;
-  padding: 0.6rem 1rem;
-  margin-right: 0.5rem;
-  margin-top: 1rem;
-  border-radius: 6px;
+  padding: 0.65rem 1.1rem;
+  margin-right: 0.6rem;
+  margin-top: 1.2rem;
+  border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .btn-primary {
-  background-color: #2f3a4a;
+  background-color: #1f3b57;
   color: #ffffff;
 }
 
 .btn-primary:hover {
-  background-color: #1f2937;
+  background-color: #14283d;
   color: #ffffff;
   text-decoration: none;
 }
 
 .btn-secondary {
-  border: 1px solid #2f3a4a;
-  color: #2f3a4a;
+  border: 1px solid #1f3b57;
+  color: #1f3b57;
   background-color: #ffffff;
 }
 
@@ -136,11 +148,15 @@ a:hover {
 
 .card {
   border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 1.2rem;
+  border-radius: 12px;
+  padding: 1.3rem;
   background-color: #fafafa;
-  word-break: normal;
-  overflow-wrap: normal;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
 .card h3 {
@@ -188,21 +204,25 @@ img {
   overflow-y: auto;
 }
 
-/* ===== MOBILE ===== */
+/* ===== MOBILE (IMPROVED) ===== */
 
 @media (max-width: 768px) {
   main.content {
     max-width: 100%;
+    padding: 1.5rem;
   }
 
   .hero {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .hero-text {
+    max-width: 100%;
   }
 
   .hero-image {
-    text-align: left;
+    text-align: center;
   }
 
   .grid {

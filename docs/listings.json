@@ -2,12 +2,12 @@
   {
     "listing": "/tutorials/index.html",
     "items": [
-      "/tutorials/blog_probit_logic/logit_probit.html",
-      "/tutorials/blog_awk/awk_tutorial.html",
+      "/tutorials/blog_probit_logic/logit_probit_tutorial.html",
+      "/tutorials/blog_working_with_HPC/working_with_HPC.html",
       "/tutorials/R2_liability_scale_files/R2_liability_scale.html",
-      "/tutorials/blog_probit_logic/index.html",
-      "/tutorials/blog_imputation/Imputation_in_Python.html",
+      "/tutorials/blog_awk/awk_tutorial.html",
       "/tutorials/blog_Execution_time_R/Execution_time_in_R.html",
+      "/tutorials/blog_imputation/Imputation_in_Python.html",
       "/tutorials/llama2/Examplecases_Llama2.html",
       "/tutorials/bioinformatics_commands/bioinformatics_commands.html",
       "/tutorials/blog_github/github_tutorial.html"

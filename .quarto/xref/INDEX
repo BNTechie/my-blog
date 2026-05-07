@@ -136,5 +136,8 @@
   },
   "tutorials/blog_hypothesis_genetics/hyothesis_driven.ipynb": {
     "hyothesis_driven.html": "3176bba5"
+  },
+  "tutorials/blog_SVD/SVD.ipynb": {
+    "SVD.html": "235bc760"
   }
 }

@@ -182,12 +182,9 @@ window.Quarto = {
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#why-matrix-factorization-matters" id="toc-why-matrix-factorization-matters" class="nav-link" data-scroll-target="#why-matrix-factorization-matters">Why Matrix Factorization Matters</a></li>
   <li><a href="#the-core-idea-of-svd" id="toc-the-core-idea-of-svd" class="nav-link" data-scroll-target="#the-core-idea-of-svd">The Core Idea of SVD</a></li>
-  <li><a href="#intuition-behind-svd" id="toc-intuition-behind-svd" class="nav-link" data-scroll-target="#intuition-behind-svd">Intuition Behind SVD</a></li>
   <li><a href="#understanding-each-component" id="toc-understanding-each-component" class="nav-link" data-scroll-target="#understanding-each-component">Understanding Each Component</a></li>
-  <li><a href="#matrix-u" id="toc-matrix-u" class="nav-link" data-scroll-target="#matrix-u">1. Matrix U</a></li>
   <li><a href="#matrix-σ-sigma" id="toc-matrix-σ-sigma" class="nav-link" data-scroll-target="#matrix-σ-sigma">2. Matrix Σ (Sigma)</a></li>
   <li><a href="#matrix-vᵀ" id="toc-matrix-vᵀ" class="nav-link" data-scroll-target="#matrix-vᵀ">3. Matrix Vᵀ</a></li>
-  <li><a href="#a-simple-numerical-example" id="toc-a-simple-numerical-example" class="nav-link" data-scroll-target="#a-simple-numerical-example">A Simple Numerical Example</a></li>
   <li><a href="#reconstructing-the-original-matrix" id="toc-reconstructing-the-original-matrix" class="nav-link" data-scroll-target="#reconstructing-the-original-matrix">Reconstructing the Original Matrix</a></li>
   <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
   <li><a href="#geometric-interpretation" id="toc-geometric-interpretation" class="nav-link" data-scroll-target="#geometric-interpretation">Geometric Interpretation</a></li>
@@ -196,13 +193,9 @@ window.Quarto = {
   <li><a href="#dimensionality-reduction" id="toc-dimensionality-reduction" class="nav-link" data-scroll-target="#dimensionality-reduction">Dimensionality Reduction</a></li>
   <li><a href="#low-rank-approximation" id="toc-low-rank-approximation" class="nav-link" data-scroll-target="#low-rank-approximation">Low-Rank Approximation</a></li>
   <li><a href="#why-this-matters" id="toc-why-this-matters" class="nav-link" data-scroll-target="#why-this-matters">Why This Matters</a></li>
-  <li><a href="#example-image-compression" id="toc-example-image-compression" class="nav-link" data-scroll-target="#example-image-compression">Example: Image Compression</a></li>
   <li><a href="#applications-of-svd" id="toc-applications-of-svd" class="nav-link" data-scroll-target="#applications-of-svd">Applications of SVD</a></li>
-  <li><a href="#svd-in-genomics" id="toc-svd-in-genomics" class="nav-link" data-scroll-target="#svd-in-genomics">SVD in Genomics</a></li>
-  <li><a href="#advantages-of-svd" id="toc-advantages-of-svd" class="nav-link" data-scroll-target="#advantages-of-svd">Advantages of SVD</a></li>
   <li><a href="#limitations-of-svd" id="toc-limitations-of-svd" class="nav-link" data-scroll-target="#limitations-of-svd">Limitations of SVD</a></li>
   <li><a href="#computational-complexity" id="toc-computational-complexity" class="nav-link" data-scroll-target="#computational-complexity">Computational Complexity</a></li>
-  <li><a href="#truncated-svd" id="toc-truncated-svd" class="nav-link" data-scroll-target="#truncated-svd">Truncated SVD</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -241,7 +234,7 @@ window.Quarto = {
 </header>
 
 
-<p>(SVD) is one of the most important mathematical tools in modern data science, machine learning, computer vision, natural language processing, and statistical genetics.</p>
+<p><strong>SVD</strong> is one of the most important mathematical tools in modern data science, machine learning, computer vision, natural language processing, and statistical genetics.</p>
 <p>Although the name sounds intimidating, the underlying idea is elegant:</p>
 <blockquote class="blockquote">
 <p>SVD decomposes a matrix into simpler components that reveal hidden structure in the data.</p>
@@ -258,8 +251,8 @@ window.Quarto = {
 </ul>
 <p>In this tutorial, we will develop an intuitive understanding of SVD and implement it step-by-step using Python.</p>
 <hr>
-<section id="learning-objectives" class="level1">
-<h1>Learning Objectives</h1>
+<section id="learning-objectives" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h3>
 <p>By the end of this tutorial, you will understand:</p>
 <ul>
 <li>What SVD is</li>
@@ -272,8 +265,8 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="why-matrix-factorization-matters" class="level1">
-<h1>Why Matrix Factorization Matters</h1>
+<section id="why-matrix-factorization-matters" class="level3">
+<h3 class="anchored" data-anchor-id="why-matrix-factorization-matters">Why Matrix Factorization Matters</h3>
 <p>In data science, we often work with matrices:</p>
 <table class="caption-top table">
 <thead>
@@ -316,8 +309,8 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="the-core-idea-of-svd" class="level1">
-<h1>The Core Idea of SVD</h1>
+<section id="the-core-idea-of-svd" class="level3">
+<h3 class="anchored" data-anchor-id="the-core-idea-of-svd">The Core Idea of SVD</h3>
 <p>SVD decomposes a matrix into three matrices:</p>
 <p>:contentReference<span data-index="1">oaicite:1</span></p>
 <p>where:</p>
@@ -344,9 +337,8 @@ window.Quarto = {
 </tbody>
 </table>
 <hr>
-</section>
-<section id="intuition-behind-svd" class="level1">
-<h1>Intuition Behind SVD</h1>
+<section id="intuition-behind-svd" class="level4">
+<h4 class="anchored" data-anchor-id="intuition-behind-svd">Intuition Behind SVD</h4>
 <p>Think of SVD as:</p>
 <ol type="1">
 <li>Rotating the data</li>
@@ -356,11 +348,11 @@ window.Quarto = {
 <p>This transformation helps reveal the most important directions in the dataset.</p>
 <hr>
 </section>
-<section id="understanding-each-component" class="level1">
-<h1>Understanding Each Component</h1>
 </section>
-<section id="matrix-u" class="level1">
-<h1>1. Matrix U</h1>
+<section id="understanding-each-component" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-each-component">Understanding Each Component</h3>
+<section id="matrix-u" class="level4">
+<h4 class="anchored" data-anchor-id="matrix-u">1. Matrix U</h4>
 <p>Matrix U contains the <strong>left singular vectors</strong>.</p>
 <p>These vectors describe relationships among samples.</p>
 <p>In machine learning terms:</p>
@@ -370,8 +362,9 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="matrix-σ-sigma" class="level1">
-<h1>2. Matrix Σ (Sigma)</h1>
+</section>
+<section id="matrix-σ-sigma" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-σ-sigma">2. Matrix Σ (Sigma)</h3>
 <p>Matrix <span class="math display">\[Σ\]</span> contains the <strong>singular values</strong>.</p>
 <p>These values indicate how important each latent dimension is.</p>
 <p>Larger singular values:</p>
@@ -386,8 +379,8 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="matrix-vᵀ" class="level1">
-<h1>3. Matrix Vᵀ</h1>
+<section id="matrix-vᵀ" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-vᵀ">3. Matrix Vᵀ</h3>
 <p>Matrix Vᵀ contains the <strong>right singular vectors</strong>.</p>
 <p>These describe relationships among features.</p>
 <p>For example:</p>
@@ -397,9 +390,8 @@ window.Quarto = {
 <li>correlated variables</li>
 </ul>
 <hr>
-</section>
-<section id="a-simple-numerical-example" class="level1">
-<h1>A Simple Numerical Example</h1>
+<section id="a-simple-numerical-example" class="level4">
+<h4 class="anchored" data-anchor-id="a-simple-numerical-example">A Simple Numerical Example</h4>
 <p>Suppose we have the following matrix:</p>
 <div id="bf47ddb0-81fc-4e84-aca3-5b343b8b8421" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -461,8 +453,9 @@ Shape of VT: (2, 2)</code></pre>
 </div>
 </div>
 </section>
-<section id="reconstructing-the-original-matrix" class="level1">
-<h1>Reconstructing the Original Matrix</h1>
+</section>
+<section id="reconstructing-the-original-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="reconstructing-the-original-matrix">Reconstructing the Original Matrix</h3>
 <p>To reconstruct the matrix:</p>
 <div id="0e8739ad-2894-4234-acee-5da08fa0b65b" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
@@ -481,8 +474,8 @@ Shape of VT: (2, 2)</code></pre>
 </div>
 <hr>
 </section>
-<section id="interpretation" class="level1">
-<h1>Interpretation</h1>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">Interpretation</h3>
 <p>The reconstructed matrix is nearly identical to the original matrix.</p>
 <p>This means:</p>
 <ul>
@@ -491,8 +484,8 @@ Shape of VT: (2, 2)</code></pre>
 </ul>
 <hr>
 </section>
-<section id="geometric-interpretation" class="level1">
-<h1>Geometric Interpretation</h1>
+<section id="geometric-interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="geometric-interpretation">Geometric Interpretation</h3>
 <p>SVD transforms data geometrically.</p>
 <p>It:</p>
 <ul>
@@ -503,8 +496,8 @@ Shape of VT: (2, 2)</code></pre>
 <p>This is why SVD is closely connected to dimensionality reduction.</p>
 <hr>
 </section>
-<section id="relationship-between-svd-and-pca" class="level1">
-<h1>Relationship Between SVD and PCA</h1>
+<section id="relationship-between-svd-and-pca" class="level3">
+<h3 class="anchored" data-anchor-id="relationship-between-svd-and-pca">Relationship Between SVD and PCA</h3>
 <p>PCA is heavily based on SVD.</p>
 <p>PCA identifies directions of maximum variance.</p>
 <p>Mathematically:</p>
@@ -569,8 +562,8 @@ Shape of VT: (2, 2)</code></pre>
 </div>
 </div>
 </section>
-<section id="singular-values-and-explained-variance" class="level1">
-<h1>Singular Values and Explained Variance</h1>
+<section id="singular-values-and-explained-variance" class="level3">
+<h3 class="anchored" data-anchor-id="singular-values-and-explained-variance">Singular Values and Explained Variance</h3>
 <p>The singular values determine how much information each component contains.</p>
 <div id="4da5a9e9-4f70-4cf8-9397-1ae164a86fa0" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pca.explained_variance_ratio_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -579,8 +572,8 @@ Shape of VT: (2, 2)</code></pre>
 </div>
 </div>
 </section>
-<section id="dimensionality-reduction" class="level1">
-<h1>Dimensionality Reduction</h1>
+<section id="dimensionality-reduction" class="level3">
+<h3 class="anchored" data-anchor-id="dimensionality-reduction">Dimensionality Reduction</h3>
 <p>One powerful property of SVD is that we can approximate matrices using only the largest singular values.</p>
 <p>This allows:</p>
 <ul>
@@ -590,8 +583,8 @@ Shape of VT: (2, 2)</code></pre>
 </ul>
 <hr>
 </section>
-<section id="low-rank-approximation" class="level1">
-<h1>Low-Rank Approximation</h1>
+<section id="low-rank-approximation" class="level3">
+<h3 class="anchored" data-anchor-id="low-rank-approximation">Low-Rank Approximation</h3>
 <p>Suppose we keep only the first singular value.</p>
 <div id="1303aff3-f263-4a92-aeae-a9b40e08b090" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
@@ -609,8 +602,8 @@ Shape of VT: (2, 2)</code></pre>
 </div>
 <hr>
 </section>
-<section id="why-this-matters" class="level1">
-<h1>Why This Matters</h1>
+<section id="why-this-matters" class="level3">
+<h3 class="anchored" data-anchor-id="why-this-matters">Why This Matters</h3>
 <p>This approximation:</p>
 <ul>
 <li>uses fewer parameters</li>
@@ -624,9 +617,8 @@ Shape of VT: (2, 2)</code></pre>
 <li>image compression</li>
 </ul>
 <hr>
-</section>
-<section id="example-image-compression" class="level1">
-<h1>Example: Image Compression</h1>
+<section id="example-image-compression" class="level4">
+<h4 class="anchored" data-anchor-id="example-image-compression">Example: Image Compression</h4>
 <p>Images are matrices of pixel intensities.</p>
 <p>SVD can compress images by storing only important singular values.</p>
 <hr>
@@ -683,8 +675,9 @@ Shape of VT: (2, 2)</code></pre>
 </div>
 <hr>
 </section>
-<section id="applications-of-svd" class="level1">
-<h1>Applications of SVD</h1>
+</section>
+<section id="applications-of-svd" class="level3">
+<h3 class="anchored" data-anchor-id="applications-of-svd">Applications of SVD</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -720,9 +713,8 @@ Shape of VT: (2, 2)</code></pre>
 </tbody>
 </table>
 <hr>
-</section>
-<section id="svd-in-genomics" class="level1">
-<h1>SVD in Genomics</h1>
+<section id="svd-in-genomics" class="level4">
+<h4 class="anchored" data-anchor-id="svd-in-genomics">SVD in Genomics</h4>
 <p>In genomics, SVD is widely used for:</p>
 <ul>
 <li>ancestry analysis</li>
@@ -733,8 +725,8 @@ Shape of VT: (2, 2)</code></pre>
 </ul>
 <hr>
 </section>
-<section id="advantages-of-svd" class="level1">
-<h1>Advantages of SVD</h1>
+<section id="advantages-of-svd" class="level4">
+<h4 class="anchored" data-anchor-id="advantages-of-svd">Advantages of SVD</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -763,8 +755,9 @@ Shape of VT: (2, 2)</code></pre>
 </table>
 <hr>
 </section>
-<section id="limitations-of-svd" class="level1">
-<h1>Limitations of SVD</h1>
+</section>
+<section id="limitations-of-svd" class="level3">
+<h3 class="anchored" data-anchor-id="limitations-of-svd">Limitations of SVD</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -789,8 +782,8 @@ Shape of VT: (2, 2)</code></pre>
 </table>
 <hr>
 </section>
-<section id="computational-complexity" class="level1">
-<h1>Computational Complexity</h1>
+<section id="computational-complexity" class="level3">
+<h3 class="anchored" data-anchor-id="computational-complexity">Computational Complexity</h3>
 <p>SVD becomes expensive for very large datasets.</p>
 <p>Challenges include:</p>
 <ul>
@@ -806,10 +799,9 @@ Shape of VT: (2, 2)</code></pre>
 <li>GPU acceleration</li>
 </ul>
 <hr>
-</section>
-<section id="truncated-svd" class="level1">
-<h1>Truncated SVD</h1>
-<p>:contentReference<span data-index="3">oaicite:3</span> keeps only the largest singular values.</p>
+<section id="truncated-svd" class="level4">
+<h4 class="anchored" data-anchor-id="truncated-svd">Truncated SVD</h4>
+<p><strong>Truncated SVD</strong> keeps only the largest singular values.</p>
 <p>This is particularly useful for sparse high-dimensional datasets.</p>
 <hr>
 <div id="aba820dd-fb5f-4dbd-8ac1-40303529eaf5" class="cell" data-execution_count="11">
@@ -858,8 +850,9 @@ Shape of VT: (2, 2)</code></pre>
 <p>In practice, SVD helps transform complex high-dimensional datasets into compact and interpretable representations. Despite computational challenges for extremely large matrices, modern approaches such as truncated and randomized SVD make these methods scalable for real-world machine learning applications.</p>
 <hr>
 </section>
-<section id="references" class="level1">
-<h1>References</h1>
+</section>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
 <ol type="1">
 <li>Hastie, Tibshirani &amp; Friedman — The Elements of Statistical Learning</li>
 <li>Bishop — Pattern Recognition and Machine Learning</li>

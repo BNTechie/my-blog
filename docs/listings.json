@@ -2,6 +2,7 @@
   {
     "listing": "/tutorials/index.html",
     "items": [
+      "/tutorials/blog_hypothesis_genetics/hyothesis_driven.html",
       "/tutorials/blog_mood_track/notebook /01_moodtrack_data_generation.html",
       "/tutorials/blog_probit_logic/logit_probit_tutorial.html",
       "/tutorials/blog_working_with_HPC/working_with_HPC.html",

@@ -124,5 +124,14 @@
   },
   "tutorials/blog_probit_logic/logit_probit_tutorial.ipynb": {
     "logit_probit_tutorial.html": "a0aeaf9b"
+  },
+  "tutorials/blog_mood_track/notebook /01_moodtrack_data_generation.ipynb.ipynb": {
+    "01_moodtrack_data_generation.ipynb.html": "eb9b77f0"
+  },
+  "tutorials/blog_mood_track/notebook /01_moodtrack_data_generation.ipynb": {
+    "01_moodtrack_data_generation.html": "4168cda6"
+  },
+  "tutorials/blog_mood_track/notebook /trial.ipynb": {
+    "trial.html": "af71fe75"
   }
 }

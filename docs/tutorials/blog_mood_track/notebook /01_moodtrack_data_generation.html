@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-05-06">
+
+<title>MoodTrack: Full-Stack Mental Health Analytics Dashboard – Nivedita’s Blog</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-f109c301ad4f8741ac597e603f54361d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Nivedita’s Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">MoodTrack: Full-Stack Mental Health Analytics Dashboard</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 6, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this tutorial, we build <strong>MoodTrack</strong>, a full-stack mental health analytics dashboard using synthetic PHQ-9-like longitudinal data.</p>
+<p>The system includes:</p>
+<ul>
+<li>Python synthetic data generation</li>
+<li>Node.js + Express backend API</li>
+<li>SQLite database</li>
+<li>React frontend dashboard</li>
+<li>Prediction API</li>
+<li>Deployment using Render and Netlify</li>
+</ul>
+<pre class="text"><code>
+This project is on a synthetic dataset. 
+</code></pre>
+<section id="final-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="final-architecture">1. Final Architecture</h2>
+<pre class="text"><code>Synthetic PHQ-9 Data Generation
+        ↓
+SQLite Database
+        ↓
+Express Backend API
+        ↓
+Prediction Logic
+        ↓
+React Frontend Dashboard
+        ↓
+Deployment using Render + Netlify</code></pre>
+<section id="final-project-structure" class="level3">
+<h3 class="anchored" data-anchor-id="final-project-structure">Final project structure:</h3>
+<pre class="text"><code>blog_mood_track/
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   ├── .env
+│   ├── data/
+│   │   ├── moodtrack_synthetic_phq9_dataset.csv
+│   │   └── moodtrack_user_summary.csv
+│   ├── db/
+│   │   ├── database.js
+│   │   ├── initDatabase.js
+│   │   └── moodtrack.db
+│   └── routes/
+│       ├── users.js
+│       ├── mood.js
+│       ├── summary.js
+│       └── prediction.js
+├── frontend/
+│   ├── .env
+│   ├── package.json
+│   └── src/
+│       ├── App.js
+│       ├── App.css
+│       └── components/
+│           ├── UserSelector.js
+│           ├── MoodChart.js
+│           ├── SummaryCards.js
+│           └── PredictionCard.js
+└── notebooks/
+    └── moodtrack_fullstack_tutorial.ipynb</code></pre>
+</section>
+</section>
+<section id="synthetic-phq-9-data-generation" class="level2">
+<h2 class="anchored" data-anchor-id="synthetic-phq-9-data-generation">2. Synthetic PHQ-9 Data Generation</h2>
+<p>Real PHQ-9 data is sensitive and cannot be used publicly. Therefore, we generate synthetic longitudinal PHQ-9-like data.</p>
+<p>The simulated dataset includes:</p>
+<ul>
+<li>300 synthetic users</li>
+<li>12 weekly observations per user</li>
+<li>PHQ-9 scores from 0 to 27</li>
+<li>trajectory patterns: stable, improving, worsening, relapse, fluctuating</li>
+<li>extra variables: sleep, stress, activity, medication status</li>
+</ul>
+<div id="ea3f2bb0-ce2b-44b5-a361-37b3c07d7aed" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>n_users <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>n_weeks <span class="op">=</span> <span class="dv">12</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>trajectory_types <span class="op">=</span> [</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stable_low"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"stable_moderate"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"improving"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"worsening"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"relapse"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fluctuating"</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>trajectory_probs <span class="op">=</span> [<span class="fl">0.20</span>, <span class="fl">0.20</span>, <span class="fl">0.20</span>, <span class="fl">0.15</span>, <span class="fl">0.10</span>, <span class="fl">0.15</span>]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> phq9_category(score):</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> score <span class="op">&lt;=</span> <span class="dv">4</span>:</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"minimal"</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> score <span class="op">&lt;=</span> <span class="dv">9</span>:</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"mild"</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> score <span class="op">&lt;=</span> <span class="dv">14</span>:</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"moderate"</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> score <span class="op">&lt;=</span> <span class="dv">19</span>:</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"moderately_severe"</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"severe"</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>records <span class="op">=</span> []</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> user_id <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n_users <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    age <span class="op">=</span> <span class="bu">int</span>(np.clip(np.random.normal(<span class="dv">38</span>, <span class="dv">12</span>), <span class="dv">18</span>, <span class="dv">75</span>))</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    sex <span class="op">=</span> np.random.choice([<span class="st">"female"</span>, <span class="st">"male"</span>], p<span class="op">=</span>[<span class="fl">0.58</span>, <span class="fl">0.42</span>])</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    trajectory <span class="op">=</span> np.random.choice(trajectory_types, p<span class="op">=</span>trajectory_probs)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    baseline <span class="op">=</span> {</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        <span class="st">"stable_low"</span>: np.random.normal(<span class="dv">4</span>, <span class="dv">2</span>),</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">"stable_moderate"</span>: np.random.normal(<span class="dv">12</span>, <span class="dv">3</span>),</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">"improving"</span>: np.random.normal(<span class="dv">17</span>, <span class="dv">4</span>),</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        <span class="st">"worsening"</span>: np.random.normal(<span class="dv">6</span>, <span class="dv">3</span>),</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        <span class="st">"relapse"</span>: np.random.normal(<span class="dv">9</span>, <span class="dv">3</span>),</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        <span class="st">"fluctuating"</span>: np.random.normal(<span class="dv">11</span>, <span class="dv">4</span>),</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    }[trajectory]</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> week <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n_weeks <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>        noise <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">1.8</span>)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> trajectory <span class="op">==</span> <span class="st">"stable_low"</span>:</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> baseline <span class="op">+</span> noise</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> trajectory <span class="op">==</span> <span class="st">"stable_moderate"</span>:</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> baseline <span class="op">+</span> noise</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> trajectory <span class="op">==</span> <span class="st">"improving"</span>:</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> baseline <span class="op">-</span> (week <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> np.random.uniform(<span class="fl">0.7</span>, <span class="fl">1.2</span>) <span class="op">+</span> noise</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> trajectory <span class="op">==</span> <span class="st">"worsening"</span>:</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> baseline <span class="op">+</span> (week <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> np.random.uniform(<span class="fl">0.6</span>, <span class="fl">1.1</span>) <span class="op">+</span> noise</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> trajectory <span class="op">==</span> <span class="st">"relapse"</span>:</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> week <span class="op">&lt;=</span> <span class="dv">6</span>:</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>                score <span class="op">=</span> baseline <span class="op">-</span> week <span class="op">*</span> np.random.uniform(<span class="fl">0.4</span>, <span class="fl">0.9</span>) <span class="op">+</span> noise</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>                score <span class="op">=</span> baseline <span class="op">-</span> <span class="dv">4</span> <span class="op">+</span> (week <span class="op">-</span> <span class="dv">6</span>) <span class="op">*</span> np.random.uniform(<span class="fl">1.0</span>, <span class="fl">1.7</span>) <span class="op">+</span> noise</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> baseline <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> np.sin(week <span class="op">/</span> <span class="fl">1.5</span>) <span class="op">+</span> noise</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> <span class="bu">int</span>(np.clip(<span class="bu">round</span>(score), <span class="dv">0</span>, <span class="dv">27</span>))</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>        records.append({</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>            <span class="st">"user_id"</span>: <span class="ss">f"U</span><span class="sc">{</span>user_id<span class="sc">:04d}</span><span class="ss">"</span>,</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>            <span class="st">"week"</span>: week,</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>            <span class="st">"age"</span>: age,</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sex"</span>: sex,</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>            <span class="st">"trajectory_type"</span>: trajectory,</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>            <span class="st">"phq9_score"</span>: score,</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>            <span class="st">"phq9_category"</span>: phq9_category(score),</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sleep_hours"</span>: <span class="bu">round</span>(np.clip(np.random.normal(<span class="dv">7</span> <span class="op">-</span> score <span class="op">*</span> <span class="fl">0.08</span>, <span class="fl">1.0</span>), <span class="dv">3</span>, <span class="dv">10</span>), <span class="dv">1</span>),</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>            <span class="st">"physical_activity_days"</span>: <span class="bu">int</span>(np.clip(<span class="bu">round</span>(np.random.normal(<span class="dv">4</span> <span class="op">-</span> score <span class="op">*</span> <span class="fl">0.12</span>, <span class="fl">1.5</span>)), <span class="dv">0</span>, <span class="dv">7</span>)),</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>            <span class="st">"stress_level"</span>: <span class="bu">int</span>(np.clip(<span class="bu">round</span>(np.random.normal(<span class="dv">3</span> <span class="op">+</span> score <span class="op">*</span> <span class="fl">0.22</span>, <span class="fl">1.3</span>)), <span class="dv">1</span>, <span class="dv">10</span>)),</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>            <span class="st">"medication_status"</span>: np.random.choice([<span class="st">"none"</span>, <span class="st">"started"</span>, <span class="st">"ongoing"</span>], p<span class="op">=</span>[<span class="fl">0.55</span>, <span class="fl">0.15</span>, <span class="fl">0.30</span>])</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(records)</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"high_risk_flag"</span>] <span class="op">=</span> df[<span class="st">"phq9_score"</span>] <span class="op">&gt;=</span> <span class="dv">15</span></span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"created_at"</span>] <span class="op">=</span> pd.Timestamp(<span class="st">"2026-01-01"</span>) <span class="op">+</span> pd.to_timedelta((df[<span class="st">"week"</span>] <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">7</span>, unit<span class="op">=</span><span class="st">"D"</span>)</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">user_id</th>
+<th data-quarto-table-cell-role="th">week</th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">trajectory_type</th>
+<th data-quarto-table-cell-role="th">phq9_score</th>
+<th data-quarto-table-cell-role="th">phq9_category</th>
+<th data-quarto-table-cell-role="th">sleep_hours</th>
+<th data-quarto-table-cell-role="th">physical_activity_days</th>
+<th data-quarto-table-cell-role="th">stress_level</th>
+<th data-quarto-table-cell-role="th">medication_status</th>
+<th data-quarto-table-cell-role="th">high_risk_flag</th>
+<th data-quarto-table-cell-role="th">created_at</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>U0001</td>
+<td>1</td>
+<td>43</td>
+<td>male</td>
+<td>improving</td>
+<td>17</td>
+<td>moderately_severe</td>
+<td>5.1</td>
+<td>1</td>
+<td>3</td>
+<td>none</td>
+<td>True</td>
+<td>2026-01-01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>U0001</td>
+<td>2</td>
+<td>43</td>
+<td>male</td>
+<td>improving</td>
+<td>17</td>
+<td>moderately_severe</td>
+<td>5.2</td>
+<td>1</td>
+<td>6</td>
+<td>ongoing</td>
+<td>True</td>
+<td>2026-01-08</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>U0001</td>
+<td>3</td>
+<td>43</td>
+<td>male</td>
+<td>improving</td>
+<td>11</td>
+<td>moderate</td>
+<td>8.7</td>
+<td>3</td>
+<td>6</td>
+<td>none</td>
+<td>False</td>
+<td>2026-01-15</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>U0001</td>
+<td>4</td>
+<td>43</td>
+<td>male</td>
+<td>improving</td>
+<td>13</td>
+<td>moderate</td>
+<td>5.4</td>
+<td>4</td>
+<td>6</td>
+<td>none</td>
+<td>False</td>
+<td>2026-01-22</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>U0001</td>
+<td>5</td>
+<td>43</td>
+<td>male</td>
+<td>improving</td>
+<td>12</td>
+<td>moderate</td>
+<td>5.5</td>
+<td>3</td>
+<td>5</td>
+<td>started</td>
+<td>False</td>
+<td>2026-01-29</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="a9fe3806-0dec-457b-8126-81eb6c791da9" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> (</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    df.groupby(<span class="st">"user_id"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    .agg(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        age<span class="op">=</span>(<span class="st">"age"</span>, <span class="st">"first"</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        sex<span class="op">=</span>(<span class="st">"sex"</span>, <span class="st">"first"</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        trajectory_type<span class="op">=</span>(<span class="st">"trajectory_type"</span>, <span class="st">"first"</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        baseline_score<span class="op">=</span>(<span class="st">"phq9_score"</span>, <span class="st">"first"</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        final_score<span class="op">=</span>(<span class="st">"phq9_score"</span>, <span class="st">"last"</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        mean_score<span class="op">=</span>(<span class="st">"phq9_score"</span>, <span class="st">"mean"</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        max_score<span class="op">=</span>(<span class="st">"phq9_score"</span>, <span class="st">"max"</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        min_score<span class="op">=</span>(<span class="st">"phq9_score"</span>, <span class="st">"min"</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        high_risk_weeks<span class="op">=</span>(<span class="st">"high_risk_flag"</span>, <span class="st">"sum"</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>summary[<span class="st">"change_from_baseline"</span>] <span class="op">=</span> summary[<span class="st">"final_score"</span>] <span class="op">-</span> summary[<span class="st">"baseline_score"</span>]</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">"moodtrack_synthetic_phq9_dataset.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>summary.to_csv(<span class="st">"moodtrack_user_summary.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary.shape)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>summary.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(3600, 13)
+(300, 11)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">user_id</th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">trajectory_type</th>
+<th data-quarto-table-cell-role="th">baseline_score</th>
+<th data-quarto-table-cell-role="th">final_score</th>
+<th data-quarto-table-cell-role="th">mean_score</th>
+<th data-quarto-table-cell-role="th">max_score</th>
+<th data-quarto-table-cell-role="th">min_score</th>
+<th data-quarto-table-cell-role="th">high_risk_weeks</th>
+<th data-quarto-table-cell-role="th">change_from_baseline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>U0001</td>
+<td>43</td>
+<td>male</td>
+<td>improving</td>
+<td>17</td>
+<td>6</td>
+<td>11.500000</td>
+<td>17</td>
+<td>6</td>
+<td>2</td>
+<td>-11</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>U0002</td>
+<td>50</td>
+<td>male</td>
+<td>stable_moderate</td>
+<td>9</td>
+<td>11</td>
+<td>10.750000</td>
+<td>14</td>
+<td>9</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>U0003</td>
+<td>28</td>
+<td>male</td>
+<td>fluctuating</td>
+<td>7</td>
+<td>9</td>
+<td>5.666667</td>
+<td>10</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>U0004</td>
+<td>38</td>
+<td>male</td>
+<td>worsening</td>
+<td>9</td>
+<td>16</td>
+<td>10.833333</td>
+<td>16</td>
+<td>7</td>
+<td>2</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>U0005</td>
+<td>36</td>
+<td>male</td>
+<td>fluctuating</td>
+<td>13</td>
+<td>12</td>
+<td>9.916667</td>
+<td>14</td>
+<td>5</td>
+<td>0</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>After generating the data, copy both CSV files into the backend data folder:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> backend/data</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> moodtrack_synthetic_phq9_dataset.csv backend/data/</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> moodtrack_user_summary.csv backend/data/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis">3. Exploratory Data Analysis</h2>
+<p>Before building the application, we inspect the generated data to understand the PHQ-9 score distribution and example trajectories.</p>
+<div id="793e92a8-2609-491b-9488-f9d993cb60e0" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.hist(df[<span class="st">"phq9_score"</span>], bins<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"PHQ-9 Score"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution of Synthetic PHQ-9 Scores"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_moodtrack_data_generation_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="59fe6d46-3178-4b39-8f89-005864ee043b" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sample_users <span class="op">=</span> df[<span class="st">"user_id"</span>].unique()[:<span class="dv">5</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> user <span class="kw">in</span> sample_users:</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> df[df[<span class="st">"user_id"</span>] <span class="op">==</span> user]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    plt.plot(temp[<span class="st">"week"</span>], temp[<span class="st">"phq9_score"</span>], marker<span class="op">=</span><span class="st">"o"</span>, label<span class="op">=</span>user)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Week"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"PHQ-9 Score"</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Sample Mood Trajectories"</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_moodtrack_data_generation_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="backend-setup" class="level2">
+<h2 class="anchored" data-anchor-id="backend-setup">4. Backend Setup</h2>
+<p>The backend is built using <strong>Node.js</strong> and <strong>Express</strong>.</p>
+<p>Create the backend folder and initialize the project.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> backend</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> init <span class="at">-y</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install express cors csv-parser dotenv sqlite sqlite3</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">--save-dev</span> nodemon</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create folders and files:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> data</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> routes</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> db</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> server.js</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> .env</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> routes/users.js</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> routes/mood.js</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> routes/summary.js</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> routes/prediction.js</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> db/database.js</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> db/initDatabase.js</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add this to <code>backend/.env</code></p>
+<p>PORT=5000</p>
+</section>
+<section id="backend-package.json" class="level2">
+<h2 class="anchored" data-anchor-id="backend-package.json">5. Backend <code>package.json</code></h2>
+<p>Replace the automatically generated <code>backend/package.json</code> with the following:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"name"</span><span class="ex">:</span> <span class="st">"moodtrack-backend"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"version"</span><span class="ex">:</span> <span class="st">"1.0.0"</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"main"</span><span class="ex">:</span> <span class="st">"server.js"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scripts"</span><span class="ex">:</span> {</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"start"</span><span class="ex">:</span> <span class="st">"node server.js"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dev"</span><span class="ex">:</span> <span class="st">"nodemon server.js"</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">},</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"dependencies"</span><span class="ex">:</span> {</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cors"</span><span class="ex">:</span> <span class="st">"^2.8.5"</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"csv-parser"</span><span class="ex">:</span> <span class="st">"^3.2.0"</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dotenv"</span><span class="ex">:</span> <span class="st">"^16.4.7"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"express"</span><span class="ex">:</span> <span class="st">"^5.1.0"</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sqlite"</span><span class="ex">:</span> <span class="st">"^5.1.1"</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sqlite3"</span><span class="ex">:</span> <span class="st">"^5.1.7"</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="ex">},</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"devDependencies"</span><span class="ex">:</span> {</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nodemon"</span><span class="ex">:</span> <span class="st">"^3.1.10"</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">}</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sqlite-database-connection" class="level2">
+<h2 class="anchored" data-anchor-id="sqlite-database-connection">6. SQLite Database Connection</h2>
+<p>We now create the SQLite connection layer.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> sqlite3 = require<span class="er">(</span><span class="st">"sqlite3"</span><span class="kw">);</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> { open } = require<span class="er">(</span><span class="st">"sqlite"</span><span class="kw">);</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> path = require<span class="er">(</span><span class="st">"path"</span><span class="kw">);</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">async</span> function openDatabase<span class="er">(</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="ex">open</span><span class="er">(</span><span class="kw">{</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">filename:</span> path.join<span class="er">(</span><span class="ex">__dirname,</span> <span class="st">"moodtrack.db"</span><span class="kw">)</span><span class="ex">,</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">driver:</span> sqlite3.Database</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">});</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="ex">module.exports</span> = openDatabase<span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="initialize-sqlite-database" class="level2">
+<h2 class="anchored" data-anchor-id="initialize-sqlite-database">7. Initialize SQLite Database</h2>
+<p>This script:</p>
+<ul>
+<li>creates tables</li>
+<li>reads CSV files</li>
+<li>inserts data into SQLite</li>
+</ul>
+<section id="backenddbinitdatabase.js" class="level3">
+<h3 class="anchored" data-anchor-id="backenddbinitdatabase.js"><code>backend/db/initDatabase.js</code></h3>
+<pre class="bahs"><code>const fs = require("fs");
+const csv = require("csv-parser");
+const path = require("path");
+const openDatabase = require("./database");
+
+function loadCSV(filePath) {
+  return new Promise((resolve, reject) =&gt; {
+    const results = [];
+
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on("data", (row) =&gt; results.push(row))
+      .on("end", () =&gt; resolve(results))
+      .on("error", (err) =&gt; reject(err));
+  });
+}
+
+async function initDatabase() {
+  const db = await openDatabase();
+
+  await db.exec(`
+    DROP TABLE IF EXISTS mood_records;
+    DROP TABLE IF EXISTS user_summary;
+
+    CREATE TABLE mood_records (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
+      week INTEGER,
+      age INTEGER,
+      sex TEXT,
+      trajectory_type TEXT,
+      phq9_score INTEGER,
+      phq9_category TEXT,
+      sleep_hours REAL,
+      physical_activity_days INTEGER,
+      stress_level INTEGER,
+      medication_status TEXT,
+      high_risk_flag TEXT,
+      created_at TEXT
+    );
+
+    CREATE TABLE user_summary (
+      user_id TEXT PRIMARY KEY,
+      age INTEGER,
+      sex TEXT,
+      trajectory_type TEXT,
+      baseline_score INTEGER,
+      final_score INTEGER,
+      mean_score REAL,
+      max_score INTEGER,
+      min_score INTEGER,
+      high_risk_weeks INTEGER,
+      change_from_baseline INTEGER
+    );
+  `);
+
+  const moodData = await loadCSV(
+    path.join(__dirname, "..", "data", "moodtrack_synthetic_phq9_dataset.csv")
+  );
+
+  const summaryData = await loadCSV(
+    path.join(__dirname, "..", "data", "moodtrack_user_summary.csv")
+  );
+
+  for (const row of moodData) {
+    await db.run(
+      `
+      INSERT INTO mood_records (
+        user_id, week, age, sex, trajectory_type, phq9_score,
+        phq9_category, sleep_hours, physical_activity_days,
+        stress_level, medication_status, high_risk_flag, created_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+      [
+        row.user_id,
+        Number(row.week),
+        Number(row.age),
+        row.sex,
+        row.trajectory_type,
+        Number(row.phq9_score),
+        row.phq9_category,
+        Number(row.sleep_hours),
+        Number(row.physical_activity_days),
+        Number(row.stress_level),
+        row.medication_status,
+        row.high_risk_flag,
+        row.created_at
+      ]
+    );
+  }
+
+  for (const row of summaryData) {
+    await db.run(
+      `
+      INSERT INTO user_summary (
+        user_id, age, sex, trajectory_type, baseline_score,
+        final_score, mean_score, max_score, min_score,
+        high_risk_weeks, change_from_baseline
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+      [
+        row.user_id,
+        Number(row.age),
+        row.sex,
+        row.trajectory_type,
+        Number(row.baseline_score),
+        Number(row.final_score),
+        Number(row.mean_score),
+        Number(row.max_score),
+        Number(row.min_score),
+        Number(row.high_risk_weeks),
+        Number(row.change_from_baseline)
+      ]
+    );
+  }
+
+  console.log("SQLite database initialized successfully.");
+  console.log("Mood records inserted:", moodData.length);
+  console.log("Summary records inserted:", summaryData.length);
+
+  await db.close();
+}
+
+initDatabase();
+</code></pre>
+<p>Run the initialization script:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">node</span> db/initDatabase.js</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected output:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">SQLite</span> database initialized successfully.</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Mood</span> records inserted: 3600</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Summary</span> records inserted: 300</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="backend-route-files" class="level2">
+<h2 class="anchored" data-anchor-id="backend-route-files">8. Backend Route Files</h2>
+<p>The backend exposes multiple REST API endpoints.</p>
+<section id="backendroutesusers.js" class="level3">
+<h3 class="anchored" data-anchor-id="backendroutesusers.js"><code>backend/routes/users.js</code></h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> express = require<span class="er">(</span><span class="st">"express"</span><span class="kw">);</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> router = express.Router<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">module.exports</span> = function <span class="er">(</span><span class="ex">db</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">router.get</span><span class="er">(</span><span class="st">"/"</span><span class="ex">,</span> async <span class="er">(</span><span class="ex">req,</span> res<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">try</span> {</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="ex">const</span> users = await db.all<span class="er">(</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"SELECT DISTINCT user_id FROM mood_records ORDER BY user_id"</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">);</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.json</span><span class="er">(</span><span class="ex">users.map</span><span class="er">((</span><span class="va">row</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> row.user_id<span class="kw">));</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span> <span class="ex">catch</span> <span class="er">(</span><span class="ex">error</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.status</span><span class="er">(</span><span class="ex">500</span><span class="kw">)</span><span class="ex">.json</span><span class="er">(</span><span class="kw">{</span> <span class="ex">error:</span> error.message }<span class="er">)</span><span class="kw">;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="er">}</span><span class="kw">);</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="ex">router</span><span class="kw">;</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="kw">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="backendroutesmood.js" class="level3">
+<h3 class="anchored" data-anchor-id="backendroutesmood.js"><code>backend/routes/mood.js</code></h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> express = require<span class="er">(</span><span class="st">"express"</span><span class="kw">);</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> router = express.Router<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">module.exports</span> = function <span class="er">(</span><span class="ex">db</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">router.get</span><span class="er">(</span><span class="st">"/"</span><span class="ex">,</span> async <span class="er">(</span><span class="ex">req,</span> res<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">try</span> {</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>      <span class="ex">const</span> rows = await db.all<span class="er">(</span><span class="st">"SELECT * FROM mood_records"</span><span class="kw">);</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.json</span><span class="er">(</span><span class="ex">rows</span><span class="kw">);</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span> <span class="ex">catch</span> <span class="er">(</span><span class="ex">error</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.status</span><span class="er">(</span><span class="ex">500</span><span class="kw">)</span><span class="ex">.json</span><span class="er">(</span><span class="kw">{</span> <span class="ex">error:</span> error.message }<span class="er">)</span><span class="kw">;</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="er">}</span><span class="kw">);</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="ex">router.get</span><span class="er">(</span><span class="st">"/:user_id"</span><span class="ex">,</span> async <span class="er">(</span><span class="ex">req,</span> res<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">try</span> {</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>      <span class="ex">const</span> rows = await db.all<span class="er">(</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"SELECT * FROM mood_records WHERE user_id = ? ORDER BY week"</span><span class="ex">,</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        <span class="ex">[req.params.user_id]</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>      <span class="kw">);</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> <span class="kw">(</span><span class="ex">rows.length</span> === 0<span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ex">res.status</span><span class="er">(</span><span class="ex">404</span><span class="kw">)</span><span class="ex">.json</span><span class="er">(</span><span class="kw">{</span> <span class="ex">error:</span> <span class="st">"User not found"</span> }<span class="er">)</span><span class="kw">;</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.json</span><span class="er">(</span><span class="ex">rows</span><span class="kw">);</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span> <span class="ex">catch</span> <span class="er">(</span><span class="ex">error</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.status</span><span class="er">(</span><span class="ex">500</span><span class="kw">)</span><span class="ex">.json</span><span class="er">(</span><span class="kw">{</span> <span class="ex">error:</span> error.message }<span class="er">)</span><span class="kw">;</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  <span class="er">}</span><span class="kw">);</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="ex">router</span><span class="kw">;</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="kw">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="backendroutessummary.js" class="level3">
+<h3 class="anchored" data-anchor-id="backendroutessummary.js"><code>backend/routes/summary.js</code></h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> express = require<span class="er">(</span><span class="st">"express"</span><span class="kw">);</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> router = express.Router<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">module.exports</span> = function <span class="er">(</span><span class="ex">db</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">router.get</span><span class="er">(</span><span class="st">"/"</span><span class="ex">,</span> async <span class="er">(</span><span class="ex">req,</span> res<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">try</span> {</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>      <span class="ex">const</span> rows = await db.all<span class="er">(</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"SELECT * FROM user_summary ORDER BY user_id"</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>      <span class="kw">);</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.json</span><span class="er">(</span><span class="ex">rows</span><span class="kw">);</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span> <span class="ex">catch</span> <span class="er">(</span><span class="ex">error</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.status</span><span class="er">(</span><span class="ex">500</span><span class="kw">)</span><span class="ex">.json</span><span class="er">(</span><span class="kw">{</span> <span class="ex">error:</span> error.message }<span class="er">)</span><span class="kw">;</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="er">}</span><span class="kw">);</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="ex">router</span><span class="kw">;</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="kw">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="part-3-prediction-api-backend-server-local-backend-test" class="level3">
+<h3 class="anchored" data-anchor-id="part-3-prediction-api-backend-server-local-backend-test">Part 3: Prediction API + Backend Server + Local Backend Test</h3>
+</section>
+</section>
+<section id="prediction-api" class="level2">
+<h2 class="anchored" data-anchor-id="prediction-api">9. Prediction API</h2>
+<p>To add a simple machine learning-style component, we create a prediction endpoint.</p>
+<p>The model uses a simple linear trend over the user’s PHQ-9 trajectory to estimate the next week’s PHQ-9 score.</p>
+<p>This is not intended as a clinical model. It is used to demonstrate how predictive logic can be exposed through an API.</p>
+<section id="backendroutesprediction.js" class="level3">
+<h3 class="anchored" data-anchor-id="backendroutesprediction.js"><code>backend/routes/prediction.js</code></h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> express = require<span class="er">(</span><span class="st">"express"</span><span class="kw">);</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> router = express.Router<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> linearRegression</span><span class="kw">(</span><span class="ex">data</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> n = data.length<span class="kw">;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> sumX = data.reduce<span class="er">(</span><span class="kw">(</span><span class="fu">sum</span>, row<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> sum + row.week, 0<span class="kw">);</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> sumY = data.reduce<span class="er">(</span><span class="kw">(</span><span class="fu">sum</span>, row<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> sum + row.phq9_score, 0<span class="kw">);</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> sumXY = data.reduce<span class="er">(</span><span class="kw">(</span><span class="fu">sum</span>, row<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> sum + row.week <span class="pp">*</span> row.phq9_score, 0<span class="kw">);</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> sumX2 = data.reduce<span class="er">(</span><span class="kw">(</span><span class="fu">sum</span>, row<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> sum + row.week <span class="pp">*</span> row.week, 0<span class="kw">);</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> slope =</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">(</span><span class="ex">n</span> <span class="pp">*</span> sumXY <span class="at">-</span> sumX <span class="pp">*</span> sumY<span class="kw">)</span> <span class="ex">/</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">(</span><span class="ex">n</span> <span class="pp">*</span> sumX2 <span class="at">-</span> sumX <span class="pp">*</span> sumX<span class="kw">);</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> intercept = <span class="er">(</span><span class="ex">sumY</span> <span class="at">-</span> slope <span class="pp">*</span> sumX<span class="kw">)</span> <span class="ex">/</span> n<span class="kw">;</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">{</span> <span class="ex">slope,</span> intercept }<span class="kw">;</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="ex">module.exports</span> = function <span class="er">(</span><span class="ex">db</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="ex">router.get</span><span class="er">(</span><span class="st">"/:user_id"</span><span class="ex">,</span> async <span class="er">(</span><span class="ex">req,</span> res<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    <span class="ex">try</span> {</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>      <span class="ex">const</span> rows = await db.all<span class="er">(</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"SELECT week, phq9_score FROM mood_records WHERE user_id = ? ORDER BY week"</span><span class="ex">,</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>        <span class="ex">[req.params.user_id]</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>      <span class="kw">);</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> <span class="kw">(</span><span class="ex">rows.length</span> === 0<span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ex">res.status</span><span class="er">(</span><span class="ex">404</span><span class="kw">)</span><span class="ex">.json</span><span class="er">(</span><span class="kw">{</span> <span class="ex">error:</span> <span class="st">"User not found"</span> }<span class="er">)</span><span class="kw">;</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>      <span class="ex">const</span> data = rows.map<span class="er">(</span><span class="kw">(</span><span class="ex">row</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> <span class="er">(</span><span class="kw">{</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>        <span class="ex">week:</span> Number<span class="er">(</span><span class="ex">row.week</span><span class="kw">)</span><span class="ex">,</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>        <span class="ex">phq9_score:</span> Number<span class="er">(</span><span class="ex">row.phq9_score</span><span class="kw">)</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}));</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>      <span class="ex">const</span> { slope, intercept } = linearRegression<span class="er">(</span><span class="ex">data</span><span class="kw">);</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>      <span class="ex">const</span> nextWeek = Math.max<span class="er">(</span><span class="ex">...data.map</span><span class="er">((</span><span class="va">row</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> row.week<span class="kw">))</span> <span class="ex">+</span> 1<span class="kw">;</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>      <span class="bu">let</span> <span class="va">predictedScore</span> <span class="op">=</span> <span class="va">slope</span> <span class="pp">*</span> <span class="va">nextWeek</span> <span class="op">+</span> <span class="va">intercept</span><span class="kw">;</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>      <span class="ex">predictedScore</span> = Math.round<span class="er">(</span><span class="ex">Math.max</span><span class="er">(</span><span class="ex">0,</span> Math.min<span class="er">(</span><span class="ex">27,</span> predictedScore<span class="kw">)));</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>      <span class="bu">let</span> <span class="va">riskLevel</span> <span class="op">=</span> <span class="st">"low"</span><span class="kw">;</span></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> <span class="kw">(</span><span class="ex">predictedScore</span> <span class="op">&gt;</span>= 15<span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>        <span class="ex">riskLevel</span> = <span class="st">"high"</span><span class="kw">;</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="kw">(</span><span class="ex">predictedScore</span> <span class="op">&gt;</span>= 10<span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>        <span class="ex">riskLevel</span> = <span class="st">"moderate"</span><span class="kw">;</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.json</span><span class="er">(</span><span class="kw">{</span></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>        <span class="ex">user_id:</span> req.params.user_id,</span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>        <span class="ex">next_week:</span> nextWeek,</span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>        <span class="ex">predicted_phq9_score:</span> predictedScore,</span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>        <span class="ex">trend_slope:</span> Number<span class="er">(</span><span class="ex">slope.toFixed</span><span class="er">(</span><span class="ex">2</span><span class="kw">))</span><span class="ex">,</span></span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>        <span class="ex">risk_level:</span> riskLevel</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>      <span class="kw">});</span></span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span> <span class="ex">catch</span> <span class="er">(</span><span class="ex">error</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.status</span><span class="er">(</span><span class="ex">500</span><span class="kw">)</span><span class="ex">.json</span><span class="er">(</span><span class="kw">{</span> <span class="ex">error:</span> error.message }<span class="er">)</span><span class="kw">;</span></span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>  <span class="er">}</span><span class="kw">);</span></span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="ex">router</span><span class="kw">;</span></span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a><span class="kw">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="backend-server" class="level2">
+<h2 class="anchored" data-anchor-id="backend-server">10. Backend Server</h2>
+<p>Now we connect the database and all route files in the main backend server.</p>
+<section id="backendserver.js" class="level3">
+<h3 class="anchored" data-anchor-id="backendserver.js"><code>backend/server.js</code></h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> express = require<span class="er">(</span><span class="st">"express"</span><span class="kw">);</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> cors = require<span class="er">(</span><span class="st">"cors"</span><span class="kw">);</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">require</span><span class="er">(</span><span class="st">"dotenv"</span><span class="kw">)</span><span class="fu">.config()</span><span class="kw">;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> openDatabase = require<span class="er">(</span><span class="st">"./db/database"</span><span class="kw">);</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> usersRouter = require<span class="er">(</span><span class="st">"./routes/users"</span><span class="kw">);</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> moodRouter = require<span class="er">(</span><span class="st">"./routes/mood"</span><span class="kw">);</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> summaryRouter = require<span class="er">(</span><span class="st">"./routes/summary"</span><span class="kw">);</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> predictionRouter = require<span class="er">(</span><span class="st">"./routes/prediction"</span><span class="kw">);</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> app = express<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> PORT = process.env.PORT <span class="kw">||</span> <span class="ex">5000</span><span class="kw">;</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="ex">app.use</span><span class="er">(</span><span class="fu">cors()</span><span class="kw">);</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="ex">app.use</span><span class="er">(</span><span class="fu">express.json()</span><span class="kw">);</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="ex">async</span> function startServer<span class="er">(</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="ex">try</span> {</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">const</span> db = await openDatabase<span class="er">(</span><span class="kw">);</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    <span class="ex">app.get</span><span class="er">(</span><span class="st">"/"</span><span class="ex">,</span> <span class="er">(</span><span class="ex">req,</span> res<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.json</span><span class="er">(</span><span class="kw">{</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>        <span class="ex">status:</span> <span class="st">"OK"</span>,</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>        <span class="ex">message:</span> <span class="st">"MoodTrack backend is live"</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>      <span class="kw">});</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span><span class="kw">);</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>    <span class="ex">app.get</span><span class="er">(</span><span class="st">"/api/health"</span><span class="ex">,</span> <span class="er">(</span><span class="ex">req,</span> res<span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>      <span class="ex">res.json</span><span class="er">(</span><span class="kw">{</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>        <span class="ex">status:</span> <span class="st">"OK"</span>,</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>        <span class="ex">message:</span> <span class="st">"MoodTrack API is running with SQLite"</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>      <span class="kw">});</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span><span class="kw">);</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>    <span class="ex">app.use</span><span class="er">(</span><span class="st">"/api/users"</span><span class="ex">,</span> usersRouter<span class="er">(</span><span class="ex">db</span><span class="kw">));</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>    <span class="ex">app.use</span><span class="er">(</span><span class="st">"/api/mood"</span><span class="ex">,</span> moodRouter<span class="er">(</span><span class="ex">db</span><span class="kw">));</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>    <span class="ex">app.use</span><span class="er">(</span><span class="st">"/api/summary"</span><span class="ex">,</span> summaryRouter<span class="er">(</span><span class="ex">db</span><span class="kw">));</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>    <span class="ex">app.use</span><span class="er">(</span><span class="st">"/api/prediction"</span><span class="ex">,</span> predictionRouter<span class="er">(</span><span class="ex">db</span><span class="kw">));</span></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>    <span class="ex">app.listen</span><span class="er">(</span><span class="fu">PORT, ()</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>      <span class="ex">console.log</span><span class="er">(</span><span class="st">"MoodTrack API running on port "</span> + PORT<span class="kw">);</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>      <span class="ex">console.log</span><span class="er">(</span><span class="st">"Connected to SQLite database"</span><span class="kw">);</span></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>    <span class="er">}</span><span class="kw">);</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>  <span class="kw">}</span> <span class="ex">catch</span> <span class="er">(</span><span class="ex">error</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>    <span class="ex">console.error</span><span class="er">(</span><span class="st">"Failed to start server:"</span><span class="ex">,</span> error<span class="kw">);</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>  <span class="kw">}</span></span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a><span class="fu">startServer()</span><span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="running-the-backend-locally" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-backend-locally">11. Running the Backend Locally</h2>
+<p>Start the backend server:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected terminal output:</p>
+<p>MoodTrack API running on port 5000</p>
+<p>Connected to SQLite database</p>
+<p>Test the following API endpoints in the browser:</p>
+<p>http://localhost:5000/</p>
+<p>http://localhost:5000/api/health</p>
+<p>http://localhost:5000/api/users</p>
+<p>http://localhost:5000/api/mood/U0001</p>
+<p>http://localhost:5000/api/summary</p>
+<p>http://localhost:5000/api/prediction/U0001</p>
+<p>Example prediction output:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"user_id"</span><span class="ex">:</span> <span class="st">"U0001"</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"next_week"</span><span class="ex">:</span> 13,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"predicted_phq9_score"</span><span class="ex">:</span> 8,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"trend_slope"</span><span class="ex">:</span> <span class="at">-0.35,</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"risk_level"</span><span class="ex">:</span> <span class="st">"low"</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>At this stage, we have a working backend API connected to a SQLite database.</p>
+</section>
+<section id="react-frontend-setup" class="level2">
+<h2 class="anchored" data-anchor-id="react-frontend-setup">12. React Frontend Setup</h2>
+<p>Next, we create the React frontend.</p>
+<p>The frontend will:</p>
+<ul>
+<li>fetch users from the backend</li>
+<li>allow user selection</li>
+<li>show PHQ-9 trajectory</li>
+<li>display summary statistics</li>
+<li>show prediction output</li>
+</ul>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npx</span> create-react-app frontend</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install axios recharts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create the frontend environment file:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span> .env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add this to <code>frontend/.env</code>:</p>
+<p>REACT_APP_API_URL=http://localhost:5000</p>
+<p>Create component files:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> src</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> components</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span> components/UserSelector.js</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span> components/MoodChart.js</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span> components/SummaryCards.js</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span> components/PredictionCard.js</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="frontend-components" class="level2">
+<h2 class="anchored" data-anchor-id="frontend-components">13. Frontend Components</h2>
+<section id="frontendsrccomponentsuserselector.js" class="level3">
+<h3 class="anchored" data-anchor-id="frontendsrccomponentsuserselector.js"><code>frontend/src/components/UserSelector.js</code></h3>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> UserSelector</span><span class="kw">({</span> <span class="fu">users</span>, selectedUser, onUserChange }<span class="er">)</span> <span class="kw">{</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">(</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"card"</span><span class="op">&gt;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>h2<span class="op">&gt;</span>Select <span class="ex">User</span><span class="op">&lt;</span>/h2<span class="op">&gt;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>select</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">value</span><span class="op">=</span>{selectedUser}</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">onChange</span><span class="op">=</span>{<span class="kw">(</span><span class="ex">e</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> onUserChange<span class="er">(</span><span class="ex">e.target.value</span><span class="kw">)</span><span class="er">}</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">&gt;</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>        <span class="ex">{users.map</span><span class="er">((</span><span class="va">user</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> <span class="er">(</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>          <span class="op">&lt;</span>option <span class="va">key</span><span class="op">=</span>{user} <span class="va">value</span><span class="op">=</span>{user}<span class="op">&gt;</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>            <span class="ex">{user}</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>          <span class="op">&lt;</span>/option<span class="op">&gt;</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">))</span><span class="er">}</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/select<span class="op">&gt;</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">);</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">default</span> <span class="va">UserSelector</span><span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="frontendsrccomponentsmoodchart.js" class="level3">
+<h3 class="anchored" data-anchor-id="frontendsrccomponentsmoodchart.js"><code>frontend/src/components/MoodChart.js</code></h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">import</span> {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">LineChart,</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Line,</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">XAxis,</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">YAxis,</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">CartesianGrid,</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Tooltip,</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">ResponsiveContainer</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="er">}</span> <span class="ex">from</span> <span class="st">"recharts"</span><span class="kw">;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> MoodChart</span><span class="kw">({</span> <span class="ex">moodData</span> }<span class="er">)</span> <span class="kw">{</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">(</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"card"</span><span class="op">&gt;</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>h2<span class="op">&gt;</span>PHQ-9 <span class="ex">Score</span> Over Time<span class="op">&lt;</span>/h2<span class="op">&gt;</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>ResponsiveContainer <span class="va">width</span><span class="op">=</span><span class="st">"100%"</span> <span class="va">height</span><span class="op">=</span>{350}<span class="op">&gt;</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>LineChart <span class="va">data</span><span class="op">=</span>{moodData}<span class="op">&gt;</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>          <span class="op">&lt;</span>CartesianGrid <span class="va">strokeDasharray</span><span class="op">=</span><span class="st">"3 3"</span> <span class="ex">/</span><span class="op">&gt;</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>          <span class="op">&lt;</span>XAxis <span class="va">dataKey</span><span class="op">=</span><span class="st">"week"</span> <span class="ex">/</span><span class="op">&gt;</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>          <span class="op">&lt;</span>YAxis <span class="va">domain</span><span class="op">=</span>{[0, <span class="ex">27]}</span> /<span class="op">&gt;</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>          <span class="op">&lt;</span>Tooltip <span class="ex">/</span><span class="op">&gt;</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>          <span class="op">&lt;</span>Line</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>            <span class="va">type</span><span class="op">=</span><span class="st">"monotone"</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>            <span class="va">dataKey</span><span class="op">=</span><span class="st">"phq9_score"</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>            <span class="va">strokeWidth</span><span class="op">=</span>{3}</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>          <span class="ex">/</span><span class="op">&gt;</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>/LineChart<span class="op">&gt;</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/ResponsiveContainer<span class="op">&gt;</span></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>  <span class="kw">);</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">default</span> <span class="va">MoodChart</span><span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="frontendsrccomponentssummarycards.js" class="level3">
+<h3 class="anchored" data-anchor-id="frontendsrccomponentssummarycards.js"><code>frontend/src/components/SummaryCards.js</code></h3>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> SummaryCards</span><span class="kw">({</span> <span class="ex">selectedUser,</span> summaryData }<span class="er">)</span> <span class="kw">{</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> userSummary = summaryData.find<span class="er">(</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">(</span><span class="ex">row</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> row.user_id === selectedUser</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">);</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="kw">(</span><span class="ex">!userSummary</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ex">null</span><span class="kw">;</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">}</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">(</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"summary-grid"</span><span class="op">&gt;</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"summary-card"</span><span class="op">&gt;</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>h3<span class="op">&gt;</span>Baseline <span class="ex">Score</span><span class="op">&lt;</span>/h3<span class="op">&gt;</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>p<span class="op">&gt;</span>{userSummary.baseline_score}<span class="op">&lt;</span>/p<span class="op">&gt;</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"summary-card"</span><span class="op">&gt;</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>h3<span class="op">&gt;</span>Final <span class="ex">Score</span><span class="op">&lt;</span>/h3<span class="op">&gt;</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>p<span class="op">&gt;</span>{userSummary.final_score}<span class="op">&lt;</span>/p<span class="op">&gt;</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"summary-card"</span><span class="op">&gt;</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>h3<span class="op">&gt;</span>Mean <span class="ex">Score</span><span class="op">&lt;</span>/h3<span class="op">&gt;</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>p<span class="op">&gt;</span>{Number(userSummary.mean_score).toFixed(1)}<span class="op">&lt;</span>/p<span class="op">&gt;</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"summary-card"</span><span class="op">&gt;</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>h3<span class="op">&gt;</span>High-Risk <span class="ex">Weeks</span><span class="op">&lt;</span>/h3<span class="op">&gt;</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>p<span class="op">&gt;</span>{userSummary.high_risk_weeks}<span class="op">&lt;</span>/p<span class="op">&gt;</span></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">);</span></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">default</span> <span class="va">SummaryCards</span><span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="frontendsrccomponentspredictioncard.js" class="level3">
+<h3 class="anchored" data-anchor-id="frontendsrccomponentspredictioncard.js"><code>frontend/src/components/PredictionCard.js</code></h3>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> PredictionCard</span><span class="kw">({</span> <span class="ex">prediction</span> }<span class="er">)</span> <span class="kw">{</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="kw">(</span><span class="ex">!prediction</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ex">null</span><span class="kw">;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">}</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">(</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"prediction-card"</span><span class="op">&gt;</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>h2<span class="op">&gt;</span>Next <span class="ex">Week</span> Prediction<span class="op">&lt;</span>/h2<span class="op">&gt;</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>p<span class="op">&gt;</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>        <span class="ex">Predicted</span> PHQ-9 score for week {prediction.next_week}:</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>strong<span class="op">&gt;</span> {prediction.predicted_phq9_score}<span class="op">&lt;</span>/strong<span class="op">&gt;</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/p<span class="op">&gt;</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>p<span class="op">&gt;</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>        <span class="ex">Trend</span> slope:</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>strong<span class="op">&gt;</span> {prediction.trend_slope}<span class="op">&lt;</span>/strong<span class="op">&gt;</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/p<span class="op">&gt;</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>p<span class="op">&gt;</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>        <span class="ex">Risk</span> level:</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>strong<span class="op">&gt;</span> {prediction.risk_level}<span class="op">&lt;</span>/strong<span class="op">&gt;</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/p<span class="op">&gt;</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">);</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">default</span> <span class="va">PredictionCard</span><span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="frontend-app.js" class="level2">
+<h2 class="anchored" data-anchor-id="frontend-app.js">14. Frontend <code>App.js</code></h2>
+<p>The main React app connects all components together.</p>
+<p>It fetches:</p>
+<ul>
+<li>user IDs from <code>/api/users</code></li>
+<li>summary data from <code>/api/summary</code></li>
+<li>selected user trajectory from <code>/api/mood/:user_id</code></li>
+<li>prediction output from <code>/api/prediction/:user_id</code></li>
+</ul>
+<section id="frontendsrcapp.js" class="level3">
+<h3 class="anchored" data-anchor-id="frontendsrcapp.js"><code>frontend/src/App.js</code></h3>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">import</span> React, { useEffect, useState } from <span class="st">"react"</span><span class="kw">;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">import</span> axios from <span class="st">"axios"</span><span class="kw">;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="ex">import</span> <span class="st">"./App.css"</span><span class="kw">;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="ex">import</span> UserSelector from <span class="st">"./components/UserSelector"</span><span class="kw">;</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="ex">import</span> MoodChart from <span class="st">"./components/MoodChart"</span><span class="kw">;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="ex">import</span> SummaryCards from <span class="st">"./components/SummaryCards"</span><span class="kw">;</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="ex">import</span> PredictionCard from <span class="st">"./components/PredictionCard"</span><span class="kw">;</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="ex">const</span> API_URL = process.env.REACT_APP_API_URL<span class="kw">;</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> App()</span> <span class="kw">{</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> [users, setUsers] = useState<span class="er">(</span><span class="ex">[]</span><span class="kw">);</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> [selectedUser, setSelectedUser] = useState<span class="er">(</span><span class="st">""</span><span class="kw">);</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> [moodData, setMoodData] = useState<span class="er">(</span><span class="ex">[]</span><span class="kw">);</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> [summaryData, setSummaryData] = useState<span class="er">(</span><span class="ex">[]</span><span class="kw">);</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="ex">const</span> [prediction, setPrediction] = useState<span class="er">(</span><span class="ex">null</span><span class="kw">);</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="ex">useEffect</span><span class="er">((</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">axios</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>      <span class="ex">.get</span><span class="er">(</span><span class="ex">API_URL</span> + <span class="st">"/api/users"</span><span class="kw">)</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>      <span class="ex">.then</span><span class="er">((</span><span class="va">res</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>        <span class="ex">setUsers</span><span class="er">(</span><span class="ex">res.data</span><span class="kw">);</span></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>        <span class="ex">setSelectedUser</span><span class="er">(</span><span class="ex">res.data[0]</span><span class="kw">);</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>      <span class="er">}</span><span class="kw">)</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>      <span class="ex">.catch</span><span class="er">((</span><span class="va">err</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> console.error<span class="er">(</span><span class="st">"Error fetching users:"</span><span class="ex">,</span> err<span class="kw">));</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>    <span class="ex">axios</span></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>      <span class="ex">.get</span><span class="er">(</span><span class="ex">API_URL</span> + <span class="st">"/api/summary"</span><span class="kw">)</span></span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>      <span class="ex">.then</span><span class="er">((</span><span class="va">res</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>        <span class="ex">setSummaryData</span><span class="er">(</span><span class="ex">res.data</span><span class="kw">);</span></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>      <span class="er">}</span><span class="kw">)</span></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>      <span class="ex">.catch</span><span class="er">((</span><span class="va">err</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> console.error<span class="er">(</span><span class="st">"Error fetching summary:"</span><span class="ex">,</span> err<span class="kw">));</span></span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>  <span class="er">}</span><span class="ex">,</span> []<span class="kw">);</span></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>  <span class="ex">useEffect</span><span class="er">((</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">(</span><span class="ex">selectedUser</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>      <span class="ex">axios</span></span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>        <span class="ex">.get</span><span class="er">(</span><span class="ex">API_URL</span> + <span class="st">"/api/mood/"</span> + selectedUser<span class="kw">)</span></span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>        <span class="ex">.then</span><span class="er">((</span><span class="va">res</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>          <span class="ex">const</span> cleanedData = res.data.map<span class="er">(</span><span class="kw">(</span><span class="ex">row</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> <span class="er">(</span><span class="kw">{</span></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>            <span class="ex">week:</span> Number<span class="er">(</span><span class="ex">row.week</span><span class="kw">)</span><span class="ex">,</span></span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>            <span class="ex">phq9_score:</span> Number<span class="er">(</span><span class="ex">row.phq9_score</span><span class="kw">)</span></span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>          <span class="kw">}));</span></span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>          <span class="ex">setMoodData</span><span class="er">(</span><span class="ex">cleanedData</span><span class="kw">);</span></span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>        <span class="er">}</span><span class="kw">)</span></span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>        <span class="ex">.catch</span><span class="er">((</span><span class="va">err</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> console.error<span class="er">(</span><span class="st">"Error fetching mood data:"</span><span class="ex">,</span> err<span class="kw">));</span></span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>      <span class="ex">axios</span></span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>        <span class="ex">.get</span><span class="er">(</span><span class="ex">API_URL</span> + <span class="st">"/api/prediction/"</span> + selectedUser<span class="kw">)</span></span>
+<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a>        <span class="ex">.then</span><span class="er">((</span><span class="va">res</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> {</span>
+<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a>          <span class="ex">setPrediction</span><span class="er">(</span><span class="ex">res.data</span><span class="kw">);</span></span>
+<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a>        <span class="er">}</span><span class="kw">)</span></span>
+<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a>        <span class="ex">.catch</span><span class="er">((</span><span class="va">err</span><span class="kw">)</span> <span class="ex">=</span><span class="op">&gt;</span> console.error<span class="er">(</span><span class="st">"Error fetching prediction:"</span><span class="ex">,</span> err<span class="kw">));</span></span>
+<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>  <span class="er">}</span><span class="ex">,</span> <span class="pp">[</span><span class="ss">selectedUser</span><span class="pp">]</span><span class="kw">);</span></span>
+<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">(</span></span>
+<span id="cb31-60"><a href="#cb31-60" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>div <span class="va">className</span><span class="op">=</span><span class="st">"App"</span><span class="op">&gt;</span></span>
+<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>header <span class="va">className</span><span class="op">=</span><span class="st">"header"</span><span class="op">&gt;</span></span>
+<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>h1<span class="op">&gt;</span>MoodTrack <span class="ex">Dashboard</span><span class="op">&lt;</span>/h1<span class="op">&gt;</span></span>
+<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>p<span class="op">&gt;</span>Visualizing <span class="ex">synthetic</span> PHQ-9 trajectories with predictive insights<span class="op">&lt;</span>/p<span class="op">&gt;</span></span>
+<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/header<span class="op">&gt;</span></span>
+<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-66"><a href="#cb31-66" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>main <span class="va">className</span><span class="op">=</span><span class="st">"container"</span><span class="op">&gt;</span></span>
+<span id="cb31-67"><a href="#cb31-67" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>UserSelector</span>
+<span id="cb31-68"><a href="#cb31-68" aria-hidden="true" tabindex="-1"></a>          <span class="va">users</span><span class="op">=</span>{users}</span>
+<span id="cb31-69"><a href="#cb31-69" aria-hidden="true" tabindex="-1"></a>          <span class="va">selectedUser</span><span class="op">=</span>{selectedUser}</span>
+<span id="cb31-70"><a href="#cb31-70" aria-hidden="true" tabindex="-1"></a>          <span class="va">onUserChange</span><span class="op">=</span>{setSelectedUser}</span>
+<span id="cb31-71"><a href="#cb31-71" aria-hidden="true" tabindex="-1"></a>        <span class="ex">/</span><span class="op">&gt;</span></span>
+<span id="cb31-72"><a href="#cb31-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-73"><a href="#cb31-73" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>SummaryCards</span>
+<span id="cb31-74"><a href="#cb31-74" aria-hidden="true" tabindex="-1"></a>          <span class="va">selectedUser</span><span class="op">=</span>{selectedUser}</span>
+<span id="cb31-75"><a href="#cb31-75" aria-hidden="true" tabindex="-1"></a>          <span class="va">summaryData</span><span class="op">=</span>{summaryData}</span>
+<span id="cb31-76"><a href="#cb31-76" aria-hidden="true" tabindex="-1"></a>        <span class="ex">/</span><span class="op">&gt;</span></span>
+<span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-78"><a href="#cb31-78" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>PredictionCard <span class="va">prediction</span><span class="op">=</span>{prediction} <span class="ex">/</span><span class="op">&gt;</span></span>
+<span id="cb31-79"><a href="#cb31-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-80"><a href="#cb31-80" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>MoodChart <span class="va">moodData</span><span class="op">=</span>{moodData} <span class="ex">/</span><span class="op">&gt;</span></span>
+<span id="cb31-81"><a href="#cb31-81" aria-hidden="true" tabindex="-1"></a>      <span class="op">&lt;</span>/main<span class="op">&gt;</span></span>
+<span id="cb31-82"><a href="#cb31-82" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>/div<span class="op">&gt;</span></span>
+<span id="cb31-83"><a href="#cb31-83" aria-hidden="true" tabindex="-1"></a>  <span class="kw">);</span></span>
+<span id="cb31-84"><a href="#cb31-84" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb31-85"><a href="#cb31-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-86"><a href="#cb31-86" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">default</span> <span class="va">App</span><span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="frontend-styling" class="level2">
+<h2 class="anchored" data-anchor-id="frontend-styling">15. Frontend Styling</h2>
+<p>The CSS file gives the dashboard a clean card-based layout.</p>
+<section id="frontendsrcapp.css" class="level3">
+<h3 class="anchored" data-anchor-id="frontendsrcapp.css"><code>frontend/src/App.css</code></h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">.App</span> {</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">font-family:</span> Arial, sans-serif<span class="kw">;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">background:</span> <span class="co">#f5f7fb;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">min-height:</span> 100vh<span class="kw">;</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="ex">.header</span> {</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">background:</span> <span class="co">#253858;</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">color:</span> white<span class="kw">;</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">padding:</span> 30px<span class="kw">;</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="ex">text-align:</span> center<span class="kw">;</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="ex">.header</span> h1 {</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin:</span> 0<span class="kw">;</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="ex">font-size:</span> 36px<span class="kw">;</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a><span class="ex">.header</span> p {</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin-top:</span> 10px<span class="kw">;</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="ex">font-size:</span> 16px<span class="kw">;</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a><span class="ex">.container</span> {</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>  <span class="ex">max-width:</span> 1000px<span class="kw">;</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin:</span> 30px auto<span class="kw">;</span></span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="ex">padding:</span> 20px<span class="kw">;</span></span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a><span class="ex">.card</span> {</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>  <span class="ex">background:</span> white<span class="kw">;</span></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>  <span class="ex">padding:</span> 25px<span class="kw">;</span></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin-bottom:</span> 25px<span class="kw">;</span></span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>  <span class="ex">border-radius:</span> 12px<span class="kw">;</span></span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>  <span class="ex">box-shadow:</span> 0 4px 12px rgba<span class="er">(</span><span class="ex">0,0,0,0.08</span><span class="kw">);</span></span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a><span class="ex">.card</span> h2 {</span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin-top:</span> 0<span class="kw">;</span></span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a><span class="cf">select</span> <span class="kw">{</span></span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>  <span class="ex">padding:</span> 10px<span class="kw">;</span></span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>  <span class="ex">font-size:</span> 16px<span class="kw">;</span></span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>  <span class="ex">width:</span> 200px<span class="kw">;</span></span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a><span class="ex">.summary-grid</span> {</span>
+<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a>  <span class="ex">display:</span> grid<span class="kw">;</span></span>
+<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>  <span class="ex">grid-template-columns:</span> repeat<span class="er">(</span><span class="ex">4,</span> 1fr<span class="kw">);</span></span>
+<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a>  <span class="ex">gap:</span> 20px<span class="kw">;</span></span>
+<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin-bottom:</span> 25px<span class="kw">;</span></span>
+<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a><span class="ex">.summary-card</span> {</span>
+<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a>  <span class="ex">background:</span> white<span class="kw">;</span></span>
+<span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a>  <span class="ex">padding:</span> 20px<span class="kw">;</span></span>
+<span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a>  <span class="ex">border-radius:</span> 12px<span class="kw">;</span></span>
+<span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a>  <span class="ex">text-align:</span> center<span class="kw">;</span></span>
+<span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a>  <span class="ex">box-shadow:</span> 0 4px 12px rgba<span class="er">(</span><span class="ex">0,0,0,0.08</span><span class="kw">);</span></span>
+<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-63"><a href="#cb32-63" aria-hidden="true" tabindex="-1"></a><span class="ex">.summary-card</span> h3 {</span>
+<span id="cb32-64"><a href="#cb32-64" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin:</span> 0<span class="kw">;</span></span>
+<span id="cb32-65"><a href="#cb32-65" aria-hidden="true" tabindex="-1"></a>  <span class="ex">font-size:</span> 16px<span class="kw">;</span></span>
+<span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a><span class="ex">.summary-card</span> p {</span>
+<span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a>  <span class="ex">font-size:</span> 28px<span class="kw">;</span></span>
+<span id="cb32-70"><a href="#cb32-70" aria-hidden="true" tabindex="-1"></a>  <span class="ex">font-weight:</span> bold<span class="kw">;</span></span>
+<span id="cb32-71"><a href="#cb32-71" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin:</span> 10px 0 0<span class="kw">;</span></span>
+<span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a><span class="ex">.prediction-card</span> {</span>
+<span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a>  <span class="ex">background:</span> white<span class="kw">;</span></span>
+<span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a>  <span class="ex">padding:</span> 25px<span class="kw">;</span></span>
+<span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin-bottom:</span> 25px<span class="kw">;</span></span>
+<span id="cb32-78"><a href="#cb32-78" aria-hidden="true" tabindex="-1"></a>  <span class="ex">border-radius:</span> 12px<span class="kw">;</span></span>
+<span id="cb32-79"><a href="#cb32-79" aria-hidden="true" tabindex="-1"></a>  <span class="ex">box-shadow:</span> 0 4px 12px rgba<span class="er">(</span><span class="ex">0,0,0,0.08</span><span class="kw">);</span></span>
+<span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-81"><a href="#cb32-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-82"><a href="#cb32-82" aria-hidden="true" tabindex="-1"></a><span class="ex">.prediction-card</span> h2 {</span>
+<span id="cb32-83"><a href="#cb32-83" aria-hidden="true" tabindex="-1"></a>  <span class="ex">margin-top:</span> 0<span class="kw">;</span></span>
+<span id="cb32-84"><a href="#cb32-84" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a><span class="ex">.prediction-card</span> strong {</span>
+<span id="cb32-87"><a href="#cb32-87" aria-hidden="true" tabindex="-1"></a>  <span class="ex">font-size:</span> 20px<span class="kw">;</span></span>
+<span id="cb32-88"><a href="#cb32-88" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="running-the-full-application-locally" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-full-application-locally">16. Running the Full Application Locally</h2>
+<p>The application has two parts:</p>
+<ol type="1">
+<li>Backend API</li>
+<li>React frontend</li>
+</ol>
+<p>Both must run at the same time.</p>
+<section id="terminal-1-start-backend" class="level3">
+<h3 class="anchored" data-anchor-id="terminal-1-start-backend">Terminal 1 — Start Backend</h3>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected backend output:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="ex">MoodTrack</span> API running on port 5000</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Connected</span> to SQLite database</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="terminal-2-start-frontend" class="level3">
+<h3 class="anchored" data-anchor-id="terminal-2-start-frontend">Terminal 2 — Start Frontend</h3>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">unset</span> <span class="va">HOST</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> start</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Open the frontend in your browser:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://localhost:3000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If React says port 3000 is already in use, press <code>Y</code> to use another port.</p>
+<p>At this point, the dashboard should show:</p>
+<ul>
+<li>user dropdown</li>
+<li>PHQ-9 trajectory plot</li>
+<li>summary cards</li>
+<li>prediction card</li>
+</ul>
+</section>
+</section>
+<section id="deployment" class="level2">
+<h2 class="anchored" data-anchor-id="deployment">17. Deployment</h2>
+<p>After confirming that the application works locally, we deploy it using free hosting platforms.</p>
+<p>The deployment architecture is:</p>
+<pre class="text"><code>React Frontend  →  Netlify
+Express Backend →  Render
+SQLite Database →  included in backend deployment
+</code></pre>
+<p>This gives us a publicly accessible full-stack data science application.</p>
+</section>
+<section id="deploy-backend-on-render" class="level2">
+<h2 class="anchored" data-anchor-id="deploy-backend-on-render">18. Deploy Backend on Render</h2>
+<p>The backend is deployed as a Render Web Service.</p>
+<p>Before deployment, make sure the backend has:</p>
+<ul>
+<li><code>server.js</code></li>
+<li><code>package.json</code></li>
+<li><code>routes/</code></li>
+<li><code>db/moodtrack.db</code></li>
+<li><code>db/database.js</code></li>
+<li><code>db/initDatabase.js</code></li>
+</ul>
+<p>Render settings:</p>
+<pre class="text"><code>Root Directory: backend
+Build Command: npm install
+Start Command: npm start
+Instance Type: Free
+</code></pre>
+<p>After deployment, Render provides a backend URL such as:</p>
+<pre class="text"><code>https://moodtrack-backend.onrender.com</code></pre>
+<p>Test the deployed backend:</p>
+<pre class="text"><code>https://moodtrack-backend.onrender.com/
+https://moodtrack-backend.onrender.com/api/health</code></pre>
+<p>Expected output:</p>
+<pre class="text"><code>
+{
+  "status": "OK",
+  "message": "MoodTrack API is running with SQLite"
+}
+</code></pre>
+</section>
+<section id="deploy-frontend-on-netlify" class="level2">
+<h2 class="anchored" data-anchor-id="deploy-frontend-on-netlify">19. Deploy Frontend on Netlify</h2>
+<p>The React frontend is deployed using Netlify.</p>
+<p>Netlify settings:</p>
+<pre class="text"><code>Base directory: frontend
+Build command: npm run build
+Publish directory: build</code></pre>
+<p>Add this environment variable in Netlify:</p>
+<pre class="text"><code>REACT_APP_API_URL=https://moodtrack-backend.onrender.com</code></pre>
+<p>This tells the deployed frontend to call the deployed backend API instead of the local backend.</p>
+<p>After deployment, Netlify provides a live frontend URL such as:</p>
+<pre class="text"><code>
+https://your-site-name.netlify.app
+</code></pre>
+</section>
+<section id="final-application-output" class="level2">
+<h2 class="anchored" data-anchor-id="final-application-output">20. Final Application Output</h2>
+<p>The deployed MoodTrack dashboard includes:</p>
+<ul>
+<li>A user selector</li>
+<li>PHQ-9 trajectory visualization</li>
+<li>Baseline score</li>
+<li>Final score</li>
+<li>Mean score</li>
+<li>High-risk week count</li>
+<li>Next-week PHQ-9 prediction</li>
+<li>Risk classification</li>
+</ul>
+<p>Live links:</p>
+<pre class="text"><code>Frontend: YOUR_NETLIFY_LINK
+Backend: https://moodtrack-backend.onrender.com
+</code></pre>
+<p>Replace YOUR_NETLIFY_LINK with your actual deployed Netlify link.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="frontend_image.png" class="img-fluid figure-img"></p>
+<figcaption>MoodTrack Dashboard</figcaption>
+</figure>
+</div>
+</section>
+<section id="what-we-built" class="level2">
+<h2 class="anchored" data-anchor-id="what-we-built">22. What We Built</h2>
+<p>In this project, we built a complete full-stack analytics system:</p>
+<pre class="text"><code>Synthetic PHQ-9 Data
+        ↓
+SQLite Database
+        ↓
+Express REST API
+        ↓
+Prediction Endpoint
+        ↓
+React Dashboard
+        ↓
+Cloud Deployment</code></pre>
+<p>This demonstrates how a data science workflow can be transformed into a deployable application.</p>
+</section>
+<section id="key-learning-outcomes" class="level2">
+<h2 class="anchored" data-anchor-id="key-learning-outcomes">23. Key Learning Outcomes</h2>
+<p>This project covers:</p>
+<ul>
+<li>synthetic data generation</li>
+<li>longitudinal PHQ-9 trajectory simulation</li>
+<li>exploratory visualization</li>
+<li>backend API development</li>
+<li>REST API design</li>
+<li>SQLite database integration</li>
+<li>modular backend route structure</li>
+<li>React frontend component design</li>
+<li>charting with Recharts</li>
+<li>environment variable configuration</li>
+<li>simple predictive modeling</li>
+<li>deployment using Render and Netlify</li>
+</ul>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">24. Limitations</h2>
+<p>This project has important limitations:</p>
+<ul>
+<li>The dataset is synthetic and does not represent real patients.</li>
+<li>The prediction model is a simple linear trend model.</li>
+<li>The system is not clinically validated.</li>
+<li>There is no authentication or user-level privacy layer.</li>
+<li>SQLite is suitable for demonstration, but not ideal for production-scale deployment.</li>
+<li>Render free services may sleep after inactivity, so the first request may be slow.</li>
+</ul>
+<p>This project should be understood as an educational full-stack data science demonstration, not a medical device or clinical decision-support tool.</p>
+</section>
+<section id="future-work" class="level2">
+<h2 class="anchored" data-anchor-id="future-work">25. Future Work</h2>
+<p>Future improvements could include:</p>
+<ul>
+<li>replacing SQLite with PostgreSQL or Azure SQL</li>
+<li>adding user authentication</li>
+<li>adding role-based access control</li>
+<li>improving the ML model</li>
+<li>adding relapse detection</li>
+<li>adding anomaly detection</li>
+<li>creating population-level analytics</li>
+<li>deploying a production version on Azure</li>
+<li>adding logging and monitoring</li>
+<li>adding automated tests</li>
+</ul>
+</section>
+<section id="azure-extension" class="level2">
+<h2 class="anchored" data-anchor-id="azure-extension">26. Azure Extension</h2>
+<p>The current free deployment uses:</p>
+<pre class="text"><code>Frontend: Netlify
+Backend: Render
+Database: SQLite</code></pre>
+<p>A production Azure version could use:</p>
+<pre class="text"><code>
+Frontend: Azure Static Web Apps
+Backend: Azure App Service
+Database: Azure SQL Database</code></pre>
+<p>The conceptual architecture remains the same:</p>
+<pre class="text"><code>React Frontend → Backend API → Database</code></pre>
+<p>The main difference is that Azure SQL would replace the local SQLite file with a managed cloud database.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">27. Conclusion</h2>
+<p>In this tutorial, we built and deployed MoodTrack, a full-stack mental health analytics dashboard using synthetic PHQ-9 data.</p>
+<p>The project demonstrates how data science, backend engineering, frontend visualization, predictive modeling, and deployment can be combined into a single end-to-end application.</p>
+<p>This project is useful as a portfolio project because it shows not only analysis, but also the ability to turn analytical work into an interactive, deployable product.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

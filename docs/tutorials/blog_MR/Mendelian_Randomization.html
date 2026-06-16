@@ -662,9 +662,9 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="a-conceptual-example">A Conceptual Example</h4>
 <p>Suppose a SNP is associated with higher CRP levels.</p>
 <p>Researchers estimate:</p>
-<p>$ SNP → CRP $</p>
+<p>SNP → CRP</p>
 <p>They then test whether the same SNP is associated with blood pressure:</p>
-<p>$ SNP → Blood&nbsp;Pressure $</p>
+<p>SNP → Blood&nbsp;Pressure</p>
 <p>If:</p>
 <ol type="1">
 <li>The SNP influences CRP.</li>
@@ -2366,9 +2366,8 @@ Coronary\ Heart\ Disease
 <li>Proper harmonization is essential before performing Mendelian Randomization analyses.</li>
 </ul>
 </section>
-</section>
-<section id="horizontal-pleiotropy-the-biggest-threat-to-mendelian-randomization" class="level1">
-<h1>Horizontal Pleiotropy: The Biggest Threat to Mendelian Randomization</h1>
+<section id="horizontal-pleiotropy-the-biggest-threat-to-mendelian-randomization" class="level3">
+<h3 class="anchored" data-anchor-id="horizontal-pleiotropy-the-biggest-threat-to-mendelian-randomization">Horizontal Pleiotropy: The Biggest Threat to Mendelian Randomization</h3>
 <p>In the previous tutorials, we introduced Mendelian Randomization (MR) and discussed how genetic variants can be used as instrumental variables to estimate causal effects.</p>
 <p>The validity of MR depends on three core assumptions:</p>
 <ol type="1">
@@ -2381,8 +2380,8 @@ Coronary\ Heart\ Disease
 <p>Pleiotropy is one of the most important concepts in statistical genetics and one of the biggest challenges in Mendelian Randomization.</p>
 <p>Understanding pleiotropy is essential before learning robust MR methods such as MR-Egger, Weighted Median, and Weighted Mode estimators.</p>
 </section>
-<section id="learning-objectives-6" class="level1">
-<h1>Learning Objectives</h1>
+<section id="learning-objectives-6" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-6">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Define pleiotropy.</li>
@@ -2393,8 +2392,8 @@ Coronary\ Heart\ Disease
 <li>Appreciate why sensitivity analyses are necessary.</li>
 </ul>
 </section>
-<section id="what-is-pleiotropy" class="level1">
-<h1>What Is Pleiotropy?</h1>
+<section id="what-is-pleiotropy" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-pleiotropy">What Is Pleiotropy?</h3>
 <p>Pleiotropy occurs when a single genetic variant influences multiple traits.</p>
 <p>The term comes from Greek:</p>
 <ul>
@@ -2411,9 +2410,8 @@ Coronary\ Heart\ Disease
 <li>Cholesterol</li>
 </ul>
 <p>simultaneously.</p>
-</section>
-<section id="a-simple-example" class="level1">
-<h1>A Simple Example</h1>
+<section id="a-simple-example" class="level4">
+<h4 class="anchored" data-anchor-id="a-simple-example">A Simple Example</h4>
 <p>Suppose a SNP influences body weight.</p>
 <p>At the same time, the same SNP also influences:</p>
 <ul>
@@ -2428,12 +2426,14 @@ Coronary\ Heart\ Disease
 <p>Pleiotropy is normal biology.</p>
 </blockquote>
 <p>The challenge is determining whether that pleiotropy violates MR assumptions.</p>
+</section>
+</section>
 <section id="revisiting-the-mr-framework-1" class="level3">
 <h3 class="anchored" data-anchor-id="revisiting-the-mr-framework-1">Revisiting the MR Framework</h3>
 <p>Recall the ideal MR model:</p>
-<p>[ SNP → Exposure → Outcome]</p>
+<p>SNP → Exposure → Outcome</p>
 <p>Example:</p>
-<p>[ SNP → BMI → Coronary&nbsp;Heart&nbsp;Disease]</p>
+<p>SNP → BMI → Coronary&nbsp;Heart&nbsp;Disease</p>
 <p>In this framework:</p>
 <ul>
 <li>The SNP affects BMI.</li>
@@ -2449,9 +2449,9 @@ Coronary\ Heart\ Disease
 <p>The genetic variant influences the outcome only through the exposure.</p>
 </blockquote>
 <p>Mathematically:</p>
-<p>[ SNP → Exposure → Outcome]</p>
+<p>SNP → Exposure → Outcome</p>
 <p>and not:</p>
-<p><a href="#snp-outcome">SNP → Outcome</a></p>
+<p>SNP → Outcome</p>
 <p>through any other pathway.</p>
 <p>This assumption is where pleiotropy becomes important.</p>
 </section>
@@ -2469,7 +2469,7 @@ Coronary\ Heart\ Disease
 <h3 class="anchored" data-anchor-id="vertical-pleiotropy">Vertical Pleiotropy</h3>
 <p>Vertical pleiotropy occurs when the SNP affects downstream traits through the exposure.</p>
 <p>Example:</p>
-<p>[ SNP → BMI → Blood&nbsp;Pressure → Heart&nbsp;Disease]</p>
+<p>SNP → BMI → Blood&nbsp;Pressure → Heart&nbsp;Disease</p>
 <p>The SNP affects heart disease through a biological chain of events.</p>
 <p>This does not violate the exclusion restriction assumption.</p>
 <p>The effect remains mediated by the exposure pathway.</p>
@@ -2477,11 +2477,11 @@ Coronary\ Heart\ Disease
 <section id="why-vertical-pleiotropy-is-acceptable" class="level3">
 <h3 class="anchored" data-anchor-id="why-vertical-pleiotropy-is-acceptable">Why Vertical Pleiotropy Is Acceptable</h3>
 <p>Suppose:</p>
-<p>[ SNP → LDL&nbsp;Cholesterol]</p>
+<p>SNP → LDL&nbsp;Cholesterol</p>
 <p>and</p>
-<p>[ LDL&nbsp;Cholesterol → Atherosclerosis]</p>
+<p>LDL&nbsp;Cholesterol → Atherosclerosis</p>
 <p>and</p>
-<p>[ Atherosclerosis → Coronary&nbsp;Heart&nbsp;Disease]</p>
+<p>Atherosclerosis → Coronary&nbsp;Heart&nbsp;Disease</p>
 <p>The SNP affects coronary heart disease through downstream consequences of LDL cholesterol.</p>
 <p>This is exactly the type of causal pathway that MR is designed to capture.</p>
 <p>Therefore:</p>
@@ -2529,11 +2529,13 @@ Coronary\ Heart\ Disease
 <section id="a-numerical-example-2" class="level3">
 <h3 class="anchored" data-anchor-id="a-numerical-example-2">A Numerical Example</h3>
 <p>Suppose:</p>
-<p>[ SNP BMI ===</p>
-<p>0.20 ]</p>
+</section>
+</section>
+<section id="snp---bmi" class="level1">
+<h1>SNP -&gt; BMI</h1>
+<p>0.20</p>
 <p>The true causal effect is:</p>
-<p>[ BMI CHD ===</p>
-<p>0.30 ]</p>
+<p>BMI -&gt; CHD = 0.30</p>
 <p>Expected SNP-outcome effect:</p>
 <p>$ 0.20 = 0.06 $</p>
 <p>Now imagine the SNP also directly affects CHD:</p>
@@ -2548,14 +2550,13 @@ Coronary\ Heart\ Disease
 <p>but the MR estimate becomes:</p>
 <p>$ 0.50 $</p>
 <p>because of horizontal pleiotropy.</p>
-</section>
-</section>
-<section id="balanced-vs-directional-pleiotropy" class="level1">
-<h1>Balanced vs Directional Pleiotropy</h1>
+<section id="balanced-vs-directional-pleiotropy" class="level4">
+<h4 class="anchored" data-anchor-id="balanced-vs-directional-pleiotropy">Balanced vs Directional Pleiotropy</h4>
 <p>Not all pleiotropic effects behave the same way.</p>
 <p>Two important patterns are:</p>
-<section id="balanced-pleiotropy" class="level2">
-<h2 class="anchored" data-anchor-id="balanced-pleiotropy">Balanced Pleiotropy</h2>
+</section>
+<section id="balanced-pleiotropy" class="level3">
+<h3 class="anchored" data-anchor-id="balanced-pleiotropy">Balanced Pleiotropy</h3>
 <p>Some SNPs have positive pleiotropic effects.</p>
 <p>Some SNPs have negative pleiotropic effects.</p>
 <p>These effects may cancel out on average.</p>
@@ -2590,9 +2591,8 @@ Coronary\ Heart\ Disease
 <p>Approximately zero.</p>
 <p>IVW estimates may remain relatively unbiased.</p>
 </section>
-</section>
-<section id="directional-pleiotropy" class="level1">
-<h1>Directional Pleiotropy</h1>
+<section id="directional-pleiotropy" class="level3">
+<h3 class="anchored" data-anchor-id="directional-pleiotropy">Directional Pleiotropy</h3>
 <p>Directional pleiotropy occurs when pleiotropic effects consistently point in the same direction.</p>
 <p>Example:</p>
 <table class="caption-top table">
@@ -2625,13 +2625,14 @@ Coronary\ Heart\ Disease
 <p>Positive.</p>
 <p>This systematically biases the MR estimate.</p>
 <p>Directional pleiotropy is much more problematic than balanced pleiotropy.</p>
+</section>
 <section id="valid-and-invalid-instruments" class="level3">
 <h3 class="anchored" data-anchor-id="valid-and-invalid-instruments">Valid and Invalid Instruments</h3>
 <p>A valid instrument satisfies all MR assumptions.</p>
-<p>$ SNP Exposure Outcome $</p>
+<p>SNP -&gt; Exposure -&gt; Outcome</p>
 <p>An invalid instrument violates at least one assumption.</p>
 <p>For example:</p>
-<p>$ SNP Outcome $</p>
+<p>SNP -&gt; Outcome</p>
 <p>through an alternative pathway.</p>
 <p>Horizontal pleiotropy is one of the most common reasons an instrument becomes invalid.</p>
 </section>
@@ -2896,24 +2897,30 @@ Coronary\ Heart\ Disease
 <h3 class="anchored" data-anchor-id="the-mr-egger-intercept">The MR-Egger Intercept</h3>
 <p>The intercept is often more interesting than the slope.</p>
 <p>Suppose:</p>
-<p>$ = 0.03 $</p>
+<p><span class="math display">\[
+\alpha = 0.03
+\]</span></p>
 <p>This suggests that, on average, SNPs have positive direct effects on the outcome that are not mediated through the exposure.</p>
 <p>This provides evidence for directional pleiotropy.</p>
 <p>Researchers often perform a hypothesis test:</p>
-<p>$ H_0 : = 0 $</p>
+<p><span class="math display">\[
+H_0 : \alpha = 0
+\]</span></p>
 <p>versus</p>
-<p>$ H_A : $</p>
+<p><span class="math display">\[
+H_A : \alpha \neq 0
+\]</span></p>
 <p>A significant result suggests pleiotropic bias.</p>
 </section>
-</section>
-<section id="balanced-vs-directional-pleiotropy-revisited" class="level1">
-<h1>Balanced vs Directional Pleiotropy Revisited</h1>
+<section id="balanced-vs-directional-pleiotropy-revisited" class="level3">
+<h3 class="anchored" data-anchor-id="balanced-vs-directional-pleiotropy-revisited">Balanced vs Directional Pleiotropy Revisited</h3>
 <p>Recall from Part 7:</p>
-<section id="balanced-pleiotropy-1" class="level2">
-<h2 class="anchored" data-anchor-id="balanced-pleiotropy-1">Balanced Pleiotropy</h2>
+</section>
+<section id="balanced-pleiotropy-1" class="level3">
+<h3 class="anchored" data-anchor-id="balanced-pleiotropy-1">Balanced Pleiotropy</h3>
 <p>Positive and negative pleiotropic effects cancel each other.</p>
 <p>Average pleiotropic effect:</p>
-<p>$ 0 $</p>
+<p>0</p>
 <p>MR-Egger intercept:</p>
 <p>Approximately zero.</p>
 </section>
@@ -2966,10 +2973,8 @@ Coronary\ Heart\ Disease
 <p>Unfortunately, InSIDE cannot usually be tested directly.</p>
 </section>
 </section>
-</section>
-</section>
-<section id="comparing-ivw-and-mr-egger" class="level1">
-<h1>Comparing IVW and MR-Egger</h1>
+<section id="comparing-ivw-and-mr-egger" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-ivw-and-mr-egger">Comparing IVW and MR-Egger</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -3008,10 +3013,13 @@ Coronary\ Heart\ Disease
 </table>
 <p>IVW is usually the primary analysis.</p>
 <p>MR-Egger is often used as a sensitivity analysis.</p>
+</section>
 <section id="why-mr-egger-has-lower-power" class="level3">
 <h3 class="anchored" data-anchor-id="why-mr-egger-has-lower-power">Why MR-Egger Has Lower Power</h3>
 <p>MR-Egger estimates an additional parameter:</p>
-<p>$ $</p>
+<p><span class="math display">\[
+\alpha
+\]</span></p>
 <p>Estimating the intercept introduces uncertainty.</p>
 <p>As a result:</p>
 <ul>
@@ -3176,9 +3184,8 @@ Coronary\ Heart\ Disease
 <li>Agreement between IVW and MR-Egger increases confidence in causal conclusions.</li>
 </ul>
 </section>
-</section>
-<section id="weighted-median-mendelian-randomization" class="level1">
-<h1>Weighted Median Mendelian Randomization</h1>
+<section id="weighted-median-mendelian-randomization" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-median-mendelian-randomization">Weighted Median Mendelian Randomization</h3>
 <p>In Part 8, we introduced MR-Egger Regression, a method that can detect and partially account for directional pleiotropy.</p>
 <p>MR-Egger was an important advance because it relaxed some of the assumptions required by the standard Inverse Variance Weighted (IVW) estimator.</p>
 <p>However, MR-Egger has limitations:</p>
@@ -3192,8 +3199,8 @@ Coronary\ Heart\ Disease
 <p>One of the most successful methods is the <strong>Weighted Median Estimator</strong>.</p>
 <p>The weighted median approach has become one of the most widely used sensitivity analyses in Mendelian Randomization.</p>
 </section>
-<section id="learning-objectives-8" class="level1">
-<h1>Learning Objectives</h1>
+<section id="learning-objectives-8" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-8">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand the motivation behind the weighted median estimator.</li>
@@ -3203,9 +3210,8 @@ Coronary\ Heart\ Disease
 <li>Interpret weighted median results.</li>
 <li>Compare IVW, MR-Egger, and Weighted Median estimators.</li>
 </ul>
-</section>
-<section id="why-do-we-need-another-method" class="level1">
-<h1>Why Do We Need Another Method?</h1>
+<section id="why-do-we-need-another-method" class="level4">
+<h4 class="anchored" data-anchor-id="why-do-we-need-another-method">Why Do We Need Another Method?</h4>
 <p>Recall the assumptions behind IVW.</p>
 <p>IVW performs well when all genetic instruments are valid.</p>
 <p>However, suppose we have 100 SNPs.</p>
@@ -3218,6 +3224,9 @@ Coronary\ Heart\ Disease
 <p>IVW may become biased because all SNPs contribute to the final estimate.</p>
 <p>Even a relatively small number of problematic instruments can distort the result.</p>
 <p>Researchers therefore wanted a method that could tolerate some invalid instruments.</p>
+</section>
+</section>
+</section>
 </section>
 <section id="the-core-idea" class="level1">
 <h1>The Core Idea</h1>
@@ -4479,10 +4488,14 @@ Coronary\ Heart\ Disease
 <section id="interpreting-the-intercept-test" class="level3">
 <h3 class="anchored" data-anchor-id="interpreting-the-intercept-test">Interpreting the Intercept Test</h3>
 <p>Null hypothesis:</p>
-<p>$ = 0 $</p>
+<p><span class="math display">\[
+\alpha = 0
+\]</span></p>
 <p>No directional pleiotropy.</p>
 <p>Alternative hypothesis:</p>
-<p>[ ]</p>
+<p><span class="math display">\[
+\alpha \neq 0
+\]</span></p>
 <p>Directional pleiotropy present.</p>
 <p>Example:</p>
 <table class="caption-top table">
@@ -4523,10 +4536,8 @@ Coronary\ Heart\ Disease
 <h3 class="anchored" data-anchor-id="why-leave-one-out-is-useful">Why Leave-One-Out Is Useful</h3>
 <p>This procedure identifies influential SNPs.</p>
 <p>Suppose:</p>
-<p>Full analysis:</p>
-<p>$ 0.42 $</p>
-<p>After removing SNP7:</p>
-<p>$ 0.05 $</p>
+<p>Full analysis:0.42</p>
+<p>After removing SNP7: 0.05</p>
 <p>This suggests SNP7 is driving the result.</p>
 <p>Researchers should inspect that SNP carefully.</p>
 </section>

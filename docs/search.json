@@ -707,41 +707,6 @@
     "text": "One of the fundamental goals of science is to determine whether one variable causes another. In medicine, epidemiology, genetics, economics, and social sciences, researchers often observe relationships between variables. However, observing a relationship is not the same as proving a causal effect.\nFor example:\nThese observations are informative, but they do not automatically establish causality.\nUnderstanding the distinction between correlation and causation is one of the most important concepts in statistics and epidemiology. It is also the motivation behind Mendelian Randomization, a powerful approach that uses genetic variants to investigate causal relationships."
   },
   {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#step-1-1",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#step-1-1",
-    "title": "Mendelian Randomization",
-    "section": "Step 1",
-    "text": "Step 1\nMatch SNP identifiers.\nExample:\n[ rs123]\nmust exist in both datasets."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#step-2-1",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#step-2-1",
-    "title": "Mendelian Randomization",
-    "section": "Step 2",
-    "text": "Step 2\nCompare effect alleles.\nDetermine whether the exposure and outcome datasets use the same allele."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#step-3-1",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#step-3-1",
-    "title": "Mendelian Randomization",
-    "section": "Step 3",
-    "text": "Step 3\nFlip effect sizes if necessary.\nReverse the sign of beta estimates when alleles differ."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#step-4-1",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#step-4-1",
-    "title": "Mendelian Randomization",
-    "section": "Step 4",
-    "text": "Step 4\nCheck strand orientation.\nResolve forward/reverse strand differences."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#step-5-1",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#step-5-1",
-    "title": "Mendelian Randomization",
-    "section": "Step 5",
-    "text": "Step 5\nRemove ambiguous SNPs.\nExclude SNPs that cannot be aligned confidently."
-  },
-  {
     "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#balanced-pleiotropy",
     "href": "tutorials/blog_MR/Mendelian_Randomization.html#balanced-pleiotropy",
     "title": "Mendelian Randomization",
@@ -770,102 +735,11 @@
     "text": "The InSIDE Assumption\nMR-Egger introduces a new assumption.\nThis assumption is called:\nInstrument Strength Independent of Direct Effect\nor simply:\nInSIDE.\n\nWhat Does InSIDE Mean?\nThe InSIDE assumption states:\n\nThe strength of the SNP-exposure association is independent of the direct pleiotropic effect.\n\nIn other words:\nStrong instruments should not systematically have larger pleiotropic effects than weak instruments.\nMathematically, the direct effects and instrument strengths should be uncorrelated.\n\nWhy Is InSIDE Important?\nThe MR-Egger slope can remain unbiased even when every SNP is pleiotropic.\nThis sounds remarkable.\nHowever, it is only true if the InSIDE assumption holds.\nIf InSIDE is violated:\n\nThe intercept may be misleading.\nThe slope may become biased.\n\nUnfortunately, InSIDE cannot usually be tested directly."
   },
   {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#ivw-1",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#ivw-1",
-    "title": "Mendelian Randomization",
-    "section": "IVW",
-    "text": "IVW\nRequires all instruments to be valid."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#mr-egger-1",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#mr-egger-1",
-    "title": "Mendelian Randomization",
-    "section": "MR-Egger",
-    "text": "MR-Egger\nAllows pleiotropy but relies on the InSIDE assumption."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#weighted-median",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#weighted-median",
-    "title": "Mendelian Randomization",
-    "section": "Weighted Median",
-    "text": "Weighted Median\nRequires more than 50% of total weight to come from valid instruments.\nBut what happens if:\n\nOnly 30% of SNPs are valid?\n40% are valid?\nThe valid instruments do not constitute a majority?\n\nCan we still recover the correct causal effect?\nThe weighted mode estimator attempts to answer yes."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#majority",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#majority",
-    "title": "Mendelian Randomization",
-    "section": "Majority",
-    "text": "Majority\nMore than 50%.\nExample:\n\n\n\nGroup\nPercentage\n\n\n\n\nValid SNPs\n60%\n\n\nInvalid SNPs\n40%\n\n\n\nValid instruments form a majority."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#plurality",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#plurality",
-    "title": "Mendelian Randomization",
-    "section": "Plurality",
-    "text": "Plurality\nLargest group, but not necessarily more than 50%.\nExample:\n\n\n\nGroup\nPercentage\n\n\n\n\nValid SNPs\n40%\n\n\nInvalid Type A\n35%\n\n\nInvalid Type B\n25%\n\n\n\nValid instruments do not form a majority.\nHowever, they form the largest cluster.\nThe weighted mode estimator can still work."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#sensitive-to-cluster-identification",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#sensitive-to-cluster-identification",
-    "title": "Mendelian Randomization",
-    "section": "Sensitive to Cluster Identification",
-    "text": "Sensitive to Cluster Identification\nDifferent clustering choices may produce different results."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#lower-precision",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#lower-precision",
-    "title": "Mendelian Randomization",
-    "section": "Lower Precision",
-    "text": "Lower Precision\nMode estimates often have larger standard errors than IVW."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#less-familiar",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#less-familiar",
-    "title": "Mendelian Randomization",
-    "section": "Less Familiar",
-    "text": "Less Familiar\nMany researchers are more comfortable interpreting IVW and MR-Egger results."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#requires-distinct-clustering",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#requires-distinct-clustering",
-    "title": "Mendelian Randomization",
-    "section": "Requires Distinct Clustering",
-    "text": "Requires Distinct Clustering\nIf SNP estimates form a broad continuous distribution rather than clear clusters, the method may perform poorly."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#ivw-2",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#ivw-2",
-    "title": "Mendelian Randomization",
-    "section": "IVW",
-    "text": "IVW\nPrimary analysis."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#mr-egger-2",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#mr-egger-2",
-    "title": "Mendelian Randomization",
-    "section": "MR-Egger",
-    "text": "MR-Egger\nDetects directional pleiotropy."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#weighted-median-1",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#weighted-median-1",
-    "title": "Mendelian Randomization",
-    "section": "Weighted Median",
-    "text": "Weighted Median\nRobust if more than 50% of weight is valid."
-  },
-  {
-    "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#weighted-mode",
-    "href": "tutorials/blog_MR/Mendelian_Randomization.html#weighted-mode",
-    "title": "Mendelian Randomization",
-    "section": "Weighted Mode",
-    "text": "Weighted Mode\nRobust if the largest cluster is valid.\nTogether these methods form the foundation of modern MR sensitivity analyses."
-  },
-  {
     "objectID": "tutorials/blog_MR/Mendelian_Randomization.html#the-overall-workflow",
     "href": "tutorials/blog_MR/Mendelian_Randomization.html#the-overall-workflow",
     "title": "Mendelian Randomization",
     "section": "The Overall Workflow",
-    "text": "The Overall Workflow\nA standard MR analysis consists of six major steps.\nExposure GWAS\n       ↓\nInstrument Selection\n       ↓\nOutcome GWAS\n       ↓\nHarmonization\n       ↓\nMR Analysis\n       ↓\nSensitivity Analyses\n       ↓\nInterpretation\n\n# Step 1: Install Required Packages\n\n\n#install.packages(\"remotes\")\n\n#remotes::install_github(\n # \"MRCIEU/TwoSampleMR\"\n#)\n\n#install.packages(\"data.table\")\n#install.packages(\"dplyr\")\n\n\n\n\n#Load the libraries:\n\nlibrary(TwoSampleMR)\nlibrary(data.table)\nlibrary(dplyr)\n\nTwoSampleMR version 0.7.8 \n\n\n [&gt;] New authentication requirements: https://mrcieu.github.io/ieugwasr/articles/guide.html#authentication.\n\n [&gt;] Major upgrades to our servers completed to improve service and stability.\n\n [&gt;] We need your help to shape our emerging roadmap!\n\n     Please take 2 minutes to give us feedback -\n\n     https://forms.office.com/e/eSr7EFAfCG\n\nWarning message:\n“package ‘data.table’ was built under R version 4.3.3”\n\nAttaching package: ‘dplyr’\n\n\nThe following objects are masked from ‘package:data.table’:\n\n    between, first, last\n\n\nThe following objects are masked from ‘package:stats’:\n\n    filter, lag\n\n\nThe following objects are masked from ‘package:base’:\n\n    intersect, setdiff, setequal, union"
+    "text": "The Overall Workflow\nA standard MR analysis consists of six major steps.\nExposure GWAS\n       ↓\nInstrument Selection\n       ↓\nOutcome GWAS\n       ↓\nHarmonization\n       ↓\nMR Analysis\n       ↓\nSensitivity Analyses\n       ↓\nInterpretation\n\nStep 1: Install Required Packages\n#install.packages(\"remotes\")\n\n#remotes::install_github(\n # \"MRCIEU/TwoSampleMR\"\n#)\n\n#install.packages(\"data.table\")\n#install.packages(\"dplyr\")\n\n\n#Load the libraries:\n\nlibrary(TwoSampleMR)\nlibrary(data.table)\nlibrary(dplyr)\n\nTwoSampleMR version 0.7.8 \n\n\n [&gt;] New authentication requirements: https://mrcieu.github.io/ieugwasr/articles/guide.html#authentication.\n\n [&gt;] Major upgrades to our servers completed to improve service and stability.\n\n [&gt;] We need your help to shape our emerging roadmap!\n\n     Please take 2 minutes to give us feedback -\n\n     https://forms.office.com/e/eSr7EFAfCG\n\nWarning message:\n“package ‘data.table’ was built under R version 4.3.3”\n\nAttaching package: ‘dplyr’\n\n\nThe following objects are masked from ‘package:data.table’:\n\n    between, first, last\n\n\nThe following objects are masked from ‘package:stats’:\n\n    filter, lag\n\n\nThe following objects are masked from ‘package:base’:\n\n    intersect, setdiff, setequal, union\n\n\n\n\n\n\nStep 2: Define the Scientific Question\nEvery MR analysis begins with a causal hypothesis.\nFor example:\n\nDoes BMI causally increase the risk of Coronary Heart Disease (CHD)?\n\nExposure:\nBMI\nOutcome:\nCoronary Heart Disease\n\n\nStep 3: Obtain Genetic Instruments\nThe first task is identifying SNPs associated with the exposure.\nIn MR terminology:\nSNP → Exposure\nThese SNPs become instrumental variables.\nUsing the IEU OpenGWAS database:\n\n#available_outcomes()\n\nSearch for BMI datasets:\n\n\n\n\n#ao &lt;- available_outcomes()\n\n#ao %&gt;%\n # filter(grepl(\"body mass index\", trait, ignore.case = TRUE)) %&gt;%\n#  head()\n\nSuppose the BMI dataset is:\nieu-a-2\nExtract instruments:\nexposure_dat &lt;- extract_instruments(\n  outcomes = \"ieu-a-2\"\n)\n\n\nWhat Happened Here?\nThe function:\nextract_instruments()\nselects SNPs that satisfy:\n\\[\nP &lt; 5 \\times 10^{-8}\n\\]\nThese are genome-wide significant variants associated with BMI.\nThe output contains:\n\nSNP IDs\nEffect alleles\nBeta coefficients\nStandard errors\nP-values\n\n\nInspect the Instruments\nhead(exposure_dat)\nTypical columns:\n\n\n\nColumn\nDescription\n\n\n\n\nSNP\nVariant ID\n\n\nbeta.exposure\nSNP → Exposure effect\n\n\nse.exposure\nStandard error\n\n\neffect_allele.exposure\nEffect allele\n\n\nother_allele.exposure\nReference allele\n\n\npval.exposure\nGWAS p-value\n\n\n\n\n\n\nStep 4: Obtain Outcome Associations\nNow extract the same SNPs from the outcome GWAS.\nSuppose:\nieu-a-7\ncorresponds to Coronary Heart Disease.\noutcome_dat &lt;- extract_outcome_data(\n  snps = exposure_dat$SNP,\n  outcomes = \"ieu-a-7\"\n)\nThis provides:\nSNP -&gt; Outcome\nassociations.\n\nInspect the Outcome Data\nhead(outcome_dat)\nImportant columns include:\n\nbeta.outcome\nse.outcome\neffect_allele.outcome\npval.outcome\n\n\n\n\nStep 5: Harmonization\nBefore calculating causal estimates, alleles must be aligned.\nRecall from Part 6:\n\nExposure and outcome effects must refer to the same allele.\n\nRun:\nharmonised_dat &lt;- harmonise_data(\n  exposure_dat,\n  outcome_dat\n)\n\n\nWhat Does Harmonization Do?\nThe function automatically:\n\nMatches SNPs\nAligns alleles\nResolves strand issues\nRemoves problematic SNPs\nExcludes ambiguous palindromic variants when necessary\n\nInspect the harmonized dataset:\nhead(harmonised_dat)\n\n\nStep 6: Run Mendelian Randomization\nNow we estimate the causal effect.\nmr_results &lt;- mr(harmonised_dat)\n\nmr_results\nBy default, TwoSampleMR reports:\n\nIVW\nMR-Egger\nWeighted Median\nWeighted Mode\n\n\nUnderstanding the Output\nTypical output:\n\n\n\nMethod\nEstimate\nSE\nP-value\n\n\n\n\nIVW\n0.42\n0.08\n0.001\n\n\nMR-Egger\n0.38\n0.15\n0.02\n\n\nWeighted Median\n0.40\n0.10\n0.003\n\n\nWeighted Mode\n0.39\n0.12\n0.005\n\n\n\nInterpretation:\nAll methods suggest a positive causal effect.\nThis strengthens confidence in the result.\n\n\n\nStep 7: Heterogeneity Testing\nAssess whether SNP-specific estimates are consistent.\nheterogeneity_results &lt;- mr_heterogeneity(\n  harmonised_dat\n)\n\nheterogeneity_results\n\nInterpreting Cochran’s Q\nSuppose:\nQ p-value = 0.62\nInterpretation:\nLittle evidence of heterogeneity.\nNow suppose:\nQ p-value &lt; 0.001\nInterpretation:\nPossible pleiotropy or invalid instruments.\n\n\n\nStep 8: Test for Directional Pleiotropy\nUse the MR-Egger intercept.\npleiotropy_results &lt;- mr_pleiotropy_test(\n  harmonised_dat\n)\n\npleiotropy_results\n\n\nInterpreting the Egger Intercept\nSuppose:\nIntercept p-value = 0.75\nInterpretation:\nLittle evidence of directional pleiotropy.\nSuppose:\nIntercept p-value = 0.002\nInterpretation:\nDirectional pleiotropy may be present.\n\n\nStep 9: Leave-One-Out Analysis\nEvaluate whether a single SNP drives the result.\n\n\n#loo_results &lt;- mr_leaveoneout(\n # harmonised_dat\n#)\n\nVisualize:\n\n#mr_leaveoneout_plot(\n#  loo_results\n#)\n\n\n\nInterpretation\nIf all estimates remain similar:\nStable Result\nIf removing one SNP dramatically changes the estimate:\nInfluential SNP Detected\nFurther investigation is warranted.\n\n\nStep 10: Scatter Plot\nVisualize SNP effects.\nscatter_plot &lt;- mr_scatter_plot(\n  mr_results,\n  harmonised_dat\n)\n\nscatter_plot\nThe plot shows:\n\nSNP-exposure effects\nSNP-outcome effects\nIVW regression line\nMR-Egger regression line\n\n\n\nStep 11: Forest Plot\nVisualize SNP-specific causal estimates.\nsingle_snp_results &lt;- mr_singlesnp(\n  harmonised_dat\n)\n\nmr_forest_plot(\n  single_snp_results\n)\nThis helps identify outliers and heterogeneity.\n\n\nStep 12: Funnel Plot\nAssess symmetry.\nmr_funnel_plot(\n  single_snp_results\n)\nSymmetric plots suggest balanced pleiotropy.\nAsymmetry may indicate directional pleiotropy.\n\n\nPutting Everything Together\nA typical MR report might contain:\n\nPrimary Analysis\nIVW estimate\n\n\nRobust Methods\n\nMR-Egger\nWeighted Median\nWeighted Mode\n\n\n\nSensitivity Analyses\n\nCochran’s Q\nEgger Intercept\nLeave-One-Out\n\n\n\nVisualizations\n\nScatter plot\nForest plot\nFunnel plot\n\n\n# A Complete Example Pipeline\n\n\nlibrary(TwoSampleMR)\n\n# Extract instruments\nexposure_dat &lt;- extract_instruments(\n  outcomes = \"ieu-a-2\"\n)\n\n# Extract outcomes\noutcome_dat &lt;- extract_outcome_data(\n  snps = exposure_dat$SNP,\n  outcomes = \"ieu-a-7\"\n)\n\n# Harmonize\nharmonised_dat &lt;- harmonise_data(\n  exposure_dat,\n  outcome_dat\n)\n\n# Main MR\nmr_results &lt;- mr(\n  harmonised_dat\n)\n\n# Heterogeneity\nmr_heterogeneity(\n  harmonised_dat\n)\n\n# Pleiotropy\nmr_pleiotropy_test(\n  harmonised_dat\n)\n\n# Leave-One-Out\nloo &lt;- mr_leaveoneout(\n  harmonised_dat\n)\n\n# Visualizations\nmr_scatter_plot(\n  mr_results,\n  harmonised_dat\n)\n\nmr_leaveoneout_plot(\n  loo\n)\n\nERROR: Error in ieugwasr::tophits(outcomes, pval = p1, clump = clump, r2 = r2, : unused argument (x_api_source = x_api_source_header())\n\nError in ieugwasr::tophits(outcomes, pval = p1, clump = clump, r2 = r2, : unused argument (x_api_source = x_api_source_header())\nTraceback:\n\n1. .handleSimpleError(function (cnd) \n . {\n .     watcher$capture_plot_and_output()\n .     cnd &lt;- sanitize_call(cnd)\n .     watcher$push(cnd)\n .     switch(on_error, continue = invokeRestart(\"eval_continue\"), \n .         stop = invokeRestart(\"eval_stop\"), error = NULL)\n . }, \"unused argument (x_api_source = x_api_source_header())\", \n .     base::quote(ieugwasr::tophits(outcomes, pval = p1, clump = clump, \n .         r2 = r2, kb = kb, force_server = force_server, opengwas_jwt = opengwas_jwt, \n .         x_api_source = x_api_source_header())))\n\n\n\n\n\nHow Results Are Usually Reported\nA typical conclusion might read:\n\nGenetically predicted BMI was positively associated with coronary heart disease risk. The IVW estimate suggested a significant causal effect. Sensitivity analyses using MR-Egger, Weighted Median, and Weighted Mode methods produced similar estimates. There was little evidence of directional pleiotropy based on the MR-Egger intercept test, and leave-one-out analyses indicated that no single SNP drove the observed association.\n\nThis is the style commonly seen in published MR studies.\n\n\nCommon Mistakes\n\nUsing Weak Instruments\nWeak SNPs produce unstable estimates.\n\n\nIgnoring Harmonization\nIncorrect allele alignment can reverse causal conclusions.\n\n\nReporting Only IVW\nRobust methods should also be presented.\n\n\nIgnoring Pleiotropy Tests\nSensitivity analyses are essential.\n\n\nOverstating Causality\nMR provides evidence for causality but is still subject to assumptions and limitations.\n\n\n\nThe Big Picture\nA complete Mendelian Randomization study is much more than calculating a single causal estimate.\nResearchers must:\n\nSelect instruments.\nHarmonize data.\nEstimate causal effects.\nTest assumptions.\nEvaluate robustness.\nInterpret results carefully.\n\nThe strength of MR comes not from a single method, but from combining multiple complementary analyses into a coherent causal inference framework.\n\nFinal Summary of the Tutorial Series\nThroughout this series, we covered:\n\nCorrelation versus causation\nMendelian Randomization\nInstrumental variables\nWald Ratio\nIVW estimation\nTwo-sample MR\nHarmonization\nHorizontal pleiotropy\nMR-Egger\nWeighted Median\nWeighted Mode\nSensitivity analyses\nComplete MR workflow\n\nTogether, these concepts form the foundation of modern Mendelian Randomization and causal inference in statistical genetics.\n\n\n\nKey Takeaways\n\nTwoSampleMR provides a complete framework for Mendelian Randomization analyses.\nInstrument selection is the first step.\nHarmonization is essential before estimation.\nIVW is typically the primary analysis.\nMR-Egger, Weighted Median, and Weighted Mode provide robustness checks.\nSensitivity analyses help evaluate violations of MR assumptions.\nModern MR studies rely on multiple complementary methods rather than a single estimate.\nCareful interpretation is just as important as statistical estimation."
   },
   {
     "objectID": "tutorials/blog_mood_track/notebook /01_moodtrack_data_generation.html",

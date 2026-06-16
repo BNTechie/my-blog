@@ -1577,7 +1577,9 @@ window.Quarto = {
 </tbody>
 </table>
 <p>These estimates represent:</p>
-<p>[ _{GX}]</p>
+<p><span class="math display">\[
+\beta_{GX}
+\]</span></p>
 <p>for each SNP.</p>
 </section>
 <section id="outcome-gwas" class="level3">
@@ -1607,19 +1609,27 @@ window.Quarto = {
 </tbody>
 </table>
 <p>These estimates represent:</p>
-<p>[ _{GY}]</p>
+<p><span class="math display">\[
+\beta_{GY}
+\]</span></p>
 <p>for each SNP.</p>
 </section>
 <section id="combining-the-two-gwas" class="level3">
 <h3 class="anchored" data-anchor-id="combining-the-two-gwas">Combining the Two GWAS</h3>
 <p>After obtaining:</p>
-<p>[ _{GX}]</p>
+<p><span class="math display">\[
+\beta_{GX}
+\]</span></p>
 <p>from the exposure GWAS</p>
 <p>and</p>
-<p>[ _{GY}]</p>
+<p><span class="math display">\[
+\beta_{GY}\]</span></p>
 <p>from the outcome GWAS</p>
 <p>we can calculate:</p>
-<p>[ {_{GX}}]</p>
+<p><span class="math display">\[
+\frac{\beta_{GY}}
+{\beta_{GX}}
+\]</span></p>
 <p>for each SNP.</p>
 <p>These are the individual Wald Ratio estimates.</p>
 <p>The estimates are then combined using IVW.</p>
@@ -1654,20 +1664,24 @@ window.Quarto = {
 <section id="a-practical-example" class="level3">
 <h3 class="anchored" data-anchor-id="a-practical-example">A Practical Example</h3>
 <p>Suppose we want to investigate:</p>
-<p>[ BMI Coronary&nbsp;Heart&nbsp;Disease]</p>
+<p><span class="math display">\[
+BMI
+→
+Coronary\ Heart\ Disease
+\]</span></p>
 <p>We might use:</p>
 </section>
 <section id="exposure-gwas-1" class="level3">
 <h3 class="anchored" data-anchor-id="exposure-gwas-1">Exposure GWAS</h3>
 <p>BMI GWAS</p>
 <p>Sample Size:</p>
-<p>[ N = 700,000]</p>
+<p>N = 700,000</p>
 </section>
 <section id="outcome-gwas-1" class="level3">
 <h3 class="anchored" data-anchor-id="outcome-gwas-1">Outcome GWAS</h3>
 <p>Coronary Heart Disease GWAS</p>
 <p>Sample Size:</p>
-<p>[ N = 200,000]</p>
+<p>N = 200,000</p>
 <p>The participants do not need to overlap.</p>
 <p>We simply extract the SNP associations from both studies.</p>
 </section>
@@ -1692,11 +1706,11 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="visualizing-two-sample-mr">Visualizing Two-Sample MR</h3>
 <p>Conceptually:</p>
 <p>Exposure GWAS</p>
-<p>[ SNP Exposure]</p>
+<p>SNP → Exposure</p>
 <p>Outcome GWAS</p>
-<p>[ SNP Outcome]</p>
+<p>SNP → Outcome</p>
 <p>MR combines both pieces of information:</p>
-<p>[ SNP Exposure Outcome]</p>
+<p>SNP → Exposure → Outcome</p>
 <p>to estimate a causal effect.</p>
 </section>
 <section id="the-assumption-of-population-similarity" class="level3">
@@ -2127,33 +2141,33 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="strand-flipping">Strand Flipping</h3>
 <p>To align datasets, software may perform strand flipping.</p>
 <p>Examples:</p>
-<p>[ A T]</p>
-<p>[ T A]</p>
-<p>[ C G]</p>
-<p>[ G C]</p>
+<p>A → T</p>
+<p>T → A</p>
+<p>C → G</p>
+<p>G → C</p>
 <p>This ensures that exposure and outcome datasets refer to the same biological allele.</p>
 </section>
 <section id="palindromic-snps" class="level3">
 <h3 class="anchored" data-anchor-id="palindromic-snps">Palindromic SNPs</h3>
 <p>Some SNPs create a special challenge.</p>
 <p>Examples:</p>
-<p>[ A/T]</p>
+<p>A/T</p>
 <p>and</p>
-<p>[ C/G]</p>
+<p>C/G</p>
 <p>These SNPs are called <strong>palindromic SNPs</strong>.</p>
 </section>
 <section id="why-are-palindromic-snps-problematic" class="level3">
 <h3 class="anchored" data-anchor-id="why-are-palindromic-snps-problematic">Why Are Palindromic SNPs Problematic?</h3>
 <p>Consider:</p>
-<p>[ A/T]</p>
+<p>A/T</p>
 <p>If we switch strands:</p>
-<p>[ T/A]</p>
+<p>T/A</p>
 <p>The alleles appear identical.</p>
 <p>We cannot immediately determine which allele corresponds to which effect estimate.</p>
 <p>This creates ambiguity.</p>
 </section>
-<section id="example-of-a-palindromic-snp" class="level1">
-<h1>Example of a Palindromic SNP</h1>
+<section id="example-of-a-palindromic-snp" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-a-palindromic-snp">Example of a Palindromic SNP</h3>
 <p>Exposure GWAS:</p>
 <table class="caption-top table">
 <thead>
@@ -2190,63 +2204,63 @@ window.Quarto = {
 </table>
 <p>Without additional information, it may be impossible to determine whether the alleles are correctly aligned.</p>
 </section>
-<section id="using-allele-frequencies" class="level1">
-<h1>Using Allele Frequencies</h1>
+<section id="using-allele-frequencies" class="level3">
+<h3 class="anchored" data-anchor-id="using-allele-frequencies">Using Allele Frequencies</h3>
 <p>Allele frequencies can help resolve ambiguity.</p>
 <p>Suppose:</p>
 <p>Exposure GWAS:</p>
-<p>[ EAF = 0.10]</p>
+<p>EAF = 0.10</p>
 <p>Outcome GWAS:</p>
-<p>[ EAF = 0.11]</p>
+<p>EAF = 0.11</p>
 <p>The similar frequencies suggest the same allele is being referenced.</p>
 <p>In contrast:</p>
-<p>[ 0.10]</p>
+<p>0.10</p>
 <p>versus</p>
-<p>[ 0.90]</p>
+<p>0.90</p>
 <p>would indicate a mismatch.</p>
 <p>Many MR software packages use allele frequencies during harmonization.</p>
 </section>
-<section id="ambiguous-palindromic-snps" class="level1">
-<h1>Ambiguous Palindromic SNPs</h1>
+<section id="ambiguous-palindromic-snps" class="level3">
+<h3 class="anchored" data-anchor-id="ambiguous-palindromic-snps">Ambiguous Palindromic SNPs</h3>
 <p>Some palindromic SNPs cannot be aligned confidently.</p>
 <p>Examples:</p>
-<p>[ EAF = 0.50]</p>
+<p>EAF = 0.50</p>
 <p>Because both alleles occur at similar frequencies, strand orientation cannot be inferred reliably.</p>
 <p>These SNPs are often removed from the analysis.</p>
 </section>
-<section id="harmonization-workflow" class="level1">
-<h1>Harmonization Workflow</h1>
+<section id="harmonization-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="harmonization-workflow">Harmonization Workflow</h3>
 <p>A typical harmonization procedure involves:</p>
-<section id="step-1-1" class="level2">
-<h2 class="anchored" data-anchor-id="step-1-1">Step 1</h2>
+<section id="step-1-1" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-1">Step 1</h4>
 <p>Match SNP identifiers.</p>
 <p>Example:</p>
-<p>[ rs123]</p>
+<p>rs123</p>
 <p>must exist in both datasets.</p>
 </section>
-<section id="step-2-1" class="level2">
-<h2 class="anchored" data-anchor-id="step-2-1">Step 2</h2>
+<section id="step-2-1" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-1">Step 2</h4>
 <p>Compare effect alleles.</p>
 <p>Determine whether the exposure and outcome datasets use the same allele.</p>
 </section>
-<section id="step-3-1" class="level2">
-<h2 class="anchored" data-anchor-id="step-3-1">Step 3</h2>
+<section id="step-3-1" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-1">Step 3</h4>
 <p>Flip effect sizes if necessary.</p>
 <p>Reverse the sign of beta estimates when alleles differ.</p>
 </section>
-<section id="step-4-1" class="level2">
-<h2 class="anchored" data-anchor-id="step-4-1">Step 4</h2>
+<section id="step-4-1" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-1">Step 4</h4>
 <p>Check strand orientation.</p>
 <p>Resolve forward/reverse strand differences.</p>
 </section>
-<section id="step-5-1" class="level2">
-<h2 class="anchored" data-anchor-id="step-5-1">Step 5</h2>
+<section id="step-5-1" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-1">Step 5</h4>
 <p>Remove ambiguous SNPs.</p>
 <p>Exclude SNPs that cannot be aligned confidently.</p>
 </section>
 </section>
-<section id="harmonization-in-twosamplemr" class="level1">
-<h1>Harmonization in TwoSampleMR</h1>
+<section id="harmonization-in-twosamplemr" class="level3">
+<h3 class="anchored" data-anchor-id="harmonization-in-twosamplemr">Harmonization in TwoSampleMR</h3>
 <p>The TwoSampleMR package provides a dedicated function:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">harmonise_data</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  exposure_dat,</span>
@@ -2414,13 +2428,12 @@ window.Quarto = {
 <p>Pleiotropy is normal biology.</p>
 </blockquote>
 <p>The challenge is determining whether that pleiotropy violates MR assumptions.</p>
-</section>
-<section id="revisiting-the-mr-framework-1" class="level1">
-<h1>Revisiting the MR Framework</h1>
+<section id="revisiting-the-mr-framework-1" class="level3">
+<h3 class="anchored" data-anchor-id="revisiting-the-mr-framework-1">Revisiting the MR Framework</h3>
 <p>Recall the ideal MR model:</p>
-<p>[ SNP Exposure Outcome]</p>
+<p>[ SNP → Exposure → Outcome]</p>
 <p>Example:</p>
-<p>[ SNP BMI Coronary&nbsp;Heart&nbsp;Disease]</p>
+<p>[ SNP → BMI → Coronary&nbsp;Heart&nbsp;Disease]</p>
 <p>In this framework:</p>
 <ul>
 <li>The SNP affects BMI.</li>
@@ -2429,21 +2442,21 @@ window.Quarto = {
 </ul>
 <p>Under these conditions, MR can estimate a causal effect.</p>
 </section>
-<section id="the-exclusion-restriction-assumption" class="level1">
-<h1>The Exclusion Restriction Assumption</h1>
+<section id="the-exclusion-restriction-assumption" class="level3">
+<h3 class="anchored" data-anchor-id="the-exclusion-restriction-assumption">The Exclusion Restriction Assumption</h3>
 <p>The exclusion restriction assumption states:</p>
 <blockquote class="blockquote">
 <p>The genetic variant influences the outcome only through the exposure.</p>
 </blockquote>
 <p>Mathematically:</p>
-<p>[ SNP Exposure Outcome]</p>
+<p>[ SNP → Exposure → Outcome]</p>
 <p>and not:</p>
-<p>[ SNP Outcome]</p>
+<p><a href="#snp-outcome">SNP → Outcome</a></p>
 <p>through any other pathway.</p>
 <p>This assumption is where pleiotropy becomes important.</p>
 </section>
-<section id="two-types-of-pleiotropy" class="level1">
-<h1>Two Types of Pleiotropy</h1>
+<section id="two-types-of-pleiotropy" class="level3">
+<h3 class="anchored" data-anchor-id="two-types-of-pleiotropy">Two Types of Pleiotropy</h3>
 <p>Not all pleiotropy is problematic.</p>
 <p>In Mendelian Randomization we distinguish between:</p>
 <ol type="1">
@@ -2452,47 +2465,48 @@ window.Quarto = {
 </ol>
 <p>Understanding this distinction is crucial.</p>
 </section>
-<section id="vertical-pleiotropy" class="level1">
-<h1>Vertical Pleiotropy</h1>
+<section id="vertical-pleiotropy" class="level3">
+<h3 class="anchored" data-anchor-id="vertical-pleiotropy">Vertical Pleiotropy</h3>
 <p>Vertical pleiotropy occurs when the SNP affects downstream traits through the exposure.</p>
 <p>Example:</p>
-<p>[ SNP BMI Blood&nbsp;Pressure Heart&nbsp;Disease]</p>
+<p>[ SNP → BMI → Blood&nbsp;Pressure → Heart&nbsp;Disease]</p>
 <p>The SNP affects heart disease through a biological chain of events.</p>
 <p>This does not violate the exclusion restriction assumption.</p>
 <p>The effect remains mediated by the exposure pathway.</p>
 </section>
-<section id="why-vertical-pleiotropy-is-acceptable" class="level1">
-<h1>Why Vertical Pleiotropy Is Acceptable</h1>
+<section id="why-vertical-pleiotropy-is-acceptable" class="level3">
+<h3 class="anchored" data-anchor-id="why-vertical-pleiotropy-is-acceptable">Why Vertical Pleiotropy Is Acceptable</h3>
 <p>Suppose:</p>
-<p>[ SNP LDL&nbsp;Cholesterol]</p>
+<p>[ SNP → LDL&nbsp;Cholesterol]</p>
 <p>and</p>
-<p>[ LDL&nbsp;Cholesterol Atherosclerosis]</p>
+<p>[ LDL&nbsp;Cholesterol → Atherosclerosis]</p>
 <p>and</p>
-<p>[ Atherosclerosis Coronary&nbsp;Heart&nbsp;Disease]</p>
+<p>[ Atherosclerosis → Coronary&nbsp;Heart&nbsp;Disease]</p>
 <p>The SNP affects coronary heart disease through downstream consequences of LDL cholesterol.</p>
 <p>This is exactly the type of causal pathway that MR is designed to capture.</p>
 <p>Therefore:</p>
 <blockquote class="blockquote">
 <p>Vertical pleiotropy is generally not considered a problem for Mendelian Randomization.</p>
 </blockquote>
-<section id="horizontal-pleiotropy" class="level3">
-<h3 class="anchored" data-anchor-id="horizontal-pleiotropy">Horizontal Pleiotropy</h3>
+<section id="horizontal-pleiotropy" class="level4">
+<h4 class="anchored" data-anchor-id="horizontal-pleiotropy">Horizontal Pleiotropy</h4>
 <p>Horizontal pleiotropy occurs when a SNP influences the outcome through a pathway other than the exposure.</p>
 <p>Example:</p>
-<p>$ SNP BMI $</p>
+<p>SNP → BMI</p>
 <p>and simultaneously:</p>
-<p>[ SNP Blood&nbsp;Pressure]</p>
+<p>SNP → Blood&nbsp;Pressure</p>
 <p>Suppose we are studying:</p>
-<p>[ BMI Blood&nbsp;Pressure]</p>
+<p>BMI →Blood&nbsp;Pressure</p>
 <p>The direct SNP effect on blood pressure creates an alternative pathway.</p>
 <p>This violates the exclusion restriction assumption.</p>
+</section>
 </section>
 <section id="visualizing-horizontal-pleiotropy" class="level3">
 <h3 class="anchored" data-anchor-id="visualizing-horizontal-pleiotropy">Visualizing Horizontal Pleiotropy</h3>
 <p>Desired pathway:</p>
-<p>$ SNP Exposure Outcome $</p>
+<p>SNP → Exposure → Outcome</p>
 <p>Problematic pathway:</p>
-<p>$ SNP Outcome $</p>
+<p>SNP → Outcome</p>
 <p>The outcome is now influenced by two routes:</p>
 <ol type="1">
 <li>Through the exposure.</li>
@@ -2504,17 +2518,16 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="why-horizontal-pleiotropy-is-dangerous">Why Horizontal Pleiotropy Is Dangerous</h3>
 <p>The SNP-outcome effect now contains two components.</p>
 <p>Exposure-mediated effect:</p>
-<p>[ SNP Exposure Outcome]</p>
+<p>SNP → Exposure → Outcome</p>
 <p>plus</p>
 <p>Direct pleiotropic effect:</p>
-<p>[ SNP Outcome]</p>
+<p>SNP → Outcome</p>
 <p>The observed SNP-outcome association becomes:</p>
 <p>$ Observed&nbsp;Effect =Causal&nbsp;Effect + Pleiotropic&nbsp;Effect $</p>
 <p>As a result, the MR estimate becomes biased.</p>
 </section>
-</section>
-<section id="a-numerical-example-2" class="level1">
-<h1>A Numerical Example</h1>
+<section id="a-numerical-example-2" class="level3">
+<h3 class="anchored" data-anchor-id="a-numerical-example-2">A Numerical Example</h3>
 <p>Suppose:</p>
 <p>[ SNP BMI ===</p>
 <p>0.20 ]</p>
@@ -2535,6 +2548,7 @@ window.Quarto = {
 <p>but the MR estimate becomes:</p>
 <p>$ 0.50 $</p>
 <p>because of horizontal pleiotropy.</p>
+</section>
 </section>
 <section id="balanced-vs-directional-pleiotropy" class="level1">
 <h1>Balanced vs Directional Pleiotropy</h1>
@@ -3275,16 +3289,15 @@ window.Quarto = {
 <p>Median:</p>
 <p>[ 3]</p>
 <p>The median remains stable despite the outlier.</p>
-</section>
-<section id="extending-the-idea-to-mendelian-randomization" class="level1">
-<h1>Extending the Idea to Mendelian Randomization</h1>
+<section id="extending-the-idea-to-mendelian-randomization" class="level3">
+<h3 class="anchored" data-anchor-id="extending-the-idea-to-mendelian-randomization">Extending the Idea to Mendelian Randomization</h3>
 <p>In MR we do not simply calculate the median of SNP estimates.</p>
 <p>Each SNP has a different level of precision.</p>
 <p>More precise SNPs should contribute more information.</p>
 <p>Therefore, we use a <strong>weighted median</strong>.</p>
 </section>
-<section id="the-weighted-median-concept" class="level1">
-<h1>The Weighted Median Concept</h1>
+<section id="the-weighted-median-concept" class="level3">
+<h3 class="anchored" data-anchor-id="the-weighted-median-concept">The Weighted Median Concept</h3>
 <p>Suppose each SNP has:</p>
 <ul>
 <li>A causal estimate</li>
@@ -3295,9 +3308,8 @@ window.Quarto = {
 <p>The estimate where 50% of the total weight lies on either side.</p>
 </blockquote>
 <p>The key idea is that SNPs with higher precision contribute more heavily.</p>
-</section>
-<section id="a-simple-example-2" class="level1">
-<h1>A Simple Example</h1>
+<section id="a-simple-example-2" class="level4">
+<h4 class="anchored" data-anchor-id="a-simple-example-2">A Simple Example</h4>
 <p>Suppose we have:</p>
 <table class="caption-top table">
 <thead>
@@ -3336,16 +3348,15 @@ window.Quarto = {
 </tbody>
 </table>
 <p>Total weight:</p>
-<p>[ 10+20+30+25+15 ==============</p>
-<p>100 ]</p>
-<p>The weighted median corresponds to the point where cumulative weight reaches:</p>
-<p>[ 50]</p>
+<p>10+20+30+25+15 =100</p>
+<p>The weighted median corresponds to the point where cumulative weight reaches:50</p>
 <p>The estimate associated with that point becomes the weighted median estimate.</p>
 <p>Notice that SNP5 has an extreme value.</p>
 <p>Because it carries only 15% of the total weight, it has limited influence on the final estimate.</p>
 </section>
-<section id="the-50-rule" class="level1">
-<h1>The 50% Rule</h1>
+</section>
+<section id="the-50-rule" class="level3">
+<h3 class="anchored" data-anchor-id="the-50-rule">The 50% Rule</h3>
 <p>The weighted median estimator has a remarkable property.</p>
 <p>It produces a consistent causal estimate provided that:</p>
 <blockquote class="blockquote">
@@ -3354,8 +3365,8 @@ window.Quarto = {
 <p>This is often called the:</p>
 <p><strong>50% Valid Instrument Assumption</strong></p>
 </section>
-<section id="why-is-the-50-rule-important" class="level1">
-<h1>Why Is the 50% Rule Important?</h1>
+<section id="why-is-the-50-rule-important" class="level3">
+<h3 class="anchored" data-anchor-id="why-is-the-50-rule-important">Why Is the 50% Rule Important?</h3>
 <p>Imagine:</p>
 <ul>
 <li>40% of SNP weight comes from invalid instruments.</li>
@@ -3364,20 +3375,17 @@ window.Quarto = {
 <p>The weighted median can still recover the correct causal effect.</p>
 <p>This is substantially more robust than IVW.</p>
 </section>
-<section id="comparing-ivw-and-weighted-median" class="level1">
-<h1>Comparing IVW and Weighted Median</h1>
+<section id="comparing-ivw-and-weighted-median" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-ivw-and-weighted-median">Comparing IVW and Weighted Median</h3>
 <p>Suppose:</p>
-<p>90 SNPs estimate:</p>
-<p>[ 0.30]</p>
-<p>10 pleiotropic SNPs estimate:</p>
-<p>[ 2.00]</p>
+<p>90 SNPs estimate:0.30</p>
+<p>10 pleiotropic SNPs estimate:2.00</p>
 <p>IVW will be pulled upward because all SNPs contribute to the average.</p>
-<p>The weighted median remains close to:</p>
-<p>[ 0.30]</p>
+<p>The weighted median remains close to:0.30</p>
 <p>provided the majority of weight comes from valid instruments.</p>
 </section>
-<section id="why-weighted-median-is-robust" class="level1">
-<h1>Why Weighted Median Is Robust</h1>
+<section id="why-weighted-median-is-robust" class="level3">
+<h3 class="anchored" data-anchor-id="why-weighted-median-is-robust">Why Weighted Median Is Robust</h3>
 <p>The method does not rely on every instrument being valid.</p>
 <p>Instead, it assumes:</p>
 <blockquote class="blockquote">
@@ -3385,8 +3393,8 @@ window.Quarto = {
 </blockquote>
 <p>This is often a much more realistic assumption in complex biological systems.</p>
 </section>
-<section id="comparing-ivw-mr-egger-and-weighted-median" class="level1">
-<h1>Comparing IVW, MR-Egger, and Weighted Median</h1>
+<section id="comparing-ivw-mr-egger-and-weighted-median" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-ivw-mr-egger-and-weighted-median">Comparing IVW, MR-Egger, and Weighted Median</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -3430,8 +3438,8 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="a-hypothetical-example-1" class="level1">
-<h1>A Hypothetical Example</h1>
+<section id="a-hypothetical-example-1" class="level3">
+<h3 class="anchored" data-anchor-id="a-hypothetical-example-1">A Hypothetical Example</h3>
 <p>Suppose we obtain the following results:</p>
 <table class="caption-top table">
 <thead>
@@ -3463,8 +3471,8 @@ window.Quarto = {
 </ul>
 <p>Agreement between robust methods often increases confidence in the causal conclusion.</p>
 </section>
-<section id="another-example-1" class="level1">
-<h1>Another Example</h1>
+<section id="another-example-1" class="level3">
+<h3 class="anchored" data-anchor-id="another-example-1">Another Example</h3>
 <p>Suppose:</p>
 <table class="caption-top table">
 <thead>
@@ -3495,8 +3503,8 @@ window.Quarto = {
 <li>Strong support for the causal effect.</li>
 </ul>
 </section>
-<section id="weighted-median-and-outliers" class="level1">
-<h1>Weighted Median and Outliers</h1>
+<section id="weighted-median-and-outliers" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-median-and-outliers">Weighted Median and Outliers</h3>
 <p>The weighted median is particularly useful when a small number of SNPs produce extreme estimates.</p>
 <p>Consider:</p>
 <table class="caption-top table">
@@ -3530,12 +3538,11 @@ window.Quarto = {
 </tbody>
 </table>
 <p>IVW will be influenced by SNP5.</p>
-<p>The weighted median remains much closer to:</p>
-<p>[ 0.30]</p>
+<p>The weighted median remains much closer to:0.30</p>
 <p>This makes it attractive when outliers are present.</p>
 </section>
-<section id="when-does-weighted-median-fail" class="level1">
-<h1>When Does Weighted Median Fail?</h1>
+<section id="when-does-weighted-median-fail" class="level3">
+<h3 class="anchored" data-anchor-id="when-does-weighted-median-fail">When Does Weighted Median Fail?</h3>
 <p>The weighted median is not perfect.</p>
 <p>Problems occur when:</p>
 <ul>
@@ -3545,8 +3552,8 @@ window.Quarto = {
 </ul>
 <p>In these situations, the weighted median may also become biased.</p>
 </section>
-<section id="why-weighted-median-became-popular" class="level1">
-<h1>Why Weighted Median Became Popular</h1>
+<section id="why-weighted-median-became-popular" class="level3">
+<h3 class="anchored" data-anchor-id="why-weighted-median-became-popular">Why Weighted Median Became Popular</h3>
 <p>The weighted median method gained popularity because it occupies an attractive middle ground.</p>
 <p>Compared with IVW:</p>
 <ul>
@@ -3559,8 +3566,8 @@ window.Quarto = {
 </ul>
 <p>As a result, it is now routinely included in MR sensitivity analyses.</p>
 </section>
-<section id="practical-interpretation" class="level1">
-<h1>Practical Interpretation</h1>
+<section id="practical-interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="practical-interpretation">Practical Interpretation</h3>
 <p>A typical MR study might report:</p>
 <table class="caption-top table">
 <thead>
@@ -3593,8 +3600,8 @@ window.Quarto = {
 </ol>
 <p>Consistency strengthens confidence in causal conclusions.</p>
 </section>
-<section id="the-big-picture-2" class="level1">
-<h1>The Big Picture</h1>
+<section id="the-big-picture-2" class="level3">
+<h3 class="anchored" data-anchor-id="the-big-picture-2">The Big Picture</h3>
 <p>The weighted median estimator was developed because real genetic datasets often contain some invalid instruments.</p>
 <p>Rather than requiring perfection, the method asks:</p>
 <blockquote class="blockquote">
@@ -3603,8 +3610,8 @@ window.Quarto = {
 <p>If the answer is yes, the weighted median can provide reliable causal estimates even when some SNPs are problematic.</p>
 <p>This robustness has made it one of the most important tools in modern Mendelian Randomization.</p>
 </section>
-<section id="looking-ahead-8" class="level1">
-<h1>Looking Ahead</h1>
+<section id="looking-ahead-8" class="level3">
+<h3 class="anchored" data-anchor-id="looking-ahead-8">Looking Ahead</h3>
 <p>Although the weighted median estimator can tolerate invalid instruments, it still assumes that most of the information comes from valid SNPs.</p>
 <p>Researchers therefore developed another approach called the <strong>Weighted Mode Estimator</strong>.</p>
 <p>The weighted mode estimator takes a very different perspective:</p>
@@ -3620,8 +3627,8 @@ window.Quarto = {
 <li>Advantages and limitations of mode-based estimators</li>
 </ul>
 </section>
-<section id="key-takeaways-8" class="level1">
-<h1>Key Takeaways</h1>
+<section id="key-takeaways-8" class="level3">
+<h3 class="anchored" data-anchor-id="key-takeaways-8">Key Takeaways</h3>
 <ul>
 <li>The weighted median estimator is a robust Mendelian Randomization method.</li>
 <li>It uses the weighted median of SNP-specific causal estimates.</li>
@@ -3633,8 +3640,8 @@ window.Quarto = {
 <li>Agreement among multiple MR methods increases confidence in causal conclusions.</li>
 </ul>
 </section>
-<section id="weighted-mode-mendelian-randomization" class="level1">
-<h1>Weighted Mode Mendelian Randomization</h1>
+<section id="weighted-mode-mendelian-randomization" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-mode-mendelian-randomization">Weighted Mode Mendelian Randomization</h3>
 <p>In Part 9, we introduced the Weighted Median estimator, a robust Mendelian Randomization (MR) method that can provide reliable causal estimates when more than 50% of the total instrument weight comes from valid instruments.</p>
 <p>The weighted median estimator represented an important improvement over the standard Inverse Variance Weighted (IVW) approach because it can tolerate some invalid instruments.</p>
 <p>However, researchers asked an important question:</p>
@@ -3644,8 +3651,8 @@ window.Quarto = {
 <p>In some situations, the majority of SNPs may not be valid instruments, yet there may still be a cluster of SNPs that identify the true causal effect.</p>
 <p>This idea motivated the development of <strong>Mode-Based Mendelian Randomization</strong>, commonly known as the <strong>Weighted Mode Estimator</strong>.</p>
 </section>
-<section id="learning-objectives-9" class="level1">
-<h1>Learning Objectives</h1>
+<section id="learning-objectives-9" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-9">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand the motivation behind the weighted mode estimator.</li>
@@ -3656,19 +3663,19 @@ window.Quarto = {
 <li>Understand the strengths and limitations of mode-based Mendelian Randomization.</li>
 </ul>
 </section>
-<section id="why-another-robust-method" class="level1">
-<h1>Why Another Robust Method?</h1>
+<section id="why-another-robust-method" class="level3">
+<h3 class="anchored" data-anchor-id="why-another-robust-method">Why Another Robust Method?</h3>
 <p>Recall the assumptions behind previous methods.</p>
-<section id="ivw-1" class="level2">
-<h2 class="anchored" data-anchor-id="ivw-1">IVW</h2>
+<section id="ivw-1" class="level4">
+<h4 class="anchored" data-anchor-id="ivw-1">IVW</h4>
 <p>Requires all instruments to be valid.</p>
 </section>
-<section id="mr-egger-1" class="level2">
-<h2 class="anchored" data-anchor-id="mr-egger-1">MR-Egger</h2>
+<section id="mr-egger-1" class="level4">
+<h4 class="anchored" data-anchor-id="mr-egger-1">MR-Egger</h4>
 <p>Allows pleiotropy but relies on the InSIDE assumption.</p>
 </section>
-<section id="weighted-median" class="level2">
-<h2 class="anchored" data-anchor-id="weighted-median">Weighted Median</h2>
+<section id="weighted-median" class="level4">
+<h4 class="anchored" data-anchor-id="weighted-median">Weighted Median</h4>
 <p>Requires more than 50% of total weight to come from valid instruments.</p>
 <p>But what happens if:</p>
 <ul>
@@ -3680,8 +3687,8 @@ window.Quarto = {
 <p>The weighted mode estimator attempts to answer yes.</p>
 </section>
 </section>
-<section id="the-core-idea-1" class="level1">
-<h1>The Core Idea</h1>
+<section id="the-core-idea-1" class="level3">
+<h3 class="anchored" data-anchor-id="the-core-idea-1">The Core Idea</h3>
 <p>The weighted mode estimator is based on a simple intuition:</p>
 <blockquote class="blockquote">
 <p>Valid instruments should estimate approximately the same causal effect.</p>
@@ -3694,19 +3701,18 @@ window.Quarto = {
 </blockquote>
 <p>This cluster defines the mode.</p>
 </section>
-<section id="what-is-a-mode" class="level1">
-<h1>What Is a Mode?</h1>
+<section id="what-is-a-mode" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-a-mode">What Is a Mode?</h3>
 <p>In statistics:</p>
 <p>The mode is the most frequently occurring value.</p>
-<p>Example:</p>
-<p>[ 1,;2,;2,;2,;3,;4]</p>
+<p>Example: 1,;2,;2,;2,;3,;4</p>
 <p>Mode:</p>
-<p>[ 2]</p>
+<p>2</p>
 <p>because it appears most often.</p>
 <p>The weighted mode estimator extends this concept to Mendelian Randomization.</p>
 </section>
-<section id="from-wald-ratios-to-clusters" class="level1">
-<h1>From Wald Ratios to Clusters</h1>
+<section id="from-wald-ratios-to-clusters" class="level3">
+<h3 class="anchored" data-anchor-id="from-wald-ratios-to-clusters">From Wald Ratios to Clusters</h3>
 <p>Suppose we calculate SNP-specific causal estimates.</p>
 <table class="caption-top table">
 <thead>
@@ -3748,29 +3754,29 @@ window.Quarto = {
 </table>
 <p>Notice the pattern.</p>
 <p>Cluster 1:</p>
-<p>[ 0.29,;0.30,;0.31,;0.32]</p>
+<p>0.29,;0.30,;0.31,;0.32</p>
 <p>Cluster 2:</p>
-<p>[ 1.20,;1.35]</p>
+<p>1.20,;1.35</p>
 <p>Cluster 3:</p>
-<p>[ -0.40]</p>
+<p>-0.40</p>
 <p>The largest cluster is centered around:</p>
-<p>[ 0.30]</p>
+<p>0.30</p>
 <p>The weighted mode estimator identifies this cluster as the most likely causal effect.</p>
 </section>
-<section id="why-valid-instruments-cluster" class="level1">
-<h1>Why Valid Instruments Cluster</h1>
+<section id="why-valid-instruments-cluster" class="level3">
+<h3 class="anchored" data-anchor-id="why-valid-instruments-cluster">Why Valid Instruments Cluster</h3>
 <p>Suppose the true causal effect is:</p>
-<p>[ 0.30]</p>
+<p>0.30</p>
 <p>Every valid SNP estimates:</p>
-<p>[ 0.30]</p>
+<p>0.30</p>
 <p>plus small sampling error.</p>
 <p>Therefore valid instruments tend to produce similar estimates.</p>
 <p>Invalid instruments affected by pleiotropy may generate very different values.</p>
 <p>This creates clusters.</p>
 <p>The largest cluster often corresponds to the valid instruments.</p>
 </section>
-<section id="visualizing-the-idea" class="level1">
-<h1>Visualizing the Idea</h1>
+<section id="visualizing-the-idea" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-the-idea">Visualizing the Idea</h3>
 <p>Imagine plotting all SNP-specific causal estimates.</p>
 <p>You might observe:</p>
 <pre class="text"><code>Density
@@ -3785,8 +3791,8 @@ window.Quarto = {
 <p>The highest peak represents the modal estimate.</p>
 <p>The weighted mode estimator identifies this peak and uses it as the causal estimate.</p>
 </section>
-<section id="weighted-mode-versus-simple-mode" class="level1">
-<h1>Weighted Mode Versus Simple Mode</h1>
+<section id="weighted-mode-versus-simple-mode" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-mode-versus-simple-mode">Weighted Mode Versus Simple Mode</h3>
 <p>Not all SNPs are equally informative.</p>
 <p>Some SNPs have:</p>
 <ul>
@@ -3797,8 +3803,8 @@ window.Quarto = {
 <p>Therefore we use a weighted mode rather than a simple mode.</p>
 <p>More precise SNPs contribute more heavily to the identification of the modal cluster.</p>
 </section>
-<section id="the-plurality-valid-assumption" class="level1">
-<h1>The Plurality Valid Assumption</h1>
+<section id="the-plurality-valid-assumption" class="level3">
+<h3 class="anchored" data-anchor-id="the-plurality-valid-assumption">The Plurality Valid Assumption</h3>
 <p>The weighted mode estimator relies on a different assumption than the weighted median estimator.</p>
 <p>Weighted Median:</p>
 <blockquote class="blockquote">
@@ -3811,11 +3817,11 @@ window.Quarto = {
 <p>This is known as the:</p>
 <p><strong>Plurality Valid Assumption</strong></p>
 </section>
-<section id="majority-versus-plurality" class="level1">
-<h1>Majority Versus Plurality</h1>
+<section id="majority-versus-plurality" class="level3">
+<h3 class="anchored" data-anchor-id="majority-versus-plurality">Majority Versus Plurality</h3>
 <p>These terms are often confused.</p>
-<section id="majority" class="level2">
-<h2 class="anchored" data-anchor-id="majority">Majority</h2>
+<section id="majority" class="level4">
+<h4 class="anchored" data-anchor-id="majority">Majority</h4>
 <p>More than 50%.</p>
 <p>Example:</p>
 <table class="caption-top table">
@@ -3838,8 +3844,8 @@ window.Quarto = {
 </table>
 <p>Valid instruments form a majority.</p>
 </section>
-<section id="plurality" class="level2">
-<h2 class="anchored" data-anchor-id="plurality">Plurality</h2>
+<section id="plurality" class="level4">
+<h4 class="anchored" data-anchor-id="plurality">Plurality</h4>
 <p>Largest group, but not necessarily more than 50%.</p>
 <p>Example:</p>
 <table class="caption-top table">
@@ -3869,8 +3875,8 @@ window.Quarto = {
 <p>The weighted mode estimator can still work.</p>
 </section>
 </section>
-<section id="why-this-is-powerful" class="level1">
-<h1>Why This Is Powerful</h1>
+<section id="why-this-is-powerful" class="level3">
+<h3 class="anchored" data-anchor-id="why-this-is-powerful">Why This Is Powerful</h3>
 <p>The weighted mode estimator can succeed in situations where:</p>
 <ul>
 <li>IVW fails</li>
@@ -3879,8 +3885,8 @@ window.Quarto = {
 <p>because it requires only the largest cluster to be valid.</p>
 <p>This can be a much weaker and more realistic assumption.</p>
 </section>
-<section id="a-numerical-example-3" class="level1">
-<h1>A Numerical Example</h1>
+<section id="a-numerical-example-3" class="level3">
+<h3 class="anchored" data-anchor-id="a-numerical-example-3">A Numerical Example</h3>
 <p>Suppose we obtain:</p>
 <table class="caption-top table">
 <thead>
@@ -3931,8 +3937,8 @@ window.Quarto = {
 <p>Weighted mode estimate:</p>
 <p>[ 0.30]</p>
 </section>
-<section id="comparing-the-four-main-mr-estimators" class="level1">
-<h1>Comparing the Four Main MR Estimators</h1>
+<section id="comparing-the-four-main-mr-estimators" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-the-four-main-mr-estimators">Comparing the Four Main MR Estimators</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 34%">
@@ -3989,8 +3995,8 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="a-hypothetical-example-2" class="level1">
-<h1>A Hypothetical Example</h1>
+<section id="a-hypothetical-example-2" class="level3">
+<h3 class="anchored" data-anchor-id="a-hypothetical-example-2">A Hypothetical Example</h3>
 <p>Suppose the results are:</p>
 <table class="caption-top table">
 <thead>
@@ -4026,8 +4032,8 @@ window.Quarto = {
 </ul>
 <p>The agreement among robust estimators strengthens confidence in the causal conclusion.</p>
 </section>
-<section id="another-example-2" class="level1">
-<h1>Another Example</h1>
+<section id="another-example-2" class="level3">
+<h3 class="anchored" data-anchor-id="another-example-2">Another Example</h3>
 <p>Suppose:</p>
 <table class="caption-top table">
 <thead>
@@ -4058,8 +4064,8 @@ window.Quarto = {
 <p>All methods agree closely.</p>
 <p>This provides strong support for a stable causal estimate.</p>
 </section>
-<section id="why-weighted-mode-is-useful" class="level1">
-<h1>Why Weighted Mode Is Useful</h1>
+<section id="why-weighted-mode-is-useful" class="level3">
+<h3 class="anchored" data-anchor-id="why-weighted-mode-is-useful">Why Weighted Mode Is Useful</h3>
 <p>The weighted mode estimator is particularly attractive because:</p>
 <ul>
 <li>It tolerates invalid instruments.</li>
@@ -4068,28 +4074,28 @@ window.Quarto = {
 <li>It can remain informative when other methods struggle.</li>
 </ul>
 </section>
-<section id="limitations-of-weighted-mode" class="level1">
-<h1>Limitations of Weighted Mode</h1>
+<section id="limitations-of-weighted-mode" class="level3">
+<h3 class="anchored" data-anchor-id="limitations-of-weighted-mode">Limitations of Weighted Mode</h3>
 <p>Despite its advantages, the weighted mode estimator has limitations.</p>
-<section id="sensitive-to-cluster-identification" class="level2">
-<h2 class="anchored" data-anchor-id="sensitive-to-cluster-identification">Sensitive to Cluster Identification</h2>
+<section id="sensitive-to-cluster-identification" class="level4">
+<h4 class="anchored" data-anchor-id="sensitive-to-cluster-identification">Sensitive to Cluster Identification</h4>
 <p>Different clustering choices may produce different results.</p>
 </section>
-<section id="lower-precision" class="level2">
-<h2 class="anchored" data-anchor-id="lower-precision">Lower Precision</h2>
+<section id="lower-precision" class="level4">
+<h4 class="anchored" data-anchor-id="lower-precision">Lower Precision</h4>
 <p>Mode estimates often have larger standard errors than IVW.</p>
 </section>
-<section id="less-familiar" class="level2">
-<h2 class="anchored" data-anchor-id="less-familiar">Less Familiar</h2>
+<section id="less-familiar" class="level4">
+<h4 class="anchored" data-anchor-id="less-familiar">Less Familiar</h4>
 <p>Many researchers are more comfortable interpreting IVW and MR-Egger results.</p>
 </section>
-<section id="requires-distinct-clustering" class="level2">
-<h2 class="anchored" data-anchor-id="requires-distinct-clustering">Requires Distinct Clustering</h2>
+<section id="requires-distinct-clustering" class="level4">
+<h4 class="anchored" data-anchor-id="requires-distinct-clustering">Requires Distinct Clustering</h4>
 <p>If SNP estimates form a broad continuous distribution rather than clear clusters, the method may perform poorly.</p>
 </section>
 </section>
-<section id="why-weighted-mode-is-usually-a-sensitivity-analysis" class="level1">
-<h1>Why Weighted Mode Is Usually a Sensitivity Analysis</h1>
+<section id="why-weighted-mode-is-usually-a-sensitivity-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="why-weighted-mode-is-usually-a-sensitivity-analysis">Why Weighted Mode Is Usually a Sensitivity Analysis</h3>
 <p>Most MR studies use the weighted mode as part of a broader sensitivity analysis framework.</p>
 <p>Researchers typically compare:</p>
 <ol type="1">
@@ -4100,29 +4106,29 @@ window.Quarto = {
 </ol>
 <p>Agreement across methods increases confidence that the observed causal effect is not driven by violations of MR assumptions.</p>
 </section>
-<section id="the-robust-mr-toolbox" class="level1">
-<h1>The Robust MR Toolbox</h1>
+<section id="the-robust-mr-toolbox" class="level3">
+<h3 class="anchored" data-anchor-id="the-robust-mr-toolbox">The Robust MR Toolbox</h3>
 <p>At this stage, we have introduced four major Mendelian Randomization estimators:</p>
-<section id="ivw-2" class="level2">
-<h2 class="anchored" data-anchor-id="ivw-2">IVW</h2>
+<section id="ivw-2" class="level4">
+<h4 class="anchored" data-anchor-id="ivw-2">IVW</h4>
 <p>Primary analysis.</p>
 </section>
-<section id="mr-egger-2" class="level2">
-<h2 class="anchored" data-anchor-id="mr-egger-2">MR-Egger</h2>
+<section id="mr-egger-2" class="level4">
+<h4 class="anchored" data-anchor-id="mr-egger-2">MR-Egger</h4>
 <p>Detects directional pleiotropy.</p>
 </section>
-<section id="weighted-median-1" class="level2">
-<h2 class="anchored" data-anchor-id="weighted-median-1">Weighted Median</h2>
+<section id="weighted-median-1" class="level4">
+<h4 class="anchored" data-anchor-id="weighted-median-1">Weighted Median</h4>
 <p>Robust if more than 50% of weight is valid.</p>
 </section>
-<section id="weighted-mode" class="level2">
-<h2 class="anchored" data-anchor-id="weighted-mode">Weighted Mode</h2>
+<section id="weighted-mode" class="level4">
+<h4 class="anchored" data-anchor-id="weighted-mode">Weighted Mode</h4>
 <p>Robust if the largest cluster is valid.</p>
 <p>Together these methods form the foundation of modern MR sensitivity analyses.</p>
 </section>
 </section>
-<section id="the-big-picture-3" class="level1">
-<h1>The Big Picture</h1>
+<section id="the-big-picture-3" class="level3">
+<h3 class="anchored" data-anchor-id="the-big-picture-3">The Big Picture</h3>
 <p>The weighted mode estimator reflects an important principle in Mendelian Randomization:</p>
 <blockquote class="blockquote">
 <p>Even when some instruments are invalid, the true causal signal often emerges as the dominant pattern among the valid instruments.</p>
@@ -4130,8 +4136,8 @@ window.Quarto = {
 <p>Rather than averaging all SNPs, the weighted mode focuses on the most consistent cluster of evidence.</p>
 <p>This makes it one of the most robust approaches available for causal inference using genetic instruments.</p>
 </section>
-<section id="looking-ahead-9" class="level1">
-<h1>Looking Ahead</h1>
+<section id="looking-ahead-9" class="level3">
+<h3 class="anchored" data-anchor-id="looking-ahead-9">Looking Ahead</h3>
 <p>We have now covered the four most widely used Mendelian Randomization estimators.</p>
 <p>The next step is learning how researchers combine these methods to evaluate the robustness of causal conclusions.</p>
 <p>In the next tutorial, we will explore:</p>
@@ -4145,8 +4151,8 @@ window.Quarto = {
 </ul>
 <p>This is where Mendelian Randomization moves from estimation to critical evaluation.</p>
 </section>
-<section id="key-takeaways-9" class="level1">
-<h1>Key Takeaways</h1>
+<section id="key-takeaways-9" class="level3">
+<h3 class="anchored" data-anchor-id="key-takeaways-9">Key Takeaways</h3>
 <ul>
 <li>The weighted mode estimator identifies the largest cluster of SNP-specific causal estimates.</li>
 <li>Valid instruments are expected to cluster around the true causal effect.</li>
@@ -4156,6 +4162,7 @@ window.Quarto = {
 <li>It is one of the most robust Mendelian Randomization estimators.</li>
 <li>Weighted mode is typically used as a sensitivity analysis alongside IVW, MR-Egger, and Weighted Median methods.</li>
 </ul>
+</section>
 <section id="sensitivity-analyses-in-mendelian-randomization" class="level3">
 <h3 class="anchored" data-anchor-id="sensitivity-analyses-in-mendelian-randomization">Sensitivity Analyses in Mendelian Randomization</h3>
 <p>In Parts 4–10, we introduced the major Mendelian Randomization (MR) estimators:</p>
@@ -4431,20 +4438,18 @@ window.Quarto = {
 <p>Do SNP-specific causal estimates vary more than expected by chance?</p>
 </blockquote>
 <p>Null hypothesis:</p>
-<p>$ All&nbsp;SNPs&nbsp;estimate&nbsp;the&nbsp;same&nbsp;causal&nbsp;effect $</p>
+<p>All&nbsp;SNPs&nbsp;estimate&nbsp;the&nbsp;same&nbsp;causal&nbsp;effect</p>
 <p>Alternative hypothesis:</p>
-<p>$ At&nbsp;least&nbsp;some&nbsp;SNPs&nbsp;differ $</p>
+<p>At&nbsp;least&nbsp;some&nbsp;SNPs&nbsp;differ</p>
 </section>
-</section>
-<section id="interpreting-cochrans-q" class="level1">
-<h1>Interpreting Cochran’s Q</h1>
+<section id="interpreting-cochrans-q" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-cochrans-q">Interpreting Cochran’s Q</h3>
 <p>Suppose:</p>
-<p>Q-test p-value:</p>
-<p>$ p = 0.75 $</p>
+<p>Q-test p-value: p = 0.75</p>
 <p>Interpretation:</p>
 <p>Little evidence of heterogeneity.</p>
 <p>Now suppose:</p>
-<p>$ p &lt; 0.001 $</p>
+<p>p &lt; 0.001</p>
 <p>Interpretation:</p>
 <p>Strong evidence of heterogeneity.</p>
 <p>Researchers should investigate possible pleiotropy.</p>
@@ -4461,6 +4466,7 @@ window.Quarto = {
 <li>Population structure</li>
 </ul>
 <p>Heterogeneity should trigger further investigation rather than immediate rejection of the analysis.</p>
+</section>
 <section id="the-mr-egger-intercept-test" class="level3">
 <h3 class="anchored" data-anchor-id="the-mr-egger-intercept-test">The MR-Egger Intercept Test</h3>
 <p>Recall from Part 8:</p>
@@ -4788,21 +4794,17 @@ MR Analysis
 Sensitivity Analyses
        ↓
 Interpretation</code></pre>
-<div id="ef6ab06f-6666-4b09-aeaa-8b9a402d12f8" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Install Required Packages</span></span>
+<section id="step-1-install-required-packages" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-install-required-packages">Step 1: Install Required Packages</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("remotes")</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("remotes")</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github(</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a> <span class="co"># "MRCIEU/TwoSampleMR"</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("data.table")</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="3dd41210-9c72-4aaf-b654-b1f1289a0e1f" class="cell" data-execution_count="2">
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github(</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> <span class="co"># "MRCIEU/TwoSampleMR"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("data.table")</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3dd41210-9c72-4aaf-b654-b1f1289a0e1f" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Load the libraries:</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4847,9 +4849,8 @@ The following objects are masked from ‘package:base’:
 </div>
 </div>
 </section>
-</section>
-<section id="step-2-define-the-scientific-question" class="level1">
-<h1>Step 2: Define the Scientific Question</h1>
+<section id="step-2-define-the-scientific-question" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-define-the-scientific-question">Step 2: Define the Scientific Question</h3>
 <p>Every MR analysis begins with a causal hypothesis.</p>
 <p>For example:</p>
 <blockquote class="blockquote">
@@ -4860,18 +4861,18 @@ The following objects are masked from ‘package:base’:
 <p>Outcome:</p>
 <pre class="text"><code>Coronary Heart Disease</code></pre>
 </section>
-<section id="step-3-obtain-genetic-instruments" class="level1">
-<h1>Step 3: Obtain Genetic Instruments</h1>
+<section id="step-3-obtain-genetic-instruments" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-obtain-genetic-instruments">Step 3: Obtain Genetic Instruments</h3>
 <p>The first task is identifying SNPs associated with the exposure.</p>
 <p>In MR terminology:</p>
 <pre class="text"><code>SNP → Exposure</code></pre>
 <p>These SNPs become instrumental variables.</p>
 <p>Using the IEU OpenGWAS database:</p>
-<div id="5ba058a4-a142-44b0-bc5a-a8ab83bbd6de" class="cell" data-execution_count="3">
+<div id="5ba058a4-a142-44b0-bc5a-a8ab83bbd6de" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#available_outcomes()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Search for BMI datasets:</p>
-<div id="c6883474-9a00-414f-a877-56df8847b4aa" class="cell" data-execution_count="4">
+<div id="c6883474-9a00-414f-a877-56df8847b4aa" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -4888,12 +4889,14 @@ The following objects are masked from ‘package:base’:
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-2"</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="what-happened-here" class="level1">
-<h1>What Happened Here?</h1>
+<section id="what-happened-here" class="level3">
+<h3 class="anchored" data-anchor-id="what-happened-here">What Happened Here?</h3>
 <p>The function:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_instruments</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>selects SNPs that satisfy:</p>
-<p>[ P &lt; 5 ^{-8}]</p>
+<p><span class="math display">\[
+P &lt; 5 \times 10^{-8}
+\]</span></p>
 <p>These are genome-wide significant variants associated with BMI.</p>
 <p>The output contains:</p>
 <ul>
@@ -4903,9 +4906,8 @@ The following objects are masked from ‘package:base’:
 <li>Standard errors</li>
 <li>P-values</li>
 </ul>
-</section>
-<section id="inspect-the-instruments" class="level1">
-<h1>Inspect the Instruments</h1>
+<section id="inspect-the-instruments" class="level4">
+<h4 class="anchored" data-anchor-id="inspect-the-instruments">Inspect the Instruments</h4>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exposure_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Typical columns:</p>
 <table class="caption-top table">
@@ -4943,8 +4945,9 @@ The following objects are masked from ‘package:base’:
 </tbody>
 </table>
 </section>
-<section id="step-4-obtain-outcome-associations" class="level1">
-<h1>Step 4: Obtain Outcome Associations</h1>
+</section>
+<section id="step-4-obtain-outcome-associations" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-obtain-outcome-associations">Step 4: Obtain Outcome Associations</h3>
 <p>Now extract the same SNPs from the outcome GWAS.</p>
 <p>Suppose:</p>
 <pre class="text"><code>ieu-a-7</code></pre>
@@ -4954,11 +4957,10 @@ The following objects are masked from ‘package:base’:
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-7"</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This provides:</p>
-<p>[ SNP Outcome]</p>
+<p>SNP -&gt; Outcome</p>
 <p>associations.</p>
-</section>
-<section id="inspect-the-outcome-data" class="level1">
-<h1>Inspect the Outcome Data</h1>
+<section id="inspect-the-outcome-data" class="level4">
+<h4 class="anchored" data-anchor-id="inspect-the-outcome-data">Inspect the Outcome Data</h4>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(outcome_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Important columns include:</p>
 <ul>
@@ -4968,8 +4970,9 @@ The following objects are masked from ‘package:base’:
 <li>pval.outcome</li>
 </ul>
 </section>
-<section id="step-5-harmonization" class="level1">
-<h1>Step 5: Harmonization</h1>
+</section>
+<section id="step-5-harmonization" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-harmonization">Step 5: Harmonization</h3>
 <p>Before calculating causal estimates, alleles must be aligned.</p>
 <p>Recall from Part 6:</p>
 <blockquote class="blockquote">
@@ -4980,6 +4983,7 @@ The following objects are masked from ‘package:base’:
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  exposure_dat,</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  outcome_dat</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 <section id="what-does-harmonization-do" class="level3">
 <h3 class="anchored" data-anchor-id="what-does-harmonization-do">What Does Harmonization Do?</h3>
 <p>The function automatically:</p>
@@ -4993,9 +4997,8 @@ The following objects are masked from ‘package:base’:
 <p>Inspect the harmonized dataset:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(harmonised_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-</section>
-<section id="step-6-run-mendelian-randomization" class="level1">
-<h1>Step 6: Run Mendelian Randomization</h1>
+<section id="step-6-run-mendelian-randomization" class="level3">
+<h3 class="anchored" data-anchor-id="step-6-run-mendelian-randomization">Step 6: Run Mendelian Randomization</h3>
 <p>Now we estimate the causal effect.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>mr_results <span class="ot">&lt;-</span> <span class="fu">mr</span>(harmonised_dat)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -5007,9 +5010,8 @@ The following objects are masked from ‘package:base’:
 <li>Weighted Median</li>
 <li>Weighted Mode</li>
 </ul>
-</section>
-<section id="understanding-the-output" class="level1">
-<h1>Understanding the Output</h1>
+<section id="understanding-the-output" class="level4">
+<h4 class="anchored" data-anchor-id="understanding-the-output">Understanding the Output</h4>
 <p>Typical output:</p>
 <table class="caption-top table">
 <thead>
@@ -5051,17 +5053,17 @@ The following objects are masked from ‘package:base’:
 <p>All methods suggest a positive causal effect.</p>
 <p>This strengthens confidence in the result.</p>
 </section>
-<section id="step-7-heterogeneity-testing" class="level1">
-<h1>Step 7: Heterogeneity Testing</h1>
+</section>
+<section id="step-7-heterogeneity-testing" class="level3">
+<h3 class="anchored" data-anchor-id="step-7-heterogeneity-testing">Step 7: Heterogeneity Testing</h3>
 <p>Assess whether SNP-specific estimates are consistent.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>heterogeneity_results <span class="ot">&lt;-</span> <span class="fu">mr_heterogeneity</span>(</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>heterogeneity_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="interpreting-cochrans-q-1" class="level1">
-<h1>Interpreting Cochran’s Q</h1>
+<section id="interpreting-cochrans-q-1" class="level4">
+<h4 class="anchored" data-anchor-id="interpreting-cochrans-q-1">Interpreting Cochran’s Q</h4>
 <p>Suppose:</p>
 <pre class="text"><code>Q p-value = 0.62</code></pre>
 <p>Interpretation:</p>
@@ -5071,8 +5073,9 @@ The following objects are masked from ‘package:base’:
 <p>Interpretation:</p>
 <p>Possible pleiotropy or invalid instruments.</p>
 </section>
-<section id="step-8-test-for-directional-pleiotropy" class="level1">
-<h1>Step 8: Test for Directional Pleiotropy</h1>
+</section>
+<section id="step-8-test-for-directional-pleiotropy" class="level3">
+<h3 class="anchored" data-anchor-id="step-8-test-for-directional-pleiotropy">Step 8: Test for Directional Pleiotropy</h3>
 <p>Use the MR-Egger intercept.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pleiotropy_results <span class="ot">&lt;-</span> <span class="fu">mr_pleiotropy_test</span>(</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
@@ -5080,8 +5083,8 @@ The following objects are masked from ‘package:base’:
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>pleiotropy_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="interpreting-the-egger-intercept" class="level1">
-<h1>Interpreting the Egger Intercept</h1>
+<section id="interpreting-the-egger-intercept" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-egger-intercept">Interpreting the Egger Intercept</h3>
 <p>Suppose:</p>
 <pre class="text"><code>Intercept p-value = 0.75</code></pre>
 <p>Interpretation:</p>
@@ -5090,17 +5093,18 @@ The following objects are masked from ‘package:base’:
 <pre class="text"><code>Intercept p-value = 0.002</code></pre>
 <p>Interpretation:</p>
 <p>Directional pleiotropy may be present.</p>
+</section>
 <section id="step-9-leave-one-out-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="step-9-leave-one-out-analysis">Step 9: Leave-One-Out Analysis</h3>
 <p>Evaluate whether a single SNP drives the result.</p>
-<div id="ed20a124-2f88-46aa-aa7d-2b438ef369df" class="cell" data-execution_count="5">
+<div id="ed20a124-2f88-46aa-aa7d-2b438ef369df" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#loo_results &lt;- mr_leaveoneout(</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a> <span class="co"># harmonised_dat</span></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Visualize:</p>
-<div id="3576252d-0bb0-4a09-9cbf-9798c4433eea" class="cell" data-execution_count="6">
+<div id="3576252d-0bb0-4a09-9cbf-9798c4433eea" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mr_leaveoneout_plot(</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  loo_results</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -5113,32 +5117,16 @@ The following objects are masked from ‘package:base’:
 <p>If removing one SNP dramatically changes the estimate:</p>
 <pre class="text"><code>Influential SNP Detected</code></pre>
 <p>Further investigation is warranted.</p>
-<div id="4b5c273d-49ca-4857-8f00-ae4662c9cb7e" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 10: Scatter Plot</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>Visualize SNP effects.</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="at">r</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="at">scatter_plot &lt;- mr_scatter_plot(</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="at">  mr_results,</span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="at">  harmonised_dat</span></span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="at">)</span></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="at">scatter_plot</span></span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>ERROR: Error in parse(text = input): &lt;text&gt;:3:11: unexpected symbol
-2: 
-3: Visualize SNP
-             ^
-
-Error in parse(text = input): &lt;text&gt;:3:11: unexpected symbol
-2: 
-3: Visualize SNP
-             ^
-Traceback:</code></pre>
-</div>
-</div>
+</section>
+<section id="step-10-scatter-plot" class="level3">
+<h3 class="anchored" data-anchor-id="step-10-scatter-plot">Step 10: Scatter Plot</h3>
+<p>Visualize SNP effects.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>scatter_plot <span class="ot">&lt;-</span> <span class="fu">mr_scatter_plot</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  mr_results,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>scatter_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The plot shows:</p>
 <ul>
 <li>SNP-exposure effects</li>
@@ -5146,33 +5134,25 @@ Traceback:</code></pre>
 <li>IVW regression line</li>
 <li>MR-Egger regression line</li>
 </ul>
-<div id="7b877e56-c2e8-4c49-a5d3-d361dc125ba0" class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 11: Forest Plot</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>Visualize SNP<span class="sc">-</span>specific causal estimates.</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="at">r</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="at">single_snp_results &lt;- mr_singlesnp(</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="at">  harmonised_dat</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="at">)</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="at">mr_forest_plot(</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="at">  single_snp_results</span></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="at">)</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>This helps identify outliers and heterogeneity.</span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 12: Funnel Plot</span></span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>Assess symmetry.</span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="at">r</span></span>
-<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a><span class="at">mr_funnel_plot(</span></span>
-<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a><span class="at">  single_snp_results</span></span>
-<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="at">)</span></span>
-<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+</section>
+<section id="step-11-forest-plot" class="level3">
+<h3 class="anchored" data-anchor-id="step-11-forest-plot">Step 11: Forest Plot</h3>
+<p>Visualize SNP-specific causal estimates.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>single_snp_results <span class="ot">&lt;-</span> <span class="fu">mr_singlesnp</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_forest_plot</span>(</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  single_snp_results</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This helps identify outliers and heterogeneity.</p>
+</section>
+<section id="step-12-funnel-plot" class="level3">
+<h3 class="anchored" data-anchor-id="step-12-funnel-plot">Step 12: Funnel Plot</h3>
+<p>Assess symmetry.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_funnel_plot</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  single_snp_results</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Symmetric plots suggest balanced pleiotropy.</p>
 <p>Asymmetry may indicate directional pleiotropy.</p>
 </section>
@@ -5206,7 +5186,7 @@ Traceback:</code></pre>
 <li>Forest plot</li>
 <li>Funnel plot</li>
 </ul>
-<div id="acb38b75-fd8f-4823-afaf-ad551ca891fd" class="cell">
+<div id="acb38b75-fd8f-4823-afaf-ad551ca891fd" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A Complete Example Pipeline</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5258,6 +5238,24 @@ Traceback:</code></pre>
 <span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_leaveoneout_plot</span>(</span>
 <span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a>  loo</span>
 <span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>ERROR: Error in ieugwasr::tophits(outcomes, pval = p1, clump = clump, r2 = r2, : unused argument (x_api_source = x_api_source_header())
+
+Error in ieugwasr::tophits(outcomes, pval = p1, clump = clump, r2 = r2, : unused argument (x_api_source = x_api_source_header())
+Traceback:
+
+1. .handleSimpleError(function (cnd) 
+ . {
+ .     watcher$capture_plot_and_output()
+ .     cnd &lt;- sanitize_call(cnd)
+ .     watcher$push(cnd)
+ .     switch(on_error, continue = invokeRestart("eval_continue"), 
+ .         stop = invokeRestart("eval_stop"), error = NULL)
+ . }, "unused argument (x_api_source = x_api_source_header())", 
+ .     base::quote(ieugwasr::tophits(outcomes, pval = p1, clump = clump, 
+ .         r2 = r2, kb = kb, force_server = force_server, opengwas_jwt = opengwas_jwt, 
+ .         x_api_source = x_api_source_header())))</code></pre>
+</div>
 </div>
 </section>
 </section>
@@ -5340,6 +5338,7 @@ Traceback:</code></pre>
 </ul>
 
 
+</section>
 </section>
 </section>
 

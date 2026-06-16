@@ -1,0 +1,4707 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-06-16">
+
+<title>Multivariate Concepts in Statistical Genetics: From LD Score Regression to Genomic SEM – Nivedita’s Blog</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita’s Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Multivariate Concepts in Statistical Genetics: From LD Score Regression to Genomic SEM</h1>
+<p class="subtitle lead">A Step-by-Step Practical Tutorial</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Statistical Genetics</div>
+    <div class="quarto-category">GWAS</div>
+    <div class="quarto-category">Genomic SEM</div>
+    <div class="quarto-category">Multivariate Analysis</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 16, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="multivariate-concepts-in-statistical-genetics" class="level1">
+<h1>Multivariate Concepts in Statistical Genetics</h1>
+<p>In many areas of statistical genetics, we are not only interested in whether a single trait is heritable. We are also interested in whether multiple traits share part of their genetic architecture.</p>
+<p>For example, psychiatric traits such as major depression, anxiety, post-traumatic stress disorder, alcohol use disorder, bipolar disorder, and schizophrenia are not genetically isolated. They often show genetic overlap. This means that some genetic variants may influence more than one phenotype.</p>
+<p>This tutorial introduces the main multivariate concepts needed to understand Genomic SEM. We will move step by step from basic ideas such as polygenicity and LD Score Regression to genetic covariance, genetic correlation, genome-wide structural models, and multivariate GWAS.</p>
+<section id="why-do-we-need-multivariate-genetic-models" class="level3">
+<h3 class="anchored" data-anchor-id="why-do-we-need-multivariate-genetic-models">1. Why Do We Need Multivariate Genetic Models?</h3>
+<p>Complex traits are usually highly polygenic. This means that they are influenced by thousands of genetic variants, each with a very small effect.</p>
+<p>A simple single-gene model is usually not appropriate for complex psychiatric or behavioral traits. Instead, risk emerges from the combined effect of many variants.</p>
+<p>This creates two important problems:</p>
+<ol type="1">
+<li>We need methods that can summarize genome-wide genetic signal.</li>
+<li>We need methods that can estimate how much genetic signal is shared across traits.</li>
+</ol>
+<p>This is where LD Score Regression and Genomic SEM become useful.</p>
+</section>
+<section id="from-genetic-overlap-to-genetic-architecture" class="level3">
+<h3 class="anchored" data-anchor-id="from-genetic-overlap-to-genetic-architecture">2. From Genetic Overlap to Genetic Architecture</h3>
+<p>Genetic overlap means that the same genetic variants contribute to variation in more than one phenotype.</p>
+<p>However, genetic overlap can appear in different forms.</p>
+<p>Two traits may share:</p>
+<p>A broad common genetic factor Several smaller domain-specific factors A mixture of shared and trait-specific genetic effects SNPs that influence one trait much more than another</p>
+<p>Genomic SEM allows us to model these possibilities explicitly.</p>
+<p>For example, if four psychiatric traits are genetically correlated, we can test whether this correlation is well explained by one common factor.</p>
+<p>A simplified model could be:</p>
+<p>$ F_1 MDD, PTSD, ANX, ALCH $</p>
+<p>where <span class="math inline">\((F_1)\)</span> is a shared genetic liability factor.</p>
+</section>
+<section id="why-traits-do-not-need-to-come-from-the-same-sample" class="level3">
+<h3 class="anchored" data-anchor-id="why-traits-do-not-need-to-come-from-the-same-sample">3. Why Traits Do Not Need to Come From the Same Sample</h3>
+<p>One powerful feature of LD Score Regression and Genomic SEM is that traits do not need to be measured in the same individuals.</p>
+<p>For example, we may have:</p>
+<p>A GWAS of major depression from one cohort A GWAS of anxiety from another cohort A GWAS of PTSD from another cohort A GWAS of alcohol use disorder from another cohort</p>
+<p>These GWAS may come from different studies, different consortia, and different individuals.</p>
+<p>The connection between them is the genome.</p>
+<p>Because each GWAS reports SNP-level effects across the genome, we can compare the pattern of SNP effects across traits. If SNPs that increase one trait also tend to increase another trait, this creates evidence of shared genetic architecture.</p>
+<p>This is why summary statistics are so useful. We do not always need access to individual-level data to study genetic overlap.</p>
+</section>
+<section id="polygenicity-and-linkage-disequilibrium" class="level3">
+<h3 class="anchored" data-anchor-id="polygenicity-and-linkage-disequilibrium">2. Polygenicity and Linkage Disequilibrium</h3>
+<p>Suppose a phenotype is influenced by a few true causal variants. In GWAS, we do not observe only those causal variants. We also observe many nearby SNPs that are correlated with them.</p>
+<p>This correlation among SNPs is called linkage disequilibrium, or LD.</p>
+<p>A SNP with high LD is correlated with many nearby SNPs. Therefore, high-LD SNPs are more likely to tag causal variants. This means they are more likely to show association signal even if they are not causal themselves.</p>
+<section id="ld-score" class="level4">
+<h4 class="anchored" data-anchor-id="ld-score">2.1 LD Score</h4>
+<p>The LD score of SNP (j) is defined as:</p>
+<p>$ _j = <em>i r</em>{ij}^2 $</p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(\ell_j\)</span> is the LD score of SNP (j)</li>
+<li><span class="math inline">\(r_{ij}^2\)</span> is the squared correlation between SNP (i) and SNP (j)</li>
+</ul>
+<p>A high LD score means that the SNP is correlated with many other SNPs.</p>
+</section>
+</section>
+<section id="the-intuition-behind-ld-score-regression" class="level3">
+<h3 class="anchored" data-anchor-id="the-intuition-behind-ld-score-regression">4. The Intuition Behind LD Score Regression</h3>
+<p>LD Score Regression works because highly polygenic traits create a predictable relationship between LD and GWAS signal.</p>
+<p>Imagine there are true causal variants in the genome.</p>
+<p>A SNP does not need to be causal to show association. If it is correlated with a causal variant through LD, it can still pick up association signal.</p>
+<p>This means:</p>
+<p>High-LD SNPs are correlated with many nearby SNPs. Therefore, they have more chances to tag causal variants. Low-LD SNPs are correlated with fewer nearby SNPs. Therefore, they usually only show strong signal if they are causal or very close to causal variants.</p>
+<p>For a highly polygenic trait, many causal variants are spread across the genome. As a result, SNPs with higher LD scores tend to have larger GWAS chi-square statistics on average.</p>
+<p>This is the core logic of LD Score Regression.</p>
+</section>
+<section id="why-the-ldsc-intercept-matters" class="level3">
+<h3 class="anchored" data-anchor-id="why-the-ldsc-intercept-matters">5. Why the LDSC Intercept Matters</h3>
+<p>In GWAS, test statistics can be inflated for several reasons.</p>
+<p>Some inflation reflects true polygenic signal. This is expected when many SNPs contribute to the trait.</p>
+<p>However, some inflation can come from confounding, such as:</p>
+<p>Population stratification Cryptic relatedness Sample overlap Technical artifacts</p>
+<p>LD Score Regression separates these components.</p>
+<p>The slope of the regression captures polygenic signal.</p>
+<p>The intercept captures inflation that is not explained by LD score.</p>
+<p>This is why LD Score Regression is useful: it helps distinguish true polygenic signal from confounding.</p>
+</section>
+<section id="snp-heritability-using-ld-score-regression" class="level3">
+<h3 class="anchored" data-anchor-id="snp-heritability-using-ld-score-regression">3. SNP Heritability Using LD Score Regression</h3>
+<p>LD Score Regression is based on a simple idea:</p>
+<p>If a trait is highly polygenic, SNPs with higher LD scores should, on average, have larger GWAS test statistics.</p>
+<p>In other words, we regress the GWAS chi-square statistics on LD scores.</p>
+<p>The expected chi-square statistic for SNP (j) can be written as:</p>
+<p>$ E[_j^2 | _j] = _j + Na + 1 $</p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(N\)</span> is the GWAS sample size</li>
+<li><span class="math inline">\(h^2\)</span> is SNP heritability</li>
+<li><span class="math inline">\(M\)</span> is the number of SNPs</li>
+<li><span class="math inline">\(\ell_j\)</span> is the LD score</li>
+<li><span class="math inline">\(a\)</span> captures confounding such as population stratification</li>
+<li>the intercept captures inflation not due to polygenic signal</li>
+</ul>
+<p>The slope of this regression is used to estimate SNP heritability.</p>
+<section id="why-sample-size-matters" class="level4">
+<h4 class="anchored" data-anchor-id="why-sample-size-matters">3.1 Why Sample Size Matters</h4>
+<p>Imagine two traits have the same GWAS p-values, but different sample sizes:</p>
+<ul>
+<li>Trait 1: <span class="math inline">\(N = 50,000\)</span></li>
+<li>Trait 2: <span class="math inline">\(N = 100,000\)</span></li>
+</ul>
+<p>If the association statistics are similar, the trait with the smaller sample size may imply stronger per-sample genetic signal. This is why LD Score Regression accounts for sample size when estimating heritability.</p>
+</section>
+</section>
+<section id="genetic-covariance-and-genetic-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="genetic-covariance-and-genetic-correlation">4. Genetic Covariance and Genetic Correlation</h3>
+<p>LD Score Regression can also be extended to two traits.</p>
+<p>Instead of regressing one trait’s chi-square statistics on LD scores, we examine the product of GWAS (Z)-statistics across two traits.</p>
+<p>For traits (Y_1) and (Y_2), we use:</p>
+<p>$ Z_{1j}Z_{2j} $</p>
+<p>If SNPs with high LD scores tend to have similar effects across both traits, this suggests genetic overlap.</p>
+<section id="genetic-covariance" class="level4">
+<h4 class="anchored" data-anchor-id="genetic-covariance">4.1 Genetic Covariance</h4>
+<p>Genetic covariance measures the extent to which two traits share genetic influences.</p>
+<p>The cross-trait LD Score Regression equation is:</p>
+<p>$ E[z_{1j}z_{2j}|_j] = <em>j + + </em>{Ns} $</p>
+<p>Conceptually:</p>
+<ul>
+<li>The slope estimates genetic covariance.</li>
+<li>The intercept captures sample overlap and confounding.</li>
+<li>Traits do not need to be measured in the same individuals.</li>
+</ul>
+<p>This is very useful because many GWAS summary statistics are publicly available and come from independent cohorts.</p>
+</section>
+<section id="genetic-correlation" class="level4">
+<h4 class="anchored" data-anchor-id="genetic-correlation">4.2 Genetic Correlation</h4>
+<p>Genetic correlation is the standardized form of genetic covariance:</p>
+<p>$ r_g = {} $</p>
+<p>A genetic correlation close to 1 means two traits share much of their genetic architecture.</p>
+<p>A genetic correlation close to 0 means little shared genetic influence.</p>
+<p>A negative genetic correlation means genetic variants that increase one trait tend to decrease the other.</p>
+<div id="62819955-1f36-4e0e-a852-17b2e9f317de" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">### 8. Why Shared Genetic Architecture Requires New Models</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="from-ld-score-regression-to-genomic-sem" class="level3">
+<h3 class="anchored" data-anchor-id="from-ld-score-regression-to-genomic-sem">5. From LD Score Regression to Genomic SEM</h3>
+<p>Genomic SEM stands for Genomic Structural Equation Modeling.</p>
+<p>It provides a flexible framework for fitting structural equation models to genetic covariance matrices estimated from GWAS summary statistics.</p>
+<p>The main advantage is that we can model genetic relationships among traits even when those traits were measured in different samples.</p>
+</section>
+<section id="the-two-stage-framework-of-genomic-sem" class="level3">
+<h3 class="anchored" data-anchor-id="the-two-stage-framework-of-genomic-sem">6. The Two-Stage Framework of Genomic SEM</h3>
+<p>Genomic SEM has two main stages.</p>
+<section id="stage-1-estimate-genetic-covariance-structure" class="level4">
+<h4 class="anchored" data-anchor-id="stage-1-estimate-genetic-covariance-structure">Stage 1: Estimate Genetic Covariance Structure</h4>
+<p>Using multivariable LD Score Regression, we estimate:</p>
+<ol type="1">
+<li>A genetic covariance matrix</li>
+<li>A sampling covariance matrix</li>
+</ol>
+<p>The genetic covariance matrix is usually called (S).</p>
+<p>The diagonal elements of (S) are SNP heritabilities.</p>
+<p>The off-diagonal elements are genetic covariances.</p>
+<p>A simplified matrix looks like this:</p>
+$ S =
+<span class="math display">\[\begin{bmatrix}
+h^2_1 &amp; cov_{g,12} &amp; cov_{g,13} \\
+cov_{g,12} &amp; h^2_2 &amp; cov_{g,23} \\
+cov_{g,13} &amp; cov_{g,23} &amp; h^2_3
+\end{bmatrix}\]</span>
+<p>$</p>
+</section>
+<section id="stage-2-fit-a-structural-equation-model" class="level4">
+<h4 class="anchored" data-anchor-id="stage-2-fit-a-structural-equation-model">Stage 2: Fit a Structural Equation Model</h4>
+<p>After estimating (S), we fit a model to explain the covariance structure.</p>
+<p>For example, we may fit a common factor model where depression, anxiety, PTSD, and alcohol use disorder load on a shared internalizing factor.</p>
+</section>
+</section>
+<section id="genome-wide-sem-vs-multivariate-gwas" class="level3">
+<h3 class="anchored" data-anchor-id="genome-wide-sem-vs-multivariate-gwas">9. Genome-Wide SEM vs Multivariate GWAS</h3>
+<p>It is important to distinguish between genome-wide SEM and multivariate GWAS.</p>
+<section id="genome-wide-sem" class="level4">
+<h4 class="anchored" data-anchor-id="genome-wide-sem">Genome-Wide SEM</h4>
+<p>Genome-wide SEM uses the genetic covariance matrix across traits.</p>
+<p>It asks:</p>
+<p>What is the genetic relationship among these traits?</p>
+<p>For example:</p>
+<p>Do the traits load on one common factor? Are there multiple factors? Does one genetic trait predict another? How well does the model fit?</p>
+<p>This stage does not test SNP effects directly.</p>
+</section>
+<section id="multivariate-gwas" class="level4">
+<h4 class="anchored" data-anchor-id="multivariate-gwas">Multivariate GWAS</h4>
+<p>Multivariate GWAS adds SNP effects to the model.</p>
+<p>It asks:</p>
+<p>Which SNPs are associated with the latent genetic factor?</p>
+<p>For example:</p>
+<p>$ F_1 SNP $</p>
+<p>This tests whether each SNP predicts the shared genetic factor.</p>
+<p>So, genome-wide SEM models the covariance structure, while multivariate GWAS tests SNP-level effects on that structure.</p>
+</section>
+</section>
+<section id="practical-setup-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="practical-setup-in-r">7. Practical Setup in R</h3>
+<p>We will now follow the practical structure from the workshop.</p>
+<p>The main steps are:</p>
+<ol type="1">
+<li>Load GenomicSEM</li>
+<li>Munge GWAS summary statistics</li>
+<li>Run LD Score Regression</li>
+<li>Specify and run a genome-wide Genomic SEM model</li>
+<li>Prepare summary statistics for multivariate GWAS</li>
+<li>Run userGWAS</li>
+<li>Interpret factor GWAS and QSNP results</li>
+</ol>
+<div id="87b036b1-bd5f-4445-b506-b28caf101862" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"GenomicSEM/GenomicSEM"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load GenomicSEM</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(GenomicSEM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+The downloaded binary packages are in
+    /var/folders/3f/6pzn2nyn32d7wthyxkzsqyxcdrtvym/T//RtmpPbLU4V/downloaded_packages</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rlang        (1.1.6  -&gt; 1.2.0    ) [CRAN]
+lifecycle    (1.0.4  -&gt; 1.0.5    ) [CRAN]
+glue         (1.8.0  -&gt; 1.8.1    ) [CRAN]
+cli          (3.6.5  -&gt; 3.6.6    ) [CRAN]
+vctrs        (0.6.5  -&gt; 0.7.3    ) [CRAN]
+utf8         (1.2.5  -&gt; 1.2.6    ) [CRAN]
+pillar       (1.10.2 -&gt; 1.11.1   ) [CRAN]
+magrittr     (2.0.3  -&gt; 2.0.5    ) [CRAN]
+cpp11        (0.5.2  -&gt; 0.5.5    ) [CRAN]
+bit          (4.0.5  -&gt; 4.6.0    ) [CRAN]
+tzdb         (0.4.0  -&gt; 0.5.0    ) [CRAN]
+tibble       (3.2.1  -&gt; 3.3.1    ) [CRAN]
+hms          (1.1.3  -&gt; 1.1.4    ) [CRAN]
+bit64        (4.0.5  -&gt; 4.8.2    ) [CRAN]
+colorspace   (2.1-1  -&gt; 2.1-2    ) [CRAN]
+gridBase     (NA     -&gt; 0.4-7    ) [CRAN]
+sfsmisc      (NA     -&gt; 1.1-24   ) [CRAN]
+R.oo         (1.26.0 -&gt; 1.27.1   ) [CRAN]
+data.table   (1.17.4 -&gt; 1.18.4   ) [CRAN]
+mnormt       (2.1.1  -&gt; 2.1.2    ) [CRAN]
+vroom        (1.6.5  -&gt; 1.7.1    ) [CRAN]
+clipr        (0.8.0  -&gt; 0.8.1    ) [CRAN]
+proxy        (0.4-27 -&gt; 0.4-29   ) [CRAN]
+Rcpp         (1.0.14 -&gt; 1.1.1-1.1) [CRAN]
+simsalapar   (NA     -&gt; 1.0-13   ) [CRAN]
+mgsub        (NA     -&gt; 2.0.0    ) [CRAN]
+dplyr        (1.1.4  -&gt; 1.2.1    ) [CRAN]
+R.utils      (2.12.3 -&gt; 2.13.0   ) [CRAN]
+splitstac... (NA     -&gt; 1.4.8.1  ) [CRAN]
+stringr      (1.5.1  -&gt; 1.6.0    ) [CRAN]
+lavaan       (0.6-19 -&gt; 0.6-21   ) [CRAN]
+gdata        (3.0.0  -&gt; 3.0.1    ) [CRAN]
+readr        (2.1.5  -&gt; 2.2.0    ) [CRAN]
+e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>The downloaded binary packages are in
+
+    /var/folders/3f/6pzn2nyn32d7wthyxkzsqyxcdrtvym/T//RtmpPbLU4V/downloaded_packages
+
+<span class="ansi-cyan-fg">──</span> <span class="ansi-cyan-fg">R CMD build</span> <span class="ansi-cyan-fg">─────────────────────────────────────────────────────────────────</span>
+
+<span class="ansi-green-fg">✔</span>  <span class="ansi-bright-black-fg">checking for file ‘/private/var/folders/3f/6pzn2nyn32d7wthyxkzsqyxcdrtvym/T/RtmpPbLU4V/remotes2dbf3fb76124/GenomicSEM-GenomicSEM-0a63ac0/DESCRIPTION’</span>
+
+<span class="ansi-bright-black-fg">─</span><span class="ansi-bright-black-fg">  </span><span class="ansi-bright-black-fg">preparing ‘GenomicSEM’:</span>
+
+<span class="ansi-green-fg">✔</span>  <span class="ansi-bright-black-fg">checking DESCRIPTION meta-information</span>
+
+<span class="ansi-bright-black-fg">─</span><span class="ansi-bright-black-fg">  </span><span class="ansi-bright-black-fg">excluding invalid files</span>
+
+   Subdirectory 'man' contains invalid file names:
+
+     ‘decisiontree.png’
+
+<span class="ansi-bright-black-fg">─</span><span class="ansi-bright-black-fg">  </span><span class="ansi-bright-black-fg">checking for LF line-endings in source and make files and shell scripts</span>
+
+<span class="ansi-bright-black-fg">─</span><span class="ansi-bright-black-fg">  </span><span class="ansi-bright-black-fg">checking for empty or unneeded directories</span>
+
+   Omitted ‘LazyData’ from DESCRIPTION
+
+<span class="ansi-bright-black-fg">─</span><span class="ansi-bright-black-fg">  </span><span class="ansi-bright-black-fg">building ‘GenomicSEM_0.0.5.tar.gz’</span>
+
+   Warning: invalid uid value replaced by that for user 'nobody'
+
+   Warning: invalid gid value replaced by that for user 'nobody'
+
+   
+
+
+</pre>
+</div>
+</div>
+</div>
+<div id="9ba6f678-e100-4eaa-a9b6-81c2ba60a044" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GenomicSEM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-1-munge-summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-munge-summary-statistics">8. Step 1: Munge Summary Statistics</h3>
+<p>Munging is the process of cleaning and harmonizing GWAS summary statistics.</p>
+<p>It usually includes:</p>
+<ul>
+<li>Aligning alleles</li>
+<li>Filtering to HapMap3 SNPs</li>
+<li>Checking SNP IDs</li>
+<li>Formatting effect sizes</li>
+<li>Formatting standard errors</li>
+<li>Preparing files for LD Score Regression</li>
+</ul>
+<p>In this practical, the workshop uses four traits:</p>
+<ul>
+<li>ALCH: Alcohol use disorder</li>
+<li>PTSD: Post-traumatic stress disorder</li>
+<li>MDD: Major depressive disorder</li>
+<li>ANX: Anxiety disorder</li>
+</ul>
+<div id="6526efce-66b8-480d-b325-7d65f8794fc1" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example file names</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ALCH_withrsID.txt"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"SORTED_PTSD_EA9_ALL_study_specific_PCs1.txt"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MDD_withNeff.txt"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ANX_withNeff.txt"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># HapMap3 SNP reference file</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>hm3 <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/w_hm3.snplist"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Effective sample size</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">5831.346</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Run munge</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># This is commented out because the workshop already provides prepared files.</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># munge(files = files, hm3 = hm3, trait.names = trait.names, N = N)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-2-run-multivariable-ld-score-regression" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-run-multivariable-ld-score-regression">9. Step 2: Run Multivariable LD Score Regression</h3>
+<p>After munging, we run LD Score Regression.</p>
+<p>This estimates:</p>
+<ul>
+<li>SNP heritability for each trait</li>
+<li>Genetic covariance between traits</li>
+<li>Genetic correlation between traits</li>
+<li>Sampling covariance matrix</li>
+</ul>
+<p>The output is later used by Genomic SEM.</p>
+<div id="8dcd0581-faac-4881-a25a-9c2743b09ffe" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Munged summary statistics</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ALCH.sumstats.gz"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PTSD.sumstats.gz"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MDD.sumstats.gz"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ANX.sumstats.gz"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample prevalence</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>sample.prev <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">5</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, .<span class="dv">5</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Population prevalence</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>population.prev <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">159</span>, .<span class="dv">3</span>, .<span class="dv">15</span>, .<span class="dv">20</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># LD score folders</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>ld <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/"</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>wld <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/"</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Run LDSC</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># This is commented out because the workshop provides LDSC_INT.RData.</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># LDSC_INT &lt;- ldsc(</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   traits = traits,</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#   sample.prev = sample.prev,</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#   population.prev = population.prev,</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   ld = ld,</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   wld = wld,</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   trait.names = trait.names</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Save LDSC output</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># save(LDSC_INT, file = "LDSC_INT.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-3-load-the-ldsc-output" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-load-the-ldsc-output">10. Step 3: Load the LDSC Output</h3>
+<p>The workshop practical already provides the LDSC object.</p>
+<p>This object contains the genetic covariance matrix and sampling covariance matrix.</p>
+<div id="1fdb33fb-e2c0-4012-9bc8-b25218cec072" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/LDSC_INT.RData"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic covariance matrix</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>LDSC_INT<span class="sc">$</span>S</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Sampling covariance matrix</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>LDSC_INT<span class="sc">$</span>V</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 4 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">ALCH</th>
+<th data-quarto-table-cell-role="th" scope="col">PTSD</th>
+<th data-quarto-table-cell-role="th" scope="col">MDD</th>
+<th data-quarto-table-cell-role="th" scope="col">ANX</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.13938790</td>
+<td>0.05977947</td>
+<td>0.05943021</td>
+<td>0.08500236</td>
+</tr>
+<tr class="even">
+<td>0.05977947</td>
+<td>0.23937808</td>
+<td>0.05799439</td>
+<td>0.11428679</td>
+</tr>
+<tr class="odd">
+<td>0.05943021</td>
+<td>0.05799439</td>
+<td>0.08503281</td>
+<td>0.12667327</td>
+</tr>
+<tr class="even">
+<td>0.08500236</td>
+<td>0.11428679</td>
+<td>0.12667327</td>
+<td>0.23329361</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 10 × 10 of type dbl</caption>
+<tbody>
+<tr class="odd">
+<td>6.041603e-04</td>
+<td>4.630259e-05</td>
+<td>1.329209e-05</td>
+<td>2.110818e-05</td>
+<td>1.699375e-04</td>
+<td>1.928842e-05</td>
+<td>5.939947e-06</td>
+<td>3.078558e-06</td>
+<td>6.866515e-06</td>
+<td>1.292371e-05</td>
+</tr>
+<tr class="even">
+<td>4.630259e-05</td>
+<td>1.683117e-03</td>
+<td>5.491624e-06</td>
+<td>1.012613e-04</td>
+<td>7.541207e-05</td>
+<td>1.794540e-05</td>
+<td>9.955430e-05</td>
+<td>2.224531e-07</td>
+<td>3.119102e-06</td>
+<td>1.406092e-05</td>
+</tr>
+<tr class="odd">
+<td>1.329209e-05</td>
+<td>5.491624e-06</td>
+<td>3.692467e-05</td>
+<td>4.865869e-05</td>
+<td>8.966010e-05</td>
+<td>1.773068e-06</td>
+<td>2.035833e-05</td>
+<td>6.028298e-06</td>
+<td>9.777927e-06</td>
+<td>7.764292e-06</td>
+</tr>
+<tr class="even">
+<td>2.110818e-05</td>
+<td>1.012613e-04</td>
+<td>4.865869e-05</td>
+<td>2.627033e-04</td>
+<td>1.244898e-05</td>
+<td>-7.693747e-08</td>
+<td>1.510451e-05</td>
+<td>6.091000e-06</td>
+<td>1.858721e-05</td>
+<td>3.524720e-05</td>
+</tr>
+<tr class="odd">
+<td>1.699375e-04</td>
+<td>7.541207e-05</td>
+<td>8.966010e-05</td>
+<td>1.244898e-05</td>
+<td>1.135989e-02</td>
+<td>4.536925e-05</td>
+<td>3.350365e-04</td>
+<td>-1.606011e-05</td>
+<td>5.419991e-05</td>
+<td>1.212088e-06</td>
+</tr>
+<tr class="even">
+<td>1.928842e-05</td>
+<td>1.794540e-05</td>
+<td>1.773068e-06</td>
+<td>-7.693747e-08</td>
+<td>4.536925e-05</td>
+<td>1.336556e-04</td>
+<td>1.255636e-04</td>
+<td>7.752931e-06</td>
+<td>1.314640e-05</td>
+<td>3.972090e-05</td>
+</tr>
+<tr class="odd">
+<td>5.939947e-06</td>
+<td>9.955430e-05</td>
+<td>2.035833e-05</td>
+<td>1.510451e-05</td>
+<td>3.350365e-04</td>
+<td>1.255636e-04</td>
+<td>8.250458e-04</td>
+<td>-4.762316e-07</td>
+<td>5.242814e-06</td>
+<td>3.447767e-05</td>
+</tr>
+<tr class="even">
+<td>3.078558e-06</td>
+<td>2.224531e-07</td>
+<td>6.028298e-06</td>
+<td>6.091000e-06</td>
+<td>-1.606011e-05</td>
+<td>7.752931e-06</td>
+<td>-4.762316e-07</td>
+<td>1.219319e-05</td>
+<td>1.921343e-05</td>
+<td>1.590191e-05</td>
+</tr>
+<tr class="odd">
+<td>6.866515e-06</td>
+<td>3.119102e-06</td>
+<td>9.777927e-06</td>
+<td>1.858721e-05</td>
+<td>5.419991e-05</td>
+<td>1.314640e-05</td>
+<td>5.242814e-06</td>
+<td>1.921343e-05</td>
+<td>5.109221e-05</td>
+<td>5.444954e-05</td>
+</tr>
+<tr class="even">
+<td>1.292371e-05</td>
+<td>1.406092e-05</td>
+<td>7.764292e-06</td>
+<td>3.524720e-05</td>
+<td>1.212088e-06</td>
+<td>3.972090e-05</td>
+<td>3.447767e-05</td>
+<td>1.590191e-05</td>
+<td>5.444954e-05</td>
+<td>2.843342e-04</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="understanding-the-genetic-covariance-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-the-genetic-covariance-matrix">11. Understanding the Genetic Covariance Matrix</h3>
+<p>The matrix <code>LDSC_INT$S</code> contains genetic variances and covariances.</p>
+<p>The diagonal values are SNP heritabilities.</p>
+<p>The off-diagonal values are genetic covariances.</p>
+<p>For example, if the covariance between MDD and ANX is high, this suggests that depression and anxiety share genetic influences.</p>
+<div id="eae10bd9-67e8-4b21-bb1f-dc468b047775" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print genetic covariance matrix</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LDSC_INT<span class="sc">$</span>S)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           ALCH       PTSD        MDD        ANX
+[1,] 0.13938790 0.05977947 0.05943021 0.08500236
+[2,] 0.05977947 0.23937808 0.05799439 0.11428679
+[3,] 0.05943021 0.05799439 0.08503281 0.12667327
+[4,] 0.08500236 0.11428679 0.12667327 0.23329361</code></pre>
+</div>
+</div>
+</section>
+<section id="understanding-the-sampling-covariance-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-the-sampling-covariance-matrix">12. Understanding the Sampling Covariance Matrix</h3>
+<p>The matrix <code>LDSC_INT$V</code> contains uncertainty around the estimates in <code>S</code>.</p>
+<p>This is important because some GWAS are more highly powered than others.</p>
+<p>It also models dependencies caused by sample overlap between GWAS studies.</p>
+</section>
+<section id="understanding-the-sampling-covariance-matrix-1" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-the-sampling-covariance-matrix-1">12. Understanding the Sampling Covariance Matrix</h3>
+</section>
+<section id="why-the-sampling-covariance-matrix-matters" class="level3">
+<h3 class="anchored" data-anchor-id="why-the-sampling-covariance-matrix-matters">13. Why the Sampling Covariance Matrix Matters</h3>
+<div id="bc02db6b-7339-4bf0-83da-b7f515dfb66c" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print sampling covariance matrix</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LDSC_INT<span class="sc">$</span>V)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              [,1]         [,2]         [,3]          [,4]          [,5]
+ [1,] 6.041603e-04 4.630259e-05 1.329209e-05  2.110818e-05  1.699375e-04
+ [2,] 4.630259e-05 1.683117e-03 5.491624e-06  1.012613e-04  7.541207e-05
+ [3,] 1.329209e-05 5.491624e-06 3.692467e-05  4.865869e-05  8.966010e-05
+ [4,] 2.110818e-05 1.012613e-04 4.865869e-05  2.627033e-04  1.244898e-05
+ [5,] 1.699375e-04 7.541207e-05 8.966010e-05  1.244898e-05  1.135989e-02
+ [6,] 1.928842e-05 1.794540e-05 1.773068e-06 -7.693747e-08  4.536925e-05
+ [7,] 5.939947e-06 9.955430e-05 2.035833e-05  1.510451e-05  3.350365e-04
+ [8,] 3.078558e-06 2.224531e-07 6.028298e-06  6.091000e-06 -1.606011e-05
+ [9,] 6.866515e-06 3.119102e-06 9.777927e-06  1.858721e-05  5.419991e-05
+[10,] 1.292371e-05 1.406092e-05 7.764292e-06  3.524720e-05  1.212088e-06
+               [,6]          [,7]          [,8]         [,9]        [,10]
+ [1,]  1.928842e-05  5.939947e-06  3.078558e-06 6.866515e-06 1.292371e-05
+ [2,]  1.794540e-05  9.955430e-05  2.224531e-07 3.119102e-06 1.406092e-05
+ [3,]  1.773068e-06  2.035833e-05  6.028298e-06 9.777927e-06 7.764292e-06
+ [4,] -7.693747e-08  1.510451e-05  6.091000e-06 1.858721e-05 3.524720e-05
+ [5,]  4.536925e-05  3.350365e-04 -1.606011e-05 5.419991e-05 1.212088e-06
+ [6,]  1.336556e-04  1.255636e-04  7.752931e-06 1.314640e-05 3.972090e-05
+ [7,]  1.255636e-04  8.250458e-04 -4.762316e-07 5.242814e-06 3.447767e-05
+ [8,]  7.752931e-06 -4.762316e-07  1.219319e-05 1.921343e-05 1.590191e-05
+ [9,]  1.314640e-05  5.242814e-06  1.921343e-05 5.109221e-05 5.444954e-05
+[10,]  3.972090e-05  3.447767e-05  1.590191e-05 5.444954e-05 2.843342e-04</code></pre>
+</div>
+</div>
+</section>
+<section id="factor-identification-in-genomic-sem" class="level3">
+<h3 class="anchored" data-anchor-id="factor-identification-in-genomic-sem">10. Factor Identification in Genomic SEM</h3>
+<p>Latent factors do not have a natural scale. Therefore, we must identify the scale of the factor.</p>
+<p>There are two common approaches.</p>
+<p>Option 1: Unit Variance Identification</p>
+<p>In this approach, the variance of the latent factor is fixed to 1.</p>
+<p>Example:</p>
+<p>Model &lt;- ” F1 =~ NA<em>MDD + PTSD + ALCH + ANX F1 ~~ 1</em>F1 ”</p>
+<p>This means the factor has a standardized variance.</p>
+<p>In Genomic SEM, this is often equivalent to using:</p>
+<p>std.lv = TRUE Option 2: Unit Loading Identification</p>
+<p>In this approach, one factor loading is fixed to 1.</p>
+<p>Example:</p>
+<p>Model &lt;- ” F1 =~ 1*MDD + PTSD + ALCH + ANX ”</p>
+<p>Here, the scale of the factor is defined by MDD.</p>
+<p>Both approaches are valid, but they lead to different parameter scaling. The interpretation of the model should always consider how the factor was identified.</p>
+</section>
+<section id="lavaan-model-syntax-used-in-genomic-sem" class="level3">
+<h3 class="anchored" data-anchor-id="lavaan-model-syntax-used-in-genomic-sem">13. Lavaan Model Syntax Used in Genomic SEM</h3>
+<p>Genomic SEM uses lavaan-style model syntax.</p>
+<p>Here are the most important operators:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>A ~ B</code></td>
+<td>A is regressed on B</td>
+</tr>
+<tr class="even">
+<td><code>A ~~ A</code></td>
+<td>Variance of A</td>
+</tr>
+<tr class="odd">
+<td><code>A ~~ B</code></td>
+<td>Covariance between A and B</td>
+</tr>
+<tr class="even">
+<td><code>F1 =~ A + B + C</code></td>
+<td>Latent factor F1 loads on A, B, and C</td>
+</tr>
+<tr class="odd">
+<td><code>A ~~ 1*B</code></td>
+<td>Fix covariance between A and B to 1</td>
+</tr>
+<tr class="even">
+<td><code>A ~~ a*B</code></td>
+<td>Label covariance as parameter <code>a</code></td>
+</tr>
+</tbody>
+</table>
+<p>This syntax allows us to specify many different genetic models.</p>
+</section>
+<section id="common-factor-model" class="level3">
+<h3 class="anchored" data-anchor-id="common-factor-model">14. Common Factor Model</h3>
+<p>A common factor model assumes that several observed traits share one underlying latent genetic factor.</p>
+<p>For example:</p>
+<p>$ F1 MDD, PTSD, ALCH, ANX $</p>
+<p>Here, <code>F1</code> represents a shared internalizing genetic factor.</p>
+<div id="a38be58a-bae0-4d6b-942b-22c71bfd38e6" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariance structure</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> LDSC_INT</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Common factor model</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>INT.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="st">F1 =~ MDD + PTSD + ALCH + ANX</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Use unit variance identification</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>std.lv <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Run model</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>IntResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> INT.model,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> std.lv</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Running primary model"
+[1] "Calculating Standardized Results"
+[1] "Calculating SRMR"
+elapsed 
+  0.175 </code></pre>
+</div>
+</div>
+</section>
+<section id="genetic-multiple-regression" class="level3">
+<h3 class="anchored" data-anchor-id="genetic-multiple-regression">15. Genetic Multiple Regression</h3>
+<p>Genomic SEM is not limited to factor models. It can also estimate genetic regression models.</p>
+<p>For example, suppose we want to know whether the genetic component of educational attainment is associated with schizophrenia and bipolar disorder.</p>
+<p>A simplified model could be:</p>
+<p>[ EA_g = b_1SCZ_g + b_2BIP_g + u]</p>
+<p>This means that the genetic component of educational attainment is regressed on the genetic components of schizophrenia and bipolar disorder.</p>
+<p>In lavaan-style syntax, this could be written as:</p>
+<p>model &lt;- ” EA ~ SCZ + BIP SCZ ~~ BIP ”</p>
+<p>This allows us to ask whether one trait explains unique genetic variation in another trait after accounting for additional genetically correlated traits.</p>
+</section>
+<section id="gwas-by-subtraction" class="level3">
+<h3 class="anchored" data-anchor-id="gwas-by-subtraction">16. GWAS-by-Subtraction</h3>
+<p>GWAS-by-subtraction is one of the important applications of Genomic SEM.</p>
+<p>The idea is to separate shared and residual genetic components.</p>
+<p>For example, educational attainment and cognitive performance are genetically correlated. But educational attainment is influenced by both cognitive and non-cognitive factors.</p>
+<p>A Genomic SEM model can estimate:</p>
+<p>A cognitive genetic factor shared with cognitive performance A non-cognitive genetic component of educational attainment</p>
+<p>Conceptually:</p>
+<p>$ EA = Cognitive + NonCognitive $</p>
+<p>This allows researchers to perform GWAS on the residual non-cognitive component.</p>
+<p>In simple terms, GWAS-by-subtraction asks:</p>
+<p>What genetic signal remains in one trait after removing the genetic signal shared with another trait?</p>
+<p>This is useful when we want to isolate more specific genetic pathways.</p>
+</section>
+<section id="view-model-results" class="level3">
+<h3 class="anchored" data-anchor-id="view-model-results">15. View Model Results</h3>
+<p>The results table contains:</p>
+<ul>
+<li>Parameter estimates</li>
+<li>Standard errors</li>
+<li>Standardized estimates</li>
+<li>p-values</li>
+</ul>
+<p>The factor loadings tell us how strongly each trait relates to the latent genetic factor.</p>
+<div id="3458d1a1-1eac-4fad-a889-76189976a6f6" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>IntResults<span class="sc">$</span>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 9 × 9</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lhs</th>
+<th data-quarto-table-cell-role="th" scope="col">op</th>
+<th data-quarto-table-cell-role="th" scope="col">rhs</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_Est</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_All</th>
+<th data-quarto-table-cell-role="th" scope="col">p_value</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>F1</td>
+<td>=~</td>
+<td>MDD</td>
+<td>0.283806747</td>
+<td>0.021002745436444</td>
+<td>0.97326125</td>
+<td>0.0720249151052966</td>
+<td>0.97326125</td>
+<td>1.313540e-41</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>F1</td>
+<td>=~</td>
+<td>PTSD</td>
+<td>0.221278068</td>
+<td>0.0402049336545347</td>
+<td>0.45226835</td>
+<td>0.0821745168725034</td>
+<td>0.45226834</td>
+<td>3.717880e-08</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>F1</td>
+<td>=~</td>
+<td>ALCH</td>
+<td>0.205225639</td>
+<td>0.024321802328951</td>
+<td>0.54969157</td>
+<td>0.0651453167330757</td>
+<td>0.54969157</td>
+<td>3.230100e-17</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>F1</td>
+<td>=~</td>
+<td>ANX</td>
+<td>0.445784749</td>
+<td>0.032456114148652</td>
+<td>0.92294074</td>
+<td>0.0671962594562505</td>
+<td>0.92294072</td>
+<td>6.265550e-43</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>ALCH</td>
+<td>~~</td>
+<td>ALCH</td>
+<td>0.097270350</td>
+<td>0.025899146459423</td>
+<td>0.69783919</td>
+<td>0.185806270387686</td>
+<td>0.69783918</td>
+<td>1.728330e-04</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">9</td>
+<td>PTSD</td>
+<td>~~</td>
+<td>PTSD</td>
+<td>0.190414108</td>
+<td>0.106977265864464</td>
+<td>0.79545336</td>
+<td>0.446896663140437</td>
+<td>0.79545335</td>
+<td>7.508426e-02</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">8</td>
+<td>MDD</td>
+<td>~~</td>
+<td>MDD</td>
+<td>0.004486541</td>
+<td>0.0109566843706871</td>
+<td>0.05276254</td>
+<td>0.12885240976165</td>
+<td>0.05276254</td>
+<td>6.821876e-01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>ANX</td>
+<td>~~</td>
+<td>ANX</td>
+<td>0.034569558</td>
+<td>0.0301103378331493</td>
+<td>0.14818043</td>
+<td>0.129066285535458</td>
+<td>0.14818043</td>
+<td>2.509289e-01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">7</td>
+<td>F1</td>
+<td>~~</td>
+<td>F1</td>
+<td>1.000000000</td>
+<td></td>
+<td>1.00000000</td>
+<td></td>
+<td>1.00000000</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="view-model-fit" class="level3">
+<h3 class="anchored" data-anchor-id="view-model-fit">16. View Model Fit</h3>
+<p>Model fit tells us whether the proposed model explains the observed genetic covariance matrix well.</p>
+<p>Important fit statistics include:</p>
+<ul>
+<li>Chi-square: lower is better</li>
+<li>AIC: useful for comparing models</li>
+<li>CFI: higher is better</li>
+<li>SRMR: lower is better</li>
+</ul>
+<p>As a rough guide:</p>
+<ul>
+<li>CFI &gt; 0.90 suggests acceptable fit</li>
+<li>CFI &gt; 0.95 suggests good fit</li>
+<li>SRMR &lt; 0.10 suggests acceptable fit</li>
+<li>SRMR &lt; 0.05 suggests good fit</li>
+</ul>
+<div id="c7dce095-c099-44c1-b38f-2084d99989b5" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>IntResults<span class="sc">$</span>modelfit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 1 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p_chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">CFI</th>
+<th data-quarto-table-cell-role="th" scope="col">SRMR</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">df</td>
+<td>1.283452</td>
+<td>2</td>
+<td>0.526383</td>
+<td>17.28345</td>
+<td>1</td>
+<td>0.03621695</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="interpreting-the-common-factor-model" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-common-factor-model">17. Interpreting the Common Factor Model</h3>
+<p>A strong loading of MDD on F1 means that major depression strongly reflects the shared genetic factor.</p>
+<p>A weaker loading of ALCH on F1 means that alcohol use disorder may share some genetic risk with the factor, but also has more trait-specific genetic influences.</p>
+<p>The residual variance of each trait represents genetic variation not explained by the common factor.</p>
+</section>
+<section id="alternative-model-correlated-traits-model" class="level3">
+<h3 class="anchored" data-anchor-id="alternative-model-correlated-traits-model">18. Alternative Model: Correlated Traits Model</h3>
+<p>Instead of forcing all traits to load on a common factor, we could estimate pairwise genetic covariances directly.</p>
+<p>This is useful when we do not want to assume a latent factor.</p>
+<div id="8e525361-73ca-4fcc-b579-cb1f7ee5365f" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>correlated.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ PTSD</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ ALCH</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ ANX</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ALCH</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ANX</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="st">ALCH ~~ ANX</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>CorResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> LDSC_INT,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> correlated.model,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">FALSE</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>CorResults<span class="sc">$</span>results</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>CorResults<span class="sc">$</span>modelfit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Running primary model"
+[1] "Calculating Standardized Results"
+[1] "Calculating SRMR"
+elapsed 
+  0.104 
+[1] "Model fit statistics are all printed as NA as you have specified a fully saturated model (i.e., df = 0)"</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 10 × 9</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lhs</th>
+<th data-quarto-table-cell-role="th" scope="col">op</th>
+<th data-quarto-table-cell-role="th" scope="col">rhs</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_Est</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_All</th>
+<th data-quarto-table-cell-role="th" scope="col">p_value</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">7</td>
+<td>MDD</td>
+<td>~~</td>
+<td>PTSD</td>
+<td>0.05799439</td>
+<td>0.011560951</td>
+<td>0.4064906</td>
+<td>0.08103228</td>
+<td>0.4064906</td>
+<td>5.264780e-07</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>MDD</td>
+<td>~~</td>
+<td>ALCH</td>
+<td>0.05943021</td>
+<td>0.006076568</td>
+<td>0.5458853</td>
+<td>0.05581520</td>
+<td>0.5458853</td>
+<td>1.369039e-22</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>MDD</td>
+<td>~~</td>
+<td>ANX</td>
+<td>0.12667327</td>
+<td>0.007147882</td>
+<td>0.8993739</td>
+<td>0.05074961</td>
+<td>0.8993739</td>
+<td>2.847008e-70</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">8</td>
+<td>PTSD</td>
+<td>~~</td>
+<td>ALCH</td>
+<td>0.05977947</td>
+<td>0.041025806</td>
+<td>0.3272633</td>
+<td>0.22459619</td>
+<td>0.3272633</td>
+<td>1.450836e-01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">9</td>
+<td>PTSD</td>
+<td>~~</td>
+<td>ANX</td>
+<td>0.11428679</td>
+<td>0.028723611</td>
+<td>0.4836180</td>
+<td>0.12154733</td>
+<td>0.4836180</td>
+<td>6.925092e-05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>ALCH</td>
+<td>~~</td>
+<td>ANX</td>
+<td>0.08500236</td>
+<td>0.016208124</td>
+<td>0.4713755</td>
+<td>0.08988118</td>
+<td>0.4713755</td>
+<td>1.567668e-07</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>ALCH</td>
+<td>~~</td>
+<td>ALCH</td>
+<td>0.13938790</td>
+<td>0.024579672</td>
+<td>1.0000000</td>
+<td>0.17634007</td>
+<td>1.0000000</td>
+<td>1.420817e-08</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">10</td>
+<td>PTSD</td>
+<td>~~</td>
+<td>PTSD</td>
+<td>0.23937808</td>
+<td>0.106582777</td>
+<td>1.0000000</td>
+<td>0.44524869</td>
+<td>1.0000000</td>
+<td>2.470812e-02</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>MDD</td>
+<td>~~</td>
+<td>MDD</td>
+<td>0.08503281</td>
+<td>0.003491874</td>
+<td>1.0000000</td>
+<td>0.04106502</td>
+<td>1.0000000</td>
+<td>5.572026e-131</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>ANX</td>
+<td>~~</td>
+<td>ANX</td>
+<td>0.23329361</td>
+<td>0.016862213</td>
+<td>1.0000000</td>
+<td>0.07227893</td>
+<td>1.0000000</td>
+<td>1.561049e-43</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 1 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p_chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">CFI</th>
+<th data-quarto-table-cell-role="th" scope="col">SRMR</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">df</td>
+<td>NA</td>
+<td>0</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="alternative-model-regression-model" class="level3">
+<h3 class="anchored" data-anchor-id="alternative-model-regression-model">19. Alternative Model: Regression Model</h3>
+<p>Genomic SEM can also fit genetic regression models.</p>
+<p>For example, we can ask whether the genetic component of anxiety predicts the genetic component of depression.</p>
+<div id="f41487b9-8553-44ac-9278-04e4801e9495" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>regression.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~ ANX + PTSD + ALCH</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="st">ANX ~~ PTSD</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="st">ANX ~~ ALCH</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ALCH</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>RegResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> LDSC_INT,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> regression.model,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">FALSE</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>RegResults<span class="sc">$</span>results</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>RegResults<span class="sc">$</span>modelfit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Running primary model"
+[1] "Calculating Standardized Results"
+[1] "Calculating SRMR"
+elapsed 
+  0.115 
+[1] "Model fit statistics are all printed as NA as you have specified a fully saturated model (i.e., df = 0)"</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 10 × 9</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lhs</th>
+<th data-quarto-table-cell-role="th" scope="col">op</th>
+<th data-quarto-table-cell-role="th" scope="col">rhs</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_Est</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_All</th>
+<th data-quarto-table-cell-role="th" scope="col">p_value</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">7</td>
+<td>MDD</td>
+<td>~</td>
+<td>ANX</td>
+<td>0.51330125</td>
+<td>0.068314744</td>
+<td>0.85021835</td>
+<td>0.11315470</td>
+<td>0.85021835</td>
+<td>5.744864e-14</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">8</td>
+<td>MDD</td>
+<td>~</td>
+<td>PTSD</td>
+<td>-0.03483028</td>
+<td>0.094099604</td>
+<td>-0.05843942</td>
+<td>0.15788349</td>
+<td>-0.05843942</td>
+<td>7.112762e-01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>MDD</td>
+<td>~</td>
+<td>ALCH</td>
+<td>0.12827888</td>
+<td>0.075097732</td>
+<td>0.16423830</td>
+<td>0.09614929</td>
+<td>0.16423830</td>
+<td>8.760680e-02</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>ANX</td>
+<td>~~</td>
+<td>PTSD</td>
+<td>0.11428679</td>
+<td>0.028723611</td>
+<td>0.48361796</td>
+<td>0.12154733</td>
+<td>0.48361796</td>
+<td>6.925093e-05</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>ANX</td>
+<td>~~</td>
+<td>ALCH</td>
+<td>0.08500236</td>
+<td>0.016208124</td>
+<td>0.47137552</td>
+<td>0.08988118</td>
+<td>0.47137551</td>
+<td>1.567668e-07</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">9</td>
+<td>PTSD</td>
+<td>~~</td>
+<td>ALCH</td>
+<td>0.05977947</td>
+<td>0.041025806</td>
+<td>0.32726331</td>
+<td>0.22459619</td>
+<td>0.32726331</td>
+<td>1.450836e-01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>ALCH</td>
+<td>~~</td>
+<td>ALCH</td>
+<td>0.13938790</td>
+<td>0.024579672</td>
+<td>1.00000001</td>
+<td>0.17634007</td>
+<td>1.00000001</td>
+<td>1.420816e-08</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">10</td>
+<td>PTSD</td>
+<td>~~</td>
+<td>PTSD</td>
+<td>0.23937808</td>
+<td>0.106582777</td>
+<td>0.99999999</td>
+<td>0.44524869</td>
+<td>0.99999999</td>
+<td>2.470812e-02</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>MDD</td>
+<td>~~</td>
+<td>MDD</td>
+<td>0.01440758</td>
+<td>0.005525258</td>
+<td>0.16943560</td>
+<td>0.06497795</td>
+<td>0.16943560</td>
+<td>9.118313e-03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>ANX</td>
+<td>~~</td>
+<td>ANX</td>
+<td>0.23329361</td>
+<td>0.016862213</td>
+<td>1.00000000</td>
+<td>0.07227893</td>
+<td>1.00000000</td>
+<td>1.561050e-43</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 1 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p_chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">CFI</th>
+<th data-quarto-table-cell-role="th" scope="col">SRMR</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">df</td>
+<td>NA</td>
+<td>0</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="multivariate-gwas-in-genomic-sem" class="level3">
+<h3 class="anchored" data-anchor-id="multivariate-gwas-in-genomic-sem">20. Multivariate GWAS in Genomic SEM</h3>
+<p>So far, we estimated a genome-wide model using the genetic covariance matrix.</p>
+<p>Now we move to multivariate GWAS.</p>
+<p>The goal is to test SNP effects on a latent factor.</p>
+<p>Instead of asking:</p>
+<blockquote class="blockquote">
+<p>Is this SNP associated with MDD?</p>
+</blockquote>
+<p>we ask:</p>
+<blockquote class="blockquote">
+<p>Is this SNP associated with the shared genetic factor underlying MDD, PTSD, ALCH, and ANX?</p>
+</blockquote>
+<p>This can increase power and improve interpretation when traits share genetic architecture.</p>
+</section>
+<section id="steps-for-multivariate-gwas" class="level3">
+<h3 class="anchored" data-anchor-id="steps-for-multivariate-gwas">21. Steps for Multivariate GWAS</h3>
+<p>Multivariate GWAS in Genomic SEM has four main steps:</p>
+<ol type="1">
+<li>Munge summary statistics</li>
+<li>Run LD Score Regression</li>
+<li>Prepare summary statistics using <code>sumstats</code></li>
+<li>Run multivariate GWAS using <code>userGWAS</code></li>
+</ol>
+<p>The first two steps are the same as before. If we already ran LDSC for the same traits, we do not need to repeat it.</p>
+</section>
+<section id="step-3-for-multivariate-gwas-prepare-snp-summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-for-multivariate-gwas-prepare-snp-summary-statistics">22. Step 3 for Multivariate GWAS: Prepare SNP Summary Statistics</h3>
+<p>The <code>sumstats()</code> function prepares SNP-level summary statistics for <code>userGWAS</code>.</p>
+<p>In the workshop practical, reduced chromosome 4 files are used for demonstration.</p>
+<div id="678a59f0-a161-4c81-863a-7155bd18aed5" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Files must be in the same order as the LDSC traits</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt"</span>, <span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt"</span>, <span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt"</span>, <span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Reference file for allele frequency</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>ref <span class="ot">&lt;-</span> <span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/reference.1000G.ch4.txt"</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Whether SEs are on logistic scale</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>se.logit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Whether linear probability model correction is needed</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>linprob <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample size argument</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare summary statistics</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>INT_sumstats <span class="ot">&lt;-</span> <span class="fu">sumstats</span>(</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">files =</span> files,</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref =</span> ref,</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">trait.names =</span> trait.names,</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">se.logit =</span> se.logit,</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">linprob =</span> linprob,</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> N</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The preparation of 4 summary statistics for use in Genomic SEM began at: 2026-06-10 12:44:42.44117
+Please note that the files should be in the same order that they were listed for the ldsc function
+Reading in reference file
+Applying MAF filer of 0.01 to the reference file.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>All files loaded into R!
+Preparing summary statistics for file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt
+Interpreting the SNP column as the SNP column.
+Interpreting the A1 column as the A1 column.
+Interpreting the A2 column as the A2 column.
+Interpreting the Z column as the effect column.
+Interpreting the P column as the P column.
+Interpreting the WEIGHT column as the N column.
+0 rows were removed from the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt summary statistics file due to entries that were duplicated for rsID. These are removed as they likely reflect multiallelic variants.
+Merging file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt with the reference file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/reference.1000G.ch4.txt
+1000 rows present in the full /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt summary statistics file.
+0 rows were removed from the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt summary statistics file as the rsIDs for these SNPs were not present in the reference file.
+The effect column was determined NOT to be coded as an odds ratio (OR) for the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt summary statistics file based on the median of the effect column being close to 0.
+An transformation used to back out logistic betas for binary traits is being applied for: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt
+No INFO column, cannot filter on INFO, which may influence results
+1000 SNPs are left in the summary statistics file /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt after QC and merging with the reference file.
+Preparing summary statistics for file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt
+Interpreting the MARKERNAME column as the SNP column.
+Interpreting the ALLELE1 column as the A1 column.
+Interpreting the ALLELE2 column as the A2 column.
+Interpreting the EFFECT column as the effect column.
+Interpreting the P.VALUE column as the P column.
+Cannot find N column, try renaming it to N in the summary statistics file for:/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt
+Interpreting the STDERR column as the SE column.
+Interpreting the DIRECTION column as the DIRECTION column.
+0 rows were removed from the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt summary statistics file due to entries that were duplicated for rsID. These are removed as they likely reflect multiallelic variants.
+Merging file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt with the reference file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/reference.1000G.ch4.txt
+1000 rows present in the full /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt summary statistics file.
+0 rows were removed from the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt summary statistics file as the rsIDs for these SNPs were not present in the reference file.
+The effect column was determined NOT to be coded as an odds ratio (OR) for the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt summary statistics file based on the median of the effect column being close to 0.
+No INFO column, cannot filter on INFO, which may influence results
+Performing transformation under the assumption that the effect column is either an odds ratio or logistic beta (please see output above to determine whether it was interpreted as an odds ratio) and the SE column is a logistic SE (i.e., NOT the SE of the odds ratio) for:/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt
+1000 SNPs are left in the summary statistics file /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt after QC and merging with the reference file.
+Preparing summary statistics for file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt
+Found an NEFF column for sample size. 
+
+Please note that this is likely effective sample size and should only be used for liability h^2 conversion for binary traits and that it should reflect the sum of effective sample sizes across cohorts.
+
+Be aware that some NEFF columns reflect half of the effective sample size; the function will automatically double the column names if recognized [check above in .log file to determine if this is the case].
+If the Neff value is halved in the summary stats, but not recognized by the munge function, this should be manually doubled prior to running munge.
+Interpreting the MARKERNAME column as the SNP column.
+Interpreting the A1 column as the A1 column.
+Interpreting the A2 column as the A2 column.
+Interpreting the LOGOR column as the effect column.
+Interpreting the P column as the P column.
+Interpreting the NEFF column as the N column.
+Interpreting the MAF column as the MAF column.
+Interpreting the STDERRLOGOR column as the SE column.
+0 rows were removed from the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt summary statistics file due to entries that were duplicated for rsID. These are removed as they likely reflect multiallelic variants.
+Merging file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt with the reference file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/reference.1000G.ch4.txt
+1400 rows present in the full /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt summary statistics file.
+20 rows were removed from the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt summary statistics file as the rsIDs for these SNPs were not present in the reference file.
+The effect column was determined NOT to be coded as an odds ratio (OR) for the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt summary statistics file based on the median of the effect column being close to 0.
+5rows were removed from the/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txtsummary statistics file due to effect values estimated at exactly 0 as this causes problems for matrix inversion necessary for later Genomic SEM analyses.
+No INFO column, cannot filter on INFO, which may influence results
+Performing transformation under the assumption that the effect column is either an odds ratio or logistic beta (please see output above to determine whether it was interpreted as an odds ratio) and the SE column is a logistic SE (i.e., NOT the SE of the odds ratio) for:/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt
+1375 SNPs are left in the summary statistics file /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt after QC and merging with the reference file.
+Preparing summary statistics for file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt
+Found an NEFF column for sample size. 
+
+Please note that this is likely effective sample size and should only be used for liability h^2 conversion for binary traits and that it should reflect the sum of effective sample sizes across cohorts.
+
+Be aware that some NEFF columns reflect half of the effective sample size; the function will automatically double the column names if recognized [check above in .log file to determine if this is the case].
+If the Neff value is halved in the summary stats, but not recognized by the munge function, this should be manually doubled prior to running munge.
+Interpreting the SNP column as the SNP column.
+Interpreting the ALLELE1 column as the A1 column.
+Interpreting the ALLELE2 column as the A2 column.
+Interpreting the EFFECT column as the effect column.
+Interpreting the P column as the P column.
+Interpreting the NEFF column as the N column.
+Interpreting the STDERR column as the SE column.
+Interpreting the DIRECTION column as the DIRECTION column.
+0 rows were removed from the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt summary statistics file due to entries that were duplicated for rsID. These are removed as they likely reflect multiallelic variants.
+Merging file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt with the reference file: /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/reference.1000G.ch4.txt
+1000 rows present in the full /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt summary statistics file.
+0 rows were removed from the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt summary statistics file as the rsIDs for these SNPs were not present in the reference file.
+The effect column was determined NOT to be coded as an odds ratio (OR) for the /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt summary statistics file based on the median of the effect column being close to 0.
+No INFO column, cannot filter on INFO, which may influence results
+Performing transformation under the assumption that the effect column is either an odds ratio or logistic beta (please see output above to determine whether it was interpreted as an odds ratio) and the SE column is a logistic SE (i.e., NOT the SE of the odds ratio) for:/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt
+1000 SNPs are left in the summary statistics file /Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt after QC and merging with the reference file.
+After merging across all summary statistics using listwise deletion, performing QC, and merging with the reference file, there are 1000 SNPs left in the final multivariate summary statistics file
+Sumstats finished running at 2026-06-10 12:44:44.381982
+Running sumstats for all files took 0 minutes and 1.94081211090088 seconds
+Please check the log file ALCH_PTSD_MDD_ANX_sumstats.log to ensure that all columns were interpreted correctly and no warnings were issued for any of the summary statistics files.</code></pre>
+</div>
+</div>
+</section>
+<section id="why-linprob-is-needed" class="level3">
+<h3 class="anchored" data-anchor-id="why-linprob-is-needed">23. Why <code>linprob</code> Is Needed</h3>
+<p>Sometimes binary traits are analyzed as continuous outcomes, or the summary statistics contain only Z-statistics.</p>
+<p>In these cases, Genomic SEM needs additional information to reconstruct the appropriate beta and standard error.</p>
+<p>In this practical, <code>linprob = TRUE</code> is used for ALCH.</p>
+</section>
+<section id="step-4-run-usergwas" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-run-usergwas">24. Step 4: Run userGWAS</h3>
+<p>Now we run a multivariate GWAS.</p>
+<p>The model is:</p>
+<p>$ F1 =~ MDD + PTSD + ALCH + ANX $</p>
+<p>and then:</p>
+<p>$ F1 SNP $</p>
+<p>This tests whether each SNP predicts the shared latent genetic factor.</p>
+<div id="e65dbd05-2af7-4fa8-bb29-e10af474a0b5" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Covariance structure from LDSC</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> LDSC_INT</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># SNP-level summary statistics</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>SNPs <span class="ot">&lt;-</span> INT_sumstats</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate GWAS model</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="st">F1 =~ MDD + PTSD + ALCH + ANX</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="st">F1 ~ SNP</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save only the SNP effect on F1</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">&lt;-</span> <span class="st">"F1~SNP"</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Practical uses serial processing</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>parallel <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate QSNP</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>Q_SNP <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Run multivariate GWAS</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>INT_GWAS <span class="ot">&lt;-</span> <span class="fu">userGWAS</span>(</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">SNPs =</span> SNPs,</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> model,</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">sub =</span> sub,</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel =</span> parallel,</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">Q_SNP =</span> Q_SNP</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Please note that an update was made to userGWAS on Sept 1 2023  so that the default behavior is to fix the measurement model using the fix_measurement argument."
+[1] "Starting GWAS Estimation"
+Running Model: 1
+Running Model: 1000
+elapsed 
+ 26.264 </code></pre>
+</div>
+</div>
+</section>
+<section id="view-the-first-rows-of-the-multivariate-gwas-output" class="level3">
+<h3 class="anchored" data-anchor-id="view-the-first-rows-of-the-multivariate-gwas-output">25. View the First Rows of the Multivariate GWAS Output</h3>
+<p>The output contains:</p>
+<ul>
+<li>SNP effect on the factor</li>
+<li>Standard error</li>
+<li>p-value</li>
+<li>QSNP statistic</li>
+<li>QSNP p-value</li>
+<li>Warnings and errors</li>
+</ul>
+<div id="9aff38aa-fe7e-43a3-9cb4-1e97f562f147" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>INT_GWAS[[<span class="dv">1</span>]][<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 5 × 24</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">SNP</th>
+<th data-quarto-table-cell-role="th" scope="col">CHR</th>
+<th data-quarto-table-cell-role="th" scope="col">BP</th>
+<th data-quarto-table-cell-role="th" scope="col">MAF</th>
+<th data-quarto-table-cell-role="th" scope="col">A1</th>
+<th data-quarto-table-cell-role="th" scope="col">A2</th>
+<th data-quarto-table-cell-role="th" scope="col">lhs</th>
+<th data-quarto-table-cell-role="th" scope="col">op</th>
+<th data-quarto-table-cell-role="th" scope="col">rhs</th>
+<th data-quarto-table-cell-role="th" scope="col">free</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">Pval_Estimate</th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">chisq_df</th>
+<th data-quarto-table-cell-role="th" scope="col">chisq_pval</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">Q_SNP</th>
+<th data-quarto-table-cell-role="th" scope="col">Q_SNP_df</th>
+<th data-quarto-table-cell-role="th" scope="col">Q_SNP_pval</th>
+<th data-quarto-table-cell-role="th" scope="col">error</th>
+<th data-quarto-table-cell-role="th" scope="col">warning</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>rs10030871</td>
+<td>4</td>
+<td>68786</td>
+<td>0.0765408</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8257532</td>
+<td>4.905573</td>
+<td>8</td>
+<td>0.7676193</td>
+<td>18.90557</td>
+<td>3.622121</td>
+<td>3</td>
+<td>0.3052654</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>rs6599368</td>
+<td>4</td>
+<td>69567</td>
+<td>0.0755467</td>
+<td>A</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8059251</td>
+<td>4.839517</td>
+<td>8</td>
+<td>0.7745831</td>
+<td>18.83952</td>
+<td>3.556062</td>
+<td>3</td>
+<td>0.3135635</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>rs7678633</td>
+<td>4</td>
+<td>69713</td>
+<td>0.0755467</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.7979215</td>
+<td>4.901617</td>
+<td>8</td>
+<td>0.7680379</td>
+<td>18.90162</td>
+<td>3.618164</td>
+<td>3</td>
+<td>0.3057569</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>rs13130581</td>
+<td>4</td>
+<td>70392</td>
+<td>0.0725646</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9840311</td>
+<td>5.029483</td>
+<td>8</td>
+<td>0.7544203</td>
+<td>19.02948</td>
+<td>3.746031</td>
+<td>3</td>
+<td>0.2902263</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>rs13125929</td>
+<td>4</td>
+<td>71566</td>
+<td>0.0725646</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9069168</td>
+<td>5.787662</td>
+<td>8</td>
+<td>0.6710031</td>
+<td>19.78766</td>
+<td>4.504209</td>
+<td>3</td>
+<td>0.2119151</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="check-warnings-and-errors" class="level3">
+<h3 class="anchored" data-anchor-id="check-warnings-and-errors">26. Check Warnings and Errors</h3>
+<p>Before interpreting results, always check warnings and errors.</p>
+<p>A value of 0 usually means the SNP was estimated successfully.</p>
+<div id="b1e9687e-5870-420c-8012-7cc24e0c4175" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Warnings</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>warning)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Errors</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>error)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+lavaan-&gt;lav_lavaan_step02_options():  \n   the following argument(s) override(s) the options in slotOptions: se 
+                                                                                                           1000 </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+   0 
+1000 </code></pre>
+</div>
+</div>
+</section>
+<section id="genome-wide-significant-factor-hits" class="level3">
+<h3 class="anchored" data-anchor-id="genome-wide-significant-factor-hits">27. Genome-Wide Significant Factor Hits</h3>
+<p>The standard genome-wide significance threshold is:</p>
+<p>$ 5 ^{-8} $</p>
+<p>We can check how many SNPs are significantly associated with the latent factor.</p>
+<div id="abba0050-0f43-4ad2-9ae7-0456c362614e" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Pval_Estimate <span class="sc">&lt;</span> <span class="fl">5e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+FALSE 
+ 1000 </code></pre>
+</div>
+</div>
+</section>
+<section id="qsnp-testing-snp-level-heterogeneity" class="level3">
+<h3 class="anchored" data-anchor-id="qsnp-testing-snp-level-heterogeneity">28. QSNP: Testing SNP-Level Heterogeneity</h3>
+<p>QSNP tests whether the SNP effect fits the common pathway model.</p>
+<p>If a SNP acts mainly through the common factor, then its effects on individual traits should be consistent with the factor structure.</p>
+<p>If the SNP has a strong trait-specific effect, the common pathway model may not fit well.</p>
+<p>A significant QSNP value suggests SNP-level heterogeneity.</p>
+<p>This means the SNP may affect one or more traits differently than expected from the common factor model.</p>
+<p>QSNP can be used in two ways:</p>
+<p>As a quality-control metric As a biological result</p>
+<p>As a QC metric, it can help identify SNPs that do not cleanly represent the common factor.</p>
+<p>As a biological result, it can highlight SNPs that differentiate related traits.</p>
+</section>
+<section id="qsnp-as-a-qc-metric" class="level3">
+<h3 class="anchored" data-anchor-id="qsnp-as-a-qc-metric">29. QSNP as a QC Metric</h3>
+<p>Suppose a SNP is significantly associated with an internalizing factor.</p>
+<p>If QSNP is not significant, this suggests that the SNP effect is consistent with the shared factor.</p>
+<p>But if QSNP is highly significant, the SNP may not be a clean factor SNP.</p>
+<p>It may be driven mainly by one phenotype.</p>
+<p>For example, a SNP may look associated with an internalizing factor, but the effect may actually be much stronger for depression than anxiety or PTSD.</p>
+<p>In that case, QSNP warns us that the SNP may have trait-specific effects.</p>
+</section>
+<section id="qsnp-as-a-biological-result" class="level3">
+<h3 class="anchored" data-anchor-id="qsnp-as-a-biological-result">30. QSNP as a Biological Result</h3>
+<p>QSNP is not only a warning. It can also be scientifically interesting.</p>
+<p>A significant QSNP result may reveal SNPs that distinguish traits that are otherwise genetically correlated.</p>
+<p>For example, depression and anxiety may share a broad genetic factor, but some variants may be more specific to depression.</p>
+<p>Similarly, schizophrenia and bipolar disorder may share genetic liability, but some variants may help differentiate them.</p>
+<p>Therefore, QSNP can be used to study genetic specificity within broader shared genetic architecture.</p>
+</section>
+<section id="multiple-factor-models-and-qsnp" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-factor-models-and-qsnp">31. Multiple-Factor Models and QSNP</h3>
+<p>In models with multiple factors, QSNP can be calculated for each SNP-factor relationship.</p>
+<p>This is useful because a SNP may fit one factor well but show heterogeneity for another factor.</p>
+<p>For example, a SNP may operate cleanly through a substance-use factor but show disorder-specific effects within an internalizing factor.</p>
+<p>This makes QSNP especially useful in complex psychiatric models where several correlated factors are estimated together.</p>
+<div id="f98501bd-a727-4888-a1a6-2281fbe84ce0" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genome-wide significant QSNP hits</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Q_SNP_pval <span class="sc">&lt;</span> <span class="fl">5e-8</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Suggestive QSNP hits</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Q_SNP_pval <span class="sc">&lt;</span> <span class="fl">1e-5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+FALSE 
+ 1000 </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+FALSE  TRUE 
+  926    74 </code></pre>
+</div>
+</div>
+</section>
+<section id="interpreting-qsnp" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-qsnp">29. Interpreting QSNP</h3>
+<p>QSNP can be interpreted in two ways.</p>
+<p>First, it can be used as a quality-control metric. If a SNP has a strong factor association but also a very significant QSNP value, the SNP may not represent the common factor cleanly.</p>
+<p>Second, QSNP can be a result of interest. It may identify SNPs that differentiate traits from one another.</p>
+<p>For example, a SNP may be associated with depression but not anxiety, even though both traits load on the same internalizing factor.</p>
+<div id="e2c57d6c-4bc7-49c7-b5fb-bf4792fb45a8" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(INT_GWAS[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 1000 × 24</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">SNP</th>
+<th data-quarto-table-cell-role="th" scope="col">CHR</th>
+<th data-quarto-table-cell-role="th" scope="col">BP</th>
+<th data-quarto-table-cell-role="th" scope="col">MAF</th>
+<th data-quarto-table-cell-role="th" scope="col">A1</th>
+<th data-quarto-table-cell-role="th" scope="col">A2</th>
+<th data-quarto-table-cell-role="th" scope="col">lhs</th>
+<th data-quarto-table-cell-role="th" scope="col">op</th>
+<th data-quarto-table-cell-role="th" scope="col">rhs</th>
+<th data-quarto-table-cell-role="th" scope="col">free</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">Pval_Estimate</th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">chisq_df</th>
+<th data-quarto-table-cell-role="th" scope="col">chisq_pval</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">Q_SNP</th>
+<th data-quarto-table-cell-role="th" scope="col">Q_SNP_df</th>
+<th data-quarto-table-cell-role="th" scope="col">Q_SNP_pval</th>
+<th data-quarto-table-cell-role="th" scope="col">error</th>
+<th data-quarto-table-cell-role="th" scope="col">warning</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">⋯</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rs10030871</td>
+<td>4</td>
+<td>68786</td>
+<td>0.0765408</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8257532</td>
+<td>4.905573</td>
+<td>8</td>
+<td>0.7676193</td>
+<td>18.90557</td>
+<td>3.622121</td>
+<td>3</td>
+<td>0.30526541</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs6599368</td>
+<td>4</td>
+<td>69567</td>
+<td>0.0755467</td>
+<td>A</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8059251</td>
+<td>4.839517</td>
+<td>8</td>
+<td>0.7745831</td>
+<td>18.83952</td>
+<td>3.556062</td>
+<td>3</td>
+<td>0.31356354</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs7678633</td>
+<td>4</td>
+<td>69713</td>
+<td>0.0755467</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.7979215</td>
+<td>4.901617</td>
+<td>8</td>
+<td>0.7680379</td>
+<td>18.90162</td>
+<td>3.618164</td>
+<td>3</td>
+<td>0.30575689</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs13130581</td>
+<td>4</td>
+<td>70392</td>
+<td>0.0725646</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9840311</td>
+<td>5.029483</td>
+<td>8</td>
+<td>0.7544203</td>
+<td>19.02948</td>
+<td>3.746031</td>
+<td>3</td>
+<td>0.29022634</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs13125929</td>
+<td>4</td>
+<td>71566</td>
+<td>0.0725646</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9069168</td>
+<td>5.787662</td>
+<td>8</td>
+<td>0.6710031</td>
+<td>19.78766</td>
+<td>4.504209</td>
+<td>3</td>
+<td>0.21191512</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs6839041</td>
+<td>4</td>
+<td>72048</td>
+<td>0.2693840</td>
+<td>T</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9978168</td>
+<td>3.541053</td>
+<td>8</td>
+<td>0.8959803</td>
+<td>17.54105</td>
+<td>2.257601</td>
+<td>3</td>
+<td>0.52069205</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs6851329</td>
+<td>4</td>
+<td>72303</td>
+<td>0.0725646</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9886240</td>
+<td>4.880091</td>
+<td>8</td>
+<td>0.7703120</td>
+<td>18.88009</td>
+<td>3.596639</td>
+<td>3</td>
+<td>0.30844301</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs10027065</td>
+<td>4</td>
+<td>72939</td>
+<td>0.0755467</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.7715593</td>
+<td>4.943569</td>
+<td>8</td>
+<td>0.7635902</td>
+<td>18.94357</td>
+<td>3.660117</td>
+<td>3</td>
+<td>0.30058151</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs4690284</td>
+<td>4</td>
+<td>73508</td>
+<td>0.1451290</td>
+<td>C</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.1241614</td>
+<td>2.966177</td>
+<td>8</td>
+<td>0.9364621</td>
+<td>16.96618</td>
+<td>1.682725</td>
+<td>3</td>
+<td>0.64078118</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs13119939</td>
+<td>4</td>
+<td>73981</td>
+<td>0.0725646</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9614800</td>
+<td>5.132825</td>
+<td>8</td>
+<td>0.7432898</td>
+<td>19.13283</td>
+<td>3.849373</td>
+<td>3</td>
+<td>0.27819520</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs6599371</td>
+<td>4</td>
+<td>74015</td>
+<td>0.0755467</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8128254</td>
+<td>4.837074</td>
+<td>8</td>
+<td>0.7748395</td>
+<td>18.83707</td>
+<td>3.553622</td>
+<td>3</td>
+<td>0.31387385</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs13125667</td>
+<td>4</td>
+<td>74238</td>
+<td>0.0725646</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9843619</td>
+<td>5.225879</td>
+<td>8</td>
+<td>0.7331836</td>
+<td>19.22588</td>
+<td>3.942427</td>
+<td>3</td>
+<td>0.26774849</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs10001263</td>
+<td>4</td>
+<td>74508</td>
+<td>0.0755467</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.7706384</td>
+<td>5.281466</td>
+<td>8</td>
+<td>0.7271125</td>
+<td>19.28147</td>
+<td>3.998014</td>
+<td>3</td>
+<td>0.26167870</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs11722512</td>
+<td>4</td>
+<td>74639</td>
+<td>0.1819090</td>
+<td>A</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9216326</td>
+<td>7.046880</td>
+<td>8</td>
+<td>0.5315833</td>
+<td>21.04688</td>
+<td>5.763430</td>
+<td>3</td>
+<td>0.12370462</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs13109067</td>
+<td>4</td>
+<td>74815</td>
+<td>0.0755467</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8393225</td>
+<td>4.908892</td>
+<td>8</td>
+<td>0.7672680</td>
+<td>18.90889</td>
+<td>3.625440</td>
+<td>3</td>
+<td>0.30485367</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs13148549</td>
+<td>4</td>
+<td>74983</td>
+<td>0.0755467</td>
+<td>T</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.7773565</td>
+<td>5.186565</td>
+<td>8</td>
+<td>0.7374625</td>
+<td>19.18656</td>
+<td>3.903112</td>
+<td>3</td>
+<td>0.27211808</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs13114862</td>
+<td>4</td>
+<td>75102</td>
+<td>0.0765408</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8046513</td>
+<td>4.687451</td>
+<td>8</td>
+<td>0.7903995</td>
+<td>18.68745</td>
+<td>3.403999</td>
+<td>3</td>
+<td>0.33342816</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs60994255</td>
+<td>4</td>
+<td>77446</td>
+<td>0.1580520</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9382913</td>
+<td>6.899311</td>
+<td>8</td>
+<td>0.5475343</td>
+<td>20.89931</td>
+<td>5.615860</td>
+<td>3</td>
+<td>0.13187081</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs59464888</td>
+<td>4</td>
+<td>77449</td>
+<td>0.1640160</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8781014</td>
+<td>5.984696</td>
+<td>8</td>
+<td>0.6489462</td>
+<td>19.98470</td>
+<td>4.701244</td>
+<td>3</td>
+<td>0.19502698</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs13435282</td>
+<td>4</td>
+<td>79340</td>
+<td>0.1928430</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.6215750</td>
+<td>7.730510</td>
+<td>8</td>
+<td>0.4602277</td>
+<td>21.73051</td>
+<td>6.447058</td>
+<td>3</td>
+<td>0.09177397</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs13434621</td>
+<td>4</td>
+<td>79535</td>
+<td>0.1938370</td>
+<td>C</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.5791460</td>
+<td>6.954466</td>
+<td>8</td>
+<td>0.5415533</td>
+<td>20.95447</td>
+<td>5.671014</td>
+<td>3</td>
+<td>0.12876046</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs13145153</td>
+<td>4</td>
+<td>79719</td>
+<td>0.0765408</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.6384795</td>
+<td>4.872118</td>
+<td>8</td>
+<td>0.7711529</td>
+<td>18.87212</td>
+<td>3.588666</td>
+<td>3</td>
+<td>0.30944321</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs59603164</td>
+<td>4</td>
+<td>80001</td>
+<td>0.1749500</td>
+<td>C</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8474933</td>
+<td>8.281415</td>
+<td>8</td>
+<td>0.4064747</td>
+<td>22.28142</td>
+<td>6.997963</td>
+<td>3</td>
+<td>0.07196273</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs7664056</td>
+<td>4</td>
+<td>80132</td>
+<td>0.0765408</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.6660829</td>
+<td>4.539084</td>
+<td>8</td>
+<td>0.8055102</td>
+<td>18.53908</td>
+<td>3.255634</td>
+<td>3</td>
+<td>0.35386546</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs28716751</td>
+<td>4</td>
+<td>81303</td>
+<td>0.0815109</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.3150613</td>
+<td>2.516640</td>
+<td>8</td>
+<td>0.9609505</td>
+<td>16.51664</td>
+<td>1.233188</td>
+<td>3</td>
+<td>0.74505586</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs2187874</td>
+<td>4</td>
+<td>82321</td>
+<td>0.1640160</td>
+<td>G</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.7757893</td>
+<td>6.046779</td>
+<td>8</td>
+<td>0.6419918</td>
+<td>20.04678</td>
+<td>4.763327</td>
+<td>3</td>
+<td>0.18997076</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs60400620</td>
+<td>4</td>
+<td>84610</td>
+<td>0.1918490</td>
+<td>A</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.6593662</td>
+<td>7.660052</td>
+<td>8</td>
+<td>0.4673615</td>
+<td>21.66005</td>
+<td>6.376598</td>
+<td>3</td>
+<td>0.09465829</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs61447907</td>
+<td>4</td>
+<td>84792</td>
+<td>0.1918490</td>
+<td>C</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.6546304</td>
+<td>7.596372</td>
+<td>8</td>
+<td>0.4738560</td>
+<td>21.59637</td>
+<td>6.312919</td>
+<td>3</td>
+<td>0.09733980</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs7667153</td>
+<td>4</td>
+<td>85422</td>
+<td>0.1918490</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.6540012</td>
+<td>7.607574</td>
+<td>8</td>
+<td>0.4727104</td>
+<td>21.60757</td>
+<td>6.324123</td>
+<td>3</td>
+<td>0.09686277</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs61792225</td>
+<td>4</td>
+<td>85526</td>
+<td>0.1739560</td>
+<td>C</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.7963943</td>
+<td>8.833127</td>
+<td>8</td>
+<td>0.3565683</td>
+<td>22.83313</td>
+<td>7.549675</td>
+<td>3</td>
+<td>0.05629572</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋱</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td>rs6834433</td>
+<td>4</td>
+<td>100294905</td>
+<td>0.2077530</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8712175</td>
+<td>13.430376</td>
+<td>8</td>
+<td>0.0978747603</td>
+<td>27.43038</td>
+<td>12.1469250</td>
+<td>3</td>
+<td>6.896436e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs6857143</td>
+<td>4</td>
+<td>100294928</td>
+<td>0.2077530</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9057906</td>
+<td>13.365897</td>
+<td>8</td>
+<td>0.0998650553</td>
+<td>27.36590</td>
+<td>12.0824435</td>
+<td>3</td>
+<td>7.106014e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs6834464</td>
+<td>4</td>
+<td>100294945</td>
+<td>0.2077530</td>
+<td>T</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8381863</td>
+<td>13.759848</td>
+<td>8</td>
+<td>0.0882436578</td>
+<td>27.75985</td>
+<td>12.4763917</td>
+<td>3</td>
+<td>5.917295e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs13121469</td>
+<td>4</td>
+<td>100295047</td>
+<td>0.1172960</td>
+<td>C</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.4026174</td>
+<td>26.646167</td>
+<td>8</td>
+<td>0.0008136034</td>
+<td>40.64617</td>
+<td>25.3627149</td>
+<td>3</td>
+<td>1.296593e-05</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs56279505</td>
+<td>4</td>
+<td>100295240</td>
+<td>0.0964215</td>
+<td>T</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8475897</td>
+<td>31.241304</td>
+<td>8</td>
+<td>0.0001272647</td>
+<td>45.24130</td>
+<td>29.9578521</td>
+<td>3</td>
+<td>1.408519e-06</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs1121534</td>
+<td>4</td>
+<td>100295415</td>
+<td>0.2087480</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.8676112</td>
+<td>13.834399</td>
+<td>8</td>
+<td>0.0861851697</td>
+<td>27.83440</td>
+<td>12.5509449</td>
+<td>3</td>
+<td>5.715560e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs6827898</td>
+<td>4</td>
+<td>100295863</td>
+<td>0.1172960</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.3756755</td>
+<td>24.804186</td>
+<td>8</td>
+<td>0.0016778555</td>
+<td>38.80419</td>
+<td>23.5207303</td>
+<td>3</td>
+<td>3.144944e-05</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs10030511</td>
+<td>4</td>
+<td>100296248</td>
+<td>0.4473160</td>
+<td>C</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.5111428</td>
+<td>6.108862</td>
+<td>8</td>
+<td>0.6350390678</td>
+<td>20.10886</td>
+<td>4.8254096</td>
+<td>3</td>
+<td>1.850371e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs10032906</td>
+<td>4</td>
+<td>100296355</td>
+<td>0.2067590</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9844021</td>
+<td>16.448897</td>
+<td>8</td>
+<td>0.0363875630</td>
+<td>30.44890</td>
+<td>15.1654448</td>
+<td>3</td>
+<td>1.680586e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs34980886</td>
+<td>4</td>
+<td>100296402</td>
+<td>0.1172960</td>
+<td>T</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.3479156</td>
+<td>24.096953</td>
+<td>8</td>
+<td>0.0022075521</td>
+<td>38.09695</td>
+<td>22.8135003</td>
+<td>3</td>
+<td>4.416375e-05</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs10000067</td>
+<td>4</td>
+<td>100296476</td>
+<td>0.2067590</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9678549</td>
+<td>16.609195</td>
+<td>8</td>
+<td>0.0344457602</td>
+<td>30.60920</td>
+<td>15.3257420</td>
+<td>3</td>
+<td>1.558415e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs76088139</td>
+<td>4</td>
+<td>100296678</td>
+<td>0.2067590</td>
+<td>C</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9823261</td>
+<td>16.046919</td>
+<td>8</td>
+<td>0.0417134522</td>
+<td>30.04692</td>
+<td>14.7634672</td>
+<td>3</td>
+<td>2.030356e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs35208813</td>
+<td>4</td>
+<td>100296684</td>
+<td>0.4483100</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.4735511</td>
+<td>5.846655</td>
+<td>8</td>
+<td>0.6644040158</td>
+<td>19.84666</td>
+<td>4.5632037</td>
+<td>3</td>
+<td>2.067215e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs35796885</td>
+<td>4</td>
+<td>100296748</td>
+<td>0.4483100</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.4841398</td>
+<td>6.394731</td>
+<td>8</td>
+<td>0.6031062592</td>
+<td>20.39473</td>
+<td>5.1112786</td>
+<td>3</td>
+<td>1.638278e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs12651165</td>
+<td>4</td>
+<td>100296791</td>
+<td>0.2067590</td>
+<td>C</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9046283</td>
+<td>16.548481</td>
+<td>8</td>
+<td>0.0351695859</td>
+<td>30.54848</td>
+<td>15.2650294</td>
+<td>3</td>
+<td>1.603614e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs66503521</td>
+<td>4</td>
+<td>100297205</td>
+<td>0.2067590</td>
+<td>C</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9029744</td>
+<td>16.037486</td>
+<td>8</td>
+<td>0.0418467104</td>
+<td>30.03749</td>
+<td>14.7540322</td>
+<td>3</td>
+<td>2.039379e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs12502498</td>
+<td>4</td>
+<td>100297551</td>
+<td>0.3240560</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.4844888</td>
+<td>5.787124</td>
+<td>8</td>
+<td>0.6710632139</td>
+<td>19.78712</td>
+<td>4.5036703</td>
+<td>3</td>
+<td>2.119631e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs28818226</td>
+<td>4</td>
+<td>100297591</td>
+<td>0.2067590</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9857570</td>
+<td>16.463681</td>
+<td>8</td>
+<td>0.0362042963</td>
+<td>30.46368</td>
+<td>15.1802287</td>
+<td>3</td>
+<td>1.668932e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs9991913</td>
+<td>4</td>
+<td>100297896</td>
+<td>0.2067590</td>
+<td>G</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9932682</td>
+<td>16.589447</td>
+<td>8</td>
+<td>0.0346796579</td>
+<td>30.58945</td>
+<td>15.3059960</td>
+<td>3</td>
+<td>1.572975e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs9992022</td>
+<td>4</td>
+<td>100297998</td>
+<td>0.2067590</td>
+<td>G</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9696586</td>
+<td>16.470744</td>
+<td>8</td>
+<td>0.0361170551</td>
+<td>30.47074</td>
+<td>15.1872930</td>
+<td>3</td>
+<td>1.663391e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs13110291</td>
+<td>4</td>
+<td>100298393</td>
+<td>0.1182900</td>
+<td>A</td>
+<td>G</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.3829837</td>
+<td>23.222449</td>
+<td>8</td>
+<td>0.0030900849</td>
+<td>37.22245</td>
+<td>21.9389962</td>
+<td>3</td>
+<td>6.716566e-05</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs56899508</td>
+<td>4</td>
+<td>100298398</td>
+<td>0.1182900</td>
+<td>G</td>
+<td>T</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.3767382</td>
+<td>23.128751</td>
+<td>8</td>
+<td>0.0032028187</td>
+<td>37.12875</td>
+<td>21.8452984</td>
+<td>3</td>
+<td>7.024885e-05</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs9994612</td>
+<td>4</td>
+<td>100298399</td>
+<td>0.2067590</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9960079</td>
+<td>16.491560</td>
+<td>8</td>
+<td>0.0358610431</td>
+<td>30.49156</td>
+<td>15.2081083</td>
+<td>3</td>
+<td>1.647172e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td><span style="white-space:pre-wrap">rs283406 </span></td>
+<td>4</td>
+<td>100298471</td>
+<td>0.0894632</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.2162775</td>
+<td>1.778214</td>
+<td>8</td>
+<td>0.9870725654</td>
+<td>15.77821</td>
+<td>0.4947615</td>
+<td>3</td>
+<td>9.200408e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs10017136</td>
+<td>4</td>
+<td>100298681</td>
+<td>0.2067590</td>
+<td>A</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9678550</td>
+<td>16.543299</td>
+<td>8</td>
+<td>0.0352320187</td>
+<td>30.54330</td>
+<td>15.2598444</td>
+<td>3</td>
+<td>1.607534e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs9997820</td>
+<td>4</td>
+<td>100299450</td>
+<td>0.4502980</td>
+<td>G</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.4744628</td>
+<td>6.772480</td>
+<td>8</td>
+<td>0.5613676486</td>
+<td>20.77248</td>
+<td>5.4890277</td>
+<td>3</td>
+<td>1.392964e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs9997653</td>
+<td>4</td>
+<td>100299453</td>
+<td>0.3260440</td>
+<td>C</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.4702161</td>
+<td>5.658205</td>
+<td>8</td>
+<td>0.6854562084</td>
+<td>19.65821</td>
+<td>4.3747501</td>
+<td>3</td>
+<td>2.237381e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs1908962</td>
+<td>4</td>
+<td>100299641</td>
+<td>0.4483100</td>
+<td>C</td>
+<td>A</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.5317039</td>
+<td>6.267869</td>
+<td>8</td>
+<td>0.6172541670</td>
+<td>20.26787</td>
+<td>4.9844168</td>
+<td>3</td>
+<td>1.729418e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="even">
+<td>rs1908963</td>
+<td>4</td>
+<td>100299664</td>
+<td>0.2067590</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.9495890</td>
+<td>16.835809</td>
+<td>8</td>
+<td>0.0318649312</td>
+<td>30.83581</td>
+<td>15.5523550</td>
+<td>3</td>
+<td>1.400596e-03</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+<tr class="odd">
+<td>rs1837932</td>
+<td>4</td>
+<td>100299978</td>
+<td>0.4483100</td>
+<td>T</td>
+<td>C</td>
+<td>F1</td>
+<td>~</td>
+<td>SNP</td>
+<td>6</td>
+<td>⋯</td>
+<td>0.5111001</td>
+<td>6.685218</td>
+<td>8</td>
+<td>0.5709443237</td>
+<td>20.68522</td>
+<td>5.4017663</td>
+<td>3</td>
+<td>1.446336e-01</td>
+<td>0</td>
+<td><span style="white-space:pre-wrap">lavaan-&gt;lav_lavaan_step02_options(): the following argument(s) override(s) the options in slotOptions: se</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="practice-section-anthropometric-traits" class="level3">
+<h3 class="anchored" data-anchor-id="practice-section-anthropometric-traits">31. Practice Section: Anthropometric Traits</h3>
+<p>The workshop also provides an additional LDSC object for anthropometric traits.</p>
+<p>These include:</p>
+<ul>
+<li>BMI: Body Mass Index</li>
+<li>WHR: Waist-Hip Ratio</li>
+<li>Waist: Waist Circumference</li>
+<li>Hip: Hip Circumference</li>
+<li>CO: Childhood Obesity</li>
+<li>Height: Height</li>
+<li>BL: Birth Length</li>
+<li>BW: Birth Weight</li>
+<li>IHC: Infant Head Circumference</li>
+</ul>
+<p>The goal is to practice specifying your own model.</p>
+<div id="40f937fd-a1a9-4990-b0f5-185072ef2a4b" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load anthropometric LDSC object</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/Anthro_LDSC.RData"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariance structure</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> anthro</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check available traits</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(anthro<span class="sc">$</span>S)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>'BMI'</li><li>'WHR'</li><li>'CO'</li><li>'Waist'</li><li>'Hip'</li><li>'Height'</li><li>'IHC'</li><li>'BL'</li><li>'BW'</li></ol>
+</div>
+</div>
+</section>
+<section id="example-anthropometric-factor-model" class="level3">
+<h3 class="anchored" data-anchor-id="example-anthropometric-factor-model">32. Example Anthropometric Factor Model</h3>
+<p>One possible model is a general body-size factor.</p>
+<p>This is only an example. In real research, you should write down your model before running it.</p>
+<div id="98128b99-7865-4700-9383-a61a17a5013f" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>Your.Model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="st">BodySize =~ BMI + WHR + Waist + Hip</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>std.lv <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>YourResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> Your.Model,</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> std.lv</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>results</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>modelfit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Running primary model"
+[1] "Calculating Standardized Results"
+[1] "Calculating SRMR"
+elapsed 
+  0.099 
+[1] "The S matrix was smoothed prior to model estimation due to a non-positive definite matrix. The largest absolute difference in a cell between the smoothed and non-smoothed matrix was  5.03885789198688e-05 As a result of the smoothing, the largest Z-statistic change for the genetic covariances was  0.00627650037966632 . We recommend setting the smooth_check argument to true if you are going to run a multivariate GWAS."</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 9 × 9</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lhs</th>
+<th data-quarto-table-cell-role="th" scope="col">op</th>
+<th data-quarto-table-cell-role="th" scope="col">rhs</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_Est</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_All</th>
+<th data-quarto-table-cell-role="th" scope="col">p_value</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>BodySize</td>
+<td>=~</td>
+<td><span style="white-space:pre-wrap">BMI </span></td>
+<td>0.32835242</td>
+<td>0.00834346434861948</td>
+<td>0.9261942</td>
+<td>0.0235346832851601</td>
+<td>0.9261941</td>
+<td><span style="white-space:pre-wrap">&lt; 5e-300 </span></td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>BodySize</td>
+<td>=~</td>
+<td>WHR</td>
+<td>0.17364843</td>
+<td>0.00899442936403122</td>
+<td>0.5823406</td>
+<td>0.0301633569935819</td>
+<td>0.5823405</td>
+<td>4.76178089813194e-83</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>BodySize</td>
+<td>=~</td>
+<td><span style="white-space:pre-wrap">Waist </span></td>
+<td>0.37150337</td>
+<td>0.00849900513137077</td>
+<td>1.0554343</td>
+<td>0.0241454997322284</td>
+<td>1.0554343</td>
+<td><span style="white-space:pre-wrap">&lt; 5e-300 </span></td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>BodySize</td>
+<td>=~</td>
+<td>Hip</td>
+<td>0.29921533</td>
+<td>0.00998707625847693</td>
+<td>0.8166573</td>
+<td>0.0272580315696167</td>
+<td>0.8166573</td>
+<td>3.23530305105103e-197</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>BMI</td>
+<td>~~</td>
+<td>BMI</td>
+<td>0.01786761</td>
+<td>0.00214989324612072</td>
+<td>0.1421646</td>
+<td>0.0171056871098916</td>
+<td>0.1421646</td>
+<td>9.49574545542005e-17</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">9</td>
+<td>WHR</td>
+<td>~~</td>
+<td>WHR</td>
+<td>0.05876384</td>
+<td>0.00500826060659902</td>
+<td>0.6608797</td>
+<td>0.0563247279072853</td>
+<td>0.6608795</td>
+<td>8.59540394910649e-32</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">8</td>
+<td>Waist</td>
+<td>~~</td>
+<td>Waist</td>
+<td>-0.01411697</td>
+<td>0.0014484156789879</td>
+<td>-0.1139415</td>
+<td>0.0116904301220693</td>
+<td>-0.1139415</td>
+<td>1.90955940051609e-22</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">7</td>
+<td>Hip</td>
+<td>~~</td>
+<td>Hip</td>
+<td>0.04471200</td>
+<td>0.00409589113627207</td>
+<td>0.3330708</td>
+<td>0.0305112937271513</td>
+<td>0.3330708</td>
+<td>9.6335396382315e-28</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>BodySize</td>
+<td>~~</td>
+<td>BodySize</td>
+<td>1.00000000</td>
+<td></td>
+<td>1.0000000</td>
+<td></td>
+<td>1.0000000</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 1 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p_chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">CFI</th>
+<th data-quarto-table-cell-role="th" scope="col">SRMR</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">df</td>
+<td>4808.273</td>
+<td>2</td>
+<td>0</td>
+<td>4824.273</td>
+<td>0.9790462</td>
+<td>0.07075376</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="example-two-factor-model" class="level3">
+<h3 class="anchored" data-anchor-id="example-two-factor-model">33. Example Two-Factor Model</h3>
+<p>We may hypothesize that body mass and early growth are partly distinct genetic dimensions.</p>
+<p>For example:</p>
+<ul>
+<li>AdultBody: BMI, WHR, Waist, Hip</li>
+<li>EarlyGrowth: BL, BW, IHC</li>
+</ul>
+<div id="9a26d22c-a737-4358-ac2c-05c8d48cdd36" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>TwoFactor.Model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="st">AdultBody =~ BMI + WHR + Waist + Hip</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="st">EarlyGrowth =~ BL + BW + IHC</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="st">AdultBody ~~ EarlyGrowth</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>TwoFactorResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> TwoFactor.Model,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">TRUE</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>results</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>modelfit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Running primary model"
+[1] "Calculating Standardized Results"
+[1] "Calculating SRMR"
+elapsed 
+  0.139 
+[1] "The S matrix was smoothed prior to model estimation due to a non-positive definite matrix. The largest absolute difference in a cell between the smoothed and non-smoothed matrix was  7.68229238531509e-05 As a result of the smoothing, the largest Z-statistic change for the genetic covariances was  0.00971267593380176 . We recommend setting the smooth_check argument to true if you are going to run a multivariate GWAS."</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 17 × 9</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lhs</th>
+<th data-quarto-table-cell-role="th" scope="col">op</th>
+<th data-quarto-table-cell-role="th" scope="col">rhs</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_Est</th>
+<th data-quarto-table-cell-role="th" scope="col">Unstand_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_Genotype_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">STD_All</th>
+<th data-quarto-table-cell-role="th" scope="col">p_value</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td><span style="white-space:pre-wrap">AdultBody </span></td>
+<td>=~</td>
+<td><span style="white-space:pre-wrap">BMI </span></td>
+<td>0.32355145</td>
+<td>0.00848257151119238</td>
+<td>0.9126525</td>
+<td>0.0239270666230049</td>
+<td>0.9126526</td>
+<td><span style="white-space:pre-wrap">&lt; 5e-300 </span></td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>AdultBody</td>
+<td>=~</td>
+<td>WHR</td>
+<td>0.17014707</td>
+<td>0.00915015430923173</td>
+<td>0.5705696</td>
+<td>0.0306840495730172</td>
+<td>0.5705696</td>
+<td>3.52749230117905e-77</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td><span style="white-space:pre-wrap">AdultBody </span></td>
+<td>=~</td>
+<td><span style="white-space:pre-wrap">Waist </span></td>
+<td>0.37262394</td>
+<td>0.00839616539135095</td>
+<td>1.0585040</td>
+<td>0.0238508087911616</td>
+<td>1.0585043</td>
+<td><span style="white-space:pre-wrap">&lt; 5e-300 </span></td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>AdultBody</td>
+<td>=~</td>
+<td>Hip</td>
+<td>0.30767486</td>
+<td>0.00991987368769025</td>
+<td>0.8397060</td>
+<td>0.0270733262889365</td>
+<td>0.8397059</td>
+<td>3.27994599611528e-211</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">10</td>
+<td>EarlyGrowth</td>
+<td>=~</td>
+<td>BL</td>
+<td>0.31883086</td>
+<td>0.0424505344230068</td>
+<td>0.7863983</td>
+<td>0.104704413507432</td>
+<td>0.7863989</td>
+<td>5.88371366564811e-14</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">11</td>
+<td>EarlyGrowth</td>
+<td>=~</td>
+<td>BW</td>
+<td>0.25182147</td>
+<td>0.0369779692381788</td>
+<td>0.7456392</td>
+<td>0.109491090900721</td>
+<td>0.7456389</td>
+<td>9.75711480693518e-12</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">12</td>
+<td>EarlyGrowth</td>
+<td>=~</td>
+<td>IHC</td>
+<td>0.38776135</td>
+<td>0.0639504168355385</td>
+<td>0.8067723</td>
+<td>0.133054274151609</td>
+<td>0.8067722</td>
+<td>1.33216727234899e-09</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>AdultBody</td>
+<td>~~</td>
+<td>EarlyGrowth</td>
+<td>0.20561960</td>
+<td>0.0457670518741615</td>
+<td>0.2056203</td>
+<td>0.0457670449740265</td>
+<td>0.2056203</td>
+<td>7.03116016834168e-06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">8</td>
+<td>BMI</td>
+<td>~~</td>
+<td>BMI</td>
+<td>0.02099732</td>
+<td>0.00236172074867183</td>
+<td>0.1670651</td>
+<td>0.0187911396306323</td>
+<td>0.1670652</td>
+<td>6.07311168507216e-19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">17</td>
+<td>WHR</td>
+<td>~~</td>
+<td>WHR</td>
+<td>0.05997650</td>
+<td>0.00508748828560331</td>
+<td>0.6744501</td>
+<td>0.0572099863458111</td>
+<td>0.6744503</td>
+<td>4.44686078822693e-32</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">16</td>
+<td>Waist</td>
+<td>~~</td>
+<td>Waist</td>
+<td>-0.01492436</td>
+<td>0.00155917314029345</td>
+<td>-0.1204312</td>
+<td>0.0125816586271371</td>
+<td>-0.1204313</td>
+<td>1.04884008907025e-21</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">14</td>
+<td>Hip</td>
+<td>~~</td>
+<td>Hip</td>
+<td>0.03959078</td>
+<td>0.00385032587902093</td>
+<td>0.2948940</td>
+<td>0.0286792741025182</td>
+<td>0.2948940</td>
+<td>8.45512132535067e-25</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">15</td>
+<td>IHC</td>
+<td>~~</td>
+<td>IHC</td>
+<td>0.08065102</td>
+<td>0.058447583363325</td>
+<td>0.3491186</td>
+<td>0.253010103779767</td>
+<td>0.3491186</td>
+<td>0.167621642770187</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">7</td>
+<td>BL</td>
+<td>~~</td>
+<td>BL</td>
+<td>0.06272152</td>
+<td>0.0309055815553739</td>
+<td>0.3815762</td>
+<td>0.188018927129747</td>
+<td>0.3815767</td>
+<td>0.0424118546489747</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">9</td>
+<td>BW</td>
+<td>~~</td>
+<td>BW</td>
+<td>0.05064431</td>
+<td>0.0212845979481534</td>
+<td>0.4440231</td>
+<td>0.186611198922835</td>
+<td>0.4440227</td>
+<td>0.0173414200434353</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>AdultBody</td>
+<td>~~</td>
+<td>AdultBody</td>
+<td>1.00000000</td>
+<td></td>
+<td>1.0000000</td>
+<td></td>
+<td>1.0000000</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">13</td>
+<td>EarlyGrowth</td>
+<td>~~</td>
+<td>EarlyGrowth</td>
+<td>1.00000000</td>
+<td></td>
+<td>1.0000000</td>
+<td></td>
+<td>1.0000000</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 1 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p_chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">CFI</th>
+<th data-quarto-table-cell-role="th" scope="col">SRMR</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">df</td>
+<td>4994.695</td>
+<td>13</td>
+<td>0</td>
+<td>5024.695</td>
+<td>0.9822088</td>
+<td>0.09017272</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="comparing-models" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-models">34. Comparing Models</h3>
+<p>We can compare models using fit statistics such as AIC, CFI, and SRMR.</p>
+<p>Lower AIC suggests a better-fitting model among competing models.</p>
+<p>Higher CFI and lower SRMR suggest better absolute fit.</p>
+<div id="72b9b175-5fa2-4c91-868d-da6e01c4ffb9" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>modelfit</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>modelfit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 1 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p_chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">CFI</th>
+<th data-quarto-table-cell-role="th" scope="col">SRMR</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">df</td>
+<td>4808.273</td>
+<td>2</td>
+<td>0</td>
+<td>4824.273</td>
+<td>0.9790462</td>
+<td>0.07075376</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 1 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p_chisq</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+<th data-quarto-table-cell-role="th" scope="col">CFI</th>
+<th data-quarto-table-cell-role="th" scope="col">SRMR</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">df</td>
+<td>4994.695</td>
+<td>13</td>
+<td>0</td>
+<td>5024.695</td>
+<td>0.9822088</td>
+<td>0.09017272</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="important-practical-advice" class="level3">
+<h3 class="anchored" data-anchor-id="important-practical-advice">35. Important Practical Advice</h3>
+<p>Genomic SEM is flexible, but this flexibility should be used carefully.</p>
+<p>Do not simply try many models until one gives a significant result.</p>
+<p>A better workflow is:</p>
+<ol type="1">
+<li>Define your research question.</li>
+<li>Write down your hypothesized model.</li>
+<li>Run the model.</li>
+<li>Check model fit.</li>
+<li>Interpret parameters cautiously.</li>
+<li>If using data-driven exploration, clearly report it as exploratory.</li>
+</ol>
+<p>This is especially important in multivariate genetic modeling because many reasonable models may appear plausible.</p>
+</section>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">36. Summary</h3>
+<p>In this tutorial, we covered the main concepts behind multivariate genetic analysis using Genomic SEM.</p>
+<p>We learned that complex traits are highly polygenic and that LD Score Regression uses the relationship between LD score and GWAS signal to estimate SNP heritability.</p>
+<p>We then extended this idea to genetic covariance and genetic correlation across traits.</p>
+<p>Finally, we introduced Genomic SEM as a framework for fitting structural models to genetic covariance matrices and for running multivariate GWAS on latent genetic factors.</p>
+<p>The key idea is simple but powerful:</p>
+<blockquote class="blockquote">
+<p>Instead of studying each trait separately, Genomic SEM allows us to model shared and trait-specific genetic architecture across multiple traits.</p>
+</blockquote>
+<p>This makes it especially useful for psychiatric, behavioral, anthropometric, and medical traits where genetic overlap is common.</p>
+</section>
+<section id="key-takeaways" class="level3">
+<h3 class="anchored" data-anchor-id="key-takeaways">37. Key Takeaways</h3>
+<ul>
+<li>Complex traits are usually highly polygenic.</li>
+<li>LD scores summarize how much LD each SNP has with nearby SNPs.</li>
+<li>LD Score Regression estimates SNP heritability from GWAS summary statistics.</li>
+<li>Cross-trait LD Score Regression estimates genetic covariance and genetic correlation.</li>
+<li>Genomic SEM fits structural equation models to genetic covariance matrices.</li>
+<li>A common factor model can capture shared genetic liability across traits.</li>
+<li>Multivariate GWAS can test SNP effects on latent genetic factors.</li>
+<li>QSNP tests whether SNP effects are consistent with the common factor model or show trait-specific heterogeneity.</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

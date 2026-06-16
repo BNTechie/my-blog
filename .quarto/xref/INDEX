@@ -139,5 +139,47 @@
   },
   "tutorials/blog_SVD/SVD.ipynb": {
     "SVD.html": "235bc760"
+  },
+  "tutorials/blog_pValues/p_Values.ipynb": {
+    "p_Values.html": "efb1ebb7"
+  },
+  "tutorials/blog_REML/REML.ipynb": {
+    "REML.html": "5aca87f2"
+  },
+  "tutorials/common_terms_genetics/GRM.ipynb": {
+    "GRM.html": "2385586f"
+  },
+  "tutorials/blog_correlation_covariance/Correlation_covariance.ipynb": {
+    "Correlation_covariance.html": "3a35d483"
+  },
+  "tutorials/blog_Colocalizatiom/Colocalization.ipynb": {
+    "Colocalization.html": "8533c89b"
+  },
+  "tutorials/blog_SEM/SEM.ipynb": {
+    "SEM.html": "bc8b4467"
+  },
+  "tutorials/blog_eQTL/Colocalization.ipynb": {
+    "Colocalization.html": "d26798a0"
+  },
+  "tutorials/blog_genetic_drift/Genetic_Drift.ipynb": {
+    "Genetic_Drift.html": "966b209d"
+  },
+  "tutorials/blog_GWAS/GWAS.ipynb": {
+    "GWAS.html": "76f1c65f"
+  },
+  "tutorials/blog_gen_env_comp/modeling_genetic_environmental_component.ipynb": {
+    "modeling_genetic_environmental_component.html": "4ed94689"
+  },
+  "tutorials/blog_PRS/PRS_prediction.ipynb": {
+    "PRS_prediction.html": "7739559d"
+  },
+  "tutorials/blog_multivariate_concepts/genomicSEM.ipynb": {
+    "genomicSEM.html": "32eb0956"
+  },
+  "tutorials/blog_causation/Mendelian_Randomization.ipynb": {
+    "Mendelian_Randomization.html": "7dde8505"
+  },
+  "tutorials/blog_eQTL/eQTL.ipynb": {
+    "eQTL.html": "8aab61a4"
   }
 }

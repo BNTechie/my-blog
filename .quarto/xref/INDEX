@@ -181,5 +181,8 @@
   },
   "tutorials/blog_eQTL/eQTL.ipynb": {
     "eQTL.html": "8aab61a4"
+  },
+  "tutorials/blog_MR/Mendelian_Randomization.ipynb": {
+    "Mendelian_Randomization.html": "043f4f37"
   }
 }

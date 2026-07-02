@@ -2,10 +2,10 @@
   {
     "listing": "/tutorials/index.html",
     "items": [
-      "/tutorials/blog_MR/Mendelian_Randomization.html",
-      "/tutorials/blog_eQTL/eQTL.html",
       "/tutorials/blog_gen_env_comp/modeling_genetic_environmental_component.html",
       "/tutorials/blog_multivariate_concepts/genomicSEM.html",
+      "/tutorials/blog_MR/Mendelian_Randomization.html",
+      "/tutorials/blog_eQTL/eQTL.html",
       "/tutorials/blog_PRS/PRS_prediction.html",
       "/tutorials/blog_GWAS/GWAS.html",
       "/tutorials/blog_genetic_drift/Genetic_Drift.html",

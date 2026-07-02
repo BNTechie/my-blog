@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Getting Started with Local LLMs using LangChain and Ollama – Nivedita’s Blog</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -150,10 +153,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#simple-chat-qa" id="toc-simple-chat-qa" class="nav-link active" data-scroll-target="#simple-chat-qa">Simple Chat / Q&amp;A</a></li>
-  <li><a href="#summarizing-text" id="toc-summarizing-text" class="nav-link" data-scroll-target="#summarizing-text">Summarizing text</a></li>
-  <li><a href="#sentiment-analysis" id="toc-sentiment-analysis" class="nav-link" data-scroll-target="#sentiment-analysis">Sentiment Analysis</a></li>
-  <li><a href="#creative-generation" id="toc-creative-generation" class="nav-link" data-scroll-target="#creative-generation">Creative generation</a></li>
+  <li><a href="#simple-chat-qa" id="toc-simple-chat-qa" class="nav-link active" data-scroll-target="#simple-chat-qa"><span class="header-section-number">1</span> Simple Chat / Q&amp;A</a></li>
+  <li><a href="#summarizing-text" id="toc-summarizing-text" class="nav-link" data-scroll-target="#summarizing-text"><span class="header-section-number">2</span> Summarizing text</a></li>
+  <li><a href="#sentiment-analysis" id="toc-sentiment-analysis" class="nav-link" data-scroll-target="#sentiment-analysis"><span class="header-section-number">3</span> Sentiment Analysis</a></li>
+  <li><a href="#creative-generation" id="toc-creative-generation" class="nav-link" data-scroll-target="#creative-generation"><span class="header-section-number">4</span> Creative generation</a></li>
   </ul>
 </nav>
     </div>
@@ -208,17 +211,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In this tutorial, we explore how to use LangChain together with Ollama to interact with a locally running LLM. Rather than focusing on theory, the goal is to demonstrate practical patterns that can be reused in real-world applications.</p>
 <p>We will walk through a series of progressively useful tasks: starting with simple question-answering, moving to text summarization and sentiment analysis, and finally exploring creative text generation. Each example highlights how prompt design and chaining can be used to structure interactions with the model.</p>
 <p>By the end of this tutorial, you will have a working understanding of how to build lightweight, local LLM pipelines for common natural language processing tasks.</p>
-<section id="simple-chat-qa" class="level1">
-<h1>Simple Chat / Q&amp;A</h1>
+<section id="simple-chat-qa" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Simple Chat / Q&amp;A</h1>
 <div id="6fbc8595-73a0-4816-8fc1-82d56a21a17c" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip install -U langchain-ollama</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip install -U langchain-ollama</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="bc16ad55-4614-443e-8173-28412431f8de" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip uninstall langchain langchain-core langchain-community -y</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip install langchain langchain-core langchain-community langchain-ollama</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip uninstall langchain langchain-core langchain-community -y</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip install langchain langchain-core langchain-community langchain-ollama</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="aecda530-13bb-444d-9a6e-e07ee064b893" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
@@ -229,17 +232,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> OllamaLLM(model<span class="op">=</span><span class="st">"llama2"</span>)</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>chain <span class="op">=</span> prompt <span class="op">|</span> llm</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chain.invoke({}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chain.invoke({}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Overfitting is a common problem in machine learning where a model is trained too well on the training data and fails to generalize well to new, unseen data. This occurs when a model becomes too complex and learns the noise or random fluctuations in the training data rather than the underlying patterns. As a result, the model performs poorly on new data, resulting in high error rates. Overfitting can be prevented by using techniques such as regularization, cross-validation, and early stopping to reduce the complexity of the model and improve its ability to generalize.</code></pre>
 </div>
 </div>
 </section>
-<section id="summarizing-text" class="level1">
-<h1>Summarizing text</h1>
+<section id="summarizing-text" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Summarizing text</h1>
 <div id="bfe2b3d5-857a-4c1d-8eb5-f8d5da69345c" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
@@ -253,7 +256,7 @@ Overfitting is a common problem in machine learning where a model is trained too
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>article <span class="op">=</span> <span class="st">"""Artificial intelligence is rapidly changing...</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">...businesses and individuals are adopting it across industries."""</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chain.invoke({<span class="st">"text"</span>: article}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chain.invoke({<span class="st">"text"</span>: article}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 • Artificial intelligence (AI) is transforming various industries and sectors.
@@ -262,10 +265,10 @@ Overfitting is a common problem in machine learning where a model is trained too
 </div>
 </div>
 </section>
-<section id="sentiment-analysis" class="level1">
-<h1>Sentiment Analysis</h1>
+<section id="sentiment-analysis" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Sentiment Analysis</h1>
 <div id="99f5e2b2-d1ee-4719-ac5f-08fef9527890" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
@@ -281,7 +284,7 @@ Overfitting is a common problem in machine learning where a model is trained too
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"The app keeps crashing!"</span>,</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"It's fine, nothing special."</span></span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>]:</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>t<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>chain<span class="sc">.</span>invoke({<span class="st">'text'</span>: t})<span class="sc">.</span>strip()<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>t<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>chain<span class="sc">.</span>invoke({<span class="st">'text'</span>: t})<span class="sc">.</span>strip()<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>I love this new feature! → Positive
 The app keeps crashing! → Positive
@@ -289,10 +292,10 @@ It's fine, nothing special. → The sentiment in the statement "It's fine, nothi
 </div>
 </div>
 </section>
-<section id="creative-generation" class="level1">
-<h1>Creative generation</h1>
+<section id="creative-generation" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Creative generation</h1>
 <div id="7b9fc92e-197e-48b3-adb1-cde9d404f75d" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(llm.invoke(<span class="st">"Write a short bedtime story about a curious data scientist who teaches AI to dream."</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(llm.invoke(<span class="st">"Write a short bedtime story about a curious data scientist who teaches AI to dream."</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Once upon a time, there was a curious data scientist named Emma who had always been fascinated by the mysteries of the human mind. She spent her days analyzing data and uncovering patterns, but she couldn't shake the feeling that there was something more to the world than what could be measured and quantified.
@@ -370,13 +373,14 @@ The end.</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Why My Model Worked Locally but Failed on HPC – Nivedita’s Blog</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -150,21 +153,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#local-machine-vs-hpc" id="toc-local-machine-vs-hpc" class="nav-link active" data-scroll-target="#local-machine-vs-hpc">Local Machine vs HPC</a></li>
-  <li><a href="#a-simple-local-training-script" id="toc-a-simple-local-training-script" class="nav-link" data-scroll-target="#a-simple-local-training-script">A Simple Local Training Script</a></li>
-  <li><a href="#problem-1-relative-paths-break" id="toc-problem-1-relative-paths-break" class="nav-link" data-scroll-target="#problem-1-relative-paths-break">Problem 1: Relative Paths Break</a></li>
-  <li><a href="#problem-2-output-directory-does-not-exist" id="toc-problem-2-output-directory-does-not-exist" class="nav-link" data-scroll-target="#problem-2-output-directory-does-not-exist">Problem 2: Output Directory Does Not Exist</a></li>
-  <li><a href="#problem-3-n_jobs-1-can-be-dangerous-on-hpc" id="toc-problem-3-n_jobs-1-can-be-dangerous-on-hpc" class="nav-link" data-scroll-target="#problem-3-n_jobs-1-can-be-dangerous-on-hpc">Problem 3: <code>n_jobs=-1</code> Can Be Dangerous on HPC</a></li>
-  <li><a href="#a-better-hpc-ready-python-script" id="toc-a-better-hpc-ready-python-script" class="nav-link" data-scroll-target="#a-better-hpc-ready-python-script">A Better HPC-Ready Python Script</a></li>
-  <li><a href="#a-basic-slurm-script" id="toc-a-basic-slurm-script" class="nav-link" data-scroll-target="#a-basic-slurm-script">A Basic SLURM Script</a></li>
-  <li><a href="#real-debugging-example-1-file-not-found" id="toc-real-debugging-example-1-file-not-found" class="nav-link" data-scroll-target="#real-debugging-example-1-file-not-found">Real Debugging Example 1: “File Not Found”</a></li>
-  <li><a href="#real-debugging-example-2-module-not-found" id="toc-real-debugging-example-2-module-not-found" class="nav-link" data-scroll-target="#real-debugging-example-2-module-not-found">Real Debugging Example 2: “Module Not Found”</a></li>
-  <li><a href="#real-debugging-example-3-job-was-killed-because-of-memory" id="toc-real-debugging-example-3-job-was-killed-because-of-memory" class="nav-link" data-scroll-target="#real-debugging-example-3-job-was-killed-because-of-memory">Real Debugging Example 3: Job Was Killed Because of Memory</a></li>
-  <li><a href="#real-debugging-example-4-job-times-out" id="toc-real-debugging-example-4-job-times-out" class="nav-link" data-scroll-target="#real-debugging-example-4-job-times-out">Real Debugging Example 4: Job Times Out</a></li>
-  <li><a href="#real-debugging-example-5-the-job-runs-but-output-is-missing" id="toc-real-debugging-example-5-the-job-runs-but-output-is-missing" class="nav-link" data-scroll-target="#real-debugging-example-5-the-job-runs-but-output-is-missing">Real Debugging Example 5: The Job Runs but Output Is Missing</a></li>
-  <li><a href="#real-debugging-example-6-parallel-jobs-overwrite-each-other" id="toc-real-debugging-example-6-parallel-jobs-overwrite-each-other" class="nav-link" data-scroll-target="#real-debugging-example-6-parallel-jobs-overwrite-each-other">Real Debugging Example 6: Parallel Jobs Overwrite Each Other</a></li>
-  <li><a href="#running-multiple-experiments-with-a-slurm-array" id="toc-running-multiple-experiments-with-a-slurm-array" class="nav-link" data-scroll-target="#running-multiple-experiments-with-a-slurm-array">Running Multiple Experiments with a SLURM Array</a></li>
-  <li><a href="#a-practical-debugging-checklist-before-submitting" id="toc-a-practical-debugging-checklist-before-submitting" class="nav-link" data-scroll-target="#a-practical-debugging-checklist-before-submitting">A Practical Debugging Checklist Before Submitting</a></li>
+  <li><a href="#local-machine-vs-hpc" id="toc-local-machine-vs-hpc" class="nav-link active" data-scroll-target="#local-machine-vs-hpc"><span class="header-section-number">1</span> Local Machine vs HPC</a></li>
+  <li><a href="#a-simple-local-training-script" id="toc-a-simple-local-training-script" class="nav-link" data-scroll-target="#a-simple-local-training-script"><span class="header-section-number">2</span> A Simple Local Training Script</a></li>
+  <li><a href="#problem-1-relative-paths-break" id="toc-problem-1-relative-paths-break" class="nav-link" data-scroll-target="#problem-1-relative-paths-break"><span class="header-section-number">3</span> Problem 1: Relative Paths Break</a></li>
+  <li><a href="#problem-2-output-directory-does-not-exist" id="toc-problem-2-output-directory-does-not-exist" class="nav-link" data-scroll-target="#problem-2-output-directory-does-not-exist"><span class="header-section-number">4</span> Problem 2: Output Directory Does Not Exist</a></li>
+  <li><a href="#problem-3-n_jobs-1-can-be-dangerous-on-hpc" id="toc-problem-3-n_jobs-1-can-be-dangerous-on-hpc" class="nav-link" data-scroll-target="#problem-3-n_jobs-1-can-be-dangerous-on-hpc"><span class="header-section-number">5</span> Problem 3: <code>n_jobs=-1</code> Can Be Dangerous on HPC</a></li>
+  <li><a href="#a-better-hpc-ready-python-script" id="toc-a-better-hpc-ready-python-script" class="nav-link" data-scroll-target="#a-better-hpc-ready-python-script"><span class="header-section-number">6</span> A Better HPC-Ready Python Script</a></li>
+  <li><a href="#a-basic-slurm-script" id="toc-a-basic-slurm-script" class="nav-link" data-scroll-target="#a-basic-slurm-script"><span class="header-section-number">7</span> A Basic SLURM Script</a></li>
+  <li><a href="#real-debugging-example-1-file-not-found" id="toc-real-debugging-example-1-file-not-found" class="nav-link" data-scroll-target="#real-debugging-example-1-file-not-found"><span class="header-section-number">8</span> Real Debugging Example 1: “File Not Found”</a></li>
+  <li><a href="#real-debugging-example-2-module-not-found" id="toc-real-debugging-example-2-module-not-found" class="nav-link" data-scroll-target="#real-debugging-example-2-module-not-found"><span class="header-section-number">9</span> Real Debugging Example 2: “Module Not Found”</a></li>
+  <li><a href="#real-debugging-example-3-job-was-killed-because-of-memory" id="toc-real-debugging-example-3-job-was-killed-because-of-memory" class="nav-link" data-scroll-target="#real-debugging-example-3-job-was-killed-because-of-memory"><span class="header-section-number">10</span> Real Debugging Example 3: Job Was Killed Because of Memory</a></li>
+  <li><a href="#real-debugging-example-4-job-times-out" id="toc-real-debugging-example-4-job-times-out" class="nav-link" data-scroll-target="#real-debugging-example-4-job-times-out"><span class="header-section-number">11</span> Real Debugging Example 4: Job Times Out</a></li>
+  <li><a href="#real-debugging-example-5-the-job-runs-but-output-is-missing" id="toc-real-debugging-example-5-the-job-runs-but-output-is-missing" class="nav-link" data-scroll-target="#real-debugging-example-5-the-job-runs-but-output-is-missing"><span class="header-section-number">12</span> Real Debugging Example 5: The Job Runs but Output Is Missing</a></li>
+  <li><a href="#real-debugging-example-6-parallel-jobs-overwrite-each-other" id="toc-real-debugging-example-6-parallel-jobs-overwrite-each-other" class="nav-link" data-scroll-target="#real-debugging-example-6-parallel-jobs-overwrite-each-other"><span class="header-section-number">13</span> Real Debugging Example 6: Parallel Jobs Overwrite Each Other</a></li>
+  <li><a href="#running-multiple-experiments-with-a-slurm-array" id="toc-running-multiple-experiments-with-a-slurm-array" class="nav-link" data-scroll-target="#running-multiple-experiments-with-a-slurm-array"><span class="header-section-number">14</span> Running Multiple Experiments with a SLURM Array</a></li>
+  <li><a href="#a-practical-debugging-checklist-before-submitting" id="toc-a-practical-debugging-checklist-before-submitting" class="nav-link" data-scroll-target="#a-practical-debugging-checklist-before-submitting"><span class="header-section-number">15</span> A Practical Debugging Checklist Before Submitting</a></li>
   </ul>
 </nav>
     </div>
@@ -175,7 +178,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title">
 <h1 class="title">Why My Model Worked Locally but Failed on HPC</h1>
 <p class="subtitle lead">A practical guide to debugging machine learning workflows when moving from local environments to HPC systems using SLURM</p>
-</div>
+  <div class="quarto-categories">
+    <div class="quarto-category">Tutorial</div>
+  </div>
+  </div>
 
 
 
@@ -208,13 +214,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>On HPC, your code does not run in the same environment, does not always start from the same directory, may not have access to the same packages, and is controlled by a scheduler. The model that worked locally is now running as a job, often without direct interaction. This is where many hidden assumptions begin to break.</p>
 <p>The issue is usually not that the model is wrong. More often, the problem is that the local workflow was too forgiving.</p>
 <hr>
-<section id="local-machine-vs-hpc" class="level2">
-<h2 class="anchored" data-anchor-id="local-machine-vs-hpc">Local Machine vs HPC</h2>
+<section id="local-machine-vs-hpc" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="local-machine-vs-hpc"><span class="header-section-number">1</span> Local Machine vs HPC</h2>
 <p>On your laptop, you are usually working interactively:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You run the script directly. Your terminal shows errors. Your current directory is obvious. Your files are nearby. Your Python environment is already active.</p>
 <p>On HPC, you usually submit a job:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> train_model.slurm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> train_model.slurm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>After that, the scheduler decides when and where your code runs. Your script may run on a compute node you never directly see. The output may go into a log file. If something fails, you may only discover it later.</p>
 <p>This means your code must become more explicit. You need to tell the system:</p>
 <pre class="text"><code>Where is the data?
@@ -225,10 +231,10 @@ Where should the output go?
 How long can the job run?</code></pre>
 <p>This is the core difference between local development and HPC execution.</p>
 </section>
-<section id="a-simple-local-training-script" class="level2">
-<h2 class="anchored" data-anchor-id="a-simple-local-training-script">A Simple Local Training Script</h2>
+<section id="a-simple-local-training-script" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="a-simple-local-training-script"><span class="header-section-number">2</span> A Simple Local Training Script</h2>
 <p>Suppose this script works perfectly on your laptop.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train_model.py</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train_model.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
@@ -260,7 +266,7 @@ How long can the job run?</code></pre>
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, pred))</span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>joblib.dump(model, <span class="st">"results/random_forest_model.joblib"</span>)</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This may work locally because:</p>
 <pre class="text"><code>data/train.csv exists
 results/ already exists
@@ -269,13 +275,13 @@ your machine allows n_jobs=-1
 you are running from the expected folder</code></pre>
 <p>On HPC, every one of these assumptions can fail.</p>
 </section>
-<section id="problem-1-relative-paths-break" class="level2">
-<h2 class="anchored" data-anchor-id="problem-1-relative-paths-break">Problem 1: Relative Paths Break</h2>
+<section id="problem-1-relative-paths-break" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="problem-1-relative-paths-break"><span class="header-section-number">3</span> Problem 1: Relative Paths Break</h2>
 <p>This line is fragile:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"data/train.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"data/train.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>It assumes the job starts from the project directory. But on HPC, the job may run from another location depending on how it is submitted.</p>
 <p>A safer version is:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>PROJECT_DIR <span class="op">=</span> Path(<span class="st">"/path/to/your/project"</span>)</span>
@@ -289,33 +295,33 @@ you are running from the expected folder</code></pre>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> DATA_PATH.exists():</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Data file not found: </span><span class="sc">{</span>DATA_PATH<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(DATA_PATH)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(DATA_PATH)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This makes the script more HPC-friendly because it no longer depends on where the job starts.</p>
 <hr>
 </section>
-<section id="problem-2-output-directory-does-not-exist" class="level2">
-<h2 class="anchored" data-anchor-id="problem-2-output-directory-does-not-exist">Problem 2: Output Directory Does Not Exist</h2>
+<section id="problem-2-output-directory-does-not-exist" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="problem-2-output-directory-does-not-exist"><span class="header-section-number">4</span> Problem 2: Output Directory Does Not Exist</h2>
 <p>Locally, you may have already created a folder called <code>results</code>.</p>
 <p>On HPC, if this folder does not exist, this line fails:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>joblib.dump(model, <span class="st">"results/random_forest_model.joblib"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>joblib.dump(model, <span class="st">"results/random_forest_model.joblib"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A safer version is:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>RESULTS_DIR.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>RESULTS_DIR.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>model_path <span class="op">=</span> RESULTS_DIR <span class="op">/</span> <span class="st">"random_forest_model.joblib"</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>joblib.dump(model, model_path)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Model saved to: </span><span class="sc">{</span>model_path<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Model saved to: </span><span class="sc">{</span>model_path<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Small details like this matter because HPC jobs are often non-interactive. You want the script to create what it needs or fail with a clear message.</p>
 <hr>
 </section>
-<section id="problem-3-n_jobs-1-can-be-dangerous-on-hpc" class="level2">
-<h2 class="anchored" data-anchor-id="problem-3-n_jobs-1-can-be-dangerous-on-hpc">Problem 3: <code>n_jobs=-1</code> Can Be Dangerous on HPC</h2>
+<section id="problem-3-n_jobs-1-can-be-dangerous-on-hpc" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="problem-3-n_jobs-1-can-be-dangerous-on-hpc"><span class="header-section-number">5</span> Problem 3: <code>n_jobs=-1</code> Can Be Dangerous on HPC</h2>
 <p>This line is common locally:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">300</span>, random_state<span class="op">=</span><span class="dv">42</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">300</span>, random_state<span class="op">=</span><span class="dv">42</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>On your laptop, <code>n_jobs=-1</code> means “use all available cores.”</p>
 <p>On HPC, this can be problematic. If you requested 4 CPUs but the node has 64 cores, some libraries may try to use more resources than allocated. This can slow your job, overload the node, or violate cluster usage rules.</p>
 <p>A better approach is to pass the number of CPUs explicitly.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>n_cpus <span class="op">=</span> <span class="bu">int</span>(os.environ.get(<span class="st">"SLURM_CPUS_PER_TASK"</span>, <span class="dv">1</span>))</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -323,13 +329,13 @@ you are running from the expected folder</code></pre>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    n_estimators<span class="op">=</span><span class="dv">300</span>,</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span>,</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    n_jobs<span class="op">=</span>n_cpus</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Now your Python code respects what you requested in the SLURM script.</p>
 </section>
-<section id="a-better-hpc-ready-python-script" class="level2">
-<h2 class="anchored" data-anchor-id="a-better-hpc-ready-python-script">A Better HPC-Ready Python Script</h2>
+<section id="a-better-hpc-ready-python-script" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="a-better-hpc-ready-python-script"><span class="header-section-number">6</span> A Better HPC-Ready Python Script</h2>
 <p>Here is a more robust version of the training script.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train_model_hpc.py</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train_model_hpc.py</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -436,14 +442,14 @@ you are running from the expected folder</code></pre>
 <span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Model saved to: </span><span class="sc">{</span>model_path<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Report saved to: </span><span class="sc">{</span>report_path<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Job completed successfully"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Job completed successfully"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This script is longer than the local version, but it is much safer. It checks paths, creates folders, prints progress, respects allocated CPUs, and saves logs.</p>
 <p>Following is a basic slurm job submission script.</p>
 </section>
-<section id="a-basic-slurm-script" class="level2">
-<h2 class="anchored" data-anchor-id="a-basic-slurm-script">A Basic SLURM Script</h2>
+<section id="a-basic-slurm-script" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="a-basic-slurm-script"><span class="header-section-number">7</span> A Basic SLURM Script</h2>
 <p>Now we need a SLURM job script to run the model.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=random_forest_train</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=logs/random_forest_%j.out</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=logs/random_forest_%j.err</span></span>
@@ -470,112 +476,112 @@ you are running from the expected folder</code></pre>
 <span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span>
 <span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Job finished"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Job finished"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Save this as:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">train_model.slurm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">train_model.slurm</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Submit it using:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> train_model.slurm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> train_model.slurm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Check the queue:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>After the job finishes, inspect:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> logs/random_forest_JOBID.out</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> logs/random_forest_JOBID.err</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> logs/random_forest_JOBID.out</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> logs/random_forest_JOBID.err</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Replace <code>JOBID</code> with the actual job number.</p>
 </section>
-<section id="real-debugging-example-1-file-not-found" class="level2">
-<h2 class="anchored" data-anchor-id="real-debugging-example-1-file-not-found">Real Debugging Example 1: “File Not Found”</h2>
+<section id="real-debugging-example-1-file-not-found" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="real-debugging-example-1-file-not-found"><span class="header-section-number">8</span> Real Debugging Example 1: “File Not Found”</h2>
 <p>You submit the job and see:</p>
 <pre class="text"><code>FileNotFoundError: Data file not found: data/train.csv</code></pre>
 <p>This usually means the job is not running from the directory you expected.</p>
 <p>To debug, add this to the SLURM script:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Working directory: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Working directory: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">"</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> data/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> data/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Or in Python:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Current working directory:"</span>, os.getcwd())</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Files here:"</span>, os.listdir(<span class="st">"."</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Files here:"</span>, os.listdir(<span class="st">"."</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The fix is usually to use absolute paths or explicitly move to the project directory:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/your/project</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/your/project</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A corrected SLURM script may include:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/your/project</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/your/project</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Now running from: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">"</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="real-debugging-example-2-module-not-found" class="level2">
-<h2 class="anchored" data-anchor-id="real-debugging-example-2-module-not-found">Real Debugging Example 2: “Module Not Found”</h2>
+<section id="real-debugging-example-2-module-not-found" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="real-debugging-example-2-module-not-found"><span class="header-section-number">9</span> Real Debugging Example 2: “Module Not Found”</h2>
 <p>The job fails with:</p>
 <pre class="text"><code>ModuleNotFoundError: No module named 'sklearn'</code></pre>
 <p>This means the environment used by the HPC job does not contain the same packages as your local environment.</p>
 <p>Locally, your notebook may use one Python installation. The HPC job may use another.</p>
 <p>To debug:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> python</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> python</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-c</span> <span class="st">"import sklearn; print(sklearn.__version__)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-c</span> <span class="st">"import sklearn; print(sklearn.__version__)"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Add these lines to your SLURM script before running the main code:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Python path:"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Python path:"</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> python</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Python version:"</span></span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Checking sklearn:"</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-c</span> <span class="st">"import sklearn; print(sklearn.__version__)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-c</span> <span class="st">"import sklearn; print(sklearn.__version__)"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If this fails, your environment is not correctly activated.</p>
 <p>A more careful SLURM script would be:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate my_ml_env</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> python</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is one of the most common HPC problems: your code is correct, but your environment is not.</p>
 <hr>
 </section>
-<section id="real-debugging-example-3-job-was-killed-because-of-memory" class="level2">
-<h2 class="anchored" data-anchor-id="real-debugging-example-3-job-was-killed-because-of-memory">Real Debugging Example 3: Job Was Killed Because of Memory</h2>
+<section id="real-debugging-example-3-job-was-killed-because-of-memory" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="real-debugging-example-3-job-was-killed-because-of-memory"><span class="header-section-number">10</span> Real Debugging Example 3: Job Was Killed Because of Memory</h2>
 <p>Sometimes the error file says:</p>
 <pre class="text"><code>slurmstepd: error: Detected 1 oom-kill event</code></pre>
 <p>This means your job used more memory than requested.</p>
 <p>For example, you requested:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=4G</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=4G</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>But your dataset and model required more.</p>
 <p>First, increase memory reasonably:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=32G</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=32G</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>But also check your code. Maybe you are loading a huge file unnecessarily:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(DATA_PATH)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(DATA_PATH)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For very large files, consider reading only required columns:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>usecols <span class="op">=</span> [<span class="st">"feature1"</span>, <span class="st">"feature2"</span>, <span class="st">"feature3"</span>, <span class="st">"target"</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>usecols <span class="op">=</span> [<span class="st">"feature1"</span>, <span class="st">"feature2"</span>, <span class="st">"feature3"</span>, <span class="st">"target"</span>]</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(DATA_PATH, usecols<span class="op">=</span>usecols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(DATA_PATH, usecols<span class="op">=</span>usecols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Or read in chunks:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> chunk <span class="kw">in</span> pd.read_csv(DATA_PATH, chunksize<span class="op">=</span><span class="dv">100_000</span>):</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(chunk.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> chunk <span class="kw">in</span> pd.read_csv(DATA_PATH, chunksize<span class="op">=</span><span class="dv">100_000</span>):</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(chunk.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>On HPC, memory problems are not just technical failures. They tell you that the local workflow may not scale.</p>
 </section>
-<section id="real-debugging-example-4-job-times-out" class="level2">
-<h2 class="anchored" data-anchor-id="real-debugging-example-4-job-times-out">Real Debugging Example 4: Job Times Out</h2>
+<section id="real-debugging-example-4-job-times-out" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="real-debugging-example-4-job-times-out"><span class="header-section-number">11</span> Real Debugging Example 4: Job Times Out</h2>
 <p>The error may not look dramatic. Your job may simply stop because it exceeded the time limit.</p>
 <p>If your script has:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00:30:00</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00:30:00</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>and the model needs two hours, SLURM will terminate it.</p>
 <p>Increase the time:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=04:00:00</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=04:00:00</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>But also add progress logging:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Step 1 completed: data loaded"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Step 1 completed: data loaded"</span>)</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Step 2 completed: split done"</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Step 3 started: model training"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Step 3 started: model training"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This helps you understand where time is being spent.</p>
 <p>For long workflows, save intermediate files:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>X_train.to_parquet(RESULTS_DIR <span class="op">/</span> <span class="st">"X_train.parquet"</span>)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>X_test.to_parquet(RESULTS_DIR <span class="op">/</span> <span class="st">"X_test.parquet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>X_train.to_parquet(RESULTS_DIR <span class="op">/</span> <span class="st">"X_train.parquet"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>X_test.to_parquet(RESULTS_DIR <span class="op">/</span> <span class="st">"X_test.parquet"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That way, if the job fails during modeling, you do not need to repeat preprocessing.</p>
 </section>
-<section id="real-debugging-example-5-the-job-runs-but-output-is-missing" class="level2">
-<h2 class="anchored" data-anchor-id="real-debugging-example-5-the-job-runs-but-output-is-missing">Real Debugging Example 5: The Job Runs but Output Is Missing</h2>
+<section id="real-debugging-example-5-the-job-runs-but-output-is-missing" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="real-debugging-example-5-the-job-runs-but-output-is-missing"><span class="header-section-number">12</span> Real Debugging Example 5: The Job Runs but Output Is Missing</h2>
 <p>This is very frustrating.</p>
 <p>The job says completed, but there is no model file.</p>
 <p>Possible reasons:</p>
@@ -585,37 +591,37 @@ The job failed before saving
 The file path was relative
 The process had no write permission</code></pre>
 <p>Add explicit save messages:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Saving model to: </span><span class="sc">{</span>model_path<span class="sc">}</span><span class="ss">"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Saving model to: </span><span class="sc">{</span>model_path<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>joblib.dump(model, model_path)</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> model_path.exists():</span>
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Model file exists after saving."</span>)</span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="st">"Model file was not created."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="st">"Model file was not created."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Also check permissions:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-ld</span> /path/to/your/project/results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-ld</span> /path/to/your/project/results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If needed:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> u+w /path/to/your/project/results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> u+w /path/to/your/project/results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="real-debugging-example-6-parallel-jobs-overwrite-each-other" class="level2">
-<h2 class="anchored" data-anchor-id="real-debugging-example-6-parallel-jobs-overwrite-each-other">Real Debugging Example 6: Parallel Jobs Overwrite Each Other</h2>
+<section id="real-debugging-example-6-parallel-jobs-overwrite-each-other" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="real-debugging-example-6-parallel-jobs-overwrite-each-other"><span class="header-section-number">13</span> Real Debugging Example 6: Parallel Jobs Overwrite Each Other</h2>
 <p>Suppose you submit multiple jobs. Each job writes to:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>random_forest_model.joblib</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>random_forest_model.joblib</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then jobs may overwrite each other.</p>
 <p>On HPC, outputs should often include the SLURM job ID.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>job_id <span class="op">=</span> os.environ.get(<span class="st">"SLURM_JOB_ID"</span>, <span class="st">"local"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>job_id <span class="op">=</span> os.environ.get(<span class="st">"SLURM_JOB_ID"</span>, <span class="st">"local"</span>)</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>model_path <span class="op">=</span> RESULTS_DIR <span class="op">/</span> <span class="ss">f"random_forest_model_</span><span class="sc">{</span>job_id<span class="sc">}</span><span class="ss">.joblib"</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>report_path <span class="op">=</span> RESULTS_DIR <span class="op">/</span> <span class="ss">f"classification_report_</span><span class="sc">{</span>job_id<span class="sc">}</span><span class="ss">.txt"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>report_path <span class="op">=</span> RESULTS_DIR <span class="op">/</span> <span class="ss">f"classification_report_</span><span class="sc">{</span>job_id<span class="sc">}</span><span class="ss">.txt"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Now each job writes a separate output.</p>
 <p>This becomes especially important when running parameter sweeps, simulations, or repeated undersampling.</p>
 </section>
-<section id="running-multiple-experiments-with-a-slurm-array" class="level2">
-<h2 class="anchored" data-anchor-id="running-multiple-experiments-with-a-slurm-array">Running Multiple Experiments with a SLURM Array</h2>
+<section id="running-multiple-experiments-with-a-slurm-array" class="level2" data-number="14">
+<h2 data-number="14" class="anchored" data-anchor-id="running-multiple-experiments-with-a-slurm-array"><span class="header-section-number">14</span> Running Multiple Experiments with a SLURM Array</h2>
 <p>A very common HPC pattern is to run the same script many times with different parameters.</p>
 <p>For example, suppose you want to train models using different random seeds.</p>
 <p>Create a Python script:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train_with_seed.py</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train_with_seed.py</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -677,9 +683,9 @@ The process had no write permission</code></pre>
 <span id="cb43-60"><a href="#cb43-60" aria-hidden="true" tabindex="-1"></a>    f.write(report)</span>
 <span id="cb43-61"><a href="#cb43-61" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-62"><a href="#cb43-62" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Saved model: </span><span class="sc">{</span>model_path<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb43-63"><a href="#cb43-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Saved report: </span><span class="sc">{</span>report_path<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb43-63"><a href="#cb43-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Saved report: </span><span class="sc">{</span>report_path<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Now create a SLURM array script:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=rf_seed_array</span></span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=logs/rf_seed_%A_%a.out</span></span>
 <span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=logs/rf_seed_%A_%a.err</span></span>
@@ -700,23 +706,23 @@ The process had no write permission</code></pre>
 <span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Running array task: </span><span class="va">$SLURM_ARRAY_TASK_ID</span><span class="st">"</span></span>
 <span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Using seed: </span><span class="va">$SEED</span><span class="st">"</span></span>
 <span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_with_seed.py <span class="at">--seed</span> <span class="va">$SEED</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_with_seed.py <span class="at">--seed</span> <span class="va">$SEED</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Submit:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> train_seed_array.slurm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> train_seed_array.slurm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This launches 10 jobs, each with a different seed.</p>
 <p>This is where HPC becomes powerful: not just running one big model, but running many controlled experiments reproducibly.</p>
 <hr>
 </section>
-<section id="a-practical-debugging-checklist-before-submitting" class="level2">
-<h2 class="anchored" data-anchor-id="a-practical-debugging-checklist-before-submitting">A Practical Debugging Checklist Before Submitting</h2>
+<section id="a-practical-debugging-checklist-before-submitting" class="level2" data-number="15">
+<h2 data-number="15" class="anchored" data-anchor-id="a-practical-debugging-checklist-before-submitting"><span class="header-section-number">15</span> A Practical Debugging Checklist Before Submitting</h2>
 <p>Before sending a full job, run a small test.</p>
 <p>First, test the Python script locally or on the login node with a tiny dataset:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model_hpc.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then submit a short SLURM test:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00:10:00</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=4G</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00:10:00</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=4G</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Use a small sample:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(DATA_PATH, nrows<span class="op">=</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(DATA_PATH, nrows<span class="op">=</span><span class="dv">1000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Once that works, scale up.</p>
 <p>This saves a lot of time. It is painful to wait in a queue for hours only to discover that the job failed because a folder name was wrong.</p>
 <hr>
@@ -782,13 +788,14 @@ The process had no write permission</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

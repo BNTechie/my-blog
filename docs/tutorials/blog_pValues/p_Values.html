@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Understanding Different Types of p-values in Statistical Models – Nivedita’s Blog</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -60,7 +63,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,12 +107,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -122,7 +125,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -266,14 +269,14 @@ window.Quarto = {
 </blockquote>
 <p>This tutorial explains the major types of p-values you may see in statistical modeling, with Python examples.</p>
 <div id="8177c898-9c84-467c-871c-e0a54725a44f" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="what-is-a-p-value" class="level3" data-number="0.1.1">
 <h3 data-number="0.1.1" class="anchored" data-anchor-id="what-is-a-p-value"><span class="header-section-number">0.1.1</span> What is a p-value?</h3>
@@ -290,7 +293,7 @@ window.Quarto = {
 <h3 data-number="0.1.2" class="anchored" data-anchor-id="simulated-data"><span class="header-section-number">0.1.2</span> Simulated Data</h3>
 <p>We will create a simple dataset with age, BMI, smoking status, and a continuous outcome.</p>
 <div id="142f3a6d-a20c-40ae-9c4e-4bdeb5d7a02f" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">500</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">500</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>age <span class="op">=</span> np.random.normal(<span class="dv">50</span>, <span class="dv">10</span>, n)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bmi <span class="op">=</span> np.random.normal(<span class="dv">27</span>, <span class="dv">4</span>, n)</span>
@@ -306,12 +309,12 @@ window.Quarto = {
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"smoking"</span>: smoking</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -323,35 +326,35 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>46.478946</td>
 <td>54.967142</td>
 <td>30.704710</td>
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>50.787874</td>
 <td>48.617357</td>
 <td>34.637667</td>
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>34.508174</td>
 <td>56.476885</td>
 <td>21.405730</td>
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>47.851006</td>
 <td>65.230299</td>
 <td>29.251877</td>
 <td>1</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>47.434630</td>
 <td>47.658466</td>
 <td>24.397430</td>
@@ -373,8 +376,8 @@ window.Quarto = {
 <p><span class="math inline">\(H_0: \beta_1 = \beta_2 = \beta_3 = 0\)</span></p>
 <p>This means none of the predictors are associated with the outcome.</p>
 <div id="df706c24-7239-4c39-ae43-20914cc7e30b" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.ols(<span class="st">"y ~ age + bmi + smoking"</span>, data<span class="op">=</span>df).fit()</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.ols(<span class="st">"y ~ age + bmi + smoking"</span>, data<span class="op">=</span>df).fit()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                            OLS Regression Results                            
 ==============================================================================
@@ -426,7 +429,7 @@ Notes:
 <p>After adjusting for age and smoking, is BMI associated with the outcome?</p>
 </blockquote>
 <div id="65254142-8f3b-4236-8d8e-628bac346c7c" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model.pvalues</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model.pvalues</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>Intercept    5.119553e-07
 age          1.023101e-22
@@ -437,19 +440,19 @@ dtype: float64</code></pre>
 </div>
 <p>Each p-value belongs to one coefficient.</p>
 <div id="ecef510c-784c-451e-9029-83f161b15943" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>coef_table <span class="op">=</span> pd.DataFrame({</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>coef_table <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"estimate"</span>: model.params,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"standard_error"</span>: model.bse,</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"t_value"</span>: model.tvalues,</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"p_value"</span>: model.pvalues</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>coef_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>coef_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -461,28 +464,28 @@ dtype: float64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Intercept</td>
+<th data-quarto-table-cell-role="th">Intercept</th>
 <td>10.103474</td>
 <td>1.985391</td>
 <td>5.088908</td>
 <td>5.119553e-07</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">age</td>
+<th data-quarto-table-cell-role="th">age</th>
 <td>0.231885</td>
 <td>0.022489</td>
 <td>10.310885</td>
 <td>1.023101e-22</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">bmi</td>
+<th data-quarto-table-cell-role="th">bmi</th>
 <td>0.838218</td>
 <td>0.056415</td>
 <td>14.858028</td>
 <td>1.426868e-41</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">smoking</td>
+<th data-quarto-table-cell-role="th">smoking</th>
 <td>3.273878</td>
 <td>0.484531</td>
 <td>6.756792</td>
@@ -502,20 +505,20 @@ dtype: float64</code></pre>
 <p>$ $</p>
 <p>If the estimate is large compared with its standard error, the p-value becomes small.</p>
 <div id="26ec8ba1-27c7-4071-9a7e-4ac8fab8c990" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>bmi_estimate <span class="op">=</span> model.params[<span class="st">"bmi"</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>bmi_estimate <span class="op">=</span> model.params[<span class="st">"bmi"</span>]</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>bmi_se <span class="op">=</span> model.bse[<span class="st">"bmi"</span>]</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>wald_stat <span class="op">=</span> bmi_estimate <span class="op">/</span> bmi_se</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>wald_p <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> stats.t.cdf(<span class="bu">abs</span>(wald_stat), df<span class="op">=</span>model.df_resid))</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>wald_stat, wald_p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>wald_stat, wald_p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>(14.85802755264616, 0.0)</code></pre>
 </div>
 </div>
 <p>This matches the regression output for BMI.</p>
 <div id="821ec284-439f-491b-b49b-78c37b3522d4" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model.pvalues[<span class="st">"bmi"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model.pvalues[<span class="st">"bmi"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>1.4268684127122685e-41</code></pre>
 </div>
@@ -537,14 +540,14 @@ dtype: float64</code></pre>
 <p>Full model:</p>
 <p><span class="math inline">\(Y \sim Age + Smoking + BMI\)</span></p>
 <div id="2d14e08f-01f8-4a76-94fb-e38b858c1379" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>reduced_model <span class="op">=</span> smf.ols(<span class="st">"y ~ age + smoking"</span>, data<span class="op">=</span>df).fit()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>reduced_model <span class="op">=</span> smf.ols(<span class="st">"y ~ age + smoking"</span>, data<span class="op">=</span>df).fit()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>full_model <span class="op">=</span> smf.ols(<span class="st">"y ~ age + smoking + bmi"</span>, data<span class="op">=</span>df).fit()</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>lr_stat <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (full_model.llf <span class="op">-</span> reduced_model.llf)</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>df_diff <span class="op">=</span> full_model.df_model <span class="op">-</span> reduced_model.df_model</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>lr_p <span class="op">=</span> stats.chi2.sf(lr_stat, df_diff)</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>lr_stat, df_diff, lr_p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>lr_stat, df_diff, lr_p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>(184.0832504570517, 1.0, 6.222071062374793e-42)</code></pre>
 </div>
@@ -556,7 +559,7 @@ dtype: float64</code></pre>
 <h3 data-number="0.1.7" class="anchored" data-anchor-id="omnibus-test-for-a-categorical-predictor"><span class="header-section-number">0.1.7</span> 5. Omnibus test for a categorical predictor</h3>
 <p>Now let us create a categorical variable with three groups.</p>
 <div id="71fae1fa-8036-47c6-be11-99c403793b62" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"education"</span>] <span class="op">=</span> np.random.choice([<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>], size<span class="op">=</span>n, p<span class="op">=</span>[<span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>])</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"education"</span>] <span class="op">=</span> np.random.choice([<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>], size<span class="op">=</span>n, p<span class="op">=</span>[<span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>])</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"y2"</span>] <span class="op">=</span> (</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span></span>
@@ -567,7 +570,7 @@ dtype: float64</code></pre>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>cat_model <span class="op">=</span> smf.ols(<span class="st">"y2 ~ age + bmi + C(education)"</span>, data<span class="op">=</span>df).fit()</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cat_model.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cat_model.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                            OLS Regression Results                            
 ==============================================================================
@@ -607,14 +610,14 @@ Notes:
 <p>Does education matter overall?</p>
 </blockquote>
 <div id="9017b1c1-6351-4f45-9c0c-cb2f3619d83b" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>reduced_cat <span class="op">=</span> smf.ols(<span class="st">"y2 ~ age + bmi"</span>, data<span class="op">=</span>df).fit()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>reduced_cat <span class="op">=</span> smf.ols(<span class="st">"y2 ~ age + bmi"</span>, data<span class="op">=</span>df).fit()</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>full_cat <span class="op">=</span> smf.ols(<span class="st">"y2 ~ age + bmi + C(education)"</span>, data<span class="op">=</span>df).fit()</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>lr_stat_cat <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (full_cat.llf <span class="op">-</span> reduced_cat.llf)</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>df_diff_cat <span class="op">=</span> full_cat.df_model <span class="op">-</span> reduced_cat.df_model</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>lr_p_cat <span class="op">=</span> stats.chi2.sf(lr_stat_cat, df_diff_cat)</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>lr_stat_cat, df_diff_cat, lr_p_cat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>lr_stat_cat, df_diff_cat, lr_p_cat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>(49.68721534532415, 2.0, 1.6238962435721106e-11)</code></pre>
 </div>
@@ -624,22 +627,22 @@ Notes:
 <h3 data-number="0.1.8" class="anchored" data-anchor-id="logistic-regression-p-values"><span class="header-section-number">0.1.8</span> 6. Logistic regression p-values</h3>
 <p>Now let us create a binary disease outcome.</p>
 <div id="8f71a909-b292-480a-8e58-240fdae7b362" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>linear_pred <span class="op">=</span> <span class="op">-</span><span class="dv">8</span> <span class="op">+</span> <span class="fl">0.05</span> <span class="op">*</span> age <span class="op">+</span> <span class="fl">0.12</span> <span class="op">*</span> bmi <span class="op">+</span> <span class="fl">0.8</span> <span class="op">*</span> smoking</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>linear_pred <span class="op">=</span> <span class="op">-</span><span class="dv">8</span> <span class="op">+</span> <span class="fl">0.05</span> <span class="op">*</span> age <span class="op">+</span> <span class="fl">0.12</span> <span class="op">*</span> bmi <span class="op">+</span> <span class="fl">0.8</span> <span class="op">*</span> smoking</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>linear_pred))</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>disease <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, prob, n)</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"disease"</span>] <span class="op">=</span> disease</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"disease"</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"disease"</span>].mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>0.12</code></pre>
 </div>
 </div>
 <p>Now fit logistic regression.</p>
 <div id="e171d18f-3e86-4e51-8245-7dd07dcbf80a" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>logit_model <span class="op">=</span> smf.logit(<span class="st">"disease ~ age + bmi + smoking"</span>, data<span class="op">=</span>df).fit()</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(logit_model.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(logit_model.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Optimization terminated successfully.
          Current function value: 0.324099
@@ -670,7 +673,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <h3 data-number="0.1.9" class="anchored" data-anchor-id="odds-ratios-and-p-values"><span class="header-section-number">0.1.9</span> Odds ratios and p-values</h3>
 <p>The coefficients are on the log-odds scale. We often exponentiate them to get odds ratios.</p>
 <div id="ce04d7eb-bed3-48d2-8cf8-88069c38c231" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>odds_ratios <span class="op">=</span> np.exp(logit_model.params)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>odds_ratios <span class="op">=</span> np.exp(logit_model.params)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>conf_int <span class="op">=</span> np.exp(logit_model.conf_int())</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>logit_results <span class="op">=</span> pd.DataFrame({</span>
@@ -681,12 +684,12 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"p_value"</span>: logit_model.pvalues</span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>logit_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>logit_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -699,7 +702,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Intercept</td>
+<th data-quarto-table-cell-role="th">Intercept</th>
 <td>-9.318118</td>
 <td>0.000090</td>
 <td>0.000005</td>
@@ -707,7 +710,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>2.697784e-10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">age</td>
+<th data-quarto-table-cell-role="th">age</th>
 <td>0.075415</td>
 <td>1.078331</td>
 <td>1.046853</td>
@@ -715,7 +718,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>6.062326e-07</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">bmi</td>
+<th data-quarto-table-cell-role="th">bmi</th>
 <td>0.109170</td>
 <td>1.115352</td>
 <td>1.034122</td>
@@ -723,7 +726,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>4.660040e-03</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">smoking</td>
+<th data-quarto-table-cell-role="th">smoking</th>
 <td>0.960055</td>
 <td>2.611840</td>
 <td>1.462949</td>
@@ -744,14 +747,14 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <h3 data-number="0.1.10" class="anchored" data-anchor-id="likelihood-ratio-test-in-logistic-regression"><span class="header-section-number">0.1.10</span> 7. Likelihood ratio test in logistic regression</h3>
 <p>We can compare a full logistic model to a reduced logistic model.</p>
 <div id="06629f30-6d26-476c-adca-a263c704a904" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>logit_reduced <span class="op">=</span> smf.logit(<span class="st">"disease ~ age + smoking"</span>, data<span class="op">=</span>df).fit(disp<span class="op">=</span><span class="va">False</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>logit_reduced <span class="op">=</span> smf.logit(<span class="st">"disease ~ age + smoking"</span>, data<span class="op">=</span>df).fit(disp<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>logit_full <span class="op">=</span> smf.logit(<span class="st">"disease ~ age + smoking + bmi"</span>, data<span class="op">=</span>df).fit(disp<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>lr_stat_logit <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (logit_full.llf <span class="op">-</span> logit_reduced.llf)</span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>df_diff_logit <span class="op">=</span> logit_full.df_model <span class="op">-</span> logit_reduced.df_model</span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>lr_p_logit <span class="op">=</span> stats.chi2.sf(lr_stat_logit, df_diff_logit)</span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>lr_stat_logit, df_diff_logit, lr_p_logit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>lr_stat_logit, df_diff_logit, lr_p_logit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>(8.2518347732684, 1.0, 0.00407108312415603)</code></pre>
 </div>
@@ -763,7 +766,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <p>A marginal p-value comes from a simple model with one predictor.</p>
 <p>An adjusted p-value comes from a model that includes other covariates.</p>
 <div id="4d941f07-666a-4472-80f4-a782f262ccef" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>marginal_bmi_model <span class="op">=</span> smf.ols(<span class="st">"y ~ bmi"</span>, data<span class="op">=</span>df).fit()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>marginal_bmi_model <span class="op">=</span> smf.ols(<span class="st">"y ~ bmi"</span>, data<span class="op">=</span>df).fit()</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>adjusted_bmi_model <span class="op">=</span> smf.ols(<span class="st">"y ~ bmi + age + smoking"</span>, data<span class="op">=</span>df).fit()</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
@@ -776,12 +779,12 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>        marginal_bmi_model.pvalues[<span class="st">"bmi"</span>],</span>
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        adjusted_bmi_model.pvalues[<span class="st">"bmi"</span>]</span>
 <span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -792,13 +795,13 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>Marginal model</td>
 <td>0.787224</td>
 <td>2.331994e-30</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>Adjusted model</td>
 <td>0.838218</td>
 <td>1.426868e-41</td>
@@ -818,7 +821,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <p>Suppose we test many predictors.</p>
 <p>This happens in genomics, transcriptomics, imaging, and high-dimensional data science.</p>
 <div id="e58715d3-c292-43d0-b18f-cec73735e23c" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">1000</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">1000</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>p_values <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, m)</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -830,12 +833,12 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"p_value"</span>: p_values</span>
 <span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>pval_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>pval_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -845,27 +848,27 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>1</td>
 <td>0.001071</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>2</td>
 <td>0.002773</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>3</td>
 <td>0.029860</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>4</td>
 <td>0.017076</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>5</td>
 <td>0.008792</td>
 </tr>
@@ -879,13 +882,13 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <section id="bonferroni-correction" class="level3" data-number="0.1.13">
 <h3 data-number="0.1.13" class="anchored" data-anchor-id="bonferroni-correction"><span class="header-section-number">0.1.13</span> Bonferroni correction</h3>
 <div id="48cd9619-a743-4f2f-a5a4-966c2228b906" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pval_df[<span class="st">"bonferroni"</span>] <span class="op">=</span> np.minimum(pval_df[<span class="st">"p_value"</span>] <span class="op">*</span> m, <span class="dv">1</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>pval_df.sort_values(<span class="st">"p_value"</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pval_df[<span class="st">"bonferroni"</span>] <span class="op">=</span> np.minimum(pval_df[<span class="st">"p_value"</span>] <span class="op">*</span> m, <span class="dv">1</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>pval_df.sort_values(<span class="st">"p_value"</span>).head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -896,61 +899,61 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">9</td>
+<th data-quarto-table-cell-role="th">9</th>
 <td>10</td>
 <td>4.548685e-08</td>
 <td>0.000045</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">15</td>
+<th data-quarto-table-cell-role="th">15</th>
 <td>16</td>
 <td>1.812720e-06</td>
 <td>0.001813</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">14</td>
+<th data-quarto-table-cell-role="th">14</th>
 <td>15</td>
 <td>3.974192e-06</td>
 <td>0.003974</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>14</td>
 <td>5.343620e-06</td>
 <td>0.005344</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">121</td>
+<th data-quarto-table-cell-role="th">121</th>
 <td>122</td>
 <td>3.071885e-05</td>
 <td>0.030719</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">17</td>
+<th data-quarto-table-cell-role="th">17</th>
 <td>18</td>
 <td>5.239162e-05</td>
 <td>0.052392</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>12</td>
 <td>7.227633e-05</td>
 <td>0.072276</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">695</td>
+<th data-quarto-table-cell-role="th">695</th>
 <td>696</td>
 <td>2.270382e-04</td>
 <td>0.227038</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">746</td>
+<th data-quarto-table-cell-role="th">746</th>
 <td>747</td>
 <td>5.979388e-04</td>
 <td>0.597939</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">12</td>
+<th data-quarto-table-cell-role="th">12</th>
 <td>13</td>
 <td>6.208697e-04</td>
 <td>0.620870</td>
@@ -965,19 +968,19 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <section id="benjamini-hochberg-fdr-correction" class="level3" data-number="0.1.14">
 <h3 data-number="0.1.14" class="anchored" data-anchor-id="benjamini-hochberg-fdr-correction"><span class="header-section-number">0.1.14</span> Benjamini-Hochberg FDR correction</h3>
 <div id="546a9cff-1e37-447c-9f09-ea48a37e96fc" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.stats.multitest <span class="im">import</span> multipletests</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.stats.multitest <span class="im">import</span> multipletests</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>reject, pvals_fdr, _, _ <span class="op">=</span> multipletests(pval_df[<span class="st">"p_value"</span>], method<span class="op">=</span><span class="st">"fdr_bh"</span>)</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>pval_df[<span class="st">"fdr_bh"</span>] <span class="op">=</span> pvals_fdr</span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>pval_df[<span class="st">"significant_fdr"</span>] <span class="op">=</span> reject</span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>pval_df.sort_values(<span class="st">"p_value"</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>pval_df.sort_values(<span class="st">"p_value"</span>).head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -990,7 +993,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">9</td>
+<th data-quarto-table-cell-role="th">9</th>
 <td>10</td>
 <td>4.548685e-08</td>
 <td>0.000045</td>
@@ -998,7 +1001,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>True</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">15</td>
+<th data-quarto-table-cell-role="th">15</th>
 <td>16</td>
 <td>1.812720e-06</td>
 <td>0.001813</td>
@@ -1006,7 +1009,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>True</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">14</td>
+<th data-quarto-table-cell-role="th">14</th>
 <td>15</td>
 <td>3.974192e-06</td>
 <td>0.003974</td>
@@ -1014,7 +1017,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>True</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>14</td>
 <td>5.343620e-06</td>
 <td>0.005344</td>
@@ -1022,7 +1025,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>True</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">121</td>
+<th data-quarto-table-cell-role="th">121</th>
 <td>122</td>
 <td>3.071885e-05</td>
 <td>0.030719</td>
@@ -1030,7 +1033,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>True</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">17</td>
+<th data-quarto-table-cell-role="th">17</th>
 <td>18</td>
 <td>5.239162e-05</td>
 <td>0.052392</td>
@@ -1038,7 +1041,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>True</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>12</td>
 <td>7.227633e-05</td>
 <td>0.072276</td>
@@ -1046,7 +1049,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>True</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">695</td>
+<th data-quarto-table-cell-role="th">695</th>
 <td>696</td>
 <td>2.270382e-04</td>
 <td>0.227038</td>
@@ -1054,7 +1057,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>True</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">746</td>
+<th data-quarto-table-cell-role="th">746</th>
 <td>747</td>
 <td>5.979388e-04</td>
 <td>0.597939</td>
@@ -1062,7 +1065,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <td>False</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">12</td>
+<th data-quarto-table-cell-role="th">12</th>
 <td>13</td>
 <td>6.208697e-04</td>
 <td>0.620870</td>
@@ -1078,7 +1081,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <p>The raw p-value tells us about one test.</p>
 <p>The adjusted p-value accounts for the fact that we performed many tests.</p>
 <div id="9b28f446-d48f-4986-b151-44b364c10e28" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">### 10. Visualizing raw and adjusted p-values</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
@@ -1093,7 +1096,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Raw p-value"</span>)</span>
 <span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"FDR-adjusted p-value"</span>)</span>
 <span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Raw p-values vs FDR-adjusted p-values"</span>)</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1115,7 +1118,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <p>Permutation testing is useful when we do not want to rely strongly on distributional assumptions.</p>
 <p>Let us test whether BMI is associated with y.</p>
 <div id="afcba537-387c-4710-9a7b-97c6d8b29424" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>observed_corr <span class="op">=</span> np.corrcoef(df[<span class="st">"bmi"</span>], df[<span class="st">"y"</span>])[<span class="dv">0</span>, <span class="dv">1</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>observed_corr <span class="op">=</span> np.corrcoef(df[<span class="st">"bmi"</span>], df[<span class="st">"y"</span>])[<span class="dv">0</span>, <span class="dv">1</span>]</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>n_perm <span class="op">=</span> <span class="dv">5000</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>perm_corrs <span class="op">=</span> []</span>
@@ -1129,20 +1132,20 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>perm_p <span class="op">=</span> np.mean(np.<span class="bu">abs</span>(perm_corrs) <span class="op">&gt;=</span> <span class="bu">abs</span>(observed_corr))</span>
 <span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>observed_corr, perm_p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>observed_corr, perm_p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>(0.4813321740204421, 0.0)</code></pre>
 </div>
 </div>
 <div id="61b239e4-dde2-4e5c-ab2a-d632dbef4b52" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>plt.hist(perm_corrs, bins<span class="op">=</span><span class="dv">40</span>)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>plt.axvline(observed_corr, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="op">-</span>observed_corr, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Correlation under permutation"</span>)</span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Count"</span>)</span>
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Permutation null distribution"</span>)</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1161,7 +1164,7 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <h3 data-number="0.1.16" class="anchored" data-anchor-id="bootstrap-confidence-interval"><span class="header-section-number">0.1.16</span> 12. Bootstrap confidence interval</h3>
 <p>Bootstrap is usually more commonly used for confidence intervals than direct p-values.</p>
 <div id="5dc3a07b-0f4f-444b-a031-29ae6b9a8394" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>n_boot <span class="op">=</span> <span class="dv">2000</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>n_boot <span class="op">=</span> <span class="dv">2000</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>boot_bmi_estimates <span class="op">=</span> []</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_boot):</span>
@@ -1173,20 +1176,20 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>ci_lower, ci_upper <span class="op">=</span> np.percentile(boot_bmi_estimates, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
 <span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>ci_lower, ci_upper</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>ci_lower, ci_upper</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>(0.7273896136823674, 0.9485951320462989)</code></pre>
 </div>
 </div>
 <div id="9998af60-4759-4bd2-b044-fa4433178b54" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>plt.hist(boot_bmi_estimates, bins<span class="op">=</span><span class="dv">40</span>)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>plt.axvline(ci_lower, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>plt.axvline(ci_upper, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Bootstrap BMI coefficient"</span>)</span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Count"</span>)</span>
 <span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Bootstrap distribution of BMI coefficient"</span>)</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1345,13 +1348,14 @@ smoking        0.9601      0.296      3.246      0.001       0.380       1.540
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,6 +10,9 @@
 
 <title>Understanding R² in Case-Control Studies – Nivedita’s Blog</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -59,7 +62,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -72,10 +75,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -103,7 +106,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
@@ -153,20 +156,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#multiple-r²-measures" id="toc-multiple-r²-measures" class="nav-link active" data-scroll-target="#multiple-r²-measures">Multiple ( R² ) Measures</a></li>
-  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting">Model Fitting</a>
+  <li><a href="#multiple-r²-measures" id="toc-multiple-r²-measures" class="nav-link active" data-scroll-target="#multiple-r²-measures"><span class="header-section-number">1</span> Multiple ( R² ) Measures</a></li>
+  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting"><span class="header-section-number">2</span> Model Fitting</a>
   <ul class="collapse">
-  <li><a href="#observed-scale-r²" id="toc-observed-scale-r²" class="nav-link" data-scroll-target="#observed-scale-r²">1. Observed-Scale ( R² )</a></li>
-  <li><a href="#cox-snells-r²" id="toc-cox-snells-r²" class="nav-link" data-scroll-target="#cox-snells-r²">2. Cox &amp; Snell’s ( R² )</a></li>
-  <li><a href="#nagelkerkes-r²" id="toc-nagelkerkes-r²" class="nav-link" data-scroll-target="#nagelkerkes-r²">3. Nagelkerke’s ( R² )</a></li>
-  <li><a href="#liability-scale-r²" id="toc-liability-scale-r²" class="nav-link" data-scroll-target="#liability-scale-r²">4. Liability-Scale ( R² )</a></li>
-  <li><a href="#probit-liability-r²" id="toc-probit-liability-r²" class="nav-link" data-scroll-target="#probit-liability-r²">5. Probit Liability ( R² )</a></li>
-  <li><a href="#logit-liability-r²" id="toc-logit-liability-r²" class="nav-link" data-scroll-target="#logit-liability-r²">6. Logit Liability ( R² )</a></li>
-  <li><a href="#auc-based-r²" id="toc-auc-based-r²" class="nav-link" data-scroll-target="#auc-based-r²">7. AUC-Based ( R² )</a></li>
-  <li><a href="#ascertainment-corrected-liability-r²" id="toc-ascertainment-corrected-liability-r²" class="nav-link" data-scroll-target="#ascertainment-corrected-liability-r²">8. Ascertainment-Corrected Liability ( R² )</a></li>
+  <li><a href="#observed-scale-r²" id="toc-observed-scale-r²" class="nav-link" data-scroll-target="#observed-scale-r²"><span class="header-section-number">2.1</span> 1. Observed-Scale ( R² )</a></li>
+  <li><a href="#cox-snells-r²" id="toc-cox-snells-r²" class="nav-link" data-scroll-target="#cox-snells-r²"><span class="header-section-number">2.2</span> 2. Cox &amp; Snell’s ( R² )</a></li>
+  <li><a href="#nagelkerkes-r²" id="toc-nagelkerkes-r²" class="nav-link" data-scroll-target="#nagelkerkes-r²"><span class="header-section-number">2.3</span> 3. Nagelkerke’s ( R² )</a></li>
+  <li><a href="#liability-scale-r²" id="toc-liability-scale-r²" class="nav-link" data-scroll-target="#liability-scale-r²"><span class="header-section-number">2.4</span> 4. Liability-Scale ( R² )</a></li>
+  <li><a href="#probit-liability-r²" id="toc-probit-liability-r²" class="nav-link" data-scroll-target="#probit-liability-r²"><span class="header-section-number">2.5</span> 5. Probit Liability ( R² )</a></li>
+  <li><a href="#logit-liability-r²" id="toc-logit-liability-r²" class="nav-link" data-scroll-target="#logit-liability-r²"><span class="header-section-number">2.6</span> 6. Logit Liability ( R² )</a></li>
+  <li><a href="#auc-based-r²" id="toc-auc-based-r²" class="nav-link" data-scroll-target="#auc-based-r²"><span class="header-section-number">2.7</span> 7. AUC-Based ( R² )</a></li>
+  <li><a href="#ascertainment-corrected-liability-r²" id="toc-ascertainment-corrected-liability-r²" class="nav-link" data-scroll-target="#ascertainment-corrected-liability-r²"><span class="header-section-number">2.8</span> 8. Ascertainment-Corrected Liability ( R² )</a></li>
   </ul></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">3</span> Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -208,8 +211,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>Recently, I came across a paper comparing different ( R² ) measures used in case-control and genetic studies. Here is the link for the <a href="https://pubmed.ncbi.nlm.nih.gov/22714935/">paper</a>. The table summarizing these methods is compact but dense, and I found it useful to sit down and work through each definition carefully.</p>
 <p>This article is a structured walkthrough of those ( R² ) measures, along with simple R implementations. The goal is to create a clear reference that can be reused later.</p>
-<section id="multiple-r²-measures" class="level2">
-<h2 class="anchored" data-anchor-id="multiple-r²-measures">Multiple ( R² ) Measures</h2>
+<section id="multiple-r²-measures" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="multiple-r²-measures"><span class="header-section-number">1</span> Multiple ( R² ) Measures</h2>
 <p>In standard linear regression, ( R² ) is straightforward, it measures the proportion of variance explained.</p>
 <p>In case-control studies, things we need to consider:</p>
 <p>The outcome is binary</p>
@@ -218,7 +221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Therefore, , different definitions of ( R² ) depends on the model (linear, logit, probit), the scale (observed vs liability), and also the study design.</p>
 <p>Simulating a GWAS-like Dataset We will work with a small simulated dataset. The idea is to generate genotype data, construct a genetic signal, and then simulate a binary phenotype using a liability threshold model, simulating a typical GWAS setting.</p>
 <div id="d3753053-1697-450e-a6c0-c112afbea9c9" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">100</span></span>
@@ -234,85 +237,85 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>liability <span class="ot">&lt;-</span> <span class="fu">scale</span>(genetic_score) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>threshold <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> K)</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(liability <span class="sc">&gt;</span> threshold, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, G[, causal_snps])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, G[, causal_snps])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="model-fitting" class="level2">
-<h2 class="anchored" data-anchor-id="model-fitting">Model Fitting</h2>
+<section id="model-fitting" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="model-fitting"><span class="header-section-number">2</span> Model Fitting</h2>
 <p>With the simulated dataset, the next step is to fit models that are commonly used for binary outcomes. We use a linear model for observed-scale R², and logistic and probit models to connect with the likelihood-based and liability-scale interpretations.</p>
 <p>These models will form the basis for computing the different R2R²R2 measures discussed next.</p>
 <div id="af2dddb0-921e-4849-99bb-bf86ca971423" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> ., <span class="at">data =</span> df)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> ., <span class="at">data =</span> df)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>logit_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> ., <span class="at">data =</span> df, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="st">"logit"</span>))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>probit_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> ., <span class="at">data =</span> df, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="st">"probit"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>probit_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> ., <span class="at">data =</span> df, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="st">"probit"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="observed-scale-r²" class="level3">
-<h3 class="anchored" data-anchor-id="observed-scale-r²">1. Observed-Scale ( R² )</h3>
+<section id="observed-scale-r²" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="observed-scale-r²"><span class="header-section-number">2.1</span> 1. Observed-Scale ( R² )</h3>
 <p>This is the standard R² from linear regression, applied here to a binary outcome. It measures how much variation in the observed data is explained by the model, but in case-control settings this interpretation is limited.</p>
 <p>R2_o = 1 - sum((y - y_hat)^2) / sum((y - mean(y))^2)</p>
 <p>R2_observed &lt;- summary(lm_fit)$r.squared</p>
 <p>Because it is computed directly on the sampled data, this measure depends strongly on the sample prevalence and is not directly comparable across studies.</p>
 </section>
-<section id="cox-snells-r²" class="level3">
-<h3 class="anchored" data-anchor-id="cox-snells-r²">2. Cox &amp; Snell’s ( R² )</h3>
+<section id="cox-snells-r²" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="cox-snells-r²"><span class="header-section-number">2.2</span> 2. Cox &amp; Snell’s ( R² )</h3>
 <p>Cox &amp; Snell’s R² is a likelihood-based measure designed for logistic regression models. Instead of relying on variance, it compares how well the fitted model performs relative to a null model using log-likelihood values.</p>
 <p>ll_null &lt;- as.numeric(logLik(glm(y ~ 1, data = df, family = binomial)))</p>
 <p>ll_full &lt;- as.numeric(logLik(logit_fit))</p>
 <p>R2_cox_snell &lt;- 1 - exp((2/n) * (ll_null - ll_full))</p>
 <p>This measure captures improvement over the null model, but it has a limitation, it does not reach 1 even for a perfectly fitting model, which affects its interpretability.</p>
 </section>
-<section id="nagelkerkes-r²" class="level3">
-<h3 class="anchored" data-anchor-id="nagelkerkes-r²">3. Nagelkerke’s ( R² )</h3>
+<section id="nagelkerkes-r²" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="nagelkerkes-r²"><span class="header-section-number">2.3</span> 3. Nagelkerke’s ( R² )</h3>
 <p>Nagelkerke’s R² is a rescaled version of Cox &amp; Snell’s R², designed to improve interpretability. It adjusts the original measure so that the maximum value can reach 1.</p>
 <p>R2_nagelkerke &lt;- R2_cox_snell / (1 - exp((2/n) * ll_null))</p>
 <p>By normalizing the range to [0,1], this version makes it easier to interpret and compare across models, while still retaining the likelihood-based foundation.</p>
 </section>
-<section id="liability-scale-r²" class="level3">
-<h3 class="anchored" data-anchor-id="liability-scale-r²">4. Liability-Scale ( R² )</h3>
+<section id="liability-scale-r²" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="liability-scale-r²"><span class="header-section-number">2.4</span> 4. Liability-Scale ( R² )</h3>
 <p>Liability-scale R² transforms the observed R² into a population-level quantity under the liability threshold model. This step accounts for both population prevalence and sample prevalence.</p>
 <p>z &lt;- dnorm(qnorm(1 - K)) P_sample &lt;- mean(y)</p>
 <p>R2_liability &lt;- R2_observed * (K^2 * (1 - K)^2) / (z^2 * P_sample * (1 - P_sample))</p>
 <p>This is the standard form used in statistical genetics, as it reflects variance explained on the underlying liability scale rather than the sampled binary outcome.</p>
 </section>
-<section id="probit-liability-r²" class="level3">
-<h3 class="anchored" data-anchor-id="probit-liability-r²">5. Probit Liability ( R² )</h3>
+<section id="probit-liability-r²" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="probit-liability-r²"><span class="header-section-number">2.5</span> 5. Probit Liability ( R² )</h3>
 <p>The probit-based R² is defined on the liability scale under the assumption that the residual variance is fixed to 1, consistent with the normal distribution used in the probit model.</p>
 <p>pred_probit &lt;- predict(probit_fit, type = “link”)</p>
 <p>R2_probit &lt;- var(pred_probit) / (var(pred_probit) + 1)</p>
 <p>This provides a direct estimate of variance explained on the latent liability scale under the probit framework.</p>
 </section>
-<section id="logit-liability-r²" class="level3">
-<h3 class="anchored" data-anchor-id="logit-liability-r²">6. Logit Liability ( R² )</h3>
+<section id="logit-liability-r²" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="logit-liability-r²"><span class="header-section-number">2.6</span> 6. Logit Liability ( R² )</h3>
 <p>The logit-based R² follows the same idea as the probit version, but under the logistic model where the residual variance is fixed to:</p>
 <p>pi^2 / 3 ≈ 3.29</p>
 <p>pred_logit &lt;- predict(logit_fit, type = “link”)</p>
 <p>R2_logit &lt;- var(pred_logit) / (var(pred_logit) + (pi^2/3))</p>
 <p>This adjusts the variance explained to the logistic scale, reflecting the assumptions of the logit model.</p>
 </section>
-<section id="auc-based-r²" class="level3">
-<h3 class="anchored" data-anchor-id="auc-based-r²">7. AUC-Based ( R² )</h3>
+<section id="auc-based-r²" class="level3" data-number="2.7">
+<h3 data-number="2.7" class="anchored" data-anchor-id="auc-based-r²"><span class="header-section-number">2.7</span> 7. AUC-Based ( R² )</h3>
 <p>The AUC-based R² takes a different approach by linking classification performance to explained variation. Instead of working directly with variance, it uses the model’s ability to discriminate between cases and controls.</p>
 <p>library(pROC)</p>
 <p>auc_value &lt;- as.numeric(auc(y, fitted(logit_fit)))</p>
 <p>R2_auc &lt;- 2 * (auc_value - 0.5)</p>
 <p>This provides a simple and practical approximation, especially in settings where only prediction metrics like AUC are available rather than full model outputs.</p>
 </section>
-<section id="ascertainment-corrected-liability-r²" class="level3">
-<h3 class="anchored" data-anchor-id="ascertainment-corrected-liability-r²">8. Ascertainment-Corrected Liability ( R² )</h3>
+<section id="ascertainment-corrected-liability-r²" class="level3" data-number="2.8">
+<h3 data-number="2.8" class="anchored" data-anchor-id="ascertainment-corrected-liability-r²"><span class="header-section-number">2.8</span> 8. Ascertainment-Corrected Liability ( R² )</h3>
 <p>This version adjusts the R² estimate for case-control sampling bias, which arises when the proportion of cases in the sample does not match the true population prevalence.</p>
 <p>theta &lt;- (z^2) / (K^2 * (1 - K)^2)</p>
 <p>R2_ascertained &lt;- R2_observed / (R2_observed + theta * P_sample * (1 - P_sample))</p>
 <p>This correction is essential in practice, as most genetic studies use ascertained samples, and not taking into consideration for this can lead to incorrect estimates.</p>
 </section>
 </section>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<section id="summary" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="summary"><span class="header-section-number">3</span> Summary</h2>
 <p>All these R² measures are trying to answer the same question: ‘how much variation is explained’, but they do so under different assumptions, on different scales, and with different interpretations. In genetic studies, reporting R2R²R2 without clearly stating the scale and definition is not informative, the context in which it is computed is equally important.</p>
 <p>Observed-scale R² is straightforward to compute, but it can be misleading in case-control settings because it depends on how the sample is constructed. Liability-scale R², reflects variation at the population level and aligns with the underlying disease model. The probit and logit versions differ in their distributional assumptions, which directly affect how variance is scaled. In real data, especially with case-control designs, accounting for ascertainment is mandatory for meaningful interpretation.</p>
 <p>This is the full code snippet</p>
 <div id="69db8360-6c76-46dc-8386-01b4cbbe8b5f" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># R2 measures for simulated GWAS-like case-control data</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy-paste ready for an R Jupyter Notebook</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
@@ -509,26 +512,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Ascertainment-corrected R2 adjusts for case-control sampling.</span><span class="sc">\n</span><span class="st">"</span>)</span>
 <span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Key point:</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"For genetic case-control studies, liability-scale R2 is the closest interpretation to heritability on the liability scale.</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Type 'citation("pROC")' for a citation.
-
-
-Attaching package: ‘pROC’
-
-
-The following objects are masked from ‘package:stats’:
-
-    cov, smooth, var
-
-</code></pre>
-</div>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"For genetic case-control studies, liability-scale R2 is the closest interpretation to heritability on the liability scale.</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sample prevalence: 0.181 
 Population prevalence used: 0.1 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 6 × 5</caption>
 <thead>
 <tr class="header">
@@ -550,7 +540,7 @@ Population prevalence used: 0.1 </code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">1</td>
+<th data-quarto-table-cell-role="th" scope="row">1</th>
 <td>1</td>
 <td>0</td>
 <td>0</td>
@@ -558,7 +548,7 @@ Population prevalence used: 0.1 </code></pre>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">2</td>
+<th data-quarto-table-cell-role="th" scope="row">2</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -566,7 +556,7 @@ Population prevalence used: 0.1 </code></pre>
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">3</td>
+<th data-quarto-table-cell-role="th" scope="row">3</th>
 <td>0</td>
 <td>0</td>
 <td>1</td>
@@ -574,7 +564,7 @@ Population prevalence used: 0.1 </code></pre>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">4</td>
+<th data-quarto-table-cell-role="th" scope="row">4</th>
 <td>0</td>
 <td>0</td>
 <td>2</td>
@@ -582,7 +572,7 @@ Population prevalence used: 0.1 </code></pre>
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">5</td>
+<th data-quarto-table-cell-role="th" scope="row">5</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -590,7 +580,7 @@ Population prevalence used: 0.1 </code></pre>
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">6</td>
+<th data-quarto-table-cell-role="th" scope="row">6</th>
 <td>0</td>
 <td>1</td>
 <td>0</td>
@@ -600,14 +590,8 @@ Population prevalence used: 0.1 </code></pre>
 </tbody>
 </table>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Setting levels: control = 0, case = 1
-
-Setting direction: controls &lt; cases
-</code></pre>
-</div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 8 × 2</caption>
 <thead>
 <tr class="header">
@@ -670,8 +654,8 @@ For genetic case-control studies, liability-scale R2 is the closest interpretati
 </div>
 </div>
 </section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<section id="references" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="references"><span class="header-section-number">4</span> References</h2>
 <p><a href="https://pubmed.ncbi.nlm.nih.gov/22714935/">A better coefficient of determination for genetic profile analysis</a></p>
 
 
@@ -729,13 +713,14 @@ For genetic case-control studies, liability-scale R2 is the closest interpretati
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Mendelian Randomization – Nivedita’s Blog</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -106,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -119,7 +122,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -138,7 +141,7 @@ window.Quarto = {
 <link rel="stylesheet" href="../../style.css">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -174,14 +177,274 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-you-will-learn" id="toc-what-you-will-learn" class="nav-link active" data-scroll-target="#what-you-will-learn">What You Will Learn</a></li>
+  <li><a href="#who-should-read-this-tutorial" id="toc-who-should-read-this-tutorial" class="nav-link" data-scroll-target="#who-should-read-this-tutorial">Who Should Read This Tutorial</a></li>
+  <li><a href="#key-concepts-covered" id="toc-key-concepts-covered" class="nav-link" data-scroll-target="#key-concepts-covered">Key Concepts Covered</a></li>
+  <li><a href="#why-mr-matters" id="toc-why-mr-matters" class="nav-link" data-scroll-target="#why-mr-matters">Why MR Matters</a></li>
+  <li><a href="#what-is-correlation" id="toc-what-is-correlation" class="nav-link" data-scroll-target="#what-is-correlation">What Is Correlation?</a></li>
+  <li><a href="#the-central-question" id="toc-the-central-question" class="nav-link" data-scroll-target="#the-central-question">The Central Question</a></li>
+  <li><a href="#randomized-controlled-trials" id="toc-randomized-controlled-trials" class="nav-link" data-scroll-target="#randomized-controlled-trials">Randomized Controlled Trials</a></li>
+  <li><a href="#what-is-mendelian-randomization" id="toc-what-is-mendelian-randomization" class="nav-link" data-scroll-target="#what-is-mendelian-randomization">What Is Mendelian Randomization?</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#the-central-idea-behind-mendelian-randomization" id="toc-the-central-idea-behind-mendelian-randomization" class="nav-link" data-scroll-target="#the-central-idea-behind-mendelian-randomization">The Central Idea Behind Mendelian Randomization</a></li>
+  <li><a href="#mendelian-randomization-and-randomized-controlled-trials" id="toc-mendelian-randomization-and-randomized-controlled-trials" class="nav-link" data-scroll-target="#mendelian-randomization-and-randomized-controlled-trials">Mendelian Randomization and Randomized Controlled Trials</a></li>
+  <li><a href="#mendelian-randomization-as-natures-experiment" id="toc-mendelian-randomization-as-natures-experiment" class="nav-link" data-scroll-target="#mendelian-randomization-as-natures-experiment">Mendelian Randomization as Nature’s Experiment</a></li>
+  <li><a href="#what-is-an-instrumental-variable" id="toc-what-is-an-instrumental-variable" class="nav-link" data-scroll-target="#what-is-an-instrumental-variable">What Is an Instrumental Variable?</a></li>
+  <li><a href="#instrumental-variable-framework" id="toc-instrumental-variable-framework" class="nav-link" data-scroll-target="#instrumental-variable-framework">Instrumental Variable Framework</a></li>
+  <li><a href="#the-three-core-assumptions-of-mendelian-randomization" id="toc-the-three-core-assumptions-of-mendelian-randomization" class="nav-link" data-scroll-target="#the-three-core-assumptions-of-mendelian-randomization">The Three Core Assumptions of Mendelian Randomization</a></li>
+  <li><a href="#understanding-pleiotropy" id="toc-understanding-pleiotropy" class="nav-link" data-scroll-target="#understanding-pleiotropy">Understanding Pleiotropy</a></li>
+  <li><a href="#why-genetic-variants-are-useful-instruments" id="toc-why-genetic-variants-are-useful-instruments" class="nav-link" data-scroll-target="#why-genetic-variants-are-useful-instruments">Why Genetic Variants Are Useful Instruments</a></li>
+  <li><a href="#strengths-of-mendelian-randomization" id="toc-strengths-of-mendelian-randomization" class="nav-link" data-scroll-target="#strengths-of-mendelian-randomization">Strengths of Mendelian Randomization</a></li>
+  <li><a href="#limitations-of-mendelian-randomization" id="toc-limitations-of-mendelian-randomization" class="nav-link" data-scroll-target="#limitations-of-mendelian-randomization">Limitations of Mendelian Randomization</a></li>
+  <li><a href="#looking-ahead-1" id="toc-looking-ahead-1" class="nav-link" data-scroll-target="#looking-ahead-1">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-1" id="toc-key-takeaways-1" class="nav-link" data-scroll-target="#key-takeaways-1">Key Takeaways</a></li>
+  <li><a href="#the-wald-ratio-and-single-snp-mendelian-randomization" id="toc-the-wald-ratio-and-single-snp-mendelian-randomization" class="nav-link" data-scroll-target="#the-wald-ratio-and-single-snp-mendelian-randomization">The Wald Ratio and Single-SNP Mendelian Randomization</a></li>
+  <li><a href="#learning-objectives-1" id="toc-learning-objectives-1" class="nav-link" data-scroll-target="#learning-objectives-1">Learning Objectives</a></li>
+  <li><a href="#from-instrumental-variables-to-causal-effects" id="toc-from-instrumental-variables-to-causal-effects" class="nav-link" data-scroll-target="#from-instrumental-variables-to-causal-effects">From Instrumental Variables to Causal Effects</a></li>
+  <li><a href="#snp-exposure" id="toc-snp-exposure" class="nav-link" data-scroll-target="#snp-exposure">SNP → Exposure</a></li>
+  <li><a href="#snp-outcome" id="toc-snp-outcome" class="nav-link" data-scroll-target="#snp-outcome">SNP → Outcome</a></li>
+  <li><a href="#the-intuition-behind-the-wald-ratio" id="toc-the-intuition-behind-the-wald-ratio" class="nav-link" data-scroll-target="#the-intuition-behind-the-wald-ratio">The Intuition Behind the Wald Ratio</a></li>
+  <li><a href="#the-wald-ratio-formula" id="toc-the-wald-ratio-formula" class="nav-link" data-scroll-target="#the-wald-ratio-formula">The Wald Ratio Formula</a></li>
+  <li><a href="#a-numerical-example" id="toc-a-numerical-example" class="nav-link" data-scroll-target="#a-numerical-example">A Numerical Example</a></li>
+  <li><a href="#snp-bmi" id="toc-snp-bmi" class="nav-link" data-scroll-target="#snp-bmi">SNP → BMI</a></li>
+  <li><a href="#visualizing-the-logic" id="toc-visualizing-the-logic" class="nav-link" data-scroll-target="#visualizing-the-logic">Visualizing the Logic</a></li>
+  <li><a href="#example-c-reactive-protein-and-blood-pressure" id="toc-example-c-reactive-protein-and-blood-pressure" class="nav-link" data-scroll-target="#example-c-reactive-protein-and-blood-pressure">Example: C-Reactive Protein and Blood Pressure</a></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals">Confidence Intervals</a></li>
+  <li><a href="#the-importance-of-instrument-strength" id="toc-the-importance-of-instrument-strength" class="nav-link" data-scroll-target="#the-importance-of-instrument-strength">The Importance of Instrument Strength</a></li>
+  <li><a href="#advantages-of-the-wald-ratio" id="toc-advantages-of-the-wald-ratio" class="nav-link" data-scroll-target="#advantages-of-the-wald-ratio">Advantages of the Wald Ratio</a></li>
+  <li><a href="#limitations-of-the-wald-ratio" id="toc-limitations-of-the-wald-ratio" class="nav-link" data-scroll-target="#limitations-of-the-wald-ratio">Limitations of the Wald Ratio</a></li>
+  <li><a href="#why-multiple-snps-are-better" id="toc-why-multiple-snps-are-better" class="nav-link" data-scroll-target="#why-multiple-snps-are-better">Why Multiple SNPs Are Better</a></li>
+  <li><a href="#looking-ahead-2" id="toc-looking-ahead-2" class="nav-link" data-scroll-target="#looking-ahead-2">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-2" id="toc-key-takeaways-2" class="nav-link" data-scroll-target="#key-takeaways-2">Key Takeaways</a></li>
+  <li><a href="#multiple-snp-mendelian-randomization-and-the-inverse-variance-weighted-ivw-method" id="toc-multiple-snp-mendelian-randomization-and-the-inverse-variance-weighted-ivw-method" class="nav-link" data-scroll-target="#multiple-snp-mendelian-randomization-and-the-inverse-variance-weighted-ivw-method">Multiple-SNP Mendelian Randomization and the Inverse Variance Weighted (IVW) Method</a></li>
+  <li><a href="#multiple-instruments" id="toc-multiple-instruments" class="nav-link" data-scroll-target="#multiple-instruments">Multiple Instruments</a></li>
+  <li><a href="#why-not-simply-average-them" id="toc-why-not-simply-average-them" class="nav-link" data-scroll-target="#why-not-simply-average-them">Why Not Simply Average Them?</a></li>
+  <li><a href="#the-principle-of-inverse-variance-weighting" id="toc-the-principle-of-inverse-variance-weighting" class="nav-link" data-scroll-target="#the-principle-of-inverse-variance-weighting">The Principle of Inverse Variance Weighting</a></li>
+  <li><a href="#the-ivw-formula" id="toc-the-ivw-formula" class="nav-link" data-scroll-target="#the-ivw-formula">The IVW Formula</a></li>
+  <li><a href="#interpreting-the-formula" id="toc-interpreting-the-formula" class="nav-link" data-scroll-target="#interpreting-the-formula">Interpreting the Formula</a></li>
+  <li><a href="#a-numerical-example-1" id="toc-a-numerical-example-1" class="nav-link" data-scroll-target="#a-numerical-example-1">A Numerical Example</a></li>
+  <li><a href="#an-alternative-view-of-ivw" id="toc-an-alternative-view-of-ivw" class="nav-link" data-scroll-target="#an-alternative-view-of-ivw">An Alternative View of IVW</a></li>
+  <li><a href="#relationship-between-wald-ratio-and-ivw" id="toc-relationship-between-wald-ratio-and-ivw" class="nav-link" data-scroll-target="#relationship-between-wald-ratio-and-ivw">Relationship Between Wald Ratio and IVW</a></li>
+  <li><a href="#why-ivw-became-the-standard-method" id="toc-why-ivw-became-the-standard-method" class="nav-link" data-scroll-target="#why-ivw-became-the-standard-method">Why IVW Became the Standard Method</a></li>
+  <li><a href="#the-assumptions-behind-ivw" id="toc-the-assumptions-behind-ivw" class="nav-link" data-scroll-target="#the-assumptions-behind-ivw">The Assumptions Behind IVW</a></li>
+  <li><a href="#the-problem-of-horizontal-pleiotropy" id="toc-the-problem-of-horizontal-pleiotropy" class="nav-link" data-scroll-target="#the-problem-of-horizontal-pleiotropy">The Problem of Horizontal Pleiotropy</a></li>
+  <li><a href="#example-from-modern-genetic-epidemiology" id="toc-example-from-modern-genetic-epidemiology" class="nav-link" data-scroll-target="#example-from-modern-genetic-epidemiology">Example from Modern Genetic Epidemiology</a></li>
+  <li><a href="#looking-ahead-3" id="toc-looking-ahead-3" class="nav-link" data-scroll-target="#looking-ahead-3">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-3" id="toc-key-takeaways-3" class="nav-link" data-scroll-target="#key-takeaways-3">Key Takeaways</a></li>
+  <li><a href="#two-sample-mendelian-randomization" id="toc-two-sample-mendelian-randomization" class="nav-link" data-scroll-target="#two-sample-mendelian-randomization">Two-Sample Mendelian Randomization</a></li>
+  <li><a href="#learning-objectives-3" id="toc-learning-objectives-3" class="nav-link" data-scroll-target="#learning-objectives-3">Learning Objectives</a></li>
+  <li><a href="#revisiting-the-mr-framework" id="toc-revisiting-the-mr-framework" class="nav-link" data-scroll-target="#revisiting-the-mr-framework">Revisiting the MR Framework</a></li>
+  <li><a href="#one-sample-mendelian-randomization" id="toc-one-sample-mendelian-randomization" class="nav-link" data-scroll-target="#one-sample-mendelian-randomization">One-Sample Mendelian Randomization</a></li>
+  <li><a href="#advantages-of-one-sample-mr" id="toc-advantages-of-one-sample-mr" class="nav-link" data-scroll-target="#advantages-of-one-sample-mr">Advantages of One-Sample MR</a></li>
+  <li><a href="#limitations-of-one-sample-mr" id="toc-limitations-of-one-sample-mr" class="nav-link" data-scroll-target="#limitations-of-one-sample-mr">Limitations of One-Sample MR</a></li>
+  <li><a href="#two-sample-mendelian-randomization-1" id="toc-two-sample-mendelian-randomization-1" class="nav-link" data-scroll-target="#two-sample-mendelian-randomization-1">Two-Sample Mendelian Randomization</a></li>
+  <li><a href="#exposure-gwas" id="toc-exposure-gwas" class="nav-link" data-scroll-target="#exposure-gwas">Exposure GWAS</a></li>
+  <li><a href="#outcome-gwas" id="toc-outcome-gwas" class="nav-link" data-scroll-target="#outcome-gwas">Outcome GWAS</a></li>
+  <li><a href="#combining-the-two-gwas" id="toc-combining-the-two-gwas" class="nav-link" data-scroll-target="#combining-the-two-gwas">Combining the Two GWAS</a></li>
+  <li><a href="#why-two-sample-mr-changed-the-field" id="toc-why-two-sample-mr-changed-the-field" class="nav-link" data-scroll-target="#why-two-sample-mr-changed-the-field">Why Two-Sample MR Changed the Field</a></li>
+  <li><a href="#modern-gwas-resources" id="toc-modern-gwas-resources" class="nav-link" data-scroll-target="#modern-gwas-resources">Modern GWAS Resources</a></li>
+  <li><a href="#a-practical-example" id="toc-a-practical-example" class="nav-link" data-scroll-target="#a-practical-example">A Practical Example</a></li>
+  <li><a href="#exposure-gwas-1" id="toc-exposure-gwas-1" class="nav-link" data-scroll-target="#exposure-gwas-1">Exposure GWAS</a></li>
+  <li><a href="#outcome-gwas-1" id="toc-outcome-gwas-1" class="nav-link" data-scroll-target="#outcome-gwas-1">Outcome GWAS</a></li>
+  <li><a href="#why-large-gwas-are-helpful" id="toc-why-large-gwas-are-helpful" class="nav-link" data-scroll-target="#why-large-gwas-are-helpful">Why Large GWAS Are Helpful</a></li>
+  <li><a href="#visualizing-two-sample-mr" id="toc-visualizing-two-sample-mr" class="nav-link" data-scroll-target="#visualizing-two-sample-mr">Visualizing Two-Sample MR</a></li>
+  <li><a href="#the-assumption-of-population-similarity" id="toc-the-assumption-of-population-similarity" class="nav-link" data-scroll-target="#the-assumption-of-population-similarity">The Assumption of Population Similarity</a></li>
+  <li><a href="#sample-overlap" id="toc-sample-overlap" class="nav-link" data-scroll-target="#sample-overlap">Sample Overlap</a></li>
+  <li><a href="#no-overlap" id="toc-no-overlap" class="nav-link" data-scroll-target="#no-overlap">No Overlap</a></li>
+  <li><a href="#partial-overlap" id="toc-partial-overlap" class="nav-link" data-scroll-target="#partial-overlap">Partial Overlap</a></li>
+  <li><a href="#complete-overlap" id="toc-complete-overlap" class="nav-link" data-scroll-target="#complete-overlap">Complete Overlap</a></li>
+  <li><a href="#weak-instrument-bias-in-two-sample-mr" id="toc-weak-instrument-bias-in-two-sample-mr" class="nav-link" data-scroll-target="#weak-instrument-bias-in-two-sample-mr">Weak Instrument Bias in Two-Sample MR</a></li>
+  <li><a href="#why-summary-statistics-are-sufficient" id="toc-why-summary-statistics-are-sufficient" class="nav-link" data-scroll-target="#why-summary-statistics-are-sufficient">Why Summary Statistics Are Sufficient</a></li>
+  <li><a href="#the-typical-two-sample-mr-workflow" id="toc-the-typical-two-sample-mr-workflow" class="nav-link" data-scroll-target="#the-typical-two-sample-mr-workflow">The Typical Two-Sample MR Workflow</a></li>
+  <li><a href="#advantages-of-two-sample-mr" id="toc-advantages-of-two-sample-mr" class="nav-link" data-scroll-target="#advantages-of-two-sample-mr">Advantages of Two-Sample MR</a></li>
+  <li><a href="#limitations-of-two-sample-mr" id="toc-limitations-of-two-sample-mr" class="nav-link" data-scroll-target="#limitations-of-two-sample-mr">Limitations of Two-Sample MR</a></li>
+  <li><a href="#looking-ahead-4" id="toc-looking-ahead-4" class="nav-link" data-scroll-target="#looking-ahead-4">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-4" id="toc-key-takeaways-4" class="nav-link" data-scroll-target="#key-takeaways-4">Key Takeaways</a></li>
+  <li><a href="#harmonization-of-exposure-and-outcome-data" id="toc-harmonization-of-exposure-and-outcome-data" class="nav-link" data-scroll-target="#harmonization-of-exposure-and-outcome-data">Harmonization of Exposure and Outcome Data</a></li>
+  <li><a href="#learning-objectives-4" id="toc-learning-objectives-4" class="nav-link" data-scroll-target="#learning-objectives-4">Learning Objectives</a></li>
+  <li><a href="#why-harmonization-is-necessary" id="toc-why-harmonization-is-necessary" class="nav-link" data-scroll-target="#why-harmonization-is-necessary">Why Harmonization Is Necessary</a></li>
+  <li><a href="#understanding-alleles" id="toc-understanding-alleles" class="nav-link" data-scroll-target="#understanding-alleles">Understanding Alleles</a></li>
+  <li><a href="#effect-allele" id="toc-effect-allele" class="nav-link" data-scroll-target="#effect-allele">Effect Allele</a></li>
+  <li><a href="#why-allele-alignment-matters" id="toc-why-allele-alignment-matters" class="nav-link" data-scroll-target="#why-allele-alignment-matters">Why Allele Alignment Matters</a></li>
+  <li><a href="#example-of-correct-harmonization" id="toc-example-of-correct-harmonization" class="nav-link" data-scroll-target="#example-of-correct-harmonization">Example of Correct Harmonization</a></li>
+  <li><a href="#what-happens-if-we-fail-to-harmonize" id="toc-what-happens-if-we-fail-to-harmonize" class="nav-link" data-scroll-target="#what-happens-if-we-fail-to-harmonize">What Happens If We Fail to Harmonize?</a></li>
+  <li><a href="#dna-strand-orientation" id="toc-dna-strand-orientation" class="nav-link" data-scroll-target="#dna-strand-orientation">DNA Strand Orientation</a></li>
+  <li><a href="#forward-and-reverse-strands" id="toc-forward-and-reverse-strands" class="nav-link" data-scroll-target="#forward-and-reverse-strands">Forward and Reverse Strands</a></li>
+  <li><a href="#strand-flipping" id="toc-strand-flipping" class="nav-link" data-scroll-target="#strand-flipping">Strand Flipping</a></li>
+  <li><a href="#palindromic-snps" id="toc-palindromic-snps" class="nav-link" data-scroll-target="#palindromic-snps">Palindromic SNPs</a></li>
+  <li><a href="#why-are-palindromic-snps-problematic" id="toc-why-are-palindromic-snps-problematic" class="nav-link" data-scroll-target="#why-are-palindromic-snps-problematic">Why Are Palindromic SNPs Problematic?</a></li>
+  <li><a href="#example-of-a-palindromic-snp" id="toc-example-of-a-palindromic-snp" class="nav-link" data-scroll-target="#example-of-a-palindromic-snp">Example of a Palindromic SNP</a></li>
+  <li><a href="#using-allele-frequencies" id="toc-using-allele-frequencies" class="nav-link" data-scroll-target="#using-allele-frequencies">Using Allele Frequencies</a></li>
+  <li><a href="#ambiguous-palindromic-snps" id="toc-ambiguous-palindromic-snps" class="nav-link" data-scroll-target="#ambiguous-palindromic-snps">Ambiguous Palindromic SNPs</a></li>
+  <li><a href="#harmonization-workflow" id="toc-harmonization-workflow" class="nav-link" data-scroll-target="#harmonization-workflow">Harmonization Workflow</a></li>
+  <li><a href="#harmonization-in-twosamplemr" id="toc-harmonization-in-twosamplemr" class="nav-link" data-scroll-target="#harmonization-in-twosamplemr">Harmonization in TwoSampleMR</a></li>
+  <li><a href="#example-workflow" id="toc-example-workflow" class="nav-link" data-scroll-target="#example-workflow">Example Workflow</a>
+  <ul class="collapse">
+  <li><a href="#common-harmonization-errors" id="toc-common-harmonization-errors" class="nav-link" data-scroll-target="#common-harmonization-errors">Common Harmonization Errors</a></li>
+  <li><a href="#quality-control-after-harmonization" id="toc-quality-control-after-harmonization" class="nav-link" data-scroll-target="#quality-control-after-harmonization">Quality Control After Harmonization</a></li>
+  <li><a href="#why-harmonization-is-so-important" id="toc-why-harmonization-is-so-important" class="nav-link" data-scroll-target="#why-harmonization-is-so-important">Why Harmonization Is So Important</a></li>
+  <li><a href="#looking-ahead-5" id="toc-looking-ahead-5" class="nav-link" data-scroll-target="#looking-ahead-5">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-5" id="toc-key-takeaways-5" class="nav-link" data-scroll-target="#key-takeaways-5">Key Takeaways</a></li>
+  <li><a href="#horizontal-pleiotropy-the-biggest-threat-to-mendelian-randomization" id="toc-horizontal-pleiotropy-the-biggest-threat-to-mendelian-randomization" class="nav-link" data-scroll-target="#horizontal-pleiotropy-the-biggest-threat-to-mendelian-randomization">Horizontal Pleiotropy: The Biggest Threat to Mendelian Randomization</a></li>
+  <li><a href="#learning-objectives-5" id="toc-learning-objectives-5" class="nav-link" data-scroll-target="#learning-objectives-5">Learning Objectives</a></li>
+  <li><a href="#what-is-pleiotropy" id="toc-what-is-pleiotropy" class="nav-link" data-scroll-target="#what-is-pleiotropy">What Is Pleiotropy?</a></li>
+  <li><a href="#revisiting-the-mr-framework-1" id="toc-revisiting-the-mr-framework-1" class="nav-link" data-scroll-target="#revisiting-the-mr-framework-1">Revisiting the MR Framework</a></li>
+  <li><a href="#the-exclusion-restriction-assumption" id="toc-the-exclusion-restriction-assumption" class="nav-link" data-scroll-target="#the-exclusion-restriction-assumption">The Exclusion Restriction Assumption</a></li>
+  <li><a href="#two-types-of-pleiotropy" id="toc-two-types-of-pleiotropy" class="nav-link" data-scroll-target="#two-types-of-pleiotropy">Two Types of Pleiotropy</a></li>
+  <li><a href="#vertical-pleiotropy" id="toc-vertical-pleiotropy" class="nav-link" data-scroll-target="#vertical-pleiotropy">Vertical Pleiotropy</a></li>
+  <li><a href="#why-vertical-pleiotropy-is-acceptable" id="toc-why-vertical-pleiotropy-is-acceptable" class="nav-link" data-scroll-target="#why-vertical-pleiotropy-is-acceptable">Why Vertical Pleiotropy Is Acceptable</a></li>
+  <li><a href="#visualizing-horizontal-pleiotropy" id="toc-visualizing-horizontal-pleiotropy" class="nav-link" data-scroll-target="#visualizing-horizontal-pleiotropy">Visualizing Horizontal Pleiotropy</a></li>
+  <li><a href="#why-horizontal-pleiotropy-is-dangerous" id="toc-why-horizontal-pleiotropy-is-dangerous" class="nav-link" data-scroll-target="#why-horizontal-pleiotropy-is-dangerous">Why Horizontal Pleiotropy Is Dangerous</a></li>
+  <li><a href="#a-numerical-example-2" id="toc-a-numerical-example-2" class="nav-link" data-scroll-target="#a-numerical-example-2">A Numerical Example</a></li>
+  </ul></li>
+  <li><a href="#snp---bmi" id="toc-snp---bmi" class="nav-link" data-scroll-target="#snp---bmi">SNP -&gt; BMI</a>
+  <ul class="collapse">
+  <li><a href="#balanced-pleiotropy" id="toc-balanced-pleiotropy" class="nav-link" data-scroll-target="#balanced-pleiotropy">Balanced Pleiotropy</a></li>
+  <li><a href="#directional-pleiotropy" id="toc-directional-pleiotropy" class="nav-link" data-scroll-target="#directional-pleiotropy">Directional Pleiotropy</a></li>
+  <li><a href="#valid-and-invalid-instruments" id="toc-valid-and-invalid-instruments" class="nav-link" data-scroll-target="#valid-and-invalid-instruments">Valid and Invalid Instruments</a></li>
+  <li><a href="#why-pleiotropy-is-so-common" id="toc-why-pleiotropy-is-so-common" class="nav-link" data-scroll-target="#why-pleiotropy-is-so-common">Why Pleiotropy Is So Common</a></li>
+  <li><a href="#looking-ahead-6" id="toc-looking-ahead-6" class="nav-link" data-scroll-target="#looking-ahead-6">Looking Ahead</a></li>
+  <li><a href="#mr-egger-regression-detecting-and-adjusting-for-directional-pleiotropy" id="toc-mr-egger-regression-detecting-and-adjusting-for-directional-pleiotropy" class="nav-link" data-scroll-target="#mr-egger-regression-detecting-and-adjusting-for-directional-pleiotropy">MR-Egger Regression: Detecting and Adjusting for Directional Pleiotropy</a></li>
+  <li><a href="#learning-objectives-6" id="toc-learning-objectives-6" class="nav-link" data-scroll-target="#learning-objectives-6">Learning Objectives</a></li>
+  <li><a href="#why-ivw-can-fail" id="toc-why-ivw-can-fail" class="nav-link" data-scroll-target="#why-ivw-can-fail">Why IVW Can Fail</a></li>
+  <li><a href="#the-idea-behind-mr-egger" id="toc-the-idea-behind-mr-egger" class="nav-link" data-scroll-target="#the-idea-behind-mr-egger">The Idea Behind MR-Egger</a></li>
+  <li><a href="#why-the-intercept-matters" id="toc-why-the-intercept-matters" class="nav-link" data-scroll-target="#why-the-intercept-matters">Why the Intercept Matters</a></li>
+  <li><a href="#visualizing-ivw-and-mr-egger" id="toc-visualizing-ivw-and-mr-egger" class="nav-link" data-scroll-target="#visualizing-ivw-and-mr-egger">Visualizing IVW and MR-Egger</a></li>
+  <li><a href="#the-mr-egger-slope" id="toc-the-mr-egger-slope" class="nav-link" data-scroll-target="#the-mr-egger-slope">The MR-Egger Slope</a></li>
+  <li><a href="#the-mr-egger-intercept" id="toc-the-mr-egger-intercept" class="nav-link" data-scroll-target="#the-mr-egger-intercept">The MR-Egger Intercept</a></li>
+  <li><a href="#balanced-vs-directional-pleiotropy-revisited" id="toc-balanced-vs-directional-pleiotropy-revisited" class="nav-link" data-scroll-target="#balanced-vs-directional-pleiotropy-revisited">Balanced vs Directional Pleiotropy Revisited</a></li>
+  <li><a href="#balanced-pleiotropy-1" id="toc-balanced-pleiotropy-1" class="nav-link" data-scroll-target="#balanced-pleiotropy-1">Balanced Pleiotropy</a></li>
+  <li><a href="#directional-pleiotropy-1" id="toc-directional-pleiotropy-1" class="nav-link" data-scroll-target="#directional-pleiotropy-1">Directional Pleiotropy</a></li>
+  <li><a href="#a-simple-example-1" id="toc-a-simple-example-1" class="nav-link" data-scroll-target="#a-simple-example-1">A Simple Example</a></li>
+  <li><a href="#the-inside-assumption" id="toc-the-inside-assumption" class="nav-link" data-scroll-target="#the-inside-assumption">The InSIDE Assumption</a></li>
+  <li><a href="#what-does-inside-mean" id="toc-what-does-inside-mean" class="nav-link" data-scroll-target="#what-does-inside-mean">What Does InSIDE Mean?</a></li>
+  <li><a href="#comparing-ivw-and-mr-egger" id="toc-comparing-ivw-and-mr-egger" class="nav-link" data-scroll-target="#comparing-ivw-and-mr-egger">Comparing IVW and MR-Egger</a></li>
+  <li><a href="#why-mr-egger-has-lower-power" id="toc-why-mr-egger-has-lower-power" class="nav-link" data-scroll-target="#why-mr-egger-has-lower-power">Why MR-Egger Has Lower Power</a></li>
+  <li><a href="#a-hypothetical-example" id="toc-a-hypothetical-example" class="nav-link" data-scroll-target="#a-hypothetical-example">A Hypothetical Example</a></li>
+  <li><a href="#when-should-mr-egger-be-used" id="toc-when-should-mr-egger-be-used" class="nav-link" data-scroll-target="#when-should-mr-egger-be-used">When Should MR-Egger Be Used?</a></li>
+  <li><a href="#limitations-of-mr-egger" id="toc-limitations-of-mr-egger" class="nav-link" data-scroll-target="#limitations-of-mr-egger">Limitations of MR-Egger</a></li>
+  <li><a href="#why-mr-egger-is-usually-a-sensitivity-analysis" id="toc-why-mr-egger-is-usually-a-sensitivity-analysis" class="nav-link" data-scroll-target="#why-mr-egger-is-usually-a-sensitivity-analysis">Why MR-Egger Is Usually a Sensitivity Analysis</a></li>
+  <li><a href="#the-big-picture-1" id="toc-the-big-picture-1" class="nav-link" data-scroll-target="#the-big-picture-1">The Big Picture</a></li>
+  <li><a href="#looking-ahead-7" id="toc-looking-ahead-7" class="nav-link" data-scroll-target="#looking-ahead-7">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-7" id="toc-key-takeaways-7" class="nav-link" data-scroll-target="#key-takeaways-7">Key Takeaways</a></li>
+  <li><a href="#weighted-median-mendelian-randomization" id="toc-weighted-median-mendelian-randomization" class="nav-link" data-scroll-target="#weighted-median-mendelian-randomization">Weighted Median Mendelian Randomization</a></li>
+  <li><a href="#learning-objectives-7" id="toc-learning-objectives-7" class="nav-link" data-scroll-target="#learning-objectives-7">Learning Objectives</a></li>
+  <li><a href="#the-core-idea" id="toc-the-core-idea" class="nav-link" data-scroll-target="#the-core-idea">The Core Idea</a></li>
+  </ul></li>
+  <li><a href="#revisiting-wald-ratios" id="toc-revisiting-wald-ratios" class="nav-link" data-scroll-target="#revisiting-wald-ratios">Revisiting Wald Ratios</a>
+  <ul class="collapse">
+  <li><a href="#extending-the-idea-to-mendelian-randomization" id="toc-extending-the-idea-to-mendelian-randomization" class="nav-link" data-scroll-target="#extending-the-idea-to-mendelian-randomization">Extending the Idea to Mendelian Randomization</a></li>
+  <li><a href="#the-weighted-median-concept" id="toc-the-weighted-median-concept" class="nav-link" data-scroll-target="#the-weighted-median-concept">The Weighted Median Concept</a></li>
+  <li><a href="#the-50-rule" id="toc-the-50-rule" class="nav-link" data-scroll-target="#the-50-rule">The 50% Rule</a></li>
+  <li><a href="#why-is-the-50-rule-important" id="toc-why-is-the-50-rule-important" class="nav-link" data-scroll-target="#why-is-the-50-rule-important">Why Is the 50% Rule Important?</a></li>
+  <li><a href="#comparing-ivw-and-weighted-median" id="toc-comparing-ivw-and-weighted-median" class="nav-link" data-scroll-target="#comparing-ivw-and-weighted-median">Comparing IVW and Weighted Median</a></li>
+  <li><a href="#why-weighted-median-is-robust" id="toc-why-weighted-median-is-robust" class="nav-link" data-scroll-target="#why-weighted-median-is-robust">Why Weighted Median Is Robust</a></li>
+  <li><a href="#comparing-ivw-mr-egger-and-weighted-median" id="toc-comparing-ivw-mr-egger-and-weighted-median" class="nav-link" data-scroll-target="#comparing-ivw-mr-egger-and-weighted-median">Comparing IVW, MR-Egger, and Weighted Median</a></li>
+  <li><a href="#a-hypothetical-example-1" id="toc-a-hypothetical-example-1" class="nav-link" data-scroll-target="#a-hypothetical-example-1">A Hypothetical Example</a></li>
+  <li><a href="#another-example-1" id="toc-another-example-1" class="nav-link" data-scroll-target="#another-example-1">Another Example</a></li>
+  <li><a href="#weighted-median-and-outliers" id="toc-weighted-median-and-outliers" class="nav-link" data-scroll-target="#weighted-median-and-outliers">Weighted Median and Outliers</a></li>
+  <li><a href="#when-does-weighted-median-fail" id="toc-when-does-weighted-median-fail" class="nav-link" data-scroll-target="#when-does-weighted-median-fail">When Does Weighted Median Fail?</a></li>
+  <li><a href="#why-weighted-median-became-popular" id="toc-why-weighted-median-became-popular" class="nav-link" data-scroll-target="#why-weighted-median-became-popular">Why Weighted Median Became Popular</a></li>
+  <li><a href="#practical-interpretation" id="toc-practical-interpretation" class="nav-link" data-scroll-target="#practical-interpretation">Practical Interpretation</a></li>
+  <li><a href="#the-big-picture-2" id="toc-the-big-picture-2" class="nav-link" data-scroll-target="#the-big-picture-2">The Big Picture</a></li>
+  <li><a href="#looking-ahead-8" id="toc-looking-ahead-8" class="nav-link" data-scroll-target="#looking-ahead-8">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-8" id="toc-key-takeaways-8" class="nav-link" data-scroll-target="#key-takeaways-8">Key Takeaways</a></li>
+  <li><a href="#weighted-mode-mendelian-randomization" id="toc-weighted-mode-mendelian-randomization" class="nav-link" data-scroll-target="#weighted-mode-mendelian-randomization">Weighted Mode Mendelian Randomization</a></li>
+  <li><a href="#learning-objectives-8" id="toc-learning-objectives-8" class="nav-link" data-scroll-target="#learning-objectives-8">Learning Objectives</a></li>
+  <li><a href="#why-another-robust-method" id="toc-why-another-robust-method" class="nav-link" data-scroll-target="#why-another-robust-method">Why Another Robust Method?</a></li>
+  <li><a href="#the-core-idea-1" id="toc-the-core-idea-1" class="nav-link" data-scroll-target="#the-core-idea-1">The Core Idea</a></li>
+  <li><a href="#what-is-a-mode" id="toc-what-is-a-mode" class="nav-link" data-scroll-target="#what-is-a-mode">What Is a Mode?</a></li>
+  <li><a href="#from-wald-ratios-to-clusters" id="toc-from-wald-ratios-to-clusters" class="nav-link" data-scroll-target="#from-wald-ratios-to-clusters">From Wald Ratios to Clusters</a></li>
+  <li><a href="#why-valid-instruments-cluster" id="toc-why-valid-instruments-cluster" class="nav-link" data-scroll-target="#why-valid-instruments-cluster">Why Valid Instruments Cluster</a></li>
+  <li><a href="#visualizing-the-idea" id="toc-visualizing-the-idea" class="nav-link" data-scroll-target="#visualizing-the-idea">Visualizing the Idea</a></li>
+  <li><a href="#weighted-mode-versus-simple-mode" id="toc-weighted-mode-versus-simple-mode" class="nav-link" data-scroll-target="#weighted-mode-versus-simple-mode">Weighted Mode Versus Simple Mode</a></li>
+  <li><a href="#the-plurality-valid-assumption" id="toc-the-plurality-valid-assumption" class="nav-link" data-scroll-target="#the-plurality-valid-assumption">The Plurality Valid Assumption</a></li>
+  <li><a href="#majority-versus-plurality" id="toc-majority-versus-plurality" class="nav-link" data-scroll-target="#majority-versus-plurality">Majority Versus Plurality</a></li>
+  <li><a href="#why-this-is-powerful" id="toc-why-this-is-powerful" class="nav-link" data-scroll-target="#why-this-is-powerful">Why This Is Powerful</a></li>
+  <li><a href="#a-numerical-example-3" id="toc-a-numerical-example-3" class="nav-link" data-scroll-target="#a-numerical-example-3">A Numerical Example</a></li>
+  <li><a href="#comparing-the-four-main-mr-estimators" id="toc-comparing-the-four-main-mr-estimators" class="nav-link" data-scroll-target="#comparing-the-four-main-mr-estimators">Comparing the Four Main MR Estimators</a></li>
+  <li><a href="#a-hypothetical-example-2" id="toc-a-hypothetical-example-2" class="nav-link" data-scroll-target="#a-hypothetical-example-2">A Hypothetical Example</a></li>
+  <li><a href="#another-example-2" id="toc-another-example-2" class="nav-link" data-scroll-target="#another-example-2">Another Example</a></li>
+  <li><a href="#why-weighted-mode-is-useful" id="toc-why-weighted-mode-is-useful" class="nav-link" data-scroll-target="#why-weighted-mode-is-useful">Why Weighted Mode Is Useful</a></li>
+  <li><a href="#limitations-of-weighted-mode" id="toc-limitations-of-weighted-mode" class="nav-link" data-scroll-target="#limitations-of-weighted-mode">Limitations of Weighted Mode</a></li>
+  <li><a href="#why-weighted-mode-is-usually-a-sensitivity-analysis" id="toc-why-weighted-mode-is-usually-a-sensitivity-analysis" class="nav-link" data-scroll-target="#why-weighted-mode-is-usually-a-sensitivity-analysis">Why Weighted Mode Is Usually a Sensitivity Analysis</a></li>
+  <li><a href="#the-robust-mr-toolbox" id="toc-the-robust-mr-toolbox" class="nav-link" data-scroll-target="#the-robust-mr-toolbox">The Robust MR Toolbox</a></li>
+  <li><a href="#the-big-picture-3" id="toc-the-big-picture-3" class="nav-link" data-scroll-target="#the-big-picture-3">The Big Picture</a></li>
+  <li><a href="#looking-ahead-9" id="toc-looking-ahead-9" class="nav-link" data-scroll-target="#looking-ahead-9">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-9" id="toc-key-takeaways-9" class="nav-link" data-scroll-target="#key-takeaways-9">Key Takeaways</a></li>
+  <li><a href="#sensitivity-analyses-in-mendelian-randomization" id="toc-sensitivity-analyses-in-mendelian-randomization" class="nav-link" data-scroll-target="#sensitivity-analyses-in-mendelian-randomization">Sensitivity Analyses in Mendelian Randomization</a></li>
+  <li><a href="#learning-objectives-9" id="toc-learning-objectives-9" class="nav-link" data-scroll-target="#learning-objectives-9">Learning Objectives</a></li>
+  <li><a href="#why-sensitivity-analyses-are-necessary" id="toc-why-sensitivity-analyses-are-necessary" class="nav-link" data-scroll-target="#why-sensitivity-analyses-are-necessary">Why Sensitivity Analyses Are Necessary</a></li>
+  <li><a href="#the-four-core-mr-estimators" id="toc-the-four-core-mr-estimators" class="nav-link" data-scroll-target="#the-four-core-mr-estimators">The Four Core MR Estimators</a></li>
+  <li><a href="#scenario-1-strong-agreement" id="toc-scenario-1-strong-agreement" class="nav-link" data-scroll-target="#scenario-1-strong-agreement">Scenario 1: Strong Agreement</a></li>
+  <li><a href="#scenario-2-moderate-differences" id="toc-scenario-2-moderate-differences" class="nav-link" data-scroll-target="#scenario-2-moderate-differences">Scenario 2: Moderate Differences</a></li>
+  <li><a href="#scenario-3-strong-disagreement" id="toc-scenario-3-strong-disagreement" class="nav-link" data-scroll-target="#scenario-3-strong-disagreement">Scenario 3: Strong Disagreement</a></li>
+  <li><a href="#why-heterogeneity-matters" id="toc-why-heterogeneity-matters" class="nav-link" data-scroll-target="#why-heterogeneity-matters">Why Heterogeneity Matters</a></li>
+  <li><a href="#cochrans-q-statistic" id="toc-cochrans-q-statistic" class="nav-link" data-scroll-target="#cochrans-q-statistic">Cochran’s Q Statistic</a></li>
+  <li><a href="#interpreting-cochrans-q" id="toc-interpreting-cochrans-q" class="nav-link" data-scroll-target="#interpreting-cochrans-q">Interpreting Cochran’s Q</a></li>
+  <li><a href="#the-mr-egger-intercept-test" id="toc-the-mr-egger-intercept-test" class="nav-link" data-scroll-target="#the-mr-egger-intercept-test">The MR-Egger Intercept Test</a></li>
+  <li><a href="#interpreting-the-intercept-test" id="toc-interpreting-the-intercept-test" class="nav-link" data-scroll-target="#interpreting-the-intercept-test">Interpreting the Intercept Test</a></li>
+  <li><a href="#leave-one-out-analysis" id="toc-leave-one-out-analysis" class="nav-link" data-scroll-target="#leave-one-out-analysis">Leave-One-Out Analysis</a></li>
+  <li><a href="#why-leave-one-out-is-useful" id="toc-why-leave-one-out-is-useful" class="nav-link" data-scroll-target="#why-leave-one-out-is-useful">Why Leave-One-Out Is Useful</a></li>
+  <li><a href="#interpreting-leave-one-out-results" id="toc-interpreting-leave-one-out-results" class="nav-link" data-scroll-target="#interpreting-leave-one-out-results">Interpreting Leave-One-Out Results</a></li>
+  <li><a href="#funnel-plots" id="toc-funnel-plots" class="nav-link" data-scroll-target="#funnel-plots">Funnel Plots</a></li>
+  <li><a href="#scatter-plots" id="toc-scatter-plots" class="nav-link" data-scroll-target="#scatter-plots">Scatter Plots</a></li>
+  <li><a href="#forest-plots" id="toc-forest-plots" class="nav-link" data-scroll-target="#forest-plots">Forest Plots</a></li>
+  <li><a href="#triangulation-of-evidence" id="toc-triangulation-of-evidence" class="nav-link" data-scroll-target="#triangulation-of-evidence">Triangulation of Evidence</a></li>
+  <li><a href="#a-practical-example-1" id="toc-a-practical-example-1" class="nav-link" data-scroll-target="#a-practical-example-1">A Practical Example</a></li>
+  <li><a href="#a-more-concerning-example" id="toc-a-more-concerning-example" class="nav-link" data-scroll-target="#a-more-concerning-example">A More Concerning Example</a></li>
+  <li><a href="#how-published-mr-studies-are-typically-reported" id="toc-how-published-mr-studies-are-typically-reported" class="nav-link" data-scroll-target="#how-published-mr-studies-are-typically-reported">How Published MR Studies Are Typically Reported</a></li>
+  <li><a href="#the-big-picture-4" id="toc-the-big-picture-4" class="nav-link" data-scroll-target="#the-big-picture-4">The Big Picture</a></li>
+  <li><a href="#looking-ahead-10" id="toc-looking-ahead-10" class="nav-link" data-scroll-target="#looking-ahead-10">Looking Ahead</a></li>
+  <li><a href="#key-takeaways-10" id="toc-key-takeaways-10" class="nav-link" data-scroll-target="#key-takeaways-10">Key Takeaways</a></li>
+  <li><a href="#a-complete-mendelian-randomization-workflow-using-the-twosamplemr-package" id="toc-a-complete-mendelian-randomization-workflow-using-the-twosamplemr-package" class="nav-link" data-scroll-target="#a-complete-mendelian-randomization-workflow-using-the-twosamplemr-package">A Complete Mendelian Randomization Workflow Using the TwoSampleMR Package</a></li>
+  <li><a href="#learning-objectives-10" id="toc-learning-objectives-10" class="nav-link" data-scroll-target="#learning-objectives-10">Learning Objectives</a></li>
+  <li><a href="#the-overall-workflow" id="toc-the-overall-workflow" class="nav-link" data-scroll-target="#the-overall-workflow">The Overall Workflow</a>
+  <ul class="collapse">
+  <li><a href="#step-1-install-required-packages" id="toc-step-1-install-required-packages" class="nav-link" data-scroll-target="#step-1-install-required-packages">Step 1: Install Required Packages</a></li>
+  <li><a href="#step-2-define-the-scientific-question" id="toc-step-2-define-the-scientific-question" class="nav-link" data-scroll-target="#step-2-define-the-scientific-question">Step 2: Define the Scientific Question</a></li>
+  <li><a href="#step-3-obtain-genetic-instruments" id="toc-step-3-obtain-genetic-instruments" class="nav-link" data-scroll-target="#step-3-obtain-genetic-instruments">Step 3: Obtain Genetic Instruments</a></li>
+  <li><a href="#what-happened-here" id="toc-what-happened-here" class="nav-link" data-scroll-target="#what-happened-here">What Happened Here?</a></li>
+  <li><a href="#step-4-obtain-outcome-associations" id="toc-step-4-obtain-outcome-associations" class="nav-link" data-scroll-target="#step-4-obtain-outcome-associations">Step 4: Obtain Outcome Associations</a></li>
+  <li><a href="#step-5-harmonization" id="toc-step-5-harmonization" class="nav-link" data-scroll-target="#step-5-harmonization">Step 5: Harmonization</a></li>
+  <li><a href="#what-does-harmonization-do" id="toc-what-does-harmonization-do" class="nav-link" data-scroll-target="#what-does-harmonization-do">What Does Harmonization Do?</a></li>
+  <li><a href="#step-6-run-mendelian-randomization" id="toc-step-6-run-mendelian-randomization" class="nav-link" data-scroll-target="#step-6-run-mendelian-randomization">Step 6: Run Mendelian Randomization</a></li>
+  <li><a href="#step-7-heterogeneity-testing" id="toc-step-7-heterogeneity-testing" class="nav-link" data-scroll-target="#step-7-heterogeneity-testing">Step 7: Heterogeneity Testing</a></li>
+  <li><a href="#step-8-test-for-directional-pleiotropy" id="toc-step-8-test-for-directional-pleiotropy" class="nav-link" data-scroll-target="#step-8-test-for-directional-pleiotropy">Step 8: Test for Directional Pleiotropy</a></li>
+  <li><a href="#interpreting-the-egger-intercept" id="toc-interpreting-the-egger-intercept" class="nav-link" data-scroll-target="#interpreting-the-egger-intercept">Interpreting the Egger Intercept</a></li>
+  <li><a href="#step-9-leave-one-out-analysis" id="toc-step-9-leave-one-out-analysis" class="nav-link" data-scroll-target="#step-9-leave-one-out-analysis">Step 9: Leave-One-Out Analysis</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
+  <li><a href="#step-10-scatter-plot" id="toc-step-10-scatter-plot" class="nav-link" data-scroll-target="#step-10-scatter-plot">Step 10: Scatter Plot</a></li>
+  <li><a href="#step-11-forest-plot" id="toc-step-11-forest-plot" class="nav-link" data-scroll-target="#step-11-forest-plot">Step 11: Forest Plot</a></li>
+  <li><a href="#step-12-funnel-plot" id="toc-step-12-funnel-plot" class="nav-link" data-scroll-target="#step-12-funnel-plot">Step 12: Funnel Plot</a></li>
+  <li><a href="#putting-everything-together" id="toc-putting-everything-together" class="nav-link" data-scroll-target="#putting-everything-together">Putting Everything Together</a></li>
+  <li><a href="#how-results-are-usually-reported" id="toc-how-results-are-usually-reported" class="nav-link" data-scroll-target="#how-results-are-usually-reported">How Results Are Usually Reported</a></li>
+  <li><a href="#common-mistakes" id="toc-common-mistakes" class="nav-link" data-scroll-target="#common-mistakes">Common Mistakes</a></li>
+  <li><a href="#the-big-picture-5" id="toc-the-big-picture-5" class="nav-link" data-scroll-target="#the-big-picture-5">The Big Picture</a></li>
+  <li><a href="#key-takeaways-11" id="toc-key-takeaways-11" class="nav-link" data-scroll-target="#key-takeaways-11">Key Takeaways</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Mendelian Randomization</h1>
-</div>
+  <div class="quarto-categories">
+    <div class="quarto-category">Genetics</div>
+    <div class="quarto-category">Epidemiology</div>
+    <div class="quarto-category">Mendelian Randomization</div>
+    <div class="quarto-category">Tutorial</div>
+  </div>
+  </div>
 
 
 
@@ -219,17 +482,33 @@ window.Quarto = {
 </ul>
 <p>These observations are informative, but they do not automatically establish causality.</p>
 <p>Understanding the distinction between correlation and causation is one of the most important concepts in statistics and epidemiology. It is also the motivation behind Mendelian Randomization, a powerful approach that uses genetic variants to investigate causal relationships.</p>
-<section id="learning-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h3>
-<p>After completing this tutorial, you should be able to:</p>
+<section id="what-you-will-learn" class="level3">
+<h3 class="anchored" data-anchor-id="what-you-will-learn">What You Will Learn</h3>
 <ul>
-<li>Explain the difference between correlation and causation.</li>
-<li>Understand why observational associations can be misleading.</li>
-<li>Describe the role of confounding variables.</li>
-<li>Understand reverse causation.</li>
-<li>Explain why randomized controlled trials are considered the gold standard for causal inference.</li>
-<li>Understand the motivation for Mendelian Randomization.</li>
+<li>How to distinguish correlation from causation</li>
+<li>Why observational associations can be misleading</li>
+<li>What confounding and reverse causation mean</li>
+<li>How Mendelian Randomization uses genetic variants as instruments</li>
+<li>When MR is a useful tool for causal inference</li>
 </ul>
+</section>
+<section id="who-should-read-this-tutorial" class="level3">
+<h3 class="anchored" data-anchor-id="who-should-read-this-tutorial">Who Should Read This Tutorial</h3>
+<p>This tutorial is intended for researchers and students who want an accessible introduction to Mendelian Randomization with a genetics focus. Familiarity with basic statistics and epidemiology is helpful.</p>
+</section>
+<section id="key-concepts-covered" class="level3">
+<h3 class="anchored" data-anchor-id="key-concepts-covered">Key Concepts Covered</h3>
+<ul>
+<li>Correlation vs.&nbsp;causation</li>
+<li>Confounding variables</li>
+<li>Reverse causation</li>
+<li>Instrumental variables</li>
+<li>Genetic instruments in MR</li>
+</ul>
+</section>
+<section id="why-mr-matters" class="level3">
+<h3 class="anchored" data-anchor-id="why-mr-matters">Why MR Matters</h3>
+<p>Mendelian Randomization helps researchers address causal questions when randomized controlled trials are not feasible. It uses the natural randomization of genetic inheritance to infer whether an exposure may have a causal effect on an outcome.</p>
 </section>
 <section id="what-is-correlation" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-correlation">What Is Correlation?</h3>
@@ -440,8 +719,8 @@ window.Quarto = {
 </blockquote>
 <p>Mendelian Randomization (MR) is one approach that attempts to answer this question using genetic variation.</p>
 </section>
-<section id="learning-objectives-1" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-1">Learning Objectives</h3>
+<section id="learning-objectives" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Explain the basic idea behind Mendelian Randomization.</li>
@@ -751,8 +1030,8 @@ window.Quarto = {
 </blockquote>
 <p>The simplest Mendelian Randomization estimator is called the <strong>Wald Ratio</strong>.</p>
 </section>
-<section id="learning-objectives-2" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-2">Learning Objectives</h3>
+<section id="learning-objectives-1" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-1">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand the logic behind the Wald Ratio.</li>
@@ -1029,8 +1308,8 @@ window.Quarto = {
 <p>How can we combine information from multiple genetic instruments to obtain a more precise causal estimate?</p>
 </blockquote>
 <p>The most widely used approach is called the <strong>Inverse Variance Weighted (IVW) Method</strong>.</p>
-<section id="learning-objectives-3" class="level4">
-<h4 class="anchored" data-anchor-id="learning-objectives-3">Learning Objectives</h4>
+<section id="learning-objectives-2" class="level4">
+<h4 class="anchored" data-anchor-id="learning-objectives-2">Learning Objectives</h4>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand why multiple SNPs are preferable to a single SNP.</li>
@@ -1304,7 +1583,7 @@ window.Quarto = {
 <section id="assumption-1-relevance-1" class="level5">
 <h5 class="anchored" data-anchor-id="assumption-1-relevance-1">Assumption 1: Relevance</h5>
 <p>Each SNP must be associated with the exposure.</p>
-<p>[ SNP Exposure]</p>
+<p>SNP-&gt;Exposure</p>
 </section>
 <section id="assumption-2-independence-1" class="level5">
 <h5 class="anchored" data-anchor-id="assumption-2-independence-1">Assumption 2: Independence</h5>
@@ -1314,7 +1593,7 @@ window.Quarto = {
 <section id="assumption-3-exclusion-restriction-1" class="level5">
 <h5 class="anchored" data-anchor-id="assumption-3-exclusion-restriction-1">Assumption 3: Exclusion Restriction</h5>
 <p>Each SNP must affect the outcome only through the exposure.</p>
-<p>$ SNP Exposure Outcome $</p>
+<p>SNP -&gt; Exposure -&gt; Outcome</p>
 <p>and not through alternative pathways.</p>
 </section>
 </section>
@@ -1420,8 +1699,8 @@ window.Quarto = {
 <p>In modern Mendelian Randomization studies, they often come from separate Genome-Wide Association Studies (GWAS).</p>
 <p>This approach is known as <strong>Two-Sample Mendelian Randomization</strong> and has become the standard framework for contemporary MR analyses.</p>
 </section>
-<section id="learning-objectives-4" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-4">Learning Objectives</h3>
+<section id="learning-objectives-3" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-3">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Distinguish between one-sample and two-sample MR.</li>
@@ -1888,8 +2167,8 @@ Coronary\ Heart\ Disease
 <p>This process is known as <strong>harmonization</strong>.</p>
 <p>Although harmonization may appear to be a simple data-cleaning step, it is one of the most important stages of a Mendelian Randomization analysis. A mistake during harmonization can completely reverse the interpretation of a causal effect.</p>
 </section>
-<section id="learning-objectives-5" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-5">Learning Objectives</h3>
+<section id="learning-objectives-4" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-4">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand why harmonization is necessary.</li>
@@ -2262,10 +2541,10 @@ Coronary\ Heart\ Disease
 <section id="harmonization-in-twosamplemr" class="level3">
 <h3 class="anchored" data-anchor-id="harmonization-in-twosamplemr">Harmonization in TwoSampleMR</h3>
 <p>The TwoSampleMR package provides a dedicated function:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">harmonise_data</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">harmonise_data</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  exposure_dat,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  outcome_dat</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This function automatically:</p>
 <ul>
 <li>Aligns alleles</li>
@@ -2277,7 +2556,7 @@ Coronary\ Heart\ Disease
 </section>
 <section id="example-workflow" class="level1">
 <h1>Example Workflow</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exposure_dat <span class="ot">&lt;-</span> <span class="fu">extract_instruments</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exposure_dat <span class="ot">&lt;-</span> <span class="fu">extract_instruments</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-2"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -2289,7 +2568,7 @@ Coronary\ Heart\ Disease
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>harmonised_dat <span class="ot">&lt;-</span> <span class="fu">harmonise_data</span>(</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  exposure_dat,</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  outcome_dat</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>After harmonization:</p>
 <ul>
 <li>Effect alleles match.</li>
@@ -2380,8 +2659,8 @@ Coronary\ Heart\ Disease
 <p>Pleiotropy is one of the most important concepts in statistical genetics and one of the biggest challenges in Mendelian Randomization.</p>
 <p>Understanding pleiotropy is essential before learning robust MR methods such as MR-Egger, Weighted Median, and Weighted Mode estimators.</p>
 </section>
-<section id="learning-objectives-6" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-6">Learning Objectives</h3>
+<section id="learning-objectives-5" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-5">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Define pleiotropy.</li>
@@ -2801,8 +3080,8 @@ Coronary\ Heart\ Disease
 <p>MR-Egger Regression was developed to address this problem.</p>
 <p>Unlike IVW, MR-Egger allows genetic variants to have direct effects on the outcome and provides a statistical framework for detecting directional pleiotropy.</p>
 </section>
-<section id="learning-objectives-7" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-7">Learning Objectives</h3>
+<section id="learning-objectives-6" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-6">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand the motivation behind MR-Egger Regression.</li>
@@ -2924,14 +3203,15 @@ H_A : \alpha \neq 0
 <p>MR-Egger intercept:</p>
 <p>Approximately zero.</p>
 </section>
-<section id="directional-pleiotropy-1" class="level2">
-<h2 class="anchored" data-anchor-id="directional-pleiotropy-1">Directional Pleiotropy</h2>
+<section id="directional-pleiotropy-1" class="level3">
+<h3 class="anchored" data-anchor-id="directional-pleiotropy-1">Directional Pleiotropy</h3>
 <p>Most pleiotropic effects point in the same direction.</p>
 <p>Average pleiotropic effect:</p>
 <p>Non-zero.</p>
 <p>MR-Egger intercept:</p>
 <p>Significantly different from zero.</p>
 <p>This is exactly what MR-Egger is designed to detect.</p>
+</section>
 <section id="a-simple-example-1" class="level3">
 <h3 class="anchored" data-anchor-id="a-simple-example-1">A Simple Example</h3>
 <p>Suppose five SNPs are associated with BMI.</p>
@@ -2943,14 +3223,14 @@ H_A : \alpha \neq 0
 <p>$ &gt; 0 $</p>
 <p>The MR-Egger intercept test may detect this bias.</p>
 </section>
-</section>
-<section id="the-inside-assumption" class="level2">
-<h2 class="anchored" data-anchor-id="the-inside-assumption">The InSIDE Assumption</h2>
+<section id="the-inside-assumption" class="level3">
+<h3 class="anchored" data-anchor-id="the-inside-assumption">The InSIDE Assumption</h3>
 <p>MR-Egger introduces a new assumption.</p>
 <p>This assumption is called:</p>
 <p><strong>Instrument Strength Independent of Direct Effect</strong></p>
 <p>or simply:</p>
 <p><strong>InSIDE</strong>.</p>
+</section>
 <section id="what-does-inside-mean" class="level3">
 <h3 class="anchored" data-anchor-id="what-does-inside-mean">What Does InSIDE Mean?</h3>
 <p>The InSIDE assumption states:</p>
@@ -3199,8 +3479,8 @@ H_A : \alpha \neq 0
 <p>One of the most successful methods is the <strong>Weighted Median Estimator</strong>.</p>
 <p>The weighted median approach has become one of the most widely used sensitivity analyses in Mendelian Randomization.</p>
 </section>
-<section id="learning-objectives-8" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-8">Learning Objectives</h3>
+<section id="learning-objectives-7" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-7">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand the motivation behind the weighted median estimator.</li>
@@ -3226,16 +3506,15 @@ H_A : \alpha \neq 0
 <p>Researchers therefore wanted a method that could tolerate some invalid instruments.</p>
 </section>
 </section>
-</section>
-</section>
-<section id="the-core-idea" class="level1">
-<h1>The Core Idea</h1>
+<section id="the-core-idea" class="level2">
+<h2 class="anchored" data-anchor-id="the-core-idea">The Core Idea</h2>
 <p>The weighted median estimator is based on a simple observation:</p>
 <blockquote class="blockquote">
 <p>If most instruments are valid, the middle estimate should still be reliable.</p>
 </blockquote>
 <p>Rather than averaging SNP estimates, the weighted median focuses on the center of the distribution.</p>
 <p>This makes it less sensitive to extreme values and invalid instruments.</p>
+</section>
 </section>
 <section id="revisiting-wald-ratios" class="level1">
 <h1>Revisiting Wald Ratios</h1>
@@ -3282,9 +3561,8 @@ H_A : \alpha \neq 0
 </ul>
 <p>IVW will be influenced by this outlier.</p>
 <p>The weighted median is much less affected.</p>
-</section>
-<section id="what-is-a-median" class="level1">
-<h1>What Is a Median?</h1>
+<section id="what-is-a-median" class="level4">
+<h4 class="anchored" data-anchor-id="what-is-a-median">What Is a Median?</h4>
 <p>A median is the middle value in an ordered list.</p>
 <p>Example:</p>
 <p>[ 1,;2,;3,;4,;5]</p>
@@ -3298,6 +3576,7 @@ H_A : \alpha \neq 0
 <p>Median:</p>
 <p>[ 3]</p>
 <p>The median remains stable despite the outlier.</p>
+</section>
 <section id="extending-the-idea-to-mendelian-randomization" class="level3">
 <h3 class="anchored" data-anchor-id="extending-the-idea-to-mendelian-randomization">Extending the Idea to Mendelian Randomization</h3>
 <p>In MR we do not simply calculate the median of SNP estimates.</p>
@@ -3660,8 +3939,8 @@ H_A : \alpha \neq 0
 <p>In some situations, the majority of SNPs may not be valid instruments, yet there may still be a cluster of SNPs that identify the true causal effect.</p>
 <p>This idea motivated the development of <strong>Mode-Based Mendelian Randomization</strong>, commonly known as the <strong>Weighted Mode Estimator</strong>.</p>
 </section>
-<section id="learning-objectives-9" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-9">Learning Objectives</h3>
+<section id="learning-objectives-8" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-8">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand the motivation behind the weighted mode estimator.</li>
@@ -4189,8 +4468,8 @@ H_A : \alpha \neq 0
 <p>In practice, Mendelian Randomization rarely relies on a single estimator. Instead, researchers perform a series of sensitivity analyses to evaluate whether their conclusions are robust to violations of MR assumptions.</p>
 <p>Sensitivity analyses are among the most important components of a modern MR study.</p>
 </section>
-<section id="learning-objectives-10" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-10">Learning Objectives</h3>
+<section id="learning-objectives-9" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-9">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Understand the purpose of sensitivity analyses.</li>
@@ -4775,8 +5054,8 @@ H_A : \alpha \neq 0
 <p>In this tutorial, we bring everything together and perform a complete Mendelian Randomization analysis using the <strong>TwoSampleMR</strong> package in R.</p>
 <p>The goal is not merely to run software, but to understand how each step connects to the assumptions and concepts discussed throughout this series.</p>
 </section>
-<section id="learning-objectives-11" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-11">Learning Objectives</h3>
+<section id="learning-objectives-10" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-10">Learning Objectives</h3>
 <p>After completing this tutorial, you should be able to:</p>
 <ul>
 <li>Perform a complete two-sample MR analysis.</li>
@@ -4807,57 +5086,21 @@ Sensitivity Analyses
 Interpretation</code></pre>
 <section id="step-1-install-required-packages" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-install-required-packages">Step 1: Install Required Packages</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("remotes")</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("remotes")</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github(</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> <span class="co"># "MRCIEU/TwoSampleMR"</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("data.table")</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="3dd41210-9c72-4aaf-b654-b1f1289a0e1f" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="3dd41210-9c72-4aaf-b654-b1f1289a0e1f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Load the libraries:</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TwoSampleMR)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>TwoSampleMR version 0.7.8 
-
-
- [&gt;] New authentication requirements: https://mrcieu.github.io/ieugwasr/articles/guide.html#authentication.
-
- [&gt;] Major upgrades to our servers completed to improve service and stability.
-
- [&gt;] We need your help to shape our emerging roadmap!
-
-     Please take 2 minutes to give us feedback -
-
-     https://forms.office.com/e/eSr7EFAfCG
-
-Warning message:
-“package ‘data.table’ was built under R version 4.3.3”
-
-Attaching package: ‘dplyr’
-
-
-The following objects are masked from ‘package:data.table’:
-
-    between, first, last
-
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-</code></pre>
-</div>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="step-2-define-the-scientific-question" class="level3">
@@ -4879,31 +5122,31 @@ The following objects are masked from ‘package:base’:
 <pre class="text"><code>SNP → Exposure</code></pre>
 <p>These SNPs become instrumental variables.</p>
 <p>Using the IEU OpenGWAS database:</p>
-<div id="5ba058a4-a142-44b0-bc5a-a8ab83bbd6de" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#available_outcomes()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="5ba058a4-a142-44b0-bc5a-a8ab83bbd6de" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#available_outcomes()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Search for BMI datasets:</p>
-<div id="c6883474-9a00-414f-a877-56df8847b4aa" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#ao &lt;- available_outcomes()</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#ao %&gt;%</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a> <span class="co"># filter(grepl("body mass index", trait, ignore.case = TRUE)) %&gt;%</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c6883474-9a00-414f-a877-56df8847b4aa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#ao &lt;- available_outcomes()</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#ao %&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a> <span class="co"># filter(grepl("body mass index", trait, ignore.case = TRUE)) %&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  head()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Suppose the BMI dataset is:</p>
 <pre class="text"><code>ieu-a-2</code></pre>
 <p>Extract instruments:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>exposure_dat <span class="ot">&lt;-</span> <span class="fu">extract_instruments</span>(</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-2"</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>exposure_dat <span class="ot">&lt;-</span> <span class="fu">extract_instruments</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-2"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="what-happened-here" class="level3">
 <h3 class="anchored" data-anchor-id="what-happened-here">What Happened Here?</h3>
 <p>The function:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_instruments</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_instruments</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>selects SNPs that satisfy:</p>
 <p><span class="math display">\[
 P &lt; 5 \times 10^{-8}
@@ -4919,7 +5162,7 @@ P &lt; 5 \times 10^{-8}
 </ul>
 <section id="inspect-the-instruments" class="level4">
 <h4 class="anchored" data-anchor-id="inspect-the-instruments">Inspect the Instruments</h4>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exposure_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exposure_dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Typical columns:</p>
 <table class="caption-top table">
 <thead>
@@ -4963,16 +5206,16 @@ P &lt; 5 \times 10^{-8}
 <p>Suppose:</p>
 <pre class="text"><code>ieu-a-7</code></pre>
 <p>corresponds to Coronary Heart Disease.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>outcome_dat <span class="ot">&lt;-</span> <span class="fu">extract_outcome_data</span>(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">snps =</span> exposure_dat<span class="sc">$</span>SNP,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-7"</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>outcome_dat <span class="ot">&lt;-</span> <span class="fu">extract_outcome_data</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">snps =</span> exposure_dat<span class="sc">$</span>SNP,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-7"</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This provides:</p>
 <p>SNP -&gt; Outcome</p>
 <p>associations.</p>
 <section id="inspect-the-outcome-data" class="level4">
 <h4 class="anchored" data-anchor-id="inspect-the-outcome-data">Inspect the Outcome Data</h4>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(outcome_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(outcome_dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Important columns include:</p>
 <ul>
 <li>beta.outcome</li>
@@ -4990,10 +5233,10 @@ P &lt; 5 \times 10^{-8}
 <p>Exposure and outcome effects must refer to the same allele.</p>
 </blockquote>
 <p>Run:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>harmonised_dat <span class="ot">&lt;-</span> <span class="fu">harmonise_data</span>(</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  exposure_dat,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  outcome_dat</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>harmonised_dat <span class="ot">&lt;-</span> <span class="fu">harmonise_data</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  exposure_dat,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  outcome_dat</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="what-does-harmonization-do" class="level3">
 <h3 class="anchored" data-anchor-id="what-does-harmonization-do">What Does Harmonization Do?</h3>
@@ -5006,14 +5249,14 @@ P &lt; 5 \times 10^{-8}
 <li>Excludes ambiguous palindromic variants when necessary</li>
 </ul>
 <p>Inspect the harmonized dataset:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(harmonised_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(harmonised_dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="step-6-run-mendelian-randomization" class="level3">
 <h3 class="anchored" data-anchor-id="step-6-run-mendelian-randomization">Step 6: Run Mendelian Randomization</h3>
 <p>Now we estimate the causal effect.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>mr_results <span class="ot">&lt;-</span> <span class="fu">mr</span>(harmonised_dat)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>mr_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mr_results <span class="ot">&lt;-</span> <span class="fu">mr</span>(harmonised_dat)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>mr_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>By default, TwoSampleMR reports:</p>
 <ul>
 <li>IVW</li>
@@ -5068,11 +5311,11 @@ P &lt; 5 \times 10^{-8}
 <section id="step-7-heterogeneity-testing" class="level3">
 <h3 class="anchored" data-anchor-id="step-7-heterogeneity-testing">Step 7: Heterogeneity Testing</h3>
 <p>Assess whether SNP-specific estimates are consistent.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>heterogeneity_results <span class="ot">&lt;-</span> <span class="fu">mr_heterogeneity</span>(</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>heterogeneity_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>heterogeneity_results <span class="ot">&lt;-</span> <span class="fu">mr_heterogeneity</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>heterogeneity_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="interpreting-cochrans-q-1" class="level4">
 <h4 class="anchored" data-anchor-id="interpreting-cochrans-q-1">Interpreting Cochran’s Q</h4>
 <p>Suppose:</p>
@@ -5088,11 +5331,11 @@ P &lt; 5 \times 10^{-8}
 <section id="step-8-test-for-directional-pleiotropy" class="level3">
 <h3 class="anchored" data-anchor-id="step-8-test-for-directional-pleiotropy">Step 8: Test for Directional Pleiotropy</h3>
 <p>Use the MR-Egger intercept.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pleiotropy_results <span class="ot">&lt;-</span> <span class="fu">mr_pleiotropy_test</span>(</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>pleiotropy_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pleiotropy_results <span class="ot">&lt;-</span> <span class="fu">mr_pleiotropy_test</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>pleiotropy_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="interpreting-the-egger-intercept" class="level3">
 <h3 class="anchored" data-anchor-id="interpreting-the-egger-intercept">Interpreting the Egger Intercept</h3>
@@ -5108,17 +5351,17 @@ P &lt; 5 \times 10^{-8}
 <section id="step-9-leave-one-out-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="step-9-leave-one-out-analysis">Step 9: Leave-One-Out Analysis</h3>
 <p>Evaluate whether a single SNP drives the result.</p>
-<div id="ed20a124-2f88-46aa-aa7d-2b438ef369df" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#loo_results &lt;- mr_leaveoneout(</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a> <span class="co"># harmonised_dat</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ed20a124-2f88-46aa-aa7d-2b438ef369df" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">#loo_results &lt;- mr_leaveoneout(</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a> <span class="co"># harmonised_dat</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Visualize:</p>
-<div id="3576252d-0bb0-4a09-9cbf-9798c4433eea" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mr_leaveoneout_plot(</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  loo_results</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3576252d-0bb0-4a09-9cbf-9798c4433eea" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mr_leaveoneout_plot(</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  loo_results</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="interpretation" class="level3">
@@ -5132,12 +5375,12 @@ P &lt; 5 \times 10^{-8}
 <section id="step-10-scatter-plot" class="level3">
 <h3 class="anchored" data-anchor-id="step-10-scatter-plot">Step 10: Scatter Plot</h3>
 <p>Visualize SNP effects.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>scatter_plot <span class="ot">&lt;-</span> <span class="fu">mr_scatter_plot</span>(</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  mr_results,</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>scatter_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>scatter_plot <span class="ot">&lt;-</span> <span class="fu">mr_scatter_plot</span>(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  mr_results,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>scatter_plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The plot shows:</p>
 <ul>
 <li>SNP-exposure effects</li>
@@ -5149,21 +5392,21 @@ P &lt; 5 \times 10^{-8}
 <section id="step-11-forest-plot" class="level3">
 <h3 class="anchored" data-anchor-id="step-11-forest-plot">Step 11: Forest Plot</h3>
 <p>Visualize SNP-specific causal estimates.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>single_snp_results <span class="ot">&lt;-</span> <span class="fu">mr_singlesnp</span>(</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_forest_plot</span>(</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  single_snp_results</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>single_snp_results <span class="ot">&lt;-</span> <span class="fu">mr_singlesnp</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_forest_plot</span>(</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  single_snp_results</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This helps identify outliers and heterogeneity.</p>
 </section>
 <section id="step-12-funnel-plot" class="level3">
 <h3 class="anchored" data-anchor-id="step-12-funnel-plot">Step 12: Funnel Plot</h3>
 <p>Assess symmetry.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_funnel_plot</span>(</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  single_snp_results</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_funnel_plot</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  single_snp_results</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Symmetric plots suggest balanced pleiotropy.</p>
 <p>Asymmetry may indicate directional pleiotropy.</p>
 </section>
@@ -5197,58 +5440,58 @@ P &lt; 5 \times 10^{-8}
 <li>Forest plot</li>
 <li>Funnel plot</li>
 </ul>
-<div id="acb38b75-fd8f-4823-afaf-ad551ca891fd" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A Complete Example Pipeline</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TwoSampleMR)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract instruments</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>exposure_dat <span class="ot">&lt;-</span> <span class="fu">extract_instruments</span>(</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-2"</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract outcomes</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>outcome_dat <span class="ot">&lt;-</span> <span class="fu">extract_outcome_data</span>(</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">snps =</span> exposure_dat<span class="sc">$</span>SNP,</span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-7"</span></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Harmonize</span></span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>harmonised_dat <span class="ot">&lt;-</span> <span class="fu">harmonise_data</span>(</span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>  exposure_dat,</span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  outcome_dat</span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Main MR</span></span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>mr_results <span class="ot">&lt;-</span> <span class="fu">mr</span>(</span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Heterogeneity</span></span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_heterogeneity</span>(</span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Pleiotropy</span></span>
-<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_pleiotropy_test</span>(</span>
-<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Leave-One-Out</span></span>
-<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>loo <span class="ot">&lt;-</span> <span class="fu">mr_leaveoneout</span>(</span>
-<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizations</span></span>
-<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_scatter_plot</span>(</span>
-<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>  mr_results,</span>
-<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
-<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_leaveoneout_plot</span>(</span>
-<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a>  loo</span>
-<span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="acb38b75-fd8f-4823-afaf-ad551ca891fd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A Complete Example Pipeline</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TwoSampleMR)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract instruments</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>exposure_dat <span class="ot">&lt;-</span> <span class="fu">extract_instruments</span>(</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-2"</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract outcomes</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>outcome_dat <span class="ot">&lt;-</span> <span class="fu">extract_outcome_data</span>(</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">snps =</span> exposure_dat<span class="sc">$</span>SNP,</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcomes =</span> <span class="st">"ieu-a-7"</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Harmonize</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>harmonised_dat <span class="ot">&lt;-</span> <span class="fu">harmonise_data</span>(</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  exposure_dat,</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  outcome_dat</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Main MR</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>mr_results <span class="ot">&lt;-</span> <span class="fu">mr</span>(</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Heterogeneity</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_heterogeneity</span>(</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Pleiotropy</span></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_pleiotropy_test</span>(</span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Leave-One-Out</span></span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>loo <span class="ot">&lt;-</span> <span class="fu">mr_leaveoneout</span>(</span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizations</span></span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_scatter_plot</span>(</span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>  mr_results,</span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>  harmonised_dat</span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a><span class="fu">mr_leaveoneout_plot</span>(</span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a>  loo</span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>ERROR: Error in ieugwasr::tophits(outcomes, pval = p1, clump = clump, r2 = r2, : unused argument (x_api_source = x_api_source_header())
 
@@ -5405,13 +5648,14 @@ Traceback:
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

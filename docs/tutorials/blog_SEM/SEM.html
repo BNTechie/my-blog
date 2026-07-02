@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Structural Equation Modeling: A Practical Tutorial with R – Nivedita’s Blog</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -60,7 +63,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-d24c3880db9ce3ca4ea2d5bb002bea1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
@@ -354,7 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In path diagrams, latent variables are usually shown as circles or ovals.</p>
 <p>For example, depression may be measured using several questionnaire items:</p>
 <div id="efbaf1a6-d548-4f96-81ed-6d2b5159dd45" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>depression <span class="ot">=</span><span class="er">~</span> dep1 <span class="sc">+</span> dep2 <span class="sc">+</span> dep3 <span class="sc">+</span> dep4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>depression <span class="ot">=</span><span class="er">~</span> dep1 <span class="sc">+</span> dep2 <span class="sc">+</span> dep3 <span class="sc">+</span> dep4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here, <code>depression</code> is a latent variable, and <code>dep1</code>, <code>dep2</code>, <code>dep3</code>, and <code>dep4</code> are observed indicators.</p>
 <p>In <code>lavaan</code>, the operator <code>=~</code> defines a latent variable. The official lavaan SEM tutorial describes three core operators: <code>=~</code> for latent variable definitions, <code>~</code> for regressions, and <code>~~</code> for variances/covariances. (<a href="https://lavaan.ugent.be/tutorial/sem.html?utm_source=chatgpt.com" title="A SEM example">Lavaan</a>)</p>
@@ -371,8 +374,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 <p>For example:</p>
 <div id="7edc6890-cbe4-44d3-a5e4-679d3db17fdc" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>depression <span class="ot">=</span><span class="er">~</span> dep1 <span class="sc">+</span> dep2 <span class="sc">+</span> dep3 <span class="sc">+</span> dep4</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>resilience <span class="ot">=</span><span class="er">~</span> res1 <span class="sc">+</span> res2 <span class="sc">+</span> res3 <span class="sc">+</span> res4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>depression <span class="ot">=</span><span class="er">~</span> dep1 <span class="sc">+</span> dep2 <span class="sc">+</span> dep3 <span class="sc">+</span> dep4</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>resilience <span class="ot">=</span><span class="er">~</span> res1 <span class="sc">+</span> res2 <span class="sc">+</span> res3 <span class="sc">+</span> res4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This says that depression is measured by four depression items, and resilience is measured by four resilience items.</p>
 <p>This part of SEM is closely related to <strong>Confirmatory Factor Analysis</strong>, or CFA. CFA is used when we already have a hypothesis about which observed variables measure which latent variables. lavaan provides the <code>cfa()</code> function for this purpose. (<a href="https://lavaan.ugent.be/tutorial/cfa.html?utm_source=chatgpt.com" title="A CFA example">Lavaan</a>)</p>
@@ -385,8 +388,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 <p>For example:</p>
 <div id="ea89d1a6-25a1-4e40-8c06-71b1941eb018" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>depression <span class="sc">~</span> resilience <span class="sc">+</span> stress</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>resilience <span class="sc">~</span> social_support</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>depression <span class="sc">~</span> resilience <span class="sc">+</span> stress</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>resilience <span class="sc">~</span> social_support</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>depression ~ resilience + stress</code></pre>
 </div>
@@ -409,45 +412,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="latent-variable-definition" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="latent-variable-definition"><span class="header-section-number">1.5.1</span> Latent variable definition</h3>
 <div id="38f2d259-0e12-40dd-835f-092310d3ee2d" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>latent_variable <span class="ot">=</span><span class="er">~</span> item1 <span class="sc">+</span> item2 <span class="sc">+</span> item3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>latent_variable <span class="ot">=</span><span class="er">~</span> item1 <span class="sc">+</span> item2 <span class="sc">+</span> item3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Example:</p>
 <div id="389ea65e-4ac8-47ad-9349-42fef3f25d2b" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>depression <span class="ot">=</span><span class="er">~</span> dep1 <span class="sc">+</span> dep2 <span class="sc">+</span> dep3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>depression <span class="ot">=</span><span class="er">~</span> dep1 <span class="sc">+</span> dep2 <span class="sc">+</span> dep3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="regression-path" class="level3" data-number="1.5.2">
 <h3 data-number="1.5.2" class="anchored" data-anchor-id="regression-path"><span class="header-section-number">1.5.2</span> Regression path</h3>
 <div id="6f9ab4cb-32fe-461e-9222-dfdbf951bffe" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>outcome <span class="sc">~</span> predictor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>outcome <span class="sc">~</span> predictor</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>outcome ~ predictor</code></pre>
 </div>
 </div>
 <div id="b85ff8c6-67b9-479d-9fc2-c11316e9fbb9" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>depression <span class="sc">~</span> stress <span class="sc">+</span> resilience</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>depression <span class="sc">~</span> stress <span class="sc">+</span> resilience</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>depression ~ stress + resilience</code></pre>
 </div>
 </div>
 <p>Example:</p>
 <div id="2f58807e-c22b-431f-86f1-4fd086eeb952" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="do">### Covariance</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>var1 <span class="sc">~</span><span class="er">~</span> var2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>var1 <span class="sc">~</span><span class="er">~</span> var2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>var1 ~ ~var2</code></pre>
 </div>
 </div>
 <p>Example:</p>
 <div id="6663be89-6917-4391-88ef-2823581d16a3" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>stress <span class="sc">~</span><span class="er">~</span> social_support</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>stress <span class="sc">~</span><span class="er">~</span> social_support</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="do">### Variance</span></span>
@@ -459,7 +462,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>Example<span class="sc">:</span></span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>stress <span class="sc">~</span><span class="er">~</span> stress</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>stress <span class="sc">~</span><span class="er">~</span> stress</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>stress ~ ~social_support</code></pre>
 </div>
@@ -496,7 +499,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This means stress may affect depression directly and indirectly through resilience.</p>
 <hr>
 <div id="1688dae7-7f1a-4ae1-abf8-d74087f57356" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 7. Complete R script using lavaan</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 7. Complete R script using lavaan</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
@@ -544,14 +547,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_sem)</span>
-<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data_sem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data_sem)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 The downloaded binary packages are in
     /var/folders/3f/6pzn2nyn32d7wthyxkzsqyxcdrtvym/T//Rtmp96VAjk/downloaded_packages</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 6 × 9</caption>
 <thead>
 <tr class="header">
@@ -581,7 +584,7 @@ The downloaded binary packages are in
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">1</td>
+<th data-quarto-table-cell-role="th" scope="row">1</th>
 <td>-0.7767752</td>
 <td>-0.6481348</td>
 <td>-0.77595113</td>
@@ -593,7 +596,7 @@ The downloaded binary packages are in
 <td>-1.43572002</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">2</td>
+<th data-quarto-table-cell-role="th" scope="row">2</th>
 <td>-0.3070449</td>
 <td>-0.0426553</td>
 <td>0.02256535</td>
@@ -605,7 +608,7 @@ The downloaded binary packages are in
 <td>-0.96182442</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">3</td>
+<th data-quarto-table-cell-role="th" scope="row">3</th>
 <td>0.8861274</td>
 <td>0.8203012</td>
 <td>1.12103167</td>
@@ -617,7 +620,7 @@ The downloaded binary packages are in
 <td>0.19536724</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">4</td>
+<th data-quarto-table-cell-role="th" scope="row">4</th>
 <td>0.3072342</td>
 <td>0.6589697</td>
 <td>-0.15013607</td>
@@ -629,7 +632,7 @@ The downloaded binary packages are in
 <td>-0.06974591</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">5</td>
+<th data-quarto-table-cell-role="th" scope="row">5</th>
 <td>0.5515722</td>
 <td>0.1775694</td>
 <td>0.42611280</td>
@@ -641,7 +644,7 @@ The downloaded binary packages are in
 <td>-1.45021286</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">6</td>
+<th data-quarto-table-cell-role="th" scope="row">6</th>
 <td>2.2229374</td>
 <td>0.8929113</td>
 <td>1.35330993</td>
@@ -684,7 +687,7 @@ The downloaded binary packages are in
 <section id="define-the-sem-model" class="level2" data-number="1.7">
 <h2 data-number="1.7" class="anchored" data-anchor-id="define-the-sem-model"><span class="header-section-number">1.7</span> 8. Define the SEM model</h2>
 <div id="57584194-cbdd-4bb6-9dfa-abbd82c2cfa0" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Define SEM model</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
@@ -706,22 +709,22 @@ The downloaded binary packages are in
 <span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="st">  total := c + (a * b)</span></span>
 <span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In this model:</p>
 <div id="12c9607c-ca90-4e96-aa4b-41cddb82c5bf" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>stress <span class="ot">=</span><span class="er">~</span> stress1 <span class="sc">+</span> stress2 <span class="sc">+</span> stress3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>stress <span class="ot">=</span><span class="er">~</span> stress1 <span class="sc">+</span> stress2 <span class="sc">+</span> stress3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>means that the latent variable <code>stress</code> is measured by three observed items.</p>
 <div id="042acc99-86c8-40c8-998e-4780c6113695" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>resilience <span class="sc">~</span> a <span class="sc">*</span> stress</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>resilience <span class="sc">~</span> a <span class="sc">*</span> stress</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>resilience ~ a * stress</code></pre>
 </div>
 </div>
 <p>means that stress predicts resilience. The path coefficient is labeled <code>a</code>.</p>
 <div id="5a7c1529-9475-47d5-be66-437d014b479d" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>depression <span class="sc">~</span> b <span class="sc">*</span> resilience <span class="sc">+</span> c <span class="sc">*</span> stress</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>depression <span class="sc">~</span> b <span class="sc">*</span> resilience <span class="sc">+</span> c <span class="sc">*</span> stress</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>depression ~ b * resilience + c * stress</code></pre>
 </div>
@@ -736,7 +739,7 @@ The downloaded binary packages are in
 <h2 data-number="1.8" class="anchored" data-anchor-id="fit-the-sem-model"><span class="header-section-number">1.8</span> 9. Fit the SEM model</h2>
 <pre class="text"><code>stress → resilience → depression</code></pre>
 <div id="bba46c4e-4b57-4ddc-921a-b471928355f8" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fit the model</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -751,7 +754,7 @@ The downloaded binary packages are in
 <span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <dl>
     <dt>$header</dt>
@@ -826,7 +829,7 @@ The downloaded binary packages are in
 </dd>
     <dt>$pe</dt>
         <dd>
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 47 × 11</caption>
 <thead>
 <tr class="header">
@@ -860,7 +863,7 @@ The downloaded binary packages are in
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">1</td>
+<th data-quarto-table-cell-role="th" scope="row">1</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress1</td>
@@ -874,7 +877,7 @@ The downloaded binary packages are in
 <td>0.868605970</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">2</td>
+<th data-quarto-table-cell-role="th" scope="row">2</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress2</td>
@@ -888,7 +891,7 @@ The downloaded binary packages are in
 <td>0.807109561</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">3</td>
+<th data-quarto-table-cell-role="th" scope="row">3</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress3</td>
@@ -902,7 +905,7 @@ The downloaded binary packages are in
 <td>0.917815829</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">4</td>
+<th data-quarto-table-cell-role="th" scope="row">4</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil1</td>
@@ -916,7 +919,7 @@ The downloaded binary packages are in
 <td>0.896166093</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">5</td>
+<th data-quarto-table-cell-role="th" scope="row">5</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil2</td>
@@ -930,7 +933,7 @@ The downloaded binary packages are in
 <td>0.803459938</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">6</td>
+<th data-quarto-table-cell-role="th" scope="row">6</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil3</td>
@@ -944,7 +947,7 @@ The downloaded binary packages are in
 <td>0.905885416</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">7</td>
+<th data-quarto-table-cell-role="th" scope="row">7</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep1</td>
@@ -958,7 +961,7 @@ The downloaded binary packages are in
 <td>0.939423104</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">8</td>
+<th data-quarto-table-cell-role="th" scope="row">8</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep2</td>
@@ -972,7 +975,7 @@ The downloaded binary packages are in
 <td>0.891874563</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">9</td>
+<th data-quarto-table-cell-role="th" scope="row">9</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep3</td>
@@ -986,7 +989,7 @@ The downloaded binary packages are in
 <td>0.950922084</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">10</td>
+<th data-quarto-table-cell-role="th" scope="row">10</th>
 <td>resilience</td>
 <td>~</td>
 <td>stress</td>
@@ -1000,7 +1003,7 @@ The downloaded binary packages are in
 <td>-0.516596762</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">11</td>
+<th data-quarto-table-cell-role="th" scope="row">11</th>
 <td>depression</td>
 <td>~</td>
 <td>resilience</td>
@@ -1014,7 +1017,7 @@ The downloaded binary packages are in
 <td>-0.441729894</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">12</td>
+<th data-quarto-table-cell-role="th" scope="row">12</th>
 <td>depression</td>
 <td>~</td>
 <td>stress</td>
@@ -1028,7 +1031,7 @@ The downloaded binary packages are in
 <td>0.484793081</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">13</td>
+<th data-quarto-table-cell-role="th" scope="row">13</th>
 <td>stress1</td>
 <td>~~</td>
 <td>stress1</td>
@@ -1042,7 +1045,7 @@ The downloaded binary packages are in
 <td>0.245523668</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">14</td>
+<th data-quarto-table-cell-role="th" scope="row">14</th>
 <td>stress2</td>
 <td>~~</td>
 <td>stress2</td>
@@ -1056,7 +1059,7 @@ The downloaded binary packages are in
 <td>0.348574156</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">15</td>
+<th data-quarto-table-cell-role="th" scope="row">15</th>
 <td>stress3</td>
 <td>~~</td>
 <td>stress3</td>
@@ -1070,7 +1073,7 @@ The downloaded binary packages are in
 <td>0.157614104</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">16</td>
+<th data-quarto-table-cell-role="th" scope="row">16</th>
 <td>resil1</td>
 <td>~~</td>
 <td>resil1</td>
@@ -1084,7 +1087,7 @@ The downloaded binary packages are in
 <td>0.196886334</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">17</td>
+<th data-quarto-table-cell-role="th" scope="row">17</th>
 <td>resil2</td>
 <td>~~</td>
 <td>resil2</td>
@@ -1098,7 +1101,7 @@ The downloaded binary packages are in
 <td>0.354452128</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">18</td>
+<th data-quarto-table-cell-role="th" scope="row">18</th>
 <td>resil3</td>
 <td>~~</td>
 <td>resil3</td>
@@ -1112,7 +1115,7 @@ The downloaded binary packages are in
 <td>0.179371612</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">19</td>
+<th data-quarto-table-cell-role="th" scope="row">19</th>
 <td>dep1</td>
 <td>~~</td>
 <td>dep1</td>
@@ -1126,7 +1129,7 @@ The downloaded binary packages are in
 <td>0.117484232</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">20</td>
+<th data-quarto-table-cell-role="th" scope="row">20</th>
 <td>dep2</td>
 <td>~~</td>
 <td>dep2</td>
@@ -1140,7 +1143,7 @@ The downloaded binary packages are in
 <td>0.204559764</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">21</td>
+<th data-quarto-table-cell-role="th" scope="row">21</th>
 <td>dep3</td>
 <td>~~</td>
 <td>dep3</td>
@@ -1154,7 +1157,7 @@ The downloaded binary packages are in
 <td>0.095747191</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">22</td>
+<th data-quarto-table-cell-role="th" scope="row">22</th>
 <td>stress</td>
 <td>~~</td>
 <td>stress</td>
@@ -1168,7 +1171,7 @@ The downloaded binary packages are in
 <td>1.000000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">23</td>
+<th data-quarto-table-cell-role="th" scope="row">23</th>
 <td>resilience</td>
 <td>~~</td>
 <td>resilience</td>
@@ -1182,7 +1185,7 @@ The downloaded binary packages are in
 <td>0.733127786</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">24</td>
+<th data-quarto-table-cell-role="th" scope="row">24</th>
 <td>depression</td>
 <td>~~</td>
 <td>depression</td>
@@ -1196,7 +1199,7 @@ The downloaded binary packages are in
 <td>0.348594459</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">25</td>
+<th data-quarto-table-cell-role="th" scope="row">25</th>
 <td>stress1</td>
 <td>~1</td>
 <td></td>
@@ -1210,7 +1213,7 @@ The downloaded binary packages are in
 <td>0.059789157</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">26</td>
+<th data-quarto-table-cell-role="th" scope="row">26</th>
 <td>stress2</td>
 <td>~1</td>
 <td></td>
@@ -1224,7 +1227,7 @@ The downloaded binary packages are in
 <td>-0.009539199</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">27</td>
+<th data-quarto-table-cell-role="th" scope="row">27</th>
 <td>stress3</td>
 <td>~1</td>
 <td></td>
@@ -1238,7 +1241,7 @@ The downloaded binary packages are in
 <td>0.043080830</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">28</td>
+<th data-quarto-table-cell-role="th" scope="row">28</th>
 <td>resil1</td>
 <td>~1</td>
 <td></td>
@@ -1252,7 +1255,7 @@ The downloaded binary packages are in
 <td>-0.028314698</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">29</td>
+<th data-quarto-table-cell-role="th" scope="row">29</th>
 <td>resil2</td>
 <td>~1</td>
 <td></td>
@@ -1266,7 +1269,7 @@ The downloaded binary packages are in
 <td>-0.013776944</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">30</td>
+<th data-quarto-table-cell-role="th" scope="row">30</th>
 <td>resil3</td>
 <td>~1</td>
 <td></td>
@@ -1280,7 +1283,7 @@ The downloaded binary packages are in
 <td>-0.037591286</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">31</td>
+<th data-quarto-table-cell-role="th" scope="row">31</th>
 <td>dep1</td>
 <td>~1</td>
 <td></td>
@@ -1294,7 +1297,7 @@ The downloaded binary packages are in
 <td>0.031246359</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">32</td>
+<th data-quarto-table-cell-role="th" scope="row">32</th>
 <td>dep2</td>
 <td>~1</td>
 <td></td>
@@ -1308,7 +1311,7 @@ The downloaded binary packages are in
 <td>0.044652611</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">33</td>
+<th data-quarto-table-cell-role="th" scope="row">33</th>
 <td>dep3</td>
 <td>~1</td>
 <td></td>
@@ -1322,7 +1325,7 @@ The downloaded binary packages are in
 <td>0.052017209</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">37</td>
+<th data-quarto-table-cell-role="th" scope="row">37</th>
 <td>indirect</td>
 <td>:=</td>
 <td>a*b</td>
@@ -1336,7 +1339,7 @@ The downloaded binary packages are in
 <td>0.228196233</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">38</td>
+<th data-quarto-table-cell-role="th" scope="row">38</th>
 <td>direct</td>
 <td>:=</td>
 <td>c</td>
@@ -1350,7 +1353,7 @@ The downloaded binary packages are in
 <td>0.484793081</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">39</td>
+<th data-quarto-table-cell-role="th" scope="row">39</th>
 <td>total</td>
 <td>:=</td>
 <td>c+(a*b)</td>
@@ -1364,7 +1367,7 @@ The downloaded binary packages are in
 <td>0.712989314</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">40</td>
+<th data-quarto-table-cell-role="th" scope="row">40</th>
 <td>stress1</td>
 <td>r2</td>
 <td>stress1</td>
@@ -1378,7 +1381,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">41</td>
+<th data-quarto-table-cell-role="th" scope="row">41</th>
 <td>stress2</td>
 <td>r2</td>
 <td>stress2</td>
@@ -1392,7 +1395,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">42</td>
+<th data-quarto-table-cell-role="th" scope="row">42</th>
 <td>stress3</td>
 <td>r2</td>
 <td>stress3</td>
@@ -1406,7 +1409,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">43</td>
+<th data-quarto-table-cell-role="th" scope="row">43</th>
 <td>resil1</td>
 <td>r2</td>
 <td>resil1</td>
@@ -1420,7 +1423,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">44</td>
+<th data-quarto-table-cell-role="th" scope="row">44</th>
 <td>resil2</td>
 <td>r2</td>
 <td>resil2</td>
@@ -1434,7 +1437,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">45</td>
+<th data-quarto-table-cell-role="th" scope="row">45</th>
 <td>resil3</td>
 <td>r2</td>
 <td>resil3</td>
@@ -1448,7 +1451,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">46</td>
+<th data-quarto-table-cell-role="th" scope="row">46</th>
 <td>dep1</td>
 <td>r2</td>
 <td>dep1</td>
@@ -1462,7 +1465,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">47</td>
+<th data-quarto-table-cell-role="th" scope="row">47</th>
 <td>dep2</td>
 <td>r2</td>
 <td>dep2</td>
@@ -1476,7 +1479,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">48</td>
+<th data-quarto-table-cell-role="th" scope="row">48</th>
 <td>dep3</td>
 <td>r2</td>
 <td>dep3</td>
@@ -1490,7 +1493,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">49</td>
+<th data-quarto-table-cell-role="th" scope="row">49</th>
 <td>resilience</td>
 <td>r2</td>
 <td>resilience</td>
@@ -1504,7 +1507,7 @@ The downloaded binary packages are in
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">50</td>
+<th data-quarto-table-cell-role="th" scope="row">50</th>
 <td>depression</td>
 <td>r2</td>
 <td>depression</td>
@@ -1639,10 +1642,10 @@ R2 for depression = 0.60</code></pre>
 <p>These cutoffs should not be used mechanically. They are guidelines, not universal rules.</p>
 <p>You can extract fit measures in R:</p>
 <div id="23285394-4023-4d5f-a99d-8ea9796f1461" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fitMeasures</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fitMeasures</span>(</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  fit_sem,</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"chisq"</span>, <span class="st">"df"</span>, <span class="st">"pvalue"</span>, <span class="st">"cfi"</span>, <span class="st">"tli"</span>, <span class="st">"rmsea"</span>, <span class="st">"srmr"</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <style>
 .dl-inline {width: auto; margin:0; padding: 0}
@@ -1658,7 +1661,7 @@ R2 for depression = 0.60</code></pre>
 <section id="visualize-the-sem-model" class="level2" data-number="1.11">
 <h2 data-number="1.11" class="anchored" data-anchor-id="visualize-the-sem-model"><span class="header-section-number">1.11</span> 12. Visualize the SEM model</h2>
 <div id="feea259a-ab14-4154-af0d-cef9e31085b0" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Plot the SEM model</span></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1672,7 +1675,7 @@ R2 for depression = 0.60</code></pre>
 <span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuals =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">intercepts =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">nCharNodes =</span> <span class="dv">0</span></span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1708,12 +1711,12 @@ R2 for depression = 0.60</code></pre>
 <p>total := direct + indirect</p>
 <p>In lavaan:</p>
 <div id="99e230f8-b15b-4d20-9474-55bd58db62c8" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parameterEstimates</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parameterEstimates</span>(</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  fit_sem,</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A lavaan.data.frame: 39 × 12</caption>
 <thead>
 <tr class="header">
@@ -2303,7 +2306,7 @@ R2 for depression = 0.60</code></pre>
 <h2 data-number="1.13" class="anchored" data-anchor-id="bootstrapped-confidence-intervals-for-indirect-effects"><span class="header-section-number">1.13</span> 14. Bootstrapped confidence intervals for indirect effects</h2>
 <p>Indirect effects often have non-normal sampling distributions. Bootstrapping is commonly used for mediation.</p>
 <div id="a12bcd79-abfd-4c9d-a91e-366bc3c447bd" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>fit_sem_boot <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>fit_sem_boot <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  model_sem,</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data_sem,</span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">se =</span> <span class="st">"bootstrap"</span>,</span>
@@ -2315,9 +2318,9 @@ R2 for depression = 0.60</code></pre>
 <span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  fit_sem_boot,</span>
 <span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">boot.ci.type =</span> <span class="st">"perc"</span>,</span>
 <span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A lavaan.data.frame: 39 × 12</caption>
 <thead>
 <tr class="header">
@@ -2908,7 +2911,7 @@ R2 for depression = 0.60</code></pre>
 <h2 data-number="1.14" class="anchored" data-anchor-id="cfa-before-sem"><span class="header-section-number">1.14</span> 15. CFA before SEM</h2>
 <p>In practice, it is often useful to first fit the measurement model alone.</p>
 <div id="d5621329-f028-4ab4-931f-7627b17e21a7" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Confirmatory Factor Analysis first</span></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -2930,7 +2933,7 @@ R2 for depression = 0.60</code></pre>
 <span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>  fit_cfa,</span>
 <span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span></span>
-<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <dl>
     <dt>$header</dt>
@@ -3005,7 +3008,7 @@ R2 for depression = 0.60</code></pre>
 </dd>
     <dt>$pe</dt>
         <dd>
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 33 × 10</caption>
 <thead>
 <tr class="header">
@@ -3037,7 +3040,7 @@ R2 for depression = 0.60</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">1</td>
+<th data-quarto-table-cell-role="th" scope="row">1</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress1</td>
@@ -3050,7 +3053,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.86860600</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">2</td>
+<th data-quarto-table-cell-role="th" scope="row">2</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress2</td>
@@ -3063,7 +3066,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.80710955</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">3</td>
+<th data-quarto-table-cell-role="th" scope="row">3</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress3</td>
@@ -3076,7 +3079,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.91781573</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">4</td>
+<th data-quarto-table-cell-role="th" scope="row">4</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil1</td>
@@ -3089,7 +3092,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.89616610</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">5</td>
+<th data-quarto-table-cell-role="th" scope="row">5</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil2</td>
@@ -3102,7 +3105,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.80345979</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">6</td>
+<th data-quarto-table-cell-role="th" scope="row">6</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil3</td>
@@ -3115,7 +3118,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.90588546</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">7</td>
+<th data-quarto-table-cell-role="th" scope="row">7</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep1</td>
@@ -3128,7 +3131,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.93942308</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">8</td>
+<th data-quarto-table-cell-role="th" scope="row">8</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep2</td>
@@ -3141,7 +3144,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.89187460</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">9</td>
+<th data-quarto-table-cell-role="th" scope="row">9</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep3</td>
@@ -3154,7 +3157,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.95092205</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">10</td>
+<th data-quarto-table-cell-role="th" scope="row">10</th>
 <td>stress1</td>
 <td>~~</td>
 <td>stress1</td>
@@ -3167,7 +3170,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.24552361</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">11</td>
+<th data-quarto-table-cell-role="th" scope="row">11</th>
 <td>stress2</td>
 <td>~~</td>
 <td>stress2</td>
@@ -3180,7 +3183,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.34857418</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">12</td>
+<th data-quarto-table-cell-role="th" scope="row">12</th>
 <td>stress3</td>
 <td>~~</td>
 <td>stress3</td>
@@ -3193,7 +3196,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.15761428</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">13</td>
+<th data-quarto-table-cell-role="th" scope="row">13</th>
 <td>resil1</td>
 <td>~~</td>
 <td>resil1</td>
@@ -3206,7 +3209,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.19688632</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">14</td>
+<th data-quarto-table-cell-role="th" scope="row">14</th>
 <td>resil2</td>
 <td>~~</td>
 <td>resil2</td>
@@ -3219,7 +3222,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.35445237</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">15</td>
+<th data-quarto-table-cell-role="th" scope="row">15</th>
 <td>resil3</td>
 <td>~~</td>
 <td>resil3</td>
@@ -3232,7 +3235,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.17937154</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">16</td>
+<th data-quarto-table-cell-role="th" scope="row">16</th>
 <td>dep1</td>
 <td>~~</td>
 <td>dep1</td>
@@ -3245,7 +3248,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.11748427</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">17</td>
+<th data-quarto-table-cell-role="th" scope="row">17</th>
 <td>dep2</td>
 <td>~~</td>
 <td>dep2</td>
@@ -3258,7 +3261,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.20455970</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">18</td>
+<th data-quarto-table-cell-role="th" scope="row">18</th>
 <td>dep3</td>
 <td>~~</td>
 <td>dep3</td>
@@ -3271,7 +3274,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.09574725</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">19</td>
+<th data-quarto-table-cell-role="th" scope="row">19</th>
 <td>stress</td>
 <td>~~</td>
 <td>stress</td>
@@ -3284,7 +3287,7 @@ R2 for depression = 0.60</code></pre>
 <td>1.00000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">20</td>
+<th data-quarto-table-cell-role="th" scope="row">20</th>
 <td>resilience</td>
 <td>~~</td>
 <td>resilience</td>
@@ -3297,7 +3300,7 @@ R2 for depression = 0.60</code></pre>
 <td>1.00000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">21</td>
+<th data-quarto-table-cell-role="th" scope="row">21</th>
 <td>depression</td>
 <td>~~</td>
 <td>depression</td>
@@ -3310,7 +3313,7 @@ R2 for depression = 0.60</code></pre>
 <td>1.00000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">22</td>
+<th data-quarto-table-cell-role="th" scope="row">22</th>
 <td>stress</td>
 <td>~~</td>
 <td>resilience</td>
@@ -3323,7 +3326,7 @@ R2 for depression = 0.60</code></pre>
 <td>-0.51659657</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">23</td>
+<th data-quarto-table-cell-role="th" scope="row">23</th>
 <td>stress</td>
 <td>~~</td>
 <td>depression</td>
@@ -3336,7 +3339,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.71298911</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">24</td>
+<th data-quarto-table-cell-role="th" scope="row">24</th>
 <td>resilience</td>
 <td>~~</td>
 <td>depression</td>
@@ -3349,7 +3352,7 @@ R2 for depression = 0.60</code></pre>
 <td>-0.69217241</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">25</td>
+<th data-quarto-table-cell-role="th" scope="row">25</th>
 <td>stress1</td>
 <td>~1</td>
 <td></td>
@@ -3362,7 +3365,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.05978917</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">26</td>
+<th data-quarto-table-cell-role="th" scope="row">26</th>
 <td>stress2</td>
 <td>~1</td>
 <td></td>
@@ -3375,7 +3378,7 @@ R2 for depression = 0.60</code></pre>
 <td>-0.00953920</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">27</td>
+<th data-quarto-table-cell-role="th" scope="row">27</th>
 <td>stress3</td>
 <td>~1</td>
 <td></td>
@@ -3388,7 +3391,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.04308084</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">28</td>
+<th data-quarto-table-cell-role="th" scope="row">28</th>
 <td>resil1</td>
 <td>~1</td>
 <td></td>
@@ -3401,7 +3404,7 @@ R2 for depression = 0.60</code></pre>
 <td>-0.02831470</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">29</td>
+<th data-quarto-table-cell-role="th" scope="row">29</th>
 <td>resil2</td>
 <td>~1</td>
 <td></td>
@@ -3414,7 +3417,7 @@ R2 for depression = 0.60</code></pre>
 <td>-0.01377695</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">30</td>
+<th data-quarto-table-cell-role="th" scope="row">30</th>
 <td>resil3</td>
 <td>~1</td>
 <td></td>
@@ -3427,7 +3430,7 @@ R2 for depression = 0.60</code></pre>
 <td>-0.03759128</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">31</td>
+<th data-quarto-table-cell-role="th" scope="row">31</th>
 <td>dep1</td>
 <td>~1</td>
 <td></td>
@@ -3440,7 +3443,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.03124636</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">32</td>
+<th data-quarto-table-cell-role="th" scope="row">32</th>
 <td>dep2</td>
 <td>~1</td>
 <td></td>
@@ -3453,7 +3456,7 @@ R2 for depression = 0.60</code></pre>
 <td>0.04465261</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">33</td>
+<th data-quarto-table-cell-role="th" scope="row">33</th>
 <td>dep3</td>
 <td>~1</td>
 <td></td>
@@ -3565,7 +3568,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <p>If variables are non-normal, robust estimators can be used.</p>
 <p>Example:</p>
 <div id="1b268857-fcf7-4bb4-a85f-c0e001977091" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fit_robust <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fit_robust <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  model_sem,</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data_sem,</span>
 <span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>,</span>
@@ -3576,7 +3579,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  fit_robust,</span>
 <span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <dl>
     <dt>$header</dt>
@@ -3685,7 +3688,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 </dd>
     <dt>$pe</dt>
         <dd>
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 36 × 11</caption>
 <thead>
 <tr class="header">
@@ -3719,7 +3722,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">1</td>
+<th data-quarto-table-cell-role="th" scope="row">1</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress1</td>
@@ -3733,7 +3736,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.868605970</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">2</td>
+<th data-quarto-table-cell-role="th" scope="row">2</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress2</td>
@@ -3747,7 +3750,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.807109561</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">3</td>
+<th data-quarto-table-cell-role="th" scope="row">3</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress3</td>
@@ -3761,7 +3764,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.917815829</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">4</td>
+<th data-quarto-table-cell-role="th" scope="row">4</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil1</td>
@@ -3775,7 +3778,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.896166093</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">5</td>
+<th data-quarto-table-cell-role="th" scope="row">5</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil2</td>
@@ -3789,7 +3792,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.803459938</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">6</td>
+<th data-quarto-table-cell-role="th" scope="row">6</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil3</td>
@@ -3803,7 +3806,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.905885416</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">7</td>
+<th data-quarto-table-cell-role="th" scope="row">7</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep1</td>
@@ -3817,7 +3820,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.939423104</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">8</td>
+<th data-quarto-table-cell-role="th" scope="row">8</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep2</td>
@@ -3831,7 +3834,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.891874563</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">9</td>
+<th data-quarto-table-cell-role="th" scope="row">9</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep3</td>
@@ -3845,7 +3848,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.950922084</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">10</td>
+<th data-quarto-table-cell-role="th" scope="row">10</th>
 <td>resilience</td>
 <td>~</td>
 <td>stress</td>
@@ -3859,7 +3862,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.516596762</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">11</td>
+<th data-quarto-table-cell-role="th" scope="row">11</th>
 <td>depression</td>
 <td>~</td>
 <td>resilience</td>
@@ -3873,7 +3876,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.441729894</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">12</td>
+<th data-quarto-table-cell-role="th" scope="row">12</th>
 <td>depression</td>
 <td>~</td>
 <td>stress</td>
@@ -3887,7 +3890,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.484793081</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">13</td>
+<th data-quarto-table-cell-role="th" scope="row">13</th>
 <td>stress1</td>
 <td>~~</td>
 <td>stress1</td>
@@ -3901,7 +3904,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.245523668</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">14</td>
+<th data-quarto-table-cell-role="th" scope="row">14</th>
 <td>stress2</td>
 <td>~~</td>
 <td>stress2</td>
@@ -3915,7 +3918,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.348574156</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">15</td>
+<th data-quarto-table-cell-role="th" scope="row">15</th>
 <td>stress3</td>
 <td>~~</td>
 <td>stress3</td>
@@ -3929,7 +3932,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.157614104</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">16</td>
+<th data-quarto-table-cell-role="th" scope="row">16</th>
 <td>resil1</td>
 <td>~~</td>
 <td>resil1</td>
@@ -3943,7 +3946,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.196886334</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">17</td>
+<th data-quarto-table-cell-role="th" scope="row">17</th>
 <td>resil2</td>
 <td>~~</td>
 <td>resil2</td>
@@ -3957,7 +3960,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.354452128</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">18</td>
+<th data-quarto-table-cell-role="th" scope="row">18</th>
 <td>resil3</td>
 <td>~~</td>
 <td>resil3</td>
@@ -3971,7 +3974,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.179371612</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">19</td>
+<th data-quarto-table-cell-role="th" scope="row">19</th>
 <td>dep1</td>
 <td>~~</td>
 <td>dep1</td>
@@ -3985,7 +3988,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.117484232</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">20</td>
+<th data-quarto-table-cell-role="th" scope="row">20</th>
 <td>dep2</td>
 <td>~~</td>
 <td>dep2</td>
@@ -3999,7 +4002,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.204559764</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">21</td>
+<th data-quarto-table-cell-role="th" scope="row">21</th>
 <td>dep3</td>
 <td>~~</td>
 <td>dep3</td>
@@ -4013,7 +4016,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.095747191</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">22</td>
+<th data-quarto-table-cell-role="th" scope="row">22</th>
 <td>stress</td>
 <td>~~</td>
 <td>stress</td>
@@ -4027,7 +4030,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>1.000000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">23</td>
+<th data-quarto-table-cell-role="th" scope="row">23</th>
 <td>resilience</td>
 <td>~~</td>
 <td>resilience</td>
@@ -4041,7 +4044,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.733127786</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">24</td>
+<th data-quarto-table-cell-role="th" scope="row">24</th>
 <td>depression</td>
 <td>~~</td>
 <td>depression</td>
@@ -4055,7 +4058,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.348594459</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">25</td>
+<th data-quarto-table-cell-role="th" scope="row">25</th>
 <td>stress1</td>
 <td>~1</td>
 <td></td>
@@ -4069,7 +4072,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.059789157</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">26</td>
+<th data-quarto-table-cell-role="th" scope="row">26</th>
 <td>stress2</td>
 <td>~1</td>
 <td></td>
@@ -4083,7 +4086,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.009539199</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">27</td>
+<th data-quarto-table-cell-role="th" scope="row">27</th>
 <td>stress3</td>
 <td>~1</td>
 <td></td>
@@ -4097,7 +4100,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.043080830</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">28</td>
+<th data-quarto-table-cell-role="th" scope="row">28</th>
 <td>resil1</td>
 <td>~1</td>
 <td></td>
@@ -4111,7 +4114,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.028314698</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">29</td>
+<th data-quarto-table-cell-role="th" scope="row">29</th>
 <td>resil2</td>
 <td>~1</td>
 <td></td>
@@ -4125,7 +4128,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.013776944</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">30</td>
+<th data-quarto-table-cell-role="th" scope="row">30</th>
 <td>resil3</td>
 <td>~1</td>
 <td></td>
@@ -4139,7 +4142,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.037591286</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">31</td>
+<th data-quarto-table-cell-role="th" scope="row">31</th>
 <td>dep1</td>
 <td>~1</td>
 <td></td>
@@ -4153,7 +4156,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.031246359</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">32</td>
+<th data-quarto-table-cell-role="th" scope="row">32</th>
 <td>dep2</td>
 <td>~1</td>
 <td></td>
@@ -4167,7 +4170,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.044652611</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">33</td>
+<th data-quarto-table-cell-role="th" scope="row">33</th>
 <td>dep3</td>
 <td>~1</td>
 <td></td>
@@ -4181,7 +4184,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.052017209</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">37</td>
+<th data-quarto-table-cell-role="th" scope="row">37</th>
 <td>indirect</td>
 <td>:=</td>
 <td>a*b</td>
@@ -4195,7 +4198,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.228196233</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">38</td>
+<th data-quarto-table-cell-role="th" scope="row">38</th>
 <td>direct</td>
 <td>:=</td>
 <td>c</td>
@@ -4209,7 +4212,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.484793081</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">39</td>
+<th data-quarto-table-cell-role="th" scope="row">39</th>
 <td>total</td>
 <td>:=</td>
 <td>c+(a*b)</td>
@@ -4235,12 +4238,12 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <h3 data-number="1.16.4" class="anchored" data-anchor-id="missing-data"><span class="header-section-number">1.16.4</span> 17.4 Missing data</h3>
 <p>SEM can handle missing data using full information maximum likelihood.</p>
 <div id="1ebcb571-b248-4785-b332-3c5d0f0d44a5" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>fit_missing <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>fit_missing <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  model_sem,</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data_sem,</span>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"fiml"</span>,</span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">meanstructure =</span> <span class="cn">TRUE</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This is often preferable to simply deleting all rows with missing values, assuming the missing data mechanism is appropriate.</p>
 <hr>
@@ -4250,13 +4253,13 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <h2 data-number="1.17" class="anchored" data-anchor-id="modification-indices"><span class="header-section-number">1.17</span> 18. Modification indices</h2>
 <p>Modification indices suggest possible model changes that may improve fit.</p>
 <div id="0f1c7f85-8f90-4cee-b90e-427577d26774" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modindices</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modindices</span>(</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  fit_sem,</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">minimum.value =</span> <span class="dv">10</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A lavaan.data.frame: 2 × 8</caption>
 <thead>
 <tr class="header">
@@ -4284,7 +4287,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">66</td>
+<th data-quarto-table-cell-role="th" scope="row">66</th>
 <td>stress2</td>
 <td>~~</td>
 <td>stress3</td>
@@ -4295,7 +4298,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.4539352</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">52</td>
+<th data-quarto-table-cell-role="th" scope="row">52</th>
 <td>depression</td>
 <td>=~</td>
 <td>stress1</td>
@@ -4358,7 +4361,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <p>SEM results should include effect sizes, standardized estimates, confidence intervals, and model fit indices.</p>
 <hr>
 <div id="acb14a4a-fe1d-4927-b8b5-57e4fb225c3b" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 21. Full R code in one block</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 21. Full R code in one block</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================</span></span>
@@ -4462,7 +4465,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <span id="cb43-102"><a href="#cb43-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span></span>
 <span id="cb43-103"><a href="#cb43-103" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb43-104"><a href="#cb43-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-105"><a href="#cb43-105" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb43-105"><a href="#cb43-105" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <dl>
     <dt>$header</dt>
@@ -4537,7 +4540,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 </dd>
     <dt>$pe</dt>
         <dd>
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 47 × 11</caption>
 <thead>
 <tr class="header">
@@ -4571,7 +4574,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">1</td>
+<th data-quarto-table-cell-role="th" scope="row">1</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress1</td>
@@ -4585,7 +4588,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.868605970</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">2</td>
+<th data-quarto-table-cell-role="th" scope="row">2</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress2</td>
@@ -4599,7 +4602,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.807109561</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">3</td>
+<th data-quarto-table-cell-role="th" scope="row">3</th>
 <td>stress</td>
 <td>=~</td>
 <td>stress3</td>
@@ -4613,7 +4616,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.917815829</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">4</td>
+<th data-quarto-table-cell-role="th" scope="row">4</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil1</td>
@@ -4627,7 +4630,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.896166093</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">5</td>
+<th data-quarto-table-cell-role="th" scope="row">5</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil2</td>
@@ -4641,7 +4644,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.803459938</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">6</td>
+<th data-quarto-table-cell-role="th" scope="row">6</th>
 <td>resilience</td>
 <td>=~</td>
 <td>resil3</td>
@@ -4655,7 +4658,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.905885416</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">7</td>
+<th data-quarto-table-cell-role="th" scope="row">7</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep1</td>
@@ -4669,7 +4672,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.939423104</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">8</td>
+<th data-quarto-table-cell-role="th" scope="row">8</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep2</td>
@@ -4683,7 +4686,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.891874563</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">9</td>
+<th data-quarto-table-cell-role="th" scope="row">9</th>
 <td>depression</td>
 <td>=~</td>
 <td>dep3</td>
@@ -4697,7 +4700,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.950922084</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">10</td>
+<th data-quarto-table-cell-role="th" scope="row">10</th>
 <td>resilience</td>
 <td>~</td>
 <td>stress</td>
@@ -4711,7 +4714,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.516596762</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">11</td>
+<th data-quarto-table-cell-role="th" scope="row">11</th>
 <td>depression</td>
 <td>~</td>
 <td>resilience</td>
@@ -4725,7 +4728,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.441729894</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">12</td>
+<th data-quarto-table-cell-role="th" scope="row">12</th>
 <td>depression</td>
 <td>~</td>
 <td>stress</td>
@@ -4739,7 +4742,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.484793081</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">13</td>
+<th data-quarto-table-cell-role="th" scope="row">13</th>
 <td>stress1</td>
 <td>~~</td>
 <td>stress1</td>
@@ -4753,7 +4756,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.245523668</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">14</td>
+<th data-quarto-table-cell-role="th" scope="row">14</th>
 <td>stress2</td>
 <td>~~</td>
 <td>stress2</td>
@@ -4767,7 +4770,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.348574156</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">15</td>
+<th data-quarto-table-cell-role="th" scope="row">15</th>
 <td>stress3</td>
 <td>~~</td>
 <td>stress3</td>
@@ -4781,7 +4784,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.157614104</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">16</td>
+<th data-quarto-table-cell-role="th" scope="row">16</th>
 <td>resil1</td>
 <td>~~</td>
 <td>resil1</td>
@@ -4795,7 +4798,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.196886334</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">17</td>
+<th data-quarto-table-cell-role="th" scope="row">17</th>
 <td>resil2</td>
 <td>~~</td>
 <td>resil2</td>
@@ -4809,7 +4812,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.354452128</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">18</td>
+<th data-quarto-table-cell-role="th" scope="row">18</th>
 <td>resil3</td>
 <td>~~</td>
 <td>resil3</td>
@@ -4823,7 +4826,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.179371612</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">19</td>
+<th data-quarto-table-cell-role="th" scope="row">19</th>
 <td>dep1</td>
 <td>~~</td>
 <td>dep1</td>
@@ -4837,7 +4840,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.117484232</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">20</td>
+<th data-quarto-table-cell-role="th" scope="row">20</th>
 <td>dep2</td>
 <td>~~</td>
 <td>dep2</td>
@@ -4851,7 +4854,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.204559764</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">21</td>
+<th data-quarto-table-cell-role="th" scope="row">21</th>
 <td>dep3</td>
 <td>~~</td>
 <td>dep3</td>
@@ -4865,7 +4868,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.095747191</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">22</td>
+<th data-quarto-table-cell-role="th" scope="row">22</th>
 <td>stress</td>
 <td>~~</td>
 <td>stress</td>
@@ -4879,7 +4882,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>1.000000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">23</td>
+<th data-quarto-table-cell-role="th" scope="row">23</th>
 <td>resilience</td>
 <td>~~</td>
 <td>resilience</td>
@@ -4893,7 +4896,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.733127786</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">24</td>
+<th data-quarto-table-cell-role="th" scope="row">24</th>
 <td>depression</td>
 <td>~~</td>
 <td>depression</td>
@@ -4907,7 +4910,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.348594459</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">25</td>
+<th data-quarto-table-cell-role="th" scope="row">25</th>
 <td>stress1</td>
 <td>~1</td>
 <td></td>
@@ -4921,7 +4924,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.059789157</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">26</td>
+<th data-quarto-table-cell-role="th" scope="row">26</th>
 <td>stress2</td>
 <td>~1</td>
 <td></td>
@@ -4935,7 +4938,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.009539199</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">27</td>
+<th data-quarto-table-cell-role="th" scope="row">27</th>
 <td>stress3</td>
 <td>~1</td>
 <td></td>
@@ -4949,7 +4952,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.043080830</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">28</td>
+<th data-quarto-table-cell-role="th" scope="row">28</th>
 <td>resil1</td>
 <td>~1</td>
 <td></td>
@@ -4963,7 +4966,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.028314698</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">29</td>
+<th data-quarto-table-cell-role="th" scope="row">29</th>
 <td>resil2</td>
 <td>~1</td>
 <td></td>
@@ -4977,7 +4980,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.013776944</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">30</td>
+<th data-quarto-table-cell-role="th" scope="row">30</th>
 <td>resil3</td>
 <td>~1</td>
 <td></td>
@@ -4991,7 +4994,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>-0.037591286</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">31</td>
+<th data-quarto-table-cell-role="th" scope="row">31</th>
 <td>dep1</td>
 <td>~1</td>
 <td></td>
@@ -5005,7 +5008,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.031246359</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">32</td>
+<th data-quarto-table-cell-role="th" scope="row">32</th>
 <td>dep2</td>
 <td>~1</td>
 <td></td>
@@ -5019,7 +5022,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.044652611</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">33</td>
+<th data-quarto-table-cell-role="th" scope="row">33</th>
 <td>dep3</td>
 <td>~1</td>
 <td></td>
@@ -5033,7 +5036,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.052017209</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">37</td>
+<th data-quarto-table-cell-role="th" scope="row">37</th>
 <td>indirect</td>
 <td>:=</td>
 <td>a*b</td>
@@ -5047,7 +5050,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.228196233</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">38</td>
+<th data-quarto-table-cell-role="th" scope="row">38</th>
 <td>direct</td>
 <td>:=</td>
 <td>c</td>
@@ -5061,7 +5064,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.484793081</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">39</td>
+<th data-quarto-table-cell-role="th" scope="row">39</th>
 <td>total</td>
 <td>:=</td>
 <td>c+(a*b)</td>
@@ -5075,7 +5078,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>0.712989314</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">40</td>
+<th data-quarto-table-cell-role="th" scope="row">40</th>
 <td>stress1</td>
 <td>r2</td>
 <td>stress1</td>
@@ -5089,7 +5092,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">41</td>
+<th data-quarto-table-cell-role="th" scope="row">41</th>
 <td>stress2</td>
 <td>r2</td>
 <td>stress2</td>
@@ -5103,7 +5106,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">42</td>
+<th data-quarto-table-cell-role="th" scope="row">42</th>
 <td>stress3</td>
 <td>r2</td>
 <td>stress3</td>
@@ -5117,7 +5120,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">43</td>
+<th data-quarto-table-cell-role="th" scope="row">43</th>
 <td>resil1</td>
 <td>r2</td>
 <td>resil1</td>
@@ -5131,7 +5134,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">44</td>
+<th data-quarto-table-cell-role="th" scope="row">44</th>
 <td>resil2</td>
 <td>r2</td>
 <td>resil2</td>
@@ -5145,7 +5148,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">45</td>
+<th data-quarto-table-cell-role="th" scope="row">45</th>
 <td>resil3</td>
 <td>r2</td>
 <td>resil3</td>
@@ -5159,7 +5162,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">46</td>
+<th data-quarto-table-cell-role="th" scope="row">46</th>
 <td>dep1</td>
 <td>r2</td>
 <td>dep1</td>
@@ -5173,7 +5176,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">47</td>
+<th data-quarto-table-cell-role="th" scope="row">47</th>
 <td>dep2</td>
 <td>r2</td>
 <td>dep2</td>
@@ -5187,7 +5190,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">48</td>
+<th data-quarto-table-cell-role="th" scope="row">48</th>
 <td>dep3</td>
 <td>r2</td>
 <td>dep3</td>
@@ -5201,7 +5204,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">49</td>
+<th data-quarto-table-cell-role="th" scope="row">49</th>
 <td>resilience</td>
 <td>r2</td>
 <td>resilience</td>
@@ -5215,7 +5218,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">50</td>
+<th data-quarto-table-cell-role="th" scope="row">50</th>
 <td>depression</td>
 <td>r2</td>
 <td>depression</td>
@@ -5243,7 +5246,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 </style><dl class="dl-inline"><dt>chisq</dt><dd>39.5933180430763</dd><dt>df</dt><dd>24</dd><dt>pvalue</dt><dd>0.023638187618621</dd><dt>cfi</dt><dd>0.996076847181476</dd><dt>tli</dt><dd>0.994115270772214</dd><dt>rmsea</dt><dd>0.0360477900883863</dd><dt>srmr</dt><dd>0.0195584346341984</dd></dl>
 </div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A lavaan.data.frame: 39 × 12</caption>
 <thead>
 <tr class="header">
@@ -5826,7 +5829,7 @@ Step 5: Report model fit and standardized estimates</code></pre>
 </table>
 </div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A lavaan.data.frame: 39 × 12</caption>
 <thead>
 <tr class="header">
@@ -6496,13 +6499,14 @@ Step 5: Report model fit and standardized estimates</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

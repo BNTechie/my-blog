@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Genetic Drift and Fixation: Understanding Evolution Through Randomness – Nivedita’s Blog</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -106,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -119,7 +122,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -179,94 +182,72 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">0.0.1</span> Learning Objectives</a></li>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites"><span class="header-section-number">0.0.2</span> Prerequisites</a></li>
-  <li><a href="#what-is-an-allele" id="toc-what-is-an-allele" class="nav-link" data-scroll-target="#what-is-an-allele"><span class="header-section-number">0.0.3</span> What is an Allele?</a></li>
-  <li><a href="#infinite-vs-finite-populations" id="toc-infinite-vs-finite-populations" class="nav-link" data-scroll-target="#infinite-vs-finite-populations"><span class="header-section-number">0.0.4</span> Infinite vs Finite Populations</a></li>
-  <li><a href="#an-intuitive-example" id="toc-an-intuitive-example" class="nav-link" data-scroll-target="#an-intuitive-example"><span class="header-section-number">0.0.5</span> An Intuitive Example</a>
-  <ul>
-  <li><a href="#formal-definition" id="toc-formal-definition" class="nav-link" data-scroll-target="#formal-definition"><span class="header-section-number">0.0.5.1</span> Formal Definition</a></li>
-  </ul></li>
-  <li><a href="#what-is-fixation" id="toc-what-is-fixation" class="nav-link" data-scroll-target="#what-is-fixation"><span class="header-section-number">0.0.6</span> What is Fixation?</a></li>
-  <li><a href="#what-is-allele-loss" id="toc-what-is-allele-loss" class="nav-link" data-scroll-target="#what-is-allele-loss"><span class="header-section-number">0.0.7</span> What is Allele Loss?</a></li>
-  <li><a href="#the-wright-fisher-model" id="toc-the-wright-fisher-model" class="nav-link" data-scroll-target="#the-wright-fisher-model"><span class="header-section-number">0.0.8</span> The Wright-Fisher Model</a></li>
-  <li><a href="#sampling-the-next-generation" id="toc-sampling-the-next-generation" class="nav-link" data-scroll-target="#sampling-the-next-generation"><span class="header-section-number">0.0.9</span> Sampling the Next Generation</a></li>
-  <li><a href="#important-theorem-1-drift-has-no-direction" id="toc-important-theorem-1-drift-has-no-direction" class="nav-link" data-scroll-target="#important-theorem-1-drift-has-no-direction"><span class="header-section-number">0.0.10</span> Important Theorem 1: Drift Has No Direction</a></li>
-  <li><a href="#important-theorem-2-variance-of-drift" id="toc-important-theorem-2-variance-of-drift" class="nav-link" data-scroll-target="#important-theorem-2-variance-of-drift"><span class="header-section-number">0.0.11</span> Important Theorem 2: Variance of Drift</a></li>
-  <li><a href="#why-small-populations-drift-faster" id="toc-why-small-populations-drift-faster" class="nav-link" data-scroll-target="#why-small-populations-drift-faster"><span class="header-section-number">0.0.12</span> Why Small Populations Drift Faster</a></li>
-  <li><a href="#important-theorem-3-fixation-probability" id="toc-important-theorem-3-fixation-probability" class="nav-link" data-scroll-target="#important-theorem-3-fixation-probability"><span class="header-section-number">0.0.13</span> Important Theorem 3: Fixation Probability</a></li>
-  <li><a href="#new-mutations" id="toc-new-mutations" class="nav-link" data-scroll-target="#new-mutations"><span class="header-section-number">0.0.14</span> New Mutations</a></li>
-  <li><a href="#important-theorem-4-heterozygosity-decay" id="toc-important-theorem-4-heterozygosity-decay" class="nav-link" data-scroll-target="#important-theorem-4-heterozygosity-decay"><span class="header-section-number">0.0.15</span> Important Theorem 4: Heterozygosity Decay</a></li>
-  <li><a href="#simulating-the-wright-fisher-model" id="toc-simulating-the-wright-fisher-model" class="nav-link" data-scroll-target="#simulating-the-wright-fisher-model"><span class="header-section-number">0.0.16</span> Simulating the Wright-Fisher Model</a></li>
-  <li><a href="#interpreting-the-plot" id="toc-interpreting-the-plot" class="nav-link" data-scroll-target="#interpreting-the-plot"><span class="header-section-number">0.0.17</span> Interpreting the Plot</a></li>
-  <li><a href="#simulating-multiple-populations" id="toc-simulating-multiple-populations" class="nav-link" data-scroll-target="#simulating-multiple-populations"><span class="header-section-number">0.0.18</span> Simulating Multiple Populations</a></li>
-  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">0.0.19</span> Interpretation</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">0.0.20</span> Summary</a></li>
-  <li><a href="#experimental-exploration-of-genetic-drift" id="toc-experimental-exploration-of-genetic-drift" class="nav-link" data-scroll-target="#experimental-exploration-of-genetic-drift"><span class="header-section-number">0.0.21</span> Experimental Exploration of Genetic Drift</a></li>
-  <li><a href="#experiment-1-effect-of-population-size" id="toc-experiment-1-effect-of-population-size" class="nav-link" data-scroll-target="#experiment-1-effect-of-population-size"><span class="header-section-number">0.0.22</span> Experiment 1: Effect of Population Size</a></li>
-  <li><a href="#simulating-different-population-sizes" id="toc-simulating-different-population-sizes" class="nav-link" data-scroll-target="#simulating-different-population-sizes"><span class="header-section-number">0.0.23</span> Simulating Different Population Sizes</a></li>
-  <li><a href="#interpretation-1" id="toc-interpretation-1" class="nav-link" data-scroll-target="#interpretation-1"><span class="header-section-number">0.1</span> Interpretation</a>
-  <ul>
-  <li><a href="#quantifying-drift-variability" id="toc-quantifying-drift-variability" class="nav-link" data-scroll-target="#quantifying-drift-variability"><span class="header-section-number">0.1.1</span> Quantifying Drift Variability</a></li>
-  </ul></li>
-  <li><a href="#experiment-2-initial-allele-frequency" id="toc-experiment-2-initial-allele-frequency" class="nav-link" data-scroll-target="#experiment-2-initial-allele-frequency"><span class="header-section-number">0.2</span> Experiment 2: Initial Allele Frequency</a>
-  <ul>
-  <li><a href="#interpretation-2" id="toc-interpretation-2" class="nav-link" data-scroll-target="#interpretation-2"><span class="header-section-number">0.2.1</span> Interpretation</a></li>
-  <li><a href="#experiment-3-verifying-the-fixation-theorem" id="toc-experiment-3-verifying-the-fixation-theorem" class="nav-link" data-scroll-target="#experiment-3-verifying-the-fixation-theorem"><span class="header-section-number">0.2.2</span> Experiment 3: Verifying the Fixation Theorem</a></li>
-  <li><a href="#interpretation-3" id="toc-interpretation-3" class="nav-link" data-scroll-target="#interpretation-3"><span class="header-section-number">0.2.3</span> Interpretation</a></li>
-  <li><a href="#experiment-4-multiple-snp-simulation" id="toc-experiment-4-multiple-snp-simulation" class="nav-link" data-scroll-target="#experiment-4-multiple-snp-simulation"><span class="header-section-number">0.2.4</span> Experiment 4: Multiple SNP Simulation</a></li>
-  <li><a href="#interpretation-4" id="toc-interpretation-4" class="nav-link" data-scroll-target="#interpretation-4"><span class="header-section-number">0.2.5</span> Interpretation</a></li>
-  <li><a href="#experiment-5-snp-loss-and-fixation" id="toc-experiment-5-snp-loss-and-fixation" class="nav-link" data-scroll-target="#experiment-5-snp-loss-and-fixation"><span class="header-section-number">0.2.6</span> Experiment 5: SNP Loss and Fixation</a></li>
-  <li><a href="#experiment-6-number-of-snps-matters" id="toc-experiment-6-number-of-snps-matters" class="nav-link" data-scroll-target="#experiment-6-number-of-snps-matters"><span class="header-section-number">0.2.7</span> Experiment 6: Number of SNPs Matters</a></li>
-  <li><a href="#interpretation-5" id="toc-interpretation-5" class="nav-link" data-scroll-target="#interpretation-5"><span class="header-section-number">0.2.8</span> Interpretation</a></li>
-  <li><a href="#experiment-7-sampling-error-versus-genetic-drift" id="toc-experiment-7-sampling-error-versus-genetic-drift" class="nav-link" data-scroll-target="#experiment-7-sampling-error-versus-genetic-drift"><span class="header-section-number">0.2.9</span> Experiment 7: Sampling Error Versus Genetic Drift</a></li>
-  <li><a href="#simulating-sampling-error" id="toc-simulating-sampling-error" class="nav-link" data-scroll-target="#simulating-sampling-error"><span class="header-section-number">0.2.10</span> Simulating Sampling Error</a></li>
-  <li><a href="#interpretation-6" id="toc-interpretation-6" class="nav-link" data-scroll-target="#interpretation-6"><span class="header-section-number">0.2.11</span> Interpretation</a></li>
-  <li><a href="#genetic-drift-vs-sampling-error" id="toc-genetic-drift-vs-sampling-error" class="nav-link" data-scroll-target="#genetic-drift-vs-sampling-error"><span class="header-section-number">0.2.12</span> Genetic Drift vs Sampling Error</a></li>
-  <li><a href="#experiment-8-distribution-of-frequency-estimates" id="toc-experiment-8-distribution-of-frequency-estimates" class="nav-link" data-scroll-target="#experiment-8-distribution-of-frequency-estimates"><span class="header-section-number">0.2.13</span> Experiment 8: Distribution of Frequency Estimates</a></li>
-  <li><a href="#interpretation-7" id="toc-interpretation-7" class="nav-link" data-scroll-target="#interpretation-7"><span class="header-section-number">0.2.14</span> Interpretation</a></li>
-  <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1"><span class="header-section-number">0.2.15</span> Summary</a></li>
-  <li><a href="#genome-wide-consequences-of-genetic-drift" id="toc-genome-wide-consequences-of-genetic-drift" class="nav-link" data-scroll-target="#genome-wide-consequences-of-genetic-drift"><span class="header-section-number">0.2.16</span> Genome-Wide Consequences of Genetic Drift</a></li>
-  <li><a href="#heterozygosity" id="toc-heterozygosity" class="nav-link" data-scroll-target="#heterozygosity"><span class="header-section-number">0.2.17</span> Heterozygosity</a></li>
-  <li><a href="#maximum-heterozygosity" id="toc-maximum-heterozygosity" class="nav-link" data-scroll-target="#maximum-heterozygosity"><span class="header-section-number">0.2.18</span> Maximum Heterozygosity</a></li>
-  </ul></li>
-  <li><a href="#theoretical-decay-of-heterozygosity" id="toc-theoretical-decay-of-heterozygosity" class="nav-link" data-scroll-target="#theoretical-decay-of-heterozygosity"><span class="header-section-number">1</span> Theoretical Decay of Heterozygosity</a>
-  <ul>
-  <li><a href="#simulating-heterozygosity-decay" id="toc-simulating-heterozygosity-decay" class="nav-link" data-scroll-target="#simulating-heterozygosity-decay"><span class="header-section-number">1.0.1</span> Simulating Heterozygosity Decay</a></li>
-  <li><a href="#interpretation-8" id="toc-interpretation-8" class="nav-link" data-scroll-target="#interpretation-8"><span class="header-section-number">1.0.2</span> Interpretation</a></li>
-  <li><a href="#effective-population-size" id="toc-effective-population-size" class="nav-link" data-scroll-target="#effective-population-size"><span class="header-section-number">1.0.3</span> Effective Population Size</a>
-  <ul class="collapse">
-  <li><a href="#census-size-vs-effective-size" id="toc-census-size-vs-effective-size" class="nav-link" data-scroll-target="#census-size-vs-effective-size"><span class="header-section-number">1.0.3.1</span> Census Size vs Effective Size</a></li>
-  </ul></li>
-  <li><a href="#why-is-effective-population-size-smaller" id="toc-why-is-effective-population-size-smaller" class="nav-link" data-scroll-target="#why-is-effective-population-size-smaller"><span class="header-section-number">1.0.4</span> Why is Effective Population Size Smaller?</a></li>
-  <li><a href="#why-statistical-geneticists-care-about-ne" id="toc-why-statistical-geneticists-care-about-ne" class="nav-link" data-scroll-target="#why-statistical-geneticists-care-about-ne"><span class="header-section-number">1.0.5</span> Why Statistical Geneticists Care About Ne</a></li>
-  <li><a href="#population-bottlenecks" id="toc-population-bottlenecks" class="nav-link" data-scroll-target="#population-bottlenecks"><span class="header-section-number">1.0.6</span> Population Bottlenecks</a></li>
-  <li><a href="#bottleneck-simulation" id="toc-bottleneck-simulation" class="nav-link" data-scroll-target="#bottleneck-simulation"><span class="header-section-number">1.0.7</span> Bottleneck Simulation</a></li>
-  <li><a href="#interpretation-9" id="toc-interpretation-9" class="nav-link" data-scroll-target="#interpretation-9"><span class="header-section-number">1.0.8</span> Interpretation</a>
-  <ul class="collapse">
-  <li><a href="#founder-effects" id="toc-founder-effects" class="nav-link" data-scroll-target="#founder-effects"><span class="header-section-number">1.0.8.1</span> Founder Effects</a></li>
-  <li><a href="#founder-effect-simulation" id="toc-founder-effect-simulation" class="nav-link" data-scroll-target="#founder-effect-simulation"><span class="header-section-number">1.0.8.2</span> Founder Effect Simulation</a></li>
-  </ul></li>
-  <li><a href="#interpretation-10" id="toc-interpretation-10" class="nav-link" data-scroll-target="#interpretation-10"><span class="header-section-number">1.0.9</span> Interpretation</a></li>
-  <li><a href="#drift-across-an-entire-genome" id="toc-drift-across-an-entire-genome" class="nav-link" data-scroll-target="#drift-across-an-entire-genome"><span class="header-section-number">1.0.10</span> Drift Across an Entire Genome</a></li>
-  <li><a href="#interpretation-11" id="toc-interpretation-11" class="nav-link" data-scroll-target="#interpretation-11"><span class="header-section-number">1.0.11</span> Interpretation</a></li>
-  <li><a href="#genetic-drift-and-population-structure" id="toc-genetic-drift-and-population-structure" class="nav-link" data-scroll-target="#genetic-drift-and-population-structure"><span class="header-section-number">1.0.12</span> Genetic Drift and Population Structure</a></li>
-  <li><a href="#simulating-divergence" id="toc-simulating-divergence" class="nav-link" data-scroll-target="#simulating-divergence"><span class="header-section-number">1.0.13</span> Simulating Divergence</a></li>
-  <li><a href="#interpretation-12" id="toc-interpretation-12" class="nav-link" data-scroll-target="#interpretation-12"><span class="header-section-number">1.1</span> Interpretation</a></li>
-  <li><a href="#connection-to-fst" id="toc-connection-to-fst" class="nav-link" data-scroll-target="#connection-to-fst"><span class="header-section-number">1.2</span> Connection to FST</a>
-  <ul class="collapse">
-  <li><a href="#why-gwas-researchers-care-about-drift" id="toc-why-gwas-researchers-care-about-drift" class="nav-link" data-scroll-target="#why-gwas-researchers-care-about-drift"><span class="header-section-number">1.2.1</span> Why GWAS Researchers Care About Drift</a>
-  <ul class="collapse">
-  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">1.2.1.1</span> Example</a></li>
-  <li><a href="#confounding" id="toc-confounding" class="nav-link" data-scroll-target="#confounding"><span class="header-section-number">1.2.1.2</span> Confounding</a></li>
-  </ul></li>
-  <li><a href="#how-gwas-controls-drift-effects" id="toc-how-gwas-controls-drift-effects" class="nav-link" data-scroll-target="#how-gwas-controls-drift-effects"><span class="header-section-number">1.2.2</span> How GWAS Controls Drift Effects</a></li>
-  <li><a href="#connection-to-finngen" id="toc-connection-to-finngen" class="nav-link" data-scroll-target="#connection-to-finngen"><span class="header-section-number">1.2.3</span> Connection to FinnGen</a></li>
-  <li><a href="#connection-to-uk-biobank" id="toc-connection-to-uk-biobank" class="nav-link" data-scroll-target="#connection-to-uk-biobank"><span class="header-section-number">1.2.4</span> Connection to UK Biobank</a></li>
-  <li><a href="#connection-to-polygenic-scores" id="toc-connection-to-polygenic-scores" class="nav-link" data-scroll-target="#connection-to-polygenic-scores"><span class="header-section-number">1.2.5</span> Connection to Polygenic Scores</a></li>
-  </ul></li>
-  <li><a href="#summary-2" id="toc-summary-2" class="nav-link" data-scroll-target="#summary-2"><span class="header-section-number">1.3</span> Summary</a></li>
-  </ul></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">0.1</span> Learning Objectives</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites"><span class="header-section-number">0.2</span> Prerequisites</a></li>
+  <li><a href="#what-is-an-allele" id="toc-what-is-an-allele" class="nav-link" data-scroll-target="#what-is-an-allele"><span class="header-section-number">0.3</span> What is an Allele?</a></li>
+  <li><a href="#infinite-vs-finite-populations" id="toc-infinite-vs-finite-populations" class="nav-link" data-scroll-target="#infinite-vs-finite-populations"><span class="header-section-number">0.4</span> Infinite vs Finite Populations</a></li>
+  <li><a href="#an-intuitive-example" id="toc-an-intuitive-example" class="nav-link" data-scroll-target="#an-intuitive-example"><span class="header-section-number">0.5</span> An Intuitive Example</a></li>
+  <li><a href="#what-is-fixation" id="toc-what-is-fixation" class="nav-link" data-scroll-target="#what-is-fixation"><span class="header-section-number">0.6</span> What is Fixation?</a></li>
+  <li><a href="#what-is-allele-loss" id="toc-what-is-allele-loss" class="nav-link" data-scroll-target="#what-is-allele-loss"><span class="header-section-number">0.7</span> What is Allele Loss?</a></li>
+  <li><a href="#the-wright-fisher-model" id="toc-the-wright-fisher-model" class="nav-link" data-scroll-target="#the-wright-fisher-model"><span class="header-section-number">0.8</span> The Wright-Fisher Model</a></li>
+  <li><a href="#sampling-the-next-generation" id="toc-sampling-the-next-generation" class="nav-link" data-scroll-target="#sampling-the-next-generation"><span class="header-section-number">0.9</span> Sampling the Next Generation</a></li>
+  <li><a href="#important-theorem-1-drift-has-no-direction" id="toc-important-theorem-1-drift-has-no-direction" class="nav-link" data-scroll-target="#important-theorem-1-drift-has-no-direction"><span class="header-section-number">0.10</span> Important Theorem 1: Drift Has No Direction</a></li>
+  <li><a href="#important-theorem-2-variance-of-drift" id="toc-important-theorem-2-variance-of-drift" class="nav-link" data-scroll-target="#important-theorem-2-variance-of-drift"><span class="header-section-number">0.11</span> Important Theorem 2: Variance of Drift</a></li>
+  <li><a href="#why-small-populations-drift-faster" id="toc-why-small-populations-drift-faster" class="nav-link" data-scroll-target="#why-small-populations-drift-faster"><span class="header-section-number">0.12</span> Why Small Populations Drift Faster</a></li>
+  <li><a href="#important-theorem-3-fixation-probability" id="toc-important-theorem-3-fixation-probability" class="nav-link" data-scroll-target="#important-theorem-3-fixation-probability"><span class="header-section-number">0.13</span> Important Theorem 3: Fixation Probability</a></li>
+  <li><a href="#new-mutations" id="toc-new-mutations" class="nav-link" data-scroll-target="#new-mutations"><span class="header-section-number">0.14</span> New Mutations</a></li>
+  <li><a href="#important-theorem-4-heterozygosity-decay" id="toc-important-theorem-4-heterozygosity-decay" class="nav-link" data-scroll-target="#important-theorem-4-heterozygosity-decay"><span class="header-section-number">0.15</span> Important Theorem 4: Heterozygosity Decay</a></li>
+  <li><a href="#simulating-the-wright-fisher-model" id="toc-simulating-the-wright-fisher-model" class="nav-link" data-scroll-target="#simulating-the-wright-fisher-model"><span class="header-section-number">0.16</span> Simulating the Wright-Fisher Model</a></li>
+  <li><a href="#interpreting-the-plot" id="toc-interpreting-the-plot" class="nav-link" data-scroll-target="#interpreting-the-plot"><span class="header-section-number">0.17</span> Interpreting the Plot</a></li>
+  <li><a href="#simulating-multiple-populations" id="toc-simulating-multiple-populations" class="nav-link" data-scroll-target="#simulating-multiple-populations"><span class="header-section-number">0.18</span> Simulating Multiple Populations</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">0.19</span> Interpretation</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">0.20</span> Summary</a></li>
+  <li><a href="#experimental-exploration-of-genetic-drift" id="toc-experimental-exploration-of-genetic-drift" class="nav-link" data-scroll-target="#experimental-exploration-of-genetic-drift"><span class="header-section-number">0.21</span> Experimental Exploration of Genetic Drift</a></li>
+  <li><a href="#experiment-1-effect-of-population-size" id="toc-experiment-1-effect-of-population-size" class="nav-link" data-scroll-target="#experiment-1-effect-of-population-size"><span class="header-section-number">0.22</span> Experiment 1: Effect of Population Size</a></li>
+  <li><a href="#simulating-different-population-sizes" id="toc-simulating-different-population-sizes" class="nav-link" data-scroll-target="#simulating-different-population-sizes"><span class="header-section-number">0.23</span> Simulating Different Population Sizes</a></li>
+  <li><a href="#interpretation-1" id="toc-interpretation-1" class="nav-link" data-scroll-target="#interpretation-1"><span class="header-section-number">0.24</span> Interpretation</a></li>
+  <li><a href="#quantifying-drift-variability" id="toc-quantifying-drift-variability" class="nav-link" data-scroll-target="#quantifying-drift-variability"><span class="header-section-number">0.25</span> Quantifying Drift Variability</a></li>
+  <li><a href="#experiment-2-initial-allele-frequency" id="toc-experiment-2-initial-allele-frequency" class="nav-link" data-scroll-target="#experiment-2-initial-allele-frequency"><span class="header-section-number">0.26</span> Experiment 2: Initial Allele Frequency</a></li>
+  <li><a href="#interpretation-2" id="toc-interpretation-2" class="nav-link" data-scroll-target="#interpretation-2"><span class="header-section-number">0.27</span> Interpretation</a></li>
+  <li><a href="#experiment-3-verifying-the-fixation-theorem" id="toc-experiment-3-verifying-the-fixation-theorem" class="nav-link" data-scroll-target="#experiment-3-verifying-the-fixation-theorem"><span class="header-section-number">0.28</span> Experiment 3: Verifying the Fixation Theorem</a></li>
+  <li><a href="#interpretation-3" id="toc-interpretation-3" class="nav-link" data-scroll-target="#interpretation-3"><span class="header-section-number">0.29</span> Interpretation</a></li>
+  <li><a href="#experiment-4-multiple-snp-simulation" id="toc-experiment-4-multiple-snp-simulation" class="nav-link" data-scroll-target="#experiment-4-multiple-snp-simulation"><span class="header-section-number">0.30</span> Experiment 4: Multiple SNP Simulation</a></li>
+  <li><a href="#interpretation-4" id="toc-interpretation-4" class="nav-link" data-scroll-target="#interpretation-4"><span class="header-section-number">0.31</span> Interpretation</a></li>
+  <li><a href="#experiment-5-snp-loss-and-fixation" id="toc-experiment-5-snp-loss-and-fixation" class="nav-link" data-scroll-target="#experiment-5-snp-loss-and-fixation"><span class="header-section-number">0.32</span> Experiment 5: SNP Loss and Fixation</a></li>
+  <li><a href="#experiment-6-number-of-snps-matters" id="toc-experiment-6-number-of-snps-matters" class="nav-link" data-scroll-target="#experiment-6-number-of-snps-matters"><span class="header-section-number">0.33</span> Experiment 6: Number of SNPs Matters</a></li>
+  <li><a href="#interpretation-5" id="toc-interpretation-5" class="nav-link" data-scroll-target="#interpretation-5"><span class="header-section-number">0.34</span> Interpretation</a></li>
+  <li><a href="#experiment-7-sampling-error-versus-genetic-drift" id="toc-experiment-7-sampling-error-versus-genetic-drift" class="nav-link" data-scroll-target="#experiment-7-sampling-error-versus-genetic-drift"><span class="header-section-number">0.35</span> Experiment 7: Sampling Error Versus Genetic Drift</a></li>
+  <li><a href="#simulating-sampling-error" id="toc-simulating-sampling-error" class="nav-link" data-scroll-target="#simulating-sampling-error"><span class="header-section-number">0.36</span> Simulating Sampling Error</a></li>
+  <li><a href="#interpretation-6" id="toc-interpretation-6" class="nav-link" data-scroll-target="#interpretation-6"><span class="header-section-number">0.37</span> Interpretation</a></li>
+  <li><a href="#genetic-drift-vs-sampling-error" id="toc-genetic-drift-vs-sampling-error" class="nav-link" data-scroll-target="#genetic-drift-vs-sampling-error"><span class="header-section-number">0.38</span> Genetic Drift vs Sampling Error</a></li>
+  <li><a href="#experiment-8-distribution-of-frequency-estimates" id="toc-experiment-8-distribution-of-frequency-estimates" class="nav-link" data-scroll-target="#experiment-8-distribution-of-frequency-estimates"><span class="header-section-number">0.39</span> Experiment 8: Distribution of Frequency Estimates</a></li>
+  <li><a href="#interpretation-7" id="toc-interpretation-7" class="nav-link" data-scroll-target="#interpretation-7"><span class="header-section-number">0.40</span> Interpretation</a></li>
+  <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1"><span class="header-section-number">0.41</span> Summary</a></li>
+  <li><a href="#genome-wide-consequences-of-genetic-drift" id="toc-genome-wide-consequences-of-genetic-drift" class="nav-link" data-scroll-target="#genome-wide-consequences-of-genetic-drift"><span class="header-section-number">0.42</span> Genome-Wide Consequences of Genetic Drift</a></li>
+  <li><a href="#heterozygosity" id="toc-heterozygosity" class="nav-link" data-scroll-target="#heterozygosity"><span class="header-section-number">0.43</span> Heterozygosity</a></li>
+  <li><a href="#maximum-heterozygosity" id="toc-maximum-heterozygosity" class="nav-link" data-scroll-target="#maximum-heterozygosity"><span class="header-section-number">0.44</span> Maximum Heterozygosity</a></li>
+  <li><a href="#theoretical-decay-of-heterozygosity" id="toc-theoretical-decay-of-heterozygosity" class="nav-link" data-scroll-target="#theoretical-decay-of-heterozygosity"><span class="header-section-number">0.45</span> Theoretical Decay of Heterozygosity</a></li>
+  <li><a href="#simulating-heterozygosity-decay" id="toc-simulating-heterozygosity-decay" class="nav-link" data-scroll-target="#simulating-heterozygosity-decay"><span class="header-section-number">0.46</span> Simulating Heterozygosity Decay</a></li>
+  <li><a href="#interpretation-8" id="toc-interpretation-8" class="nav-link" data-scroll-target="#interpretation-8"><span class="header-section-number">0.47</span> Interpretation</a></li>
+  <li><a href="#effective-population-size" id="toc-effective-population-size" class="nav-link" data-scroll-target="#effective-population-size"><span class="header-section-number">0.48</span> Effective Population Size</a></li>
+  <li><a href="#why-is-effective-population-size-smaller" id="toc-why-is-effective-population-size-smaller" class="nav-link" data-scroll-target="#why-is-effective-population-size-smaller"><span class="header-section-number">0.49</span> Why is Effective Population Size Smaller?</a></li>
+  <li><a href="#why-statistical-geneticists-care-about-ne" id="toc-why-statistical-geneticists-care-about-ne" class="nav-link" data-scroll-target="#why-statistical-geneticists-care-about-ne"><span class="header-section-number">0.50</span> Why Statistical Geneticists Care About Ne</a></li>
+  <li><a href="#population-bottlenecks" id="toc-population-bottlenecks" class="nav-link" data-scroll-target="#population-bottlenecks"><span class="header-section-number">0.51</span> Population Bottlenecks</a></li>
+  <li><a href="#bottleneck-simulation" id="toc-bottleneck-simulation" class="nav-link" data-scroll-target="#bottleneck-simulation"><span class="header-section-number">0.52</span> Bottleneck Simulation</a></li>
+  <li><a href="#interpretation-9" id="toc-interpretation-9" class="nav-link" data-scroll-target="#interpretation-9"><span class="header-section-number">0.53</span> Interpretation</a></li>
+  <li><a href="#interpretation-10" id="toc-interpretation-10" class="nav-link" data-scroll-target="#interpretation-10"><span class="header-section-number">0.54</span> Interpretation</a></li>
+  <li><a href="#drift-across-an-entire-genome" id="toc-drift-across-an-entire-genome" class="nav-link" data-scroll-target="#drift-across-an-entire-genome"><span class="header-section-number">0.55</span> Drift Across an Entire Genome</a></li>
+  <li><a href="#interpretation-11" id="toc-interpretation-11" class="nav-link" data-scroll-target="#interpretation-11"><span class="header-section-number">0.56</span> Interpretation</a></li>
+  <li><a href="#genetic-drift-and-population-structure" id="toc-genetic-drift-and-population-structure" class="nav-link" data-scroll-target="#genetic-drift-and-population-structure"><span class="header-section-number">0.57</span> Genetic Drift and Population Structure</a></li>
+  <li><a href="#simulating-divergence" id="toc-simulating-divergence" class="nav-link" data-scroll-target="#simulating-divergence"><span class="header-section-number">0.58</span> Simulating Divergence</a></li>
+  <li><a href="#interpretation-12" id="toc-interpretation-12" class="nav-link" data-scroll-target="#interpretation-12"><span class="header-section-number">0.59</span> Interpretation</a></li>
+  <li><a href="#connection-to-fst" id="toc-connection-to-fst" class="nav-link" data-scroll-target="#connection-to-fst"><span class="header-section-number">0.60</span> Connection to FST</a></li>
+  <li><a href="#why-gwas-researchers-care-about-drift" id="toc-why-gwas-researchers-care-about-drift" class="nav-link" data-scroll-target="#why-gwas-researchers-care-about-drift"><span class="header-section-number">0.61</span> Why GWAS Researchers Care About Drift</a></li>
+  <li><a href="#how-gwas-controls-drift-effects" id="toc-how-gwas-controls-drift-effects" class="nav-link" data-scroll-target="#how-gwas-controls-drift-effects"><span class="header-section-number">0.62</span> How GWAS Controls Drift Effects</a></li>
+  <li><a href="#connection-to-finngen" id="toc-connection-to-finngen" class="nav-link" data-scroll-target="#connection-to-finngen"><span class="header-section-number">0.63</span> Connection to FinnGen</a></li>
+  <li><a href="#connection-to-uk-biobank" id="toc-connection-to-uk-biobank" class="nav-link" data-scroll-target="#connection-to-uk-biobank"><span class="header-section-number">0.64</span> Connection to UK Biobank</a></li>
+  <li><a href="#connection-to-polygenic-scores" id="toc-connection-to-polygenic-scores" class="nav-link" data-scroll-target="#connection-to-polygenic-scores"><span class="header-section-number">0.65</span> Connection to Polygenic Scores</a></li>
+  <li><a href="#summary-2" id="toc-summary-2" class="nav-link" data-scroll-target="#summary-2"><span class="header-section-number">0.66</span> Summary</a></li>
   </ul>
 </nav>
     </div>
@@ -277,7 +258,10 @@ window.Quarto = {
 <div class="quarto-title">
 <h1 class="title">Genetic Drift and Fixation: Understanding Evolution Through Randomness</h1>
 <p class="subtitle lead">A Simulation-Based Tutorial Using the Wright-Fisher Model</p>
-</div>
+  <div class="quarto-categories">
+    <div class="quarto-category">Tutorial</div>
+  </div>
+  </div>
 
 
 
@@ -329,8 +313,8 @@ window.Quarto = {
 <li>Simulation of allele-frequency trajectories</li>
 <li>Verification of classical population genetics theorems</li>
 </ol>
-<section id="learning-objectives" class="level3" data-number="0.0.1">
-<h3 data-number="0.0.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">0.0.1</span> Learning Objectives</h3>
+<section id="learning-objectives" class="level3" data-number="0.1">
+<h3 data-number="0.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">0.1</span> Learning Objectives</h3>
 <p>By the end of this tutorial you should be able to:</p>
 <ul>
 <li>Explain genetic drift intuitively</li>
@@ -342,8 +326,8 @@ window.Quarto = {
 <li>Connect drift to modern genomic studies</li>
 </ul>
 </section>
-<section id="prerequisites" class="level3" data-number="0.0.2">
-<h3 data-number="0.0.2" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">0.0.2</span> Prerequisites</h3>
+<section id="prerequisites" class="level3" data-number="0.2">
+<h3 data-number="0.2" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">0.2</span> Prerequisites</h3>
 <p>This tutorial assumes familiarity with:</p>
 <ul>
 <li>Basic probability</li>
@@ -353,8 +337,8 @@ window.Quarto = {
 </ul>
 <p>No prior knowledge of population genetics is required.</p>
 </section>
-<section id="what-is-an-allele" class="level3" data-number="0.0.3">
-<h3 data-number="0.0.3" class="anchored" data-anchor-id="what-is-an-allele"><span class="header-section-number">0.0.3</span> What is an Allele?</h3>
+<section id="what-is-an-allele" class="level3" data-number="0.3">
+<h3 data-number="0.3" class="anchored" data-anchor-id="what-is-an-allele"><span class="header-section-number">0.3</span> What is an Allele?</h3>
 <p>A gene can exist in different versions called alleles.</p>
 <p>For example:</p>
 <table class="caption-top table">
@@ -383,7 +367,7 @@ A
 <p><span class="math display">\[
 a
 \]</span></p>
-<p>Let <span class="math display">\[ p \]</span> denote the frequency of allele A.</p>
+<p>Let <span class="math inline">\(p\)</span> denote the frequency of allele A.</p>
 <p>Then</p>
 <p><span class="math display">\[
 1-p
@@ -413,8 +397,8 @@ a
 p + (1-p)=1
 \]</span></p>
 </section>
-<section id="infinite-vs-finite-populations" class="level3" data-number="0.0.4">
-<h3 data-number="0.0.4" class="anchored" data-anchor-id="infinite-vs-finite-populations"><span class="header-section-number">0.0.4</span> Infinite vs Finite Populations</h3>
+<section id="infinite-vs-finite-populations" class="level3" data-number="0.4">
+<h3 data-number="0.4" class="anchored" data-anchor-id="infinite-vs-finite-populations"><span class="header-section-number">0.4</span> Infinite vs Finite Populations</h3>
 <p>Imagine an infinitely large population.</p>
 <p>If:</p>
 <ul>
@@ -430,8 +414,8 @@ p + (1-p)=1
 <p>This sampling introduces randomness.</p>
 <p>That randomness is genetic drift.</p>
 </section>
-<section id="an-intuitive-example" class="level3" data-number="0.0.5">
-<h3 data-number="0.0.5" class="anchored" data-anchor-id="an-intuitive-example"><span class="header-section-number">0.0.5</span> An Intuitive Example</h3>
+<section id="an-intuitive-example" class="level3" data-number="0.5">
+<h3 data-number="0.5" class="anchored" data-anchor-id="an-intuitive-example"><span class="header-section-number">0.5</span> An Intuitive Example</h3>
 <p>Imagine a population containing:</p>
 <ul>
 <li>50 copies of allele A</li>
@@ -455,8 +439,8 @@ p=0.55
 <p>No selection occurred.</p>
 <p>The change is purely due to chance.</p>
 <p>This is genetic drift.</p>
-<section id="formal-definition" class="level4" data-number="0.0.5.1">
-<h4 data-number="0.0.5.1" class="anchored" data-anchor-id="formal-definition"><span class="header-section-number">0.0.5.1</span> Formal Definition</h4>
+<section id="formal-definition" class="level4" data-number="0.5.1">
+<h4 data-number="0.5.1" class="anchored" data-anchor-id="formal-definition"><span class="header-section-number">0.5.1</span> Formal Definition</h4>
 <p>Genetic drift is the random fluctuation of allele frequencies due to finite population sampling.</p>
 <p>Unlike natural selection:</p>
 <table class="caption-top table">
@@ -487,8 +471,8 @@ p=0.55
 </table>
 </section>
 </section>
-<section id="what-is-fixation" class="level3" data-number="0.0.6">
-<h3 data-number="0.0.6" class="anchored" data-anchor-id="what-is-fixation"><span class="header-section-number">0.0.6</span> What is Fixation?</h3>
+<section id="what-is-fixation" class="level3" data-number="0.6">
+<h3 data-number="0.6" class="anchored" data-anchor-id="what-is-fixation"><span class="header-section-number">0.6</span> What is Fixation?</h3>
 <p>An allele is fixed when its frequency becomes:</p>
 <p><span class="math display">\[
 p=1
@@ -519,8 +503,8 @@ p=1
 <li>No alternative allele remains</li>
 </ul>
 </section>
-<section id="what-is-allele-loss" class="level3" data-number="0.0.7">
-<h3 data-number="0.0.7" class="anchored" data-anchor-id="what-is-allele-loss"><span class="header-section-number">0.0.7</span> What is Allele Loss?</h3>
+<section id="what-is-allele-loss" class="level3" data-number="0.7">
+<h3 data-number="0.7" class="anchored" data-anchor-id="what-is-allele-loss"><span class="header-section-number">0.7</span> What is Allele Loss?</h3>
 <p>The opposite situation occurs when:</p>
 <p><span class="math display">\[
 p=0
@@ -552,8 +536,8 @@ p=0
 </ul>
 <p>Once reached, these states remain forever.</p>
 </section>
-<section id="the-wright-fisher-model" class="level3" data-number="0.0.8">
-<h3 data-number="0.0.8" class="anchored" data-anchor-id="the-wright-fisher-model"><span class="header-section-number">0.0.8</span> The Wright-Fisher Model</h3>
+<section id="the-wright-fisher-model" class="level3" data-number="0.8">
+<h3 data-number="0.8" class="anchored" data-anchor-id="the-wright-fisher-model"><span class="header-section-number">0.8</span> The Wright-Fisher Model</h3>
 <p>The Wright-Fisher model is the classical mathematical model of genetic drift.</p>
 <p>Assumptions:</p>
 <ol type="1">
@@ -576,8 +560,8 @@ N
 \]</span></p>
 <p>gene copies.</p>
 </section>
-<section id="sampling-the-next-generation" class="level3" data-number="0.0.9">
-<h3 data-number="0.0.9" class="anchored" data-anchor-id="sampling-the-next-generation"><span class="header-section-number">0.0.9</span> Sampling the Next Generation</h3>
+<section id="sampling-the-next-generation" class="level3" data-number="0.9">
+<h3 data-number="0.9" class="anchored" data-anchor-id="sampling-the-next-generation"><span class="header-section-number">0.9</span> Sampling the Next Generation</h3>
 <p>Suppose allele A has frequency:</p>
 <p><span class="math display">\[
 p_t
@@ -600,8 +584,8 @@ p_{t+1}
 \]</span></p>
 <p>This simple equation forms the foundation of modern population genetics.</p>
 </section>
-<section id="important-theorem-1-drift-has-no-direction" class="level3" data-number="0.0.10">
-<h3 data-number="0.0.10" class="anchored" data-anchor-id="important-theorem-1-drift-has-no-direction"><span class="header-section-number">0.0.10</span> Important Theorem 1: Drift Has No Direction</h3>
+<section id="important-theorem-1-drift-has-no-direction" class="level3" data-number="0.10">
+<h3 data-number="0.10" class="anchored" data-anchor-id="important-theorem-1-drift-has-no-direction"><span class="header-section-number">0.10</span> Important Theorem 1: Drift Has No Direction</h3>
 <p>For a neutral allele:</p>
 <p><span class="math display">\[
 E[p_{t+1}\mid p_t]
@@ -613,8 +597,8 @@ p_t
 <p>Drift is unbiased.</p>
 <p>However, individual populations may behave very differently.</p>
 </section>
-<section id="important-theorem-2-variance-of-drift" class="level3" data-number="0.0.11">
-<h3 data-number="0.0.11" class="anchored" data-anchor-id="important-theorem-2-variance-of-drift"><span class="header-section-number">0.0.11</span> Important Theorem 2: Variance of Drift</h3>
+<section id="important-theorem-2-variance-of-drift" class="level3" data-number="0.11">
+<h3 data-number="0.11" class="anchored" data-anchor-id="important-theorem-2-variance-of-drift"><span class="header-section-number">0.11</span> Important Theorem 2: Variance of Drift</h3>
 <p>The variance is:</p>
 <p><span class="math display">\[
 Var(p_{t+1}\mid p_t)
@@ -624,8 +608,8 @@ Var(p_{t+1}\mid p_t)
 <p>This equation reveals an important biological fact:</p>
 <p>Drift becomes stronger as population size decreases.</p>
 </section>
-<section id="why-small-populations-drift-faster" class="level3" data-number="0.0.12">
-<h3 data-number="0.0.12" class="anchored" data-anchor-id="why-small-populations-drift-faster"><span class="header-section-number">0.0.12</span> Why Small Populations Drift Faster</h3>
+<section id="why-small-populations-drift-faster" class="level3" data-number="0.12">
+<h3 data-number="0.12" class="anchored" data-anchor-id="why-small-populations-drift-faster"><span class="header-section-number">0.12</span> Why Small Populations Drift Faster</h3>
 <p>Suppose:</p>
 <p><span class="math display">\[
 p_t=0.5
@@ -652,8 +636,8 @@ N=1000
 \]</span></p>
 <p>The smaller population experiences much larger fluctuations.</p>
 </section>
-<section id="important-theorem-3-fixation-probability" class="level3" data-number="0.0.13">
-<h3 data-number="0.0.13" class="anchored" data-anchor-id="important-theorem-3-fixation-probability"><span class="header-section-number">0.0.13</span> Important Theorem 3: Fixation Probability</h3>
+<section id="important-theorem-3-fixation-probability" class="level3" data-number="0.13">
+<h3 data-number="0.13" class="anchored" data-anchor-id="important-theorem-3-fixation-probability"><span class="header-section-number">0.13</span> Important Theorem 3: Fixation Probability</h3>
 <p>One of the most beautiful results in population genetics states:</p>
 <p>For a neutral allele:</p>
 <p><span class="math display">\[
@@ -692,8 +676,8 @@ p_0
 </tbody>
 </table>
 </section>
-<section id="new-mutations" class="level3" data-number="0.0.14">
-<h3 data-number="0.0.14" class="anchored" data-anchor-id="new-mutations"><span class="header-section-number">0.0.14</span> New Mutations</h3>
+<section id="new-mutations" class="level3" data-number="0.14">
+<h3 data-number="0.14" class="anchored" data-anchor-id="new-mutations"><span class="header-section-number">0.14</span> New Mutations</h3>
 <p>A new mutation begins as a single copy.</p>
 <p>In a diploid population:</p>
 <p><span class="math display">\[
@@ -720,8 +704,8 @@ P(Fixation)
 <p>Only 0.05%.</p>
 <p>Most neutral mutations disappear.</p>
 </section>
-<section id="important-theorem-4-heterozygosity-decay" class="level3" data-number="0.0.15">
-<h3 data-number="0.0.15" class="anchored" data-anchor-id="important-theorem-4-heterozygosity-decay"><span class="header-section-number">0.0.15</span> Important Theorem 4: Heterozygosity Decay</h3>
+<section id="important-theorem-4-heterozygosity-decay" class="level3" data-number="0.15">
+<h3 data-number="0.15" class="anchored" data-anchor-id="important-theorem-4-heterozygosity-decay"><span class="header-section-number">0.15</span> Important Theorem 4: Heterozygosity Decay</h3>
 <p>Drift reduces genetic diversity.</p>
 <p>Expected heterozygosity after t generations:</p>
 <p><span class="math display">\[
@@ -734,21 +718,21 @@ H_0
 \]</span></p>
 <p>This explains why isolated populations lose diversity over time.</p>
 <div id="98f9bf54-ae8d-4483-ac09-79929e89e13e" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting Up Python</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting Up Python</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="simulating-the-wright-fisher-model" class="level3" data-number="0.0.16">
-<h3 data-number="0.0.16" class="anchored" data-anchor-id="simulating-the-wright-fisher-model"><span class="header-section-number">0.0.16</span> Simulating the Wright-Fisher Model</h3>
+<section id="simulating-the-wright-fisher-model" class="level3" data-number="0.16">
+<h3 data-number="0.16" class="anchored" data-anchor-id="simulating-the-wright-fisher-model"><span class="header-section-number">0.16</span> Simulating the Wright-Fisher Model</h3>
 <p>We now implement the model directly.</p>
 <div id="7b6205e2-9a2b-42ba-b168-a5c65d2056d2" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_drift(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_drift(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    N<span class="op">=</span><span class="dv">100</span>,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    generations<span class="op">=</span><span class="dv">100</span></span>
@@ -788,10 +772,10 @@ H_0
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    generations<span class="op">=</span><span class="dv">200</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="98ecd89f-3d5d-4710-aa4a-434d89d8e7d4" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizing Drift</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -824,7 +808,7 @@ H_0
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.05</span></span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -834,8 +818,8 @@ H_0
 </div>
 </div>
 </section>
-<section id="interpreting-the-plot" class="level3" data-number="0.0.17">
-<h3 data-number="0.0.17" class="anchored" data-anchor-id="interpreting-the-plot"><span class="header-section-number">0.0.17</span> Interpreting the Plot</h3>
+<section id="interpreting-the-plot" class="level3" data-number="0.17">
+<h3 data-number="0.17" class="anchored" data-anchor-id="interpreting-the-plot"><span class="header-section-number">0.17</span> Interpreting the Plot</h3>
 <p>Notice:</p>
 <ul>
 <li>Frequency fluctuates randomly</li>
@@ -845,11 +829,11 @@ H_0
 </ul>
 <p>This randomness is the hallmark of genetic drift.</p>
 </section>
-<section id="simulating-multiple-populations" class="level3" data-number="0.0.18">
-<h3 data-number="0.0.18" class="anchored" data-anchor-id="simulating-multiple-populations"><span class="header-section-number">0.0.18</span> Simulating Multiple Populations</h3>
+<section id="simulating-multiple-populations" class="level3" data-number="0.18">
+<h3 data-number="0.18" class="anchored" data-anchor-id="simulating-multiple-populations"><span class="header-section-number">0.18</span> Simulating Multiple Populations</h3>
 <p>The true power of drift appears when we simulate many populations with identical starting conditions.</p>
 <div id="2e404d71-a89b-4b60-be4c-0bbe9ed91cea" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_many_populations(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    N<span class="op">=</span><span class="dv">100</span>,</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
@@ -899,7 +883,7 @@ H_0
 <span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.05</span></span>
 <span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -909,9 +893,9 @@ H_0
 </div>
 </div>
 </section>
-<section id="interpretation" class="level3" data-number="0.0.19">
-<h3 data-number="0.0.19" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">0.0.19</span> Interpretation</h3>
-<p>All populations began with: $ p_0=0.5$.</p>
+<section id="interpretation" class="level3" data-number="0.19">
+<h3 data-number="0.19" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">0.19</span> Interpretation</h3>
+<p>All populations began with: <span class="math inline">\(p_0=0.5\)</span>.</p>
 <p>Yet they diverged dramatically.</p>
 <p>Some populations moved upward.</p>
 <p>Some moved downward.</p>
@@ -922,8 +906,8 @@ H_0
 <p>Evolutionary outcomes can differ substantially even when populations start under identical conditions.</p>
 </blockquote>
 </section>
-<section id="summary" class="level3" data-number="0.0.20">
-<h3 data-number="0.0.20" class="anchored" data-anchor-id="summary"><span class="header-section-number">0.0.20</span> Summary</h3>
+<section id="summary" class="level3" data-number="0.20">
+<h3 data-number="0.20" class="anchored" data-anchor-id="summary"><span class="header-section-number">0.20</span> Summary</h3>
 <p>In this first part we learned:</p>
 <ul>
 <li>What genetic drift is</li>
@@ -944,8 +928,8 @@ H_0
 <li>Allele frequency spectra</li>
 </ul>
 </section>
-<section id="experimental-exploration-of-genetic-drift" class="level3" data-number="0.0.21">
-<h3 data-number="0.0.21" class="anchored" data-anchor-id="experimental-exploration-of-genetic-drift"><span class="header-section-number">0.0.21</span> Experimental Exploration of Genetic Drift</h3>
+<section id="experimental-exploration-of-genetic-drift" class="level3" data-number="0.21">
+<h3 data-number="0.21" class="anchored" data-anchor-id="experimental-exploration-of-genetic-drift"><span class="header-section-number">0.21</span> Experimental Exploration of Genetic Drift</h3>
 <p>In Part 1, we simulated a single SNP evolving under neutral genetic drift.</p>
 <p>Now we move toward a more realistic population genetics framework by asking:</p>
 <ul>
@@ -958,8 +942,8 @@ H_0
 </ul>
 <p>These experiments mirror questions encountered in modern statistical genetics and genomics.</p>
 </section>
-<section id="experiment-1-effect-of-population-size" class="level3" data-number="0.0.22">
-<h3 data-number="0.0.22" class="anchored" data-anchor-id="experiment-1-effect-of-population-size"><span class="header-section-number">0.0.22</span> Experiment 1: Effect of Population Size</h3>
+<section id="experiment-1-effect-of-population-size" class="level3" data-number="0.22">
+<h3 data-number="0.22" class="anchored" data-anchor-id="experiment-1-effect-of-population-size"><span class="header-section-number">0.22</span> Experiment 1: Effect of Population Size</h3>
 <p>Recall the variance theorem:</p>
 <p><span class="math display">\[
 Var(p_{t+1}|p_t)
@@ -976,10 +960,10 @@ N
 <li>Large populations should drift slowly.</li>
 </ul>
 </section>
-<section id="simulating-different-population-sizes" class="level3" data-number="0.0.23">
-<h3 data-number="0.0.23" class="anchored" data-anchor-id="simulating-different-population-sizes"><span class="header-section-number">0.0.23</span> Simulating Different Population Sizes</h3>
+<section id="simulating-different-population-sizes" class="level3" data-number="0.23">
+<h3 data-number="0.23" class="anchored" data-anchor-id="simulating-different-population-sizes"><span class="header-section-number">0.23</span> Simulating Different Population Sizes</h3>
 <div id="71845885-4ec0-46ed-acf2-f35c5c4f9be7" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>population_sizes <span class="op">=</span> [</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">20</span>,</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">50</span>,</span>
@@ -1019,7 +1003,7 @@ N
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1029,8 +1013,8 @@ N
 </div>
 </div>
 </section>
-<section id="interpretation-1" class="level2" data-number="0.1">
-<h2 data-number="0.1" class="anchored" data-anchor-id="interpretation-1"><span class="header-section-number">0.1</span> Interpretation</h2>
+<section id="interpretation-1" class="level3" data-number="0.24">
+<h3 data-number="0.24" class="anchored" data-anchor-id="interpretation-1"><span class="header-section-number">0.24</span> Interpretation</h3>
 <p>Notice the dramatic difference.</p>
 <p>For:</p>
 <p><span class="math display">\[
@@ -1043,11 +1027,12 @@ N=1000
 \]</span></p>
 <p>the frequency remains close to its initial value.</p>
 <p>This directly verifies the variance theorem.</p>
-<section id="quantifying-drift-variability" class="level3" data-number="0.1.1">
-<h3 data-number="0.1.1" class="anchored" data-anchor-id="quantifying-drift-variability"><span class="header-section-number">0.1.1</span> Quantifying Drift Variability</h3>
+</section>
+<section id="quantifying-drift-variability" class="level3" data-number="0.25">
+<h3 data-number="0.25" class="anchored" data-anchor-id="quantifying-drift-variability"><span class="header-section-number">0.25</span> Quantifying Drift Variability</h3>
 <p>Instead of looking at one trajectory, we can measure variance across many replicate populations.</p>
 <div id="5c138c1c-c267-4b47-a7a3-1bbd05545b86" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>population_sizes <span class="op">=</span> [</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>population_sizes <span class="op">=</span> [</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">20</span>,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">50</span>,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span>,</span>
@@ -1075,10 +1060,10 @@ N=1000
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    variances.append(</span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        np.var(final_freqs)</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="9babecb3-1afe-429f-850b-73bb190a60cf" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    population_sizes,</span>
@@ -1094,7 +1079,7 @@ N=1000
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Drift Variance Decreases With Population Size"</span></span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1104,9 +1089,8 @@ N=1000
 </div>
 </div>
 </section>
-</section>
-<section id="experiment-2-initial-allele-frequency" class="level2" data-number="0.2">
-<h2 data-number="0.2" class="anchored" data-anchor-id="experiment-2-initial-allele-frequency"><span class="header-section-number">0.2</span> Experiment 2: Initial Allele Frequency</h2>
+<section id="experiment-2-initial-allele-frequency" class="level3" data-number="0.26">
+<h3 data-number="0.26" class="anchored" data-anchor-id="experiment-2-initial-allele-frequency"><span class="header-section-number">0.26</span> Experiment 2: Initial Allele Frequency</h3>
 <p>The fixation theorem states:</p>
 <p><span class="math display">\[
 P(Fixation)=p_0
@@ -1114,7 +1098,7 @@ P(Fixation)=p_0
 <p>where, <span class="math inline">\(p_0\)</span> is the initial allele frequency.</p>
 <p>We first visualize trajectories starting from different frequencies.</p>
 <div id="0cfc7639-8c33-4f21-a5d1-e7dceb0ff64c" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>starting_frequencies <span class="op">=</span> [</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>starting_frequencies <span class="op">=</span> [</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.1</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.3</span>,</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.5</span>,</span>
@@ -1146,7 +1130,7 @@ P(Fixation)=p_0
 <span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1155,18 +1139,19 @@ P(Fixation)=p_0
 </div>
 </div>
 </div>
-<section id="interpretation-2" class="level3" data-number="0.2.1">
-<h3 data-number="0.2.1" class="anchored" data-anchor-id="interpretation-2"><span class="header-section-number">0.2.1</span> Interpretation</h3>
+</section>
+<section id="interpretation-2" class="level3" data-number="0.27">
+<h3 data-number="0.27" class="anchored" data-anchor-id="interpretation-2"><span class="header-section-number">0.27</span> Interpretation</h3>
 <p>Alleles beginning near <span class="math inline">\(p=1\)</span> have a much greater chance of fixation.</p>
 <p>Alleles beginning near <span class="math inline">\(p=0\)</span></p>
 <p>have a much greater chance of loss.</p>
 </section>
-<section id="experiment-3-verifying-the-fixation-theorem" class="level3" data-number="0.2.2">
-<h3 data-number="0.2.2" class="anchored" data-anchor-id="experiment-3-verifying-the-fixation-theorem"><span class="header-section-number">0.2.2</span> Experiment 3: Verifying the Fixation Theorem</h3>
+<section id="experiment-3-verifying-the-fixation-theorem" class="level3" data-number="0.28">
+<h3 data-number="0.28" class="anchored" data-anchor-id="experiment-3-verifying-the-fixation-theorem"><span class="header-section-number">0.28</span> Experiment 3: Verifying the Fixation Theorem</h3>
 <p>One of the most elegant results in population genetics states <span class="math inline">\(P(Fixation)=p_0\)</span> .</p>
 <p>We now verify this experimentally.</p>
 <div id="4787396c-735a-4b04-ab1d-046262f1bb04" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> estimate_fixation_probability(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> estimate_fixation_probability(</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    p0,</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    N<span class="op">=</span><span class="dv">100</span>,</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    generations<span class="op">=</span><span class="dv">1000</span>,</span>
@@ -1206,10 +1191,10 @@ P(Fixation)=p_0
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>            n_replicates<span class="op">=</span><span class="dv">500</span></span>
 <span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>        )</span>
 <span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="941f40c0-4650-418f-a93d-019beaf7559d" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    p0_values,</span>
@@ -1234,7 +1219,7 @@ P(Fixation)=p_0
 <span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
 <span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1244,20 +1229,20 @@ P(Fixation)=p_0
 </div>
 </div>
 </section>
-<section id="interpretation-3" class="level3" data-number="0.2.3">
-<h3 data-number="0.2.3" class="anchored" data-anchor-id="interpretation-3"><span class="header-section-number">0.2.3</span> Interpretation</h3>
+<section id="interpretation-3" class="level3" data-number="0.29">
+<h3 data-number="0.29" class="anchored" data-anchor-id="interpretation-3"><span class="header-section-number">0.29</span> Interpretation</h3>
 <p>The simulation closely follows the theoretical prediction:</p>
 <p><span class="math display">\[
 P(Fixation)=p_0
 \]</span></p>
 <p>This is one of the most important theorems in neutral evolution.</p>
 </section>
-<section id="experiment-4-multiple-snp-simulation" class="level3" data-number="0.2.4">
-<h3 data-number="0.2.4" class="anchored" data-anchor-id="experiment-4-multiple-snp-simulation"><span class="header-section-number">0.2.4</span> Experiment 4: Multiple SNP Simulation</h3>
+<section id="experiment-4-multiple-snp-simulation" class="level3" data-number="0.30">
+<h3 data-number="0.30" class="anchored" data-anchor-id="experiment-4-multiple-snp-simulation"><span class="header-section-number">0.30</span> Experiment 4: Multiple SNP Simulation</h3>
 <p>Real genomes contain millions of SNPs.</p>
 <p>Instead of tracking a single locus, we simulate many SNPs simultaneously.</p>
 <div id="403c7a6a-50f1-4d67-8845-0de2e730bd3b" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating 1,000 Independent SNPs</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating 1,000 Independent SNPs</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>n_snps <span class="op">=</span> <span class="dv">1000</span></span>
@@ -1311,7 +1296,7 @@ P(Fixation)=p_0
 <span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
 <span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1321,8 +1306,8 @@ P(Fixation)=p_0
 </div>
 </div>
 </section>
-<section id="interpretation-4" class="level3" data-number="0.2.5">
-<h3 data-number="0.2.5" class="anchored" data-anchor-id="interpretation-4"><span class="header-section-number">0.2.5</span> Interpretation</h3>
+<section id="interpretation-4" class="level3" data-number="0.31">
+<h3 data-number="0.31" class="anchored" data-anchor-id="interpretation-4"><span class="header-section-number">0.31</span> Interpretation</h3>
 <p>Initially, frequencies were nearly uniform.</p>
 <p>After drift:</p>
 <ul>
@@ -1332,11 +1317,11 @@ P(Fixation)=p_0
 </ul>
 <p>This is a hallmark of neutral evolution.</p>
 </section>
-<section id="experiment-5-snp-loss-and-fixation" class="level3" data-number="0.2.6">
-<h3 data-number="0.2.6" class="anchored" data-anchor-id="experiment-5-snp-loss-and-fixation"><span class="header-section-number">0.2.6</span> Experiment 5: SNP Loss and Fixation</h3>
+<section id="experiment-5-snp-loss-and-fixation" class="level3" data-number="0.32">
+<h3 data-number="0.32" class="anchored" data-anchor-id="experiment-5-snp-loss-and-fixation"><span class="header-section-number">0.32</span> Experiment 5: SNP Loss and Fixation</h3>
 <p>How many SNPs become fixed or lost?</p>
 <div id="ba39feea-b0a1-433e-afe6-dce75f7ca5ce" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>lost<span class="op">=</span><span class="dv">0</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fixed<span class="op">=</span><span class="dv">0</span></span>
@@ -1381,7 +1366,7 @@ P(Fixation)=p_0
 <span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fate of SNPs After Drift"</span></span>
 <span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Lost SNPs: 313
 Fixed SNPs: 285</code></pre>
@@ -1395,11 +1380,11 @@ Fixed SNPs: 285</code></pre>
 </div>
 </div>
 </section>
-<section id="experiment-6-number-of-snps-matters" class="level3" data-number="0.2.7">
-<h3 data-number="0.2.7" class="anchored" data-anchor-id="experiment-6-number-of-snps-matters"><span class="header-section-number">0.2.7</span> Experiment 6: Number of SNPs Matters</h3>
+<section id="experiment-6-number-of-snps-matters" class="level3" data-number="0.33">
+<h3 data-number="0.33" class="anchored" data-anchor-id="experiment-6-number-of-snps-matters"><span class="header-section-number">0.33</span> Experiment 6: Number of SNPs Matters</h3>
 <p>Now repeat the experiment using increasingly larger numbers of SNPs.</p>
 <div id="39c5f58e-038b-4dcc-a4a0-d6d6adb0f488" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>snp_counts <span class="op">=</span> [</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span>,</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">500</span>,</span>
@@ -1466,7 +1451,7 @@ Fixed SNPs: 285</code></pre>
 <span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
 <span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1476,8 +1461,8 @@ Fixed SNPs: 285</code></pre>
 </div>
 </div>
 </section>
-<section id="interpretation-5" class="level3" data-number="0.2.8">
-<h3 data-number="0.2.8" class="anchored" data-anchor-id="interpretation-5"><span class="header-section-number">0.2.8</span> Interpretation</h3>
+<section id="interpretation-5" class="level3" data-number="0.34">
+<h3 data-number="0.34" class="anchored" data-anchor-id="interpretation-5"><span class="header-section-number">0.34</span> Interpretation</h3>
 <p>As the number of SNPs increases:</p>
 <ul>
 <li>More variants become fixed</li>
@@ -1485,16 +1470,16 @@ Fixed SNPs: 285</code></pre>
 <li>Overall diversity declines</li>
 </ul>
 </section>
-<section id="experiment-7-sampling-error-versus-genetic-drift" class="level3" data-number="0.2.9">
-<h3 data-number="0.2.9" class="anchored" data-anchor-id="experiment-7-sampling-error-versus-genetic-drift"><span class="header-section-number">0.2.9</span> Experiment 7: Sampling Error Versus Genetic Drift</h3>
+<section id="experiment-7-sampling-error-versus-genetic-drift" class="level3" data-number="0.35">
+<h3 data-number="0.35" class="anchored" data-anchor-id="experiment-7-sampling-error-versus-genetic-drift"><span class="header-section-number">0.35</span> Experiment 7: Sampling Error Versus Genetic Drift</h3>
 <p>In GWAS we rarely observe the entire population.</p>
 <p>Instead we estimate allele frequencies from samples.</p>
 <p>Suppose the true frequency is <span class="math inline">\(p=0.30\)</span>.</p>
 </section>
-<section id="simulating-sampling-error" class="level3" data-number="0.2.10">
-<h3 data-number="0.2.10" class="anchored" data-anchor-id="simulating-sampling-error"><span class="header-section-number">0.2.10</span> Simulating Sampling Error</h3>
+<section id="simulating-sampling-error" class="level3" data-number="0.36">
+<h3 data-number="0.36" class="anchored" data-anchor-id="simulating-sampling-error"><span class="header-section-number">0.36</span> Simulating Sampling Error</h3>
 <div id="c55ee867-bfc0-41bd-a650-e556f491fa4f" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>true_frequency <span class="op">=</span> <span class="fl">0.30</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="op">=</span> [</span>
@@ -1545,7 +1530,7 @@ Fixed SNPs: 285</code></pre>
 <span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1555,14 +1540,14 @@ Fixed SNPs: 285</code></pre>
 </div>
 </div>
 </section>
-<section id="interpretation-6" class="level3" data-number="0.2.11">
-<h3 data-number="0.2.11" class="anchored" data-anchor-id="interpretation-6"><span class="header-section-number">0.2.11</span> Interpretation</h3>
+<section id="interpretation-6" class="level3" data-number="0.37">
+<h3 data-number="0.37" class="anchored" data-anchor-id="interpretation-6"><span class="header-section-number">0.37</span> Interpretation</h3>
 <p>Larger studies produce more precise allele frequency estimates.</p>
 <p>This randomness is not genetic drift.</p>
 <p>Instead it is statistical sampling error.</p>
 </section>
-<section id="genetic-drift-vs-sampling-error" class="level3" data-number="0.2.12">
-<h3 data-number="0.2.12" class="anchored" data-anchor-id="genetic-drift-vs-sampling-error"><span class="header-section-number">0.2.12</span> Genetic Drift vs Sampling Error</h3>
+<section id="genetic-drift-vs-sampling-error" class="level3" data-number="0.38">
+<h3 data-number="0.38" class="anchored" data-anchor-id="genetic-drift-vs-sampling-error"><span class="header-section-number">0.38</span> Genetic Drift vs Sampling Error</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1591,10 +1576,10 @@ Fixed SNPs: 285</code></pre>
 </table>
 <p>Understanding this distinction is essential in GWAS and population genetics.</p>
 </section>
-<section id="experiment-8-distribution-of-frequency-estimates" class="level3" data-number="0.2.13">
-<h3 data-number="0.2.13" class="anchored" data-anchor-id="experiment-8-distribution-of-frequency-estimates"><span class="header-section-number">0.2.13</span> Experiment 8: Distribution of Frequency Estimates</h3>
+<section id="experiment-8-distribution-of-frequency-estimates" class="level3" data-number="0.39">
+<h3 data-number="0.39" class="anchored" data-anchor-id="experiment-8-distribution-of-frequency-estimates"><span class="header-section-number">0.39</span> Experiment 8: Distribution of Frequency Estimates</h3>
 <div id="090175a5-6ec4-4226-8081-388f92084faa" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sample_size <span class="op">=</span> <span class="dv">50</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>estimates<span class="op">=</span>[]</span>
@@ -1630,7 +1615,7 @@ Fixed SNPs: 285</code></pre>
 <span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1640,8 +1625,8 @@ Fixed SNPs: 285</code></pre>
 </div>
 </div>
 </section>
-<section id="interpretation-7" class="level3" data-number="0.2.14">
-<h3 data-number="0.2.14" class="anchored" data-anchor-id="interpretation-7"><span class="header-section-number">0.2.14</span> Interpretation</h3>
+<section id="interpretation-7" class="level3" data-number="0.40">
+<h3 data-number="0.40" class="anchored" data-anchor-id="interpretation-7"><span class="header-section-number">0.40</span> Interpretation</h3>
 <p>Even though the true frequency remains fixed at:</p>
 <p><span class="math display">\[
 p=0.30
@@ -1649,8 +1634,8 @@ p=0.30
 <p>individual samples produce different estimates.</p>
 <p>This is exactly why larger cohorts improve statistical power.</p>
 </section>
-<section id="summary-1" class="level3" data-number="0.2.15">
-<h3 data-number="0.2.15" class="anchored" data-anchor-id="summary-1"><span class="header-section-number">0.2.15</span> Summary</h3>
+<section id="summary-1" class="level3" data-number="0.41">
+<h3 data-number="0.41" class="anchored" data-anchor-id="summary-1"><span class="header-section-number">0.41</span> Summary</h3>
 <p>In this section we experimentally demonstrated:</p>
 <ol type="1">
 <li>Small populations drift faster.</li>
@@ -1673,8 +1658,8 @@ p=0.30
 <li>Modern statistical genetics applications</li>
 </ul>
 </section>
-<section id="genome-wide-consequences-of-genetic-drift" class="level3" data-number="0.2.16">
-<h3 data-number="0.2.16" class="anchored" data-anchor-id="genome-wide-consequences-of-genetic-drift"><span class="header-section-number">0.2.16</span> Genome-Wide Consequences of Genetic Drift</h3>
+<section id="genome-wide-consequences-of-genetic-drift" class="level3" data-number="0.42">
+<h3 data-number="0.42" class="anchored" data-anchor-id="genome-wide-consequences-of-genetic-drift"><span class="header-section-number">0.42</span> Genome-Wide Consequences of Genetic Drift</h3>
 <p>So far we have studied drift at the level of individual SNPs.</p>
 <p>Real genomes contain millions of variants.</p>
 <p>Over evolutionary time, drift acts simultaneously on all of them.</p>
@@ -1688,8 +1673,8 @@ p=0.30
 </ul>
 <p>Many patterns observed in modern genomics can be understood through drift alone.</p>
 </section>
-<section id="heterozygosity" class="level3" data-number="0.2.17">
-<h3 data-number="0.2.17" class="anchored" data-anchor-id="heterozygosity"><span class="header-section-number">0.2.17</span> Heterozygosity</h3>
+<section id="heterozygosity" class="level3" data-number="0.43">
+<h3 data-number="0.43" class="anchored" data-anchor-id="heterozygosity"><span class="header-section-number">0.43</span> Heterozygosity</h3>
 <p>One of the most important measures of genetic diversity is heterozygosity.</p>
 <p>For a biallelic SNP:</p>
 <p><span class="math display">\[
@@ -1701,8 +1686,8 @@ H = 2p(1-p)
 <li>(1-p) = frequency of allele a</li>
 </ul>
 </section>
-<section id="maximum-heterozygosity" class="level3" data-number="0.2.18">
-<h3 data-number="0.2.18" class="anchored" data-anchor-id="maximum-heterozygosity"><span class="header-section-number">0.2.18</span> Maximum Heterozygosity</h3>
+<section id="maximum-heterozygosity" class="level3" data-number="0.44">
+<h3 data-number="0.44" class="anchored" data-anchor-id="maximum-heterozygosity"><span class="header-section-number">0.44</span> Maximum Heterozygosity</h3>
 <p>The maximum occurs when:</p>
 <p><span class="math display">\[
 p=0.5
@@ -1725,9 +1710,8 @@ H=0
 \]</span></p>
 <p>At fixation, all diversity disappears.</p>
 </section>
-</section>
-<section id="theoretical-decay-of-heterozygosity" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Theoretical Decay of Heterozygosity</h1>
+<section id="theoretical-decay-of-heterozygosity" class="level3" data-number="0.45">
+<h3 data-number="0.45" class="anchored" data-anchor-id="theoretical-decay-of-heterozygosity"><span class="header-section-number">0.45</span> Theoretical Decay of Heterozygosity</h3>
 <p>One of the classical results of population genetics is:</p>
 <p><span class="math display">\[
 H_t
@@ -1743,10 +1727,11 @@ H_0
 <li>(N) = population size</li>
 <li>(t) = generations</li>
 </ul>
-<section id="simulating-heterozygosity-decay" class="level3" data-number="1.0.1">
-<h3 data-number="1.0.1" class="anchored" data-anchor-id="simulating-heterozygosity-decay"><span class="header-section-number">1.0.1</span> Simulating Heterozygosity Decay</h3>
+</section>
+<section id="simulating-heterozygosity-decay" class="level3" data-number="0.46">
+<h3 data-number="0.46" class="anchored" data-anchor-id="simulating-heterozygosity-decay"><span class="header-section-number">0.46</span> Simulating Heterozygosity Decay</h3>
 <div id="8d93f388-d905-4781-9ef8-56329c284dad" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> heterozygosity_decay(</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    H0,</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    N,</span>
@@ -1796,7 +1781,7 @@ H_0
 <span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
 <span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1806,21 +1791,21 @@ H_0
 </div>
 </div>
 </section>
-<section id="interpretation-8" class="level3" data-number="1.0.2">
-<h3 data-number="1.0.2" class="anchored" data-anchor-id="interpretation-8"><span class="header-section-number">1.0.2</span> Interpretation</h3>
+<section id="interpretation-8" class="level3" data-number="0.47">
+<h3 data-number="0.47" class="anchored" data-anchor-id="interpretation-8"><span class="header-section-number">0.47</span> Interpretation</h3>
 <p>Small populations lose diversity rapidly.</p>
 <p>Large populations retain diversity for much longer periods.</p>
 <p>This is one reason conservation biologists worry about endangered populations.</p>
 </section>
-<section id="effective-population-size" class="level3" data-number="1.0.3">
-<h3 data-number="1.0.3" class="anchored" data-anchor-id="effective-population-size"><span class="header-section-number">1.0.3</span> Effective Population Size</h3>
+<section id="effective-population-size" class="level3" data-number="0.48">
+<h3 data-number="0.48" class="anchored" data-anchor-id="effective-population-size"><span class="header-section-number">0.48</span> Effective Population Size</h3>
 <p>A critical concept in population genetics is:</p>
 <p><span class="math display">\[
 N_e
 \]</span></p>
 <p>the effective population size.</p>
-<section id="census-size-vs-effective-size" class="level4" data-number="1.0.3.1">
-<h4 data-number="1.0.3.1" class="anchored" data-anchor-id="census-size-vs-effective-size"><span class="header-section-number">1.0.3.1</span> Census Size vs Effective Size</h4>
+<section id="census-size-vs-effective-size" class="level4" data-number="0.48.1">
+<h4 data-number="0.48.1" class="anchored" data-anchor-id="census-size-vs-effective-size"><span class="header-section-number">0.48.1</span> Census Size vs Effective Size</h4>
 <p>Census size:</p>
 <p><span class="math display">\[
 N
@@ -1837,8 +1822,8 @@ N_e &lt; N
 \]</span></p>
 </section>
 </section>
-<section id="why-is-effective-population-size-smaller" class="level3" data-number="1.0.4">
-<h3 data-number="1.0.4" class="anchored" data-anchor-id="why-is-effective-population-size-smaller"><span class="header-section-number">1.0.4</span> Why is Effective Population Size Smaller?</h3>
+<section id="why-is-effective-population-size-smaller" class="level3" data-number="0.49">
+<h3 data-number="0.49" class="anchored" data-anchor-id="why-is-effective-population-size-smaller"><span class="header-section-number">0.49</span> Why is Effective Population Size Smaller?</h3>
 <p>Real populations violate Wright-Fisher assumptions:</p>
 <ul>
 <li>Unequal family sizes</li>
@@ -1849,8 +1834,8 @@ N_e &lt; N
 </ul>
 <p>All of these increase drift.</p>
 </section>
-<section id="why-statistical-geneticists-care-about-ne" class="level3" data-number="1.0.5">
-<h3 data-number="1.0.5" class="anchored" data-anchor-id="why-statistical-geneticists-care-about-ne"><span class="header-section-number">1.0.5</span> Why Statistical Geneticists Care About Ne</h3>
+<section id="why-statistical-geneticists-care-about-ne" class="level3" data-number="0.50">
+<h3 data-number="0.50" class="anchored" data-anchor-id="why-statistical-geneticists-care-about-ne"><span class="header-section-number">0.50</span> Why Statistical Geneticists Care About Ne</h3>
 <p>Many quantities depend on:</p>
 <p><span class="math display">\[
 N_e
@@ -1864,8 +1849,8 @@ N_e
 <li>Demographic inference</li>
 </ul>
 </section>
-<section id="population-bottlenecks" class="level3" data-number="1.0.6">
-<h3 data-number="1.0.6" class="anchored" data-anchor-id="population-bottlenecks"><span class="header-section-number">1.0.6</span> Population Bottlenecks</h3>
+<section id="population-bottlenecks" class="level3" data-number="0.51">
+<h3 data-number="0.51" class="anchored" data-anchor-id="population-bottlenecks"><span class="header-section-number">0.51</span> Population Bottlenecks</h3>
 <p>A bottleneck occurs when population size suddenly decreases.</p>
 <p>Examples include:</p>
 <ul>
@@ -1875,10 +1860,10 @@ N_e
 <li>Founder migrations</li>
 </ul>
 </section>
-<section id="bottleneck-simulation" class="level3" data-number="1.0.7">
-<h3 data-number="1.0.7" class="anchored" data-anchor-id="bottleneck-simulation"><span class="header-section-number">1.0.7</span> Bottleneck Simulation</h3>
+<section id="bottleneck-simulation" class="level3" data-number="0.52">
+<h3 data-number="0.52" class="anchored" data-anchor-id="bottleneck-simulation"><span class="header-section-number">0.52</span> Bottleneck Simulation</h3>
 <div id="e486cf2d-f4be-487b-ac46-451480eddd28" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_bottleneck(</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    generations_before<span class="op">=</span><span class="dv">50</span>,</span>
@@ -1937,7 +1922,7 @@ N_e
 <span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
 <span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1947,24 +1932,24 @@ N_e
 </div>
 </div>
 </section>
-<section id="interpretation-9" class="level3" data-number="1.0.8">
-<h3 data-number="1.0.8" class="anchored" data-anchor-id="interpretation-9"><span class="header-section-number">1.0.8</span> Interpretation</h3>
+<section id="interpretation-9" class="level3" data-number="0.53">
+<h3 data-number="0.53" class="anchored" data-anchor-id="interpretation-9"><span class="header-section-number">0.53</span> Interpretation</h3>
 <p>Most frequency changes occur during the bottleneck period.</p>
 <p>This happens because:</p>
 <p><span class="math display">\[
 N
 \]</span></p>
 <p>temporarily becomes very small.</p>
-<section id="founder-effects" class="level4" data-number="1.0.8.1">
-<h4 data-number="1.0.8.1" class="anchored" data-anchor-id="founder-effects"><span class="header-section-number">1.0.8.1</span> Founder Effects</h4>
+<section id="founder-effects" class="level4" data-number="0.53.1">
+<h4 data-number="0.53.1" class="anchored" data-anchor-id="founder-effects"><span class="header-section-number">0.53.1</span> Founder Effects</h4>
 <p>A founder effect is a special case of drift.</p>
 <p>A small group leaves a large population and establishes a new population.</p>
 <p>The new population contains only a subset of the original genetic variation.</p>
 </section>
-<section id="founder-effect-simulation" class="level4" data-number="1.0.8.2">
-<h4 data-number="1.0.8.2" class="anchored" data-anchor-id="founder-effect-simulation"><span class="header-section-number">1.0.8.2</span> Founder Effect Simulation</h4>
+<section id="founder-effect-simulation" class="level4" data-number="0.53.2">
+<h4 data-number="0.53.2" class="anchored" data-anchor-id="founder-effect-simulation"><span class="header-section-number">0.53.2</span> Founder Effect Simulation</h4>
 <div id="4fcbd79b-45c3-4497-ab37-4d715cb4b805" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>source_population <span class="op">=</span> np.random.uniform(</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.05</span>,</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.95</span>,</span>
@@ -2003,7 +1988,7 @@ N
 <span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
 <span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -2014,20 +1999,20 @@ N
 </div>
 </section>
 </section>
-<section id="interpretation-10" class="level3" data-number="1.0.9">
-<h3 data-number="1.0.9" class="anchored" data-anchor-id="interpretation-10"><span class="header-section-number">1.0.9</span> Interpretation</h3>
+<section id="interpretation-10" class="level3" data-number="0.54">
+<h3 data-number="0.54" class="anchored" data-anchor-id="interpretation-10"><span class="header-section-number">0.54</span> Interpretation</h3>
 <p>Even before evolution occurs, the founder population already differs genetically.</p>
 <p>This is purely due to sampling.</p>
 </section>
-<section id="drift-across-an-entire-genome" class="level3" data-number="1.0.10">
-<h3 data-number="1.0.10" class="anchored" data-anchor-id="drift-across-an-entire-genome"><span class="header-section-number">1.0.10</span> Drift Across an Entire Genome</h3>
+<section id="drift-across-an-entire-genome" class="level3" data-number="0.55">
+<h3 data-number="0.55" class="anchored" data-anchor-id="drift-across-an-entire-genome"><span class="header-section-number">0.55</span> Drift Across an Entire Genome</h3>
 <p>Now simulate:</p>
 <ul>
 <li>10,000 SNPs</li>
 <li>500 generations</li>
 </ul>
 <div id="c1638d50-d73a-4d59-9b62-91611819c25a" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>n_snps <span class="op">=</span> <span class="dv">10000</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>initial_freqs <span class="op">=</span> np.random.uniform(</span>
@@ -2084,7 +2069,7 @@ N
 <span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fixed: 4523
 Lost: 4665
@@ -2099,8 +2084,8 @@ Segregating: 812</code></pre>
 </div>
 </div>
 </section>
-<section id="interpretation-11" class="level3" data-number="1.0.11">
-<h3 data-number="1.0.11" class="anchored" data-anchor-id="interpretation-11"><span class="header-section-number">1.0.11</span> Interpretation</h3>
+<section id="interpretation-11" class="level3" data-number="0.56">
+<h3 data-number="0.56" class="anchored" data-anchor-id="interpretation-11"><span class="header-section-number">0.56</span> Interpretation</h3>
 <p>After sufficient evolutionary time:</p>
 <ul>
 <li>Many variants disappear</li>
@@ -2108,17 +2093,17 @@ Segregating: 812</code></pre>
 <li>Only a subset remain polymorphic</li>
 </ul>
 </section>
-<section id="genetic-drift-and-population-structure" class="level3" data-number="1.0.12">
-<h3 data-number="1.0.12" class="anchored" data-anchor-id="genetic-drift-and-population-structure"><span class="header-section-number">1.0.12</span> Genetic Drift and Population Structure</h3>
+<section id="genetic-drift-and-population-structure" class="level3" data-number="0.57">
+<h3 data-number="0.57" class="anchored" data-anchor-id="genetic-drift-and-population-structure"><span class="header-section-number">0.57</span> Genetic Drift and Population Structure</h3>
 <p>Different populations experience different drift histories.</p>
 <p>Suppose two populations split.</p>
 <p>Each evolves independently.</p>
 <p>Their allele frequencies diverge over time.</p>
 </section>
-<section id="simulating-divergence" class="level3" data-number="1.0.13">
-<h3 data-number="1.0.13" class="anchored" data-anchor-id="simulating-divergence"><span class="header-section-number">1.0.13</span> Simulating Divergence</h3>
+<section id="simulating-divergence" class="level3" data-number="0.58">
+<h3 data-number="0.58" class="anchored" data-anchor-id="simulating-divergence"><span class="header-section-number">0.58</span> Simulating Divergence</h3>
 <div id="3f80abb5-d72e-4912-92e7-503b0f13509e" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>shared_freqs <span class="op">=</span> np.random.uniform(</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.05</span>,</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.95</span>,</span>
@@ -2169,7 +2154,7 @@ Segregating: 812</code></pre>
 <span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -2179,14 +2164,14 @@ Segregating: 812</code></pre>
 </div>
 </div>
 </section>
-<section id="interpretation-12" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="interpretation-12"><span class="header-section-number">1.1</span> Interpretation</h2>
+<section id="interpretation-12" class="level3" data-number="0.59">
+<h3 data-number="0.59" class="anchored" data-anchor-id="interpretation-12"><span class="header-section-number">0.59</span> Interpretation</h3>
 <p>The populations began identically.</p>
 <p>Drift alone created differences.</p>
 <p>This is the foundation of population structure.</p>
 </section>
-<section id="connection-to-fst" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="connection-to-fst"><span class="header-section-number">1.2</span> Connection to FST</h2>
+<section id="connection-to-fst" class="level3" data-number="0.60">
+<h3 data-number="0.60" class="anchored" data-anchor-id="connection-to-fst"><span class="header-section-number">0.60</span> Connection to FST</h3>
 <p>Population differentiation is often measured using:</p>
 <p><span class="math display">\[
 F_{ST}
@@ -2197,12 +2182,13 @@ F_{ST}
 F_{ST}
 \]</span></p>
 <p>over time.</p>
-<section id="why-gwas-researchers-care-about-drift" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="why-gwas-researchers-care-about-drift"><span class="header-section-number">1.2.1</span> Why GWAS Researchers Care About Drift</h3>
+</section>
+<section id="why-gwas-researchers-care-about-drift" class="level3" data-number="0.61">
+<h3 data-number="0.61" class="anchored" data-anchor-id="why-gwas-researchers-care-about-drift"><span class="header-section-number">0.61</span> Why GWAS Researchers Care About Drift</h3>
 <p>Modern GWAS datasets contain individuals from populations with different demographic histories.</p>
 <p>Drift can create allele-frequency differences unrelated to disease.</p>
-<section id="example" class="level4" data-number="1.2.1.1">
-<h4 data-number="1.2.1.1" class="anchored" data-anchor-id="example"><span class="header-section-number">1.2.1.1</span> Example</h4>
+<section id="example" class="level4" data-number="0.61.1">
+<h4 data-number="0.61.1" class="anchored" data-anchor-id="example"><span class="header-section-number">0.61.1</span> Example</h4>
 <p>Suppose:</p>
 <p>Population A:</p>
 <p><span class="math display">\[
@@ -2215,15 +2201,15 @@ p=0.3
 <p>for a SNP.</p>
 <p>If disease prevalence also differs between populations, a naive GWAS may falsely associate the SNP with disease.</p>
 </section>
-<section id="confounding" class="level4" data-number="1.2.1.2">
-<h4 data-number="1.2.1.2" class="anchored" data-anchor-id="confounding"><span class="header-section-number">1.2.1.2</span> Confounding</h4>
+<section id="confounding" class="level4" data-number="0.61.2">
+<h4 data-number="0.61.2" class="anchored" data-anchor-id="confounding"><span class="header-section-number">0.61.2</span> Confounding</h4>
 <p>This phenomenon is called:</p>
 <p>Population stratification.</p>
 <p>Drift is one of its major causes.</p>
 </section>
 </section>
-<section id="how-gwas-controls-drift-effects" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="how-gwas-controls-drift-effects"><span class="header-section-number">1.2.2</span> How GWAS Controls Drift Effects</h3>
+<section id="how-gwas-controls-drift-effects" class="level3" data-number="0.62">
+<h3 data-number="0.62" class="anchored" data-anchor-id="how-gwas-controls-drift-effects"><span class="header-section-number">0.62</span> How GWAS Controls Drift Effects</h3>
 <p>Modern studies use:</p>
 <ul>
 <li>Principal Components Analysis (PCA)</li>
@@ -2233,8 +2219,8 @@ p=0.3
 </ul>
 <p>to account for population structure.</p>
 </section>
-<section id="connection-to-finngen" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="connection-to-finngen"><span class="header-section-number">1.2.3</span> Connection to FinnGen</h3>
+<section id="connection-to-finngen" class="level3" data-number="0.63">
+<h3 data-number="0.63" class="anchored" data-anchor-id="connection-to-finngen"><span class="header-section-number">0.63</span> Connection to FinnGen</h3>
 <p>Finnish populations experienced:</p>
 <ul>
 <li>Founder events</li>
@@ -2248,8 +2234,8 @@ p=0.3
 </ul>
 <p>This is known as the Finnish Disease Heritage.</p>
 </section>
-<section id="connection-to-uk-biobank" class="level3" data-number="1.2.4">
-<h3 data-number="1.2.4" class="anchored" data-anchor-id="connection-to-uk-biobank"><span class="header-section-number">1.2.4</span> Connection to UK Biobank</h3>
+<section id="connection-to-uk-biobank" class="level3" data-number="0.64">
+<h3 data-number="0.64" class="anchored" data-anchor-id="connection-to-uk-biobank"><span class="header-section-number">0.64</span> Connection to UK Biobank</h3>
 <p>UK Biobank contains:</p>
 <ul>
 <li>Multiple ancestry groups</li>
@@ -2258,8 +2244,8 @@ p=0.3
 </ul>
 <p>These produce subtle allele-frequency differences caused partly by drift.</p>
 </section>
-<section id="connection-to-polygenic-scores" class="level3" data-number="1.2.5">
-<h3 data-number="1.2.5" class="anchored" data-anchor-id="connection-to-polygenic-scores"><span class="header-section-number">1.2.5</span> Connection to Polygenic Scores</h3>
+<section id="connection-to-polygenic-scores" class="level3" data-number="0.65">
+<h3 data-number="0.65" class="anchored" data-anchor-id="connection-to-polygenic-scores"><span class="header-section-number">0.65</span> Connection to Polygenic Scores</h3>
 <p>Polygenic scores depend on allele frequencies.</p>
 <p>Since drift changes frequencies:</p>
 <ul>
@@ -2280,9 +2266,8 @@ p=0.3
 <li><p>Drift influences GWAS, polygenic scores, and demographic inference.</p></li>
 </ol>
 </section>
-</section>
-<section id="summary-2" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="summary-2"><span class="header-section-number">1.3</span> Summary</h2>
+<section id="summary-2" class="level3" data-number="0.66">
+<h3 data-number="0.66" class="anchored" data-anchor-id="summary-2"><span class="header-section-number">0.66</span> Summary</h3>
 <p>One of the most surprising lessons in population genetics is that evolution does not always require selection.</p>
 <p>Randomness alone can dramatically reshape genomes.</p>
 <p>Given enough time, drift can:</p>
@@ -2296,7 +2281,6 @@ p=0.3
 <p>Understanding genetic drift is therefore essential for evolutionary biology, statistical genetics, genomics, and modern precision medicine.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -2351,13 +2335,14 @@ p=0.3
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

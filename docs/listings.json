@@ -2,6 +2,7 @@
   {
     "listing": "/tutorials/index.html",
     "items": [
+      "/tutorials/blog_GWAS_expert/Advanced_GWAS.html",
       "/tutorials/blog_gen_env_comp/modeling_genetic_environmental_component.html",
       "/tutorials/blog_multivariate_concepts/genomicSEM.html",
       "/tutorials/blog_MR/Mendelian_Randomization.html",

@@ -184,5 +184,8 @@
   },
   "tutorials/blog_MR/Mendelian_Randomization.ipynb": {
     "Mendelian_Randomization.html": "043f4f37"
+  },
+  "tutorials/blog_GWAS_expert/Advanced_GWAS.ipynb": {
+    "Advanced_GWAS.html": "39ac7790"
   }
 }

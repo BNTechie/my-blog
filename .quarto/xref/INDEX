@@ -268,5 +268,11 @@
   },
   "files 2/affective-nlp-thesis.qmd": {
     "affective-nlp-thesis.html": "aec65891"
+  },
+  "tutorials/blog_NGS_pipeline_raw_data_to_GWAS/files 2/ngs-to-gwas-pipeline.qmd": {
+    "ngs-to-gwas-pipeline.html": "813f866d"
+  },
+  "tutorials/blog_NGS_pipeline_raw_data_to_GWAS/ngs-to-gwas-pipeline.qmd": {
+    "ngs-to-gwas-pipeline.html": "3b12522f"
   }
 }

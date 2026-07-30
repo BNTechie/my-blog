@@ -8,6 +8,7 @@
 
 <meta name="author" content="Nivedita Bhadra">
 <meta name="dcterms.date" content="2026-06-16">
+<meta name="description" content="Why a GWAS hit is a neighborhood, not an address – and how ABF and SuSiE narrow a correlated LD block down to the actual causal variants, worked end to end on simulated data.">
 
 <title>Statistical Fine-Mapping: From GWAS Signals to Causal Variants – Nivedita Bhadra</title>
 <style>
@@ -63,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -107,6 +108,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -217,6 +221,11 @@ window.Quarto = {
   </div>
   </div>
 
+<div>
+  <div class="description">
+    Why a GWAS hit is a neighborhood, not an address – and how ABF and SuSiE narrow a correlated LD block down to the actual causal variants, worked end to end on simulated data.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -243,6 +252,15 @@ window.Quarto = {
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/fine-mapping.svg" alt="Two panels comparing ABF and SuSiE fine-mapping on the same simulated GWAS region: ABF finds only 1 of 3 true causal SNPs, SuSiE finds all 3" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The result this tutorial builds up to, from real simulated data: with three true causal variants hiding in one correlated region, ABF collapses onto a single dominant signal while SuSiE separates out all three.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">Fine-Mapping</span> <span class="tag">SuSiE</span> <span class="tag">GWAS</span> <span class="tag">R</span></p>
+</div>
 <section id="what-is-fine-mapping" class="level2" data-number="0.1">
 <h2 data-number="0.1" class="anchored" data-anchor-id="what-is-fine-mapping"><span class="header-section-number">0.1</span> What Is Fine-Mapping?</h2>
 <p>GWAS has identified thousands of genomic regions associated with disease, but it typically doesn’t pinpoint the <em>causal</em> variant. Instead, GWAS flags a region containing many correlated variants, because of <strong>Linkage Disequilibrium (LD)</strong> — the non-random correlation between nearby genetic variants:</p>
@@ -258,7 +276,7 @@ window.Quarto = {
 <section id="the-goal-posterior-inclusion-probabilities" class="level2" data-number="0.2">
 <h2 data-number="0.2" class="anchored" data-anchor-id="the-goal-posterior-inclusion-probabilities"><span class="header-section-number">0.2</span> The Goal: Posterior Inclusion Probabilities</h2>
 <p>Fine-mapping estimates <span class="math inline">\(P(\text{SNP is causal} \mid \text{data})\)</span> for every variant in a region — a <strong>Posterior Inclusion Probability (PIP)</strong> — rather than just a p-value.</p>
-<div id="44699ac8" class="cell">
+<div id="44699ac8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:45.958879Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:45.950848Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:46.033032Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:46.028336Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">SNP =</span> <span class="fu">c</span>(<span class="st">"rs1"</span>,<span class="st">"rs2"</span>,<span class="st">"rs3"</span>,<span class="st">"rs4"</span>,<span class="st">"rs5"</span>),</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">PIP =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.04</span>, <span class="fl">0.88</span>, <span class="fl">0.05</span>, <span class="fl">0.02</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -326,7 +344,7 @@ window.Quarto = {
 <p><strong>Why LD exists:</strong> during recombination, nearby variants are less likely to be separated, so physical proximity → co-inheritance → correlation → LD. The closer two SNPs sit, the stronger their LD tends to be.</p>
 <p><strong>Two common measures:</strong> <span class="math inline">\(D'\)</span> (0–1, measures historical recombination) and <span class="math inline">\(r^2\)</span> (0–1, measures correlation; <span class="math inline">\(r^2=0\)</span> means no correlation, <span class="math inline">\(r^2=1\)</span> means perfect correlation). Fine-mapping primarily uses <span class="math inline">\(r^2\)</span>.</p>
 <p>Example 4×4 LD matrix, where SNP1–SNP2 and SNP3–SNP4 form two separate, tightly-correlated blocks:</p>
-<div id="43d9178e" class="cell">
+<div id="43d9178e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:46.129471Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:46.042048Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:46.159820Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:46.153312Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ld <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">rbind</span>(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fl">1.00</span>, <span class="fl">0.92</span>, <span class="fl">0.15</span>, <span class="fl">0.05</span>),</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fl">0.92</span>, <span class="fl">1.00</span>, <span class="fl">0.18</span>, <span class="fl">0.07</span>),</span>
@@ -337,7 +355,7 @@ window.Quarto = {
 </section>
 <section id="posterior-inclusion-probability-pip" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="posterior-inclusion-probability-pip"><span class="header-section-number">1.2</span> Posterior Inclusion Probability (PIP)</h2>
-<div id="b5d91117" class="cell">
+<div id="b5d91117" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:46.172529Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:46.167692Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:46.199000Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:46.194739Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pip <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">SNP =</span> <span class="fu">c</span>(<span class="st">"rs1"</span>,<span class="st">"rs2"</span>,<span class="st">"rs3"</span>,<span class="st">"rs4"</span>),</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">PIP =</span> <span class="fu">c</span>(<span class="fl">0.03</span>, <span class="fl">0.07</span>, <span class="fl">0.82</span>, <span class="fl">0.08</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -471,8 +489,8 @@ window.Quarto = {
 </section>
 <section id="running-susie-in-r" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="running-susie-in-r"><span class="header-section-number">3.3</span> Running SuSiE in R</h2>
-<div id="2758af2b" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(susieR)</span>
+<p><em>Illustrative syntax – the objects below (<code>GWAS_df</code>, <code>N</code>, <code>in_sample_LD</code>, <code>y</code>) are built from scratch in the worked example later in this tutorial.</em></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(susieR)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>susie_results <span class="ot">&lt;-</span> <span class="fu">susie_rss</span>(</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">bhat =</span> GWAS_df<span class="sc">$</span>beta_marginal,</span>
@@ -483,11 +501,8 @@ window.Quarto = {
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">L =</span> <span class="dv">4</span>,</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate_residual_variance =</span> <span class="cn">TRUE</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 <p>Unlike ABF, SuSiE <strong>requires an LD matrix</strong> — it has to know which SNPs are correlated in order to separate distinct signals.</p>
-<div id="5aca7bfd" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">susie_plot</span>(susie_results, <span class="at">y =</span> <span class="st">"PIP"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">susie_plot</span>(susie_results, <span class="at">y =</span> <span class="st">"PIP"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="when-susie-works-best" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="when-susie-works-best"><span class="header-section-number">3.4</span> When SuSiE Works Best</h2>
@@ -547,46 +562,51 @@ window.Quarto = {
 <h1 data-number="4"><span class="header-section-number">4</span> Running a Complete Fine-Mapping Analysis Step-by-Step</h1>
 <p>With the concepts and methods in hand, here’s a complete, self-contained workflow — simulate a locus with known causal variants, run GWAS, then compare ABF against SuSiE.</p>
 <p><span class="math display">\[\text{Simulate Genotypes} \rightarrow \text{Simulate Phenotype} \rightarrow \text{GWAS} \rightarrow \text{ABF} \rightarrow \text{SuSiE} \rightarrow \text{Interpret PIPs \&amp; Credible Sets}\]</span></p>
-<div id="5cfb5c9b" class="cell">
+<div id="5cfb5c9b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:46.211056Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:46.206511Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.893724Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.891378Z&quot;}}" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)     <span class="co"># data simulation</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(susieR)   <span class="co"># fine-mapping</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)  <span class="co"># visualization</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Simulate a genomic region of <code>p &lt;- 100</code> SNPs with moderate LD (off-diagonal 0.3, diagonal 1):</strong></p>
-<div id="ce5cf556" class="cell">
+<div id="ce5cf556" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.899659Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.897603Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.916506Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.914561Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>LD <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.3</span>, <span class="at">nrow =</span> p, <span class="at">ncol =</span> p)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(LD) <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Simulate genotypes for <code>N &lt;- 1000</code> individuals</strong> using the LD matrix as the covariance structure:</p>
-<div id="131ad5e6" class="cell">
+<div id="131ad5e6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.921169Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.919589Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.948124Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.946268Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> N, <span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>, p), <span class="at">Sigma =</span> LD)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dim(X) -&gt; 1000 x 100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> N, <span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>, p), <span class="at">Sigma =</span> LD)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># dim(X) -&gt; 1000 x 100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Define <code>L &lt;- 3</code> true causal SNPs, chosen at random</strong> (e.g.&nbsp;variants 68, 39, 1 — the workshop’s exact setup):</p>
-<div id="863fbfba" class="cell">
+<div id="863fbfba" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.952580Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.950828Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.964328Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.962510Z&quot;}}" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>causal_ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>p, L, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>causal_ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>p, L, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Assign effect sizes for a target heritability, e.g.&nbsp;<code>h2g &lt;- 0.1</code>:</strong></p>
-<div id="0085ce1f" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>per_snp_h2g <span class="ot">&lt;-</span> h2g <span class="sc">/</span> L</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>effect_sizes <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(L, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(per_snp_h2g))</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, p)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>beta[causal_ind] <span class="ot">&lt;-</span> effect_sizes</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>genetic_effect <span class="ot">&lt;-</span> X <span class="sc">%*%</span> beta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0085ce1f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.968853Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.967037Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.984982Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.982888Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>h2g <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>per_snp_h2g <span class="ot">&lt;-</span> h2g <span class="sc">/</span> L</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>effect_sizes <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(L, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(per_snp_h2g))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, p)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>beta[causal_ind] <span class="ot">&lt;-</span> effect_sizes</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>genetic_effect <span class="ot">&lt;-</span> X <span class="sc">%*%</span> beta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Simulate the phenotype by adding environmental noise:</strong></p>
-<div id="daa08136" class="cell">
+<div id="daa08136" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.988976Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.987919Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.002841Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.001039Z&quot;}}" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>var_g <span class="ot">&lt;-</span> <span class="fu">var</span>(genetic_effect)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sigma_squared <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="dv">1</span> <span class="sc">-</span> var_g <span class="sc">&gt;</span> <span class="fl">0.05</span>, <span class="dv">1</span> <span class="sc">-</span> var_g, <span class="fl">0.1</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma_squared))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(genetic_effect <span class="sc">+</span> epsilon)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">105</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma_squared))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(genetic_effect <span class="sc">+</span> epsilon)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Run GWAS</strong> — one univariate regression per SNP, producing a full summary-statistics table:</p>
-<div id="467ebc29" class="cell">
+<div id="467ebc29" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.008073Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.006475Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.141066Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.138637Z&quot;}}" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>GWAS_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta =</span> <span class="fu">numeric</span>(p), <span class="at">se =</span> <span class="fu">numeric</span>(p), <span class="at">z =</span> <span class="fu">numeric</span>(p), <span class="at">pval =</span> <span class="fu">numeric</span>(p))</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p) {</span>
@@ -600,7 +620,7 @@ window.Quarto = {
 </div>
 <p>Plotting <code>-log10(pval)</code> against SNP position gives a regional Manhattan plot; the tallest peaks are candidate causal variants.</p>
 <p><strong>Apply ABF fine-mapping</strong> using the Wakefield formula from Part 3, implemented as a reusable function:</p>
-<div id="feeccf62" class="cell">
+<div id="feeccf62" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.145871Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.144393Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.171895Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.170056Z&quot;}}" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>run_abf <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, stderr, <span class="at">W =</span> <span class="fl">0.04</span>) {</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> beta <span class="sc">/</span> stderr</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  V <span class="ot">&lt;-</span> stderr<span class="sc">^</span><span class="dv">2</span></span>
@@ -615,7 +635,7 @@ window.Quarto = {
 </div>
 <p>ABF will often strongly prioritize just one signal, even when several causal variants exist.</p>
 <p><strong>Run SuSiE</strong>, using an in-sample LD matrix computed directly from the simulated genotypes:</p>
-<div id="57eb231f" class="cell">
+<div id="57eb231f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.181309Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.180126Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.249492Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.247581Z&quot;}}" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">scale</span>(X))</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>susie_results <span class="ot">&lt;-</span> <span class="fu">susie_rss</span>(</span>
@@ -625,17 +645,116 @@ window.Quarto = {
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>GWAS_df<span class="sc">$</span>PIP_SuSiE <span class="ot">&lt;-</span> susie_results<span class="sc">$</span>pip</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(GWAS_df[<span class="fu">order</span>(<span class="sc">-</span>GWAS_df<span class="sc">$</span>PIP_SuSiE), ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span style="font-weight:bold;text-decoration:underline" class="ansi-magenta-fg">HINT:</span> For estimate_residual_variance = TRUE, please check that R is the "in-sample" LD matrix; that is, the correlation matrix obtained using the exact same data matrix X that was used for the other summary statistics. Also note, when covariates are included in the univariate regressions that produced the summary statistics, also consider removing these effects from X before computing R.
+
+
+</pre>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 6 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">beta</th>
+<th data-quarto-table-cell-role="th" scope="col">se</th>
+<th data-quarto-table-cell-role="th" scope="col">z</th>
+<th data-quarto-table-cell-role="th" scope="col">pval</th>
+<th data-quarto-table-cell-role="th" scope="col">PIP_ABF</th>
+<th data-quarto-table-cell-role="th" scope="col">PIP_SuSiE</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">1</th>
+<td>-0.23391752</td>
+<td>0.02955646</td>
+<td>-7.914261</td>
+<td>2.487253e-15</td>
+<td>9.999993e-01</td>
+<td>1.000000e+00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">39</th>
+<td>0.11271078</td>
+<td>0.03016101</td>
+<td>3.736970</td>
+<td>1.862512e-04</td>
+<td>4.604485e-11</td>
+<td>1.000000e+00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">68</th>
+<td>-0.17209840</td>
+<td>0.02969970</td>
+<td>-5.794617</td>
+<td>6.847711e-09</td>
+<td>6.692374e-07</td>
+<td>9.999861e-01</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">51</th>
+<td>-0.11439249</td>
+<td>0.03180954</td>
+<td>-3.596169</td>
+<td>3.229380e-04</td>
+<td>2.881971e-11</td>
+<td>2.692740e-06</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">48</th>
+<td>-0.10034456</td>
+<td>0.03015366</td>
+<td>-3.327774</td>
+<td>8.754293e-04</td>
+<td>1.120259e-11</td>
+<td>2.578888e-06</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">32</th>
+<td>-0.08948059</td>
+<td>0.03040323</td>
+<td>-2.943127</td>
+<td>3.249148e-03</td>
+<td>3.467398e-12</td>
+<td>1.484153e-06</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>A <code>PIP_SuSiE</code> plot typically shows several distinct peaks, corresponding to the multiple simulated causal variants — unlike ABF’s single dominant peak.</p>
 <p><strong>Examine credible sets</strong>, the most important SuSiE output:</p>
-<div id="f3e2778e" class="cell">
+<div id="f3e2778e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.254009Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.252406Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.268480Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.267054Z&quot;}}" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>susie_results<span class="sc">$</span>sets<span class="sc">$</span>cs</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># $L1: 39   $L2: 20   $L3: 68</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># $L1: 1    $L2: 39   $L3: 68</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$L1</dt>
+        <dd>1</dd>
+    <dt>$L2</dt>
+        <dd>39</dd>
+    <dt>$L3</dt>
+        <dd>68</dd>
+</dl>
+</div>
 </div>
 <p>Three independent signals, correctly located at variants 39, 20, and 68.</p>
 <section id="abf-vs.-susie-head-to-head" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="abf-vs.-susie-head-to-head"><span class="header-section-number">4.1</span> ABF vs.&nbsp;SuSiE, Head to Head</h2>
-<p>Where ABF may identify only variant 39, SuSiE correctly recovers variants 20, 39, <em>and</em> 68 — because it allows multiple causal variants. This is precisely why SuSiE has become the preferred modern approach.</p>
+<p>Where ABF may identify only variant 1, SuSiE correctly recovers variants 1, 39, <em>and</em> 68 — because it allows multiple causal variants. This is precisely why SuSiE has become the preferred modern approach.</p>
 <p><span class="math display">\[\text{Simulate} \rightarrow \text{GWAS} \rightarrow \text{ABF} \rightarrow \text{PIP Estimates} \rightarrow \text{SuSiE} \rightarrow \text{Multiple Signals} \rightarrow \text{Credible Sets} \rightarrow \text{Candidate Causal Variants}\]</span></p>
 <blockquote class="blockquote">
 <p><strong>Key takeaways.</strong> A complete fine-mapping analysis starts from GWAS summary statistics and an LD matrix. ABF converts these into posterior probabilities under a single-causal-variant assumption; SuSiE extends this to multiple independent signals in the same locus. The outputs — PIPs and credible sets — feed directly into downstream eQTL and colocalization analyses.</p>
@@ -734,9 +853,19 @@ window.Quarto = {
 <section id="multiple-credible-sets" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="multiple-credible-sets"><span class="header-section-number">5.4</span> Multiple Credible Sets</h2>
 <p>Modern loci often contain multiple signals — Signal 1: CS1={rs20}, Signal 2: CS2={rs39, rs40}, Signal 3: CS3={rs68} — exactly what SuSiE was designed to discover. Each credible set corresponds to a separate causal signal:</p>
-<div id="cc910417" class="cell">
+<div id="cc910417" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.273102Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.271400Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.286551Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.284787Z&quot;}}" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>susie_results<span class="sc">$</span>sets<span class="sc">$</span>cs</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># $L1: 39   $L2: 20   $L3: 68</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># $L1: 1    $L2: 39   $L3: 68</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$L1</dt>
+        <dd>1</dd>
+    <dt>$L2</dt>
+        <dd>39</dd>
+    <dt>$L3</dt>
+        <dd>68</dd>
+</dl>
+</div>
 </div>
 </section>
 <section id="coverage-trade-off" class="level2" data-number="5.5">
@@ -867,7 +996,7 @@ window.Quarto = {
 <section id="individual-level-data-workflow-gold-standard" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="individual-level-data-workflow-gold-standard"><span class="header-section-number">7.2</span> Individual-Level Data Workflow (Gold Standard)</h2>
 <p><span class="math display">\[\text{Raw Genotypes} \rightarrow \text{QC} \rightarrow \text{GWAS} \rightarrow \text{Compute In-Sample LD} \rightarrow \text{Fine-Mapping}\]</span></p>
-<div id="34ea61d6" class="cell">
+<div id="34ea61d6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.291026Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.289421Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.331758Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.329293Z&quot;}}" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">scale</span>(X))   <span class="co"># X = genotype matrix from your own samples</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This produces <strong>in-sample LD</strong> — LD computed from exactly the individuals in your GWAS — the most accurate LD possible, and considered the gold standard.</p>
@@ -1340,9 +1469,8 @@ window.Quarto = {
 <section id="sensitivity-analysis" class="level2" data-number="12.6">
 <h2 data-number="12.6" class="anchored" data-anchor-id="sensitivity-analysis"><span class="header-section-number">12.6</span> Sensitivity Analysis</h2>
 <p>Because coloc’s Bayesian priors (<span class="math inline">\(p_1\)</span>, <span class="math inline">\(p_2\)</span>, <span class="math inline">\(p_{12}\)</span> — beliefs about how likely a SNP affects trait 1, trait 2, or both) influence the posterior, a good study tests multiple prior settings:</p>
-<div id="b4bb9ad8" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coloc.abf</span>(dataset1, dataset2, <span class="at">p1 =</span> <span class="fl">1e-4</span>, <span class="at">p2 =</span> <span class="fl">1e-4</span>, <span class="at">p12 =</span> <span class="fl">1e-5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p><em>Illustrative syntax – <code>dataset1</code>/<code>dataset2</code> are placeholders for your own formatted summary-statistics lists; see the</em> <a href="https://chr1swallace.github.io/coloc/">coloc package documentation</a> <em>for the exact list format each expects.</em></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coloc.abf</span>(dataset1, dataset2, <span class="at">p1 =</span> <span class="fl">1e-4</span>, <span class="at">p2 =</span> <span class="fl">1e-4</span>, <span class="at">p12 =</span> <span class="fl">1e-5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If PP.H4 = 0.82 under one prior but 0.35 under another, the result is unstable and should be reported cautiously.</p>
 </section>
 <section id="a-complete-worked-example" class="level2" data-number="12.7">

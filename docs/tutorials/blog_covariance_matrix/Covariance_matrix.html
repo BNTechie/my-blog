@@ -6,6 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-06-15">
+<meta name="description" content="Four real scenarios – relatedness, phylogenetic structure, and LD – where ignoring the covariance matrix silently breaks standard errors, with worked R simulations for each.">
 
 <title>The Covariance Matrix in Association Testing – Nivedita Bhadra</title>
 <style>
@@ -210,13 +213,36 @@ window.Quarto = {
 <div class="quarto-title">
 <h1 class="title">The Covariance Matrix in Association Testing</h1>
 <p class="subtitle lead">Why the off-diagonal terms decide whether your p-values are real</p>
-</div>
+  <div class="quarto-categories">
+    <div class="quarto-category">Statistical Genetics</div>
+    <div class="quarto-category">GWAS</div>
+    <div class="quarto-category">Mixed Models</div>
+    <div class="quarto-category">R</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Four real scenarios – relatedness, phylogenetic structure, and LD – where ignoring the covariance matrix silently breaks standard errors, with worked R simulations for each.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 15, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -226,6 +252,15 @@ window.Quarto = {
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/covariance-matrix.svg" alt="A 3x3 covariance matrix heatmap with the diagonal (variances) highlighted in amber and off-diagonal covariances shaded by strength" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The object at the center of every case in this tutorial: a covariance matrix’s diagonal describes each observation’s own variance, but it’s the off-diagonal terms – the part “independence” assumes away – that decide whether a p-value can be trusted.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">Covariance</span> <span class="tag">Mixed Models</span> <span class="tag">GRM</span> <span class="tag">R</span></p>
+</div>
 <p>Very often atatistical models fail because we assume observations are independent when they are not. Repeated measurements from the same patient, genetic similarity between individuals, longitudinal studies, family data, spatial observations, and multivariate phenotypes all introduce correlation. Ignoring these dependencies produces misleading standard errors, inflated false-positive rates, and unreliable inference.</p>
 <p>The mathematical object that describes these dependencies is the covariance matrix. It summarizes not only how variable each observation is, but also how every pair of observations varies together. Once that covariance structure is specified, many seemingly different statistical methods—from ordinary least squares to generalized least squares, linear mixed models, generalized estimating equations, phylogenetic regression, and modern GWAS methods—become variations of the same underlying framework.</p>
 <blockquote class="blockquote">
@@ -242,7 +277,7 @@ window.Quarto = {
 <p><strong>Why not just track variances?</strong> Because variance alone tells you how much a single variable moves. It says nothing about whether two variables move <em>together</em>. Two traits can each have large variance and still be uncorrelated, or have small variance and be almost perfectly redundant. The off-diagonal is where all the structure lives.</p>
 </blockquote>
 <p>A quick simulated illustration: three correlated traits.</p>
-<div id="99ca85d2-831a-4708-8176-d06f5e8cd581" class="cell" data-execution_count="1">
+<div id="99ca85d2-831a-4708-8176-d06f5e8cd581" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T17:59:48.851001Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T17:59:48.841376Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T17:59:48.998286Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T17:59:48.993899Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Sigma_true <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(</span>
@@ -269,21 +304,21 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th" scope="row">trait1</th>
-<td>1.05</td>
-<td>0.73</td>
-<td>0.01</td>
+<td>1.04</td>
+<td>0.70</td>
+<td>0.09</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th" scope="row">trait2</th>
-<td>0.73</td>
-<td>1.05</td>
-<td>0.19</td>
+<td>0.70</td>
+<td>0.99</td>
+<td>0.26</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th" scope="row">trait3</th>
-<td>0.01</td>
-<td>0.19</td>
-<td>1.07</td>
+<td>0.09</td>
+<td>0.26</td>
+<td>1.13</td>
 </tr>
 </tbody>
 </table>
@@ -316,7 +351,7 @@ window.Quarto = {
 <section id="case-1-independent-samples-the-textbook-gwas-test" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="case-1-independent-samples-the-textbook-gwas-test"><span class="header-section-number">3.1</span> Case 1 — independent samples (the textbook GWAS test)</h3>
 <p>If individuals are unrelated and drawn from a single population, <span class="math inline">\(\boldsymbol{\Sigma} = \sigma^2 \mathbf{I}\)</span> is a reasonable approximation, and a simple linear model per variant is valid:</p>
-<div id="83a06a82-5ca6-4042-81b4-0bb407324363" class="cell" data-execution_count="2">
+<div id="83a06a82-5ca6-4042-81b4-0bb407324363" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T17:59:49.092022Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T17:59:49.005925Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T17:59:49.143426Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T17:59:49.141245Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>genotype <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">2</span>, <span class="fl">0.3</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>phenotype <span class="ot">&lt;-</span> <span class="fl">0.3</span> <span class="sc">*</span> genotype <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
@@ -360,7 +395,7 @@ window.Quarto = {
 <h3 data-number="3.2" class="anchored" data-anchor-id="case-2-cryptic-relatedness-and-population-stratification"><span class="header-section-number">3.2</span> Case 2 — cryptic relatedness and population stratification</h3>
 <p>In reality cohorts are never fully unrelated, and subgroups can differ in both allele frequency and phenotype mean. This induces off-diagonal covariance between individuals that correlates with genotype, which is exactly the condition under which OLS standard errors become invalid.</p>
 <p>We simulate two subpopulations with different means and a genotype frequency difference:</p>
-<div id="6188d1ea-530e-49a1-89c1-bf8cb6af4cc4" class="cell" data-execution_count="3">
+<div id="6188d1ea-530e-49a1-89c1-bf8cb6af4cc4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T17:59:49.148747Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T17:59:49.147191Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T17:59:49.178744Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T17:59:49.176618Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">each =</span> n <span class="sc">/</span> <span class="dv">2</span>)</span>
@@ -380,7 +415,7 @@ window.Quarto = {
 .dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
 .dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
 .dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
-</style><dl class="dl-inline"><dt>Estimate</dt><dd>0.36051672383449</dd><dt>Std. Error</dt><dd>0.0312442835871719</dd><dt>t value</dt><dd>11.5386458719287</dd><dt>Pr(&gt;|t|)</dt><dd>5.30984934684381e-29</dd></dl>
+</style><dl class="dl-inline"><dt>Estimate</dt><dd>0.36051672383449</dd><dt>Std. Error</dt><dd>0.0312442835871719</dd><dt>t value</dt><dd>11.5386458719287</dd><dt>Pr(&gt;|t|)</dt><dd>5.30984934684389e-29</dd></dl>
 </div>
 </div>
 <p>Here <code>genotype</code> picks up a spurious association purely because it tags population membership, not because it affects the phenotype. The fix is to model the covariance directly, either with a genomic relationship matrix (GRM) in a mixed model, or with fixed-effect covariates (PCs) that absorb the structure. The mixed-model version:</p>
@@ -388,23 +423,31 @@ window.Quarto = {
 y = X\beta + Zu + \epsilon, \quad u \sim N(0, \sigma^2_g \mathbf{K}), \quad \epsilon \sim N(0, \sigma^2_e \mathbf{I})
 \]</span></p>
 <p>where <span class="math inline">\(\mathbf{K}\)</span> is the GRM: <span class="math inline">\(K_{ij}\)</span> estimates genome-wide relatedness between individuals <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> from marker data. This is exactly <span class="math inline">\(\boldsymbol{\Sigma}\)</span> built from data instead of assumed to be diagonal.</p>
-<div id="80c255a8-7f8d-4b01-bbd6-cefc022713a4" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># toy GRM from a small marker panel, standardised as in GCTA/GEMMA</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>markers <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rbinom</span>(n <span class="sc">*</span> <span class="dv">200</span>, <span class="dv">2</span>, <span class="fl">0.3</span>), <span class="at">nrow =</span> n)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>markers_std <span class="ot">&lt;-</span> <span class="fu">scale</span>(markers)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">tcrossprod</span>(markers_std) <span class="sc">/</span> <span class="fu">ncol</span>(markers_std)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># correcting the naive test with the top structure-capturing PCs of K</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>pcs <span class="ot">&lt;-</span> <span class="fu">eigen</span>(K)<span class="sc">$</span>vectors[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>corrected <span class="ot">&lt;-</span> <span class="fu">lm</span>(phenotype <span class="sc">~</span> genotype <span class="sc">+</span> pcs)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(corrected)<span class="sc">$</span>coefficients[<span class="st">"genotype"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="80c255a8-7f8d-4b01-bbd6-cefc022713a4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T17:59:49.184124Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T17:59:49.182015Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T17:59:50.591002Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T17:59:50.588855Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># toy GRM from a small marker panel, standardised as in GCTA/GEMMA.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Crucially, these markers must actually carry the population signal --</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># a marker panel with the same allele frequency in both groups would</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># produce a GRM blind to the very structure we're trying to correct for.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>marker_freq_A <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">200</span>, <span class="fl">0.05</span>, <span class="fl">0.15</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>marker_freq_B <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">200</span>, <span class="fl">0.25</span>, <span class="fl">0.45</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>markers <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">seq_len</span>(<span class="dv">200</span>), <span class="cf">function</span>(j) {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pop <span class="sc">==</span> <span class="st">"A"</span>, marker_freq_A[j], marker_freq_B[j])</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbinom</span>(n, <span class="dv">2</span>, f)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>markers_std <span class="ot">&lt;-</span> <span class="fu">scale</span>(markers)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">tcrossprod</span>(markers_std) <span class="sc">/</span> <span class="fu">ncol</span>(markers_std)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># correcting the naive test with the top structure-capturing PCs of K</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>pcs <span class="ot">&lt;-</span> <span class="fu">eigen</span>(K)<span class="sc">$</span>vectors[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>corrected <span class="ot">&lt;-</span> <span class="fu">lm</span>(phenotype <span class="sc">~</span> genotype <span class="sc">+</span> pcs)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(corrected)<span class="sc">$</span>coefficients[<span class="st">"genotype"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <style>
 .dl-inline {width: auto; margin:0; padding: 0}
 .dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
 .dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
 .dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
-</style><dl class="dl-inline"><dt>Estimate</dt><dd>0.361786986712764</dd><dt>Std. Error</dt><dd>0.0312270351202561</dd><dt>t value</dt><dd>11.5856976276971</dd><dt>Pr(&gt;|t|)</dt><dd>3.30041164438917e-29</dd></dl>
+</style><dl class="dl-inline"><dt>Estimate</dt><dd>0.0332531649087993</dd><dt>Std. Error</dt><dd>0.0267829897746121</dd><dt>t value</dt><dd>1.24157777711286</dd><dt>Pr(&gt;|t|)</dt><dd>0.214684689209704</dd></dl>
 </div>
 </div>
 <p>Adding the components that summarise <span class="math inline">\(\mathbf{K}\)</span> absorbs the stratification signal and pulls the genotype effect back toward the null. Tools like GEMMA, SAIGE, and regenie fit the full mixed model rather than a PC approximation, but the logic is identical: replace the identity covariance with <span class="math inline">\(\mathbf{K}\)</span>.</p>
@@ -413,7 +456,7 @@ y = X\beta + Zu + \epsilon, \quad u \sim N(0, \sigma^2_g \mathbf{K}), \quad \eps
 <h3 data-number="3.3" class="anchored" data-anchor-id="case-3-non-independent-taxa-pgls"><span class="header-section-number">3.3</span> Case 3 — non-independent taxa: PGLS</h3>
 <p>This scenario also appears in other fields. In a comparative dataset across species, closely related species resemble each other for reasons that have nothing to do with the trait being tested — shared evolutionary history, not shared biology of interest. Ordinary regression treats each species as an independent data point, so the effective sample size is inflated and p-values are anti-conservative.</p>
 <p>Phylogenetic generalised least squares replaces <span class="math inline">\(\boldsymbol{\Sigma} = \sigma^2\mathbf{I}\)</span> with a covariance matrix derived from the phylogeny, typically under Brownian motion: <span class="math inline">\(\Sigma_{ij}\)</span> is the shared branch length from the root to the most recent common ancestor of species <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>.</p>
-<div id="89a7964f-8c29-4a6c-8636-c6547243caf4" class="cell" data-execution_count="5">
+<div id="89a7964f-8c29-4a6c-8636-c6547243caf4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T17:59:50.596186Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T17:59:50.594464Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T17:59:50.768815Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T17:59:50.766646Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -435,7 +478,7 @@ y = X\beta + Zu + \epsilon, \quad u \sim N(0, \sigma^2_g \mathbf{K}), \quad \eps
 .dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
 .dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
 .dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
-</style><dl class="dl-inline"><dt>Estimate</dt><dd>0.887154063958008</dd><dt>Std. Error</dt><dd>1.95739468827264</dd><dt>t value</dt><dd>0.453232078983979</dd><dt>Pr(&gt;|t|)</dt><dd>0.653874585786409</dd></dl>
+</style><dl class="dl-inline"><dt>Estimate</dt><dd>0.887154063958009</dd><dt>Std. Error</dt><dd>1.95739468827265</dd><dt>t value</dt><dd>0.453232078983979</dd><dt>Pr(&gt;|t|)</dt><dd>0.653874585786409</dd></dl>
 </div>
 <div class="cell-output cell-output-display">
 <style>
@@ -443,7 +486,7 @@ y = X\beta + Zu + \epsilon, \quad u \sim N(0, \sigma^2_g \mathbf{K}), \quad \eps
 .dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
 .dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
 .dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
-</style><dl class="dl-inline"><dt>Value</dt><dd>1.33947740226451</dd><dt>Std.Error</dt><dd>1.3131699537816</dd><dt>t-value</dt><dd>1.02003354433076</dd><dt>p-value</dt><dd>0.31644557557449</dd></dl>
+</style><dl class="dl-inline"><dt>Value</dt><dd>1.3394774022645</dd><dt>Std.Error</dt><dd>1.3131699537816</dd><dt>t-value</dt><dd>1.02003354433076</dd><dt>p-value</dt><dd>0.316445575574491</dd></dl>
 </div>
 </div>
 <p>Same data, two different assumed covariance matrices, two different standard errors on the same point estimate. This is the direct cousin of Case 2: relatedness there is genetic and pairwise (the GRM), relatedness here is phylogenetic and hierarchical (branch-length covariance), but the correction mechanism — swap <span class="math inline">\(\mathbf{I}\)</span> for the real <span class="math inline">\(\boldsymbol{\Sigma}\)</span> — is the same equation.</p>
@@ -456,7 +499,7 @@ y = X\beta + Zu + \epsilon, \quad u \sim N(0, \sigma^2_g \mathbf{K}), \quad \eps
 \chi^2_{\text{joint}} = \mathbf{z}^\top R^{-1} \mathbf{z}
 \]</span></p>
 <p>where <span class="math inline">\(\mathbf{z}\)</span> is the vector of marginal Wald z-scores. This is the same GLS logic again, just applied to summary statistics instead of raw phenotypes:</p>
-<div id="e85fc665-a673-4f11-9b02-a4c4b76e5d9d" class="cell" data-execution_count="6">
+<div id="e85fc665-a673-4f11-9b02-a4c4b76e5d9d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T17:59:50.773579Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T17:59:50.771574Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T17:59:50.797944Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T17:59:50.796115Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate LD between 5 variants</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.3</span>, <span class="dv">5</span>, <span class="dv">5</span>); <span class="fu">diag</span>(R) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
@@ -470,10 +513,10 @@ y = X\beta + Zu + \epsilon, \quad u \sim N(0, \sigma^2_g \mathbf{K}), \quad \eps
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>chisq_joint <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">t</span>(z) <span class="sc">%*%</span> <span class="fu">solve</span>(R) <span class="sc">%*%</span> z)</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(chisq_joint, <span class="at">df =</span> <span class="dv">5</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-0.0385703969300287
+0.0670792649358373
 </div>
 <div class="cell-output cell-output-display">
-0.00758300054654221
+0.0175917963452512
 </div>
 </div>
 <p><code>coloc.abf</code> and conditional/joint (COJO) analyses both hinge on getting this <span class="math inline">\(R\)</span> right; a mismatched LD reference panel is the single most common cause of spurious colocalization or fine-mapping results.</p>

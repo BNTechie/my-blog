@@ -8,8 +8,9 @@
 
 <meta name="author" content="Nivedita Bhadra">
 <meta name="dcterms.date" content="2026-07-26">
+<meta name="description" content="The Kaplan-Meier estimator, Greenwood’s formula, the Cox partial likelihood, martingale/deviance/Schoenfeld residuals, and the log-rank test, each derived and coded from scratch, then verified line-by-line against R’s survival package.">
 
-<title>Survival Analysis: Deriving the Kaplan–Meier Estimator and the Cox Model From Scratch – Nivedita Bhadra</title>
+<title>Survival Analysis: Deriving the Kaplan-Meier Estimator and the Cox Model From Scratch – Nivedita Bhadra</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -210,9 +211,21 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Survival Analysis: Deriving the Kaplan–Meier Estimator and the Cox Model From Scratch</h1>
-</div>
+<h1 class="title">Survival Analysis: Deriving the Kaplan-Meier Estimator and the Cox Model From Scratch</h1>
+<p class="subtitle lead">Every formula implemented by hand in R and checked against survfit(), coxph(), and survdiff()</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Statistical Genetics</div>
+    <div class="quarto-category">Survival Analysis</div>
+    <div class="quarto-category">Biostatistics</div>
+    <div class="quarto-category">R</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    The Kaplan-Meier estimator, Greenwood’s formula, the Cox partial likelihood, martingale/deviance/Schoenfeld residuals, and the log-rank test, each derived and coded from scratch, then verified line-by-line against R’s survival package.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -239,6 +252,15 @@ window.Quarto = {
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/survival-curves.svg" alt="Two step-function Kaplan-Meier survival curves for two groups, showing survival probability declining over time with a widening confidence band" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The shape every method in this tutorial is built to explain: a survival curve that steps down at each event, with uncertainty that widens as fewer people remain at risk.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">Kaplan-Meier</span> <span class="tag">Cox Model</span> <span class="tag">Survival Analysis</span> <span class="tag">R</span></p>
+</div>
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>Suppose a new cancer treatment is introduced, and researchers want to know whether it helps patients live longer. They recruit volunteers, follow them for several years, and record when each patient experiences an event such as disease recurrence or death.</p>
@@ -489,7 +511,7 @@ P(T&gt;t_j \mid T\ge t_j).
 <li>the updated survival probability using the product-limit formula.</li>
 </ul>
 <p>Finally, we compare our manual calculation with the result produced by the <code>survfit()</code> function from R’s <strong>survival</strong> package. Both methods should produce identical survival estimates, demonstrating that the Kaplan–Meier estimator implemented by <code>survfit()</code> is simply an efficient implementation of the mathematical definition derived above.</p>
-<div id="9f89447c-348f-4c59-bd80-f12e21b267bb" class="cell" data-execution_count="1">
+<div id="9f89447c-348f-4c59-bd80-f12e21b267bb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:21.554893Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:21.539987Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:23.815644Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:23.808382Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>toy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -711,10 +733,10 @@ P(T&gt;t_j \mid T\ge t_j).
 <section id="visualizing-the-kaplanmeier-survival-curve" class="level3" data-number="3.6">
 <h3 data-number="3.6" class="anchored" data-anchor-id="visualizing-the-kaplanmeier-survival-curve"><span class="header-section-number">3.6</span> Visualizing the Kaplan–Meier Survival Curve</h3>
 <p>The Kaplan–Meier estimate is conventionally displayed as a step function. The curve drops at observed event times and remains unchanged between events. Vertical marks indicate censored observations: these individuals were still event-free at their last recorded follow-up time, but their subsequent outcomes are unknown.</p>
-<div id="39068095-cc9a-430d-9b6a-e307f26d09e6" class="cell" data-execution_count="2">
+<div id="39068095-cc9a-430d-9b6a-e307f26d09e6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:23.962026Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:23.826899Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.132767Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.127378Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>km_fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> lung2)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>km_fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> lung)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  km_fit,</span>
@@ -726,38 +748,17 @@ P(T&gt;t_j \mid T\ge t_j).
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-error">
-<pre><code>ERROR: Error in eval(expr, p): object 'lung2' not found
-
-Error in eval(expr, p): object 'lung2' not found
-Traceback:
-
-1. survfit.formula(Surv(time, status) ~ 1, data = lung2)
-2. eval.parent(temp)
-3. eval(expr, p)
-4. eval(expr, p)
-5. stats::model.frame(formula = Surv(time, status) ~ 1, data = lung2)
-6. model.frame.default(formula = Surv(time, status) ~ 1, data = lung2)
-7. is.data.frame(data)
-8. .handleSimpleError(function (cnd) 
- . {
- .     watcher$capture_plot_and_output()
- .     cnd &lt;- sanitize_call(cnd)
- .     watcher$push(cnd)
- .     switch(on_error, continue = invokeRestart("eval_continue"), 
- .         stop = invokeRestart("eval_stop"), error = NULL)
- . }, "object 'lung2' not found", base::quote(eval(expr, p)))</code></pre>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="survival-analysis-tutorial_files/figure-html/cell-3-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
 </div>
 </div>
-<div id="721a96a3-77f2-481b-aa44-0d821710cba6" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>The estimated survival probability declines over follow<span class="sc">-</span>up as deaths occur. The widening confidence interval toward the right<span class="sc">-</span>hand tail reflects the decreasing number of individuals remaining under observation.</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">### Quantifying Uncertainty: Greenwood's Formula</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>The Kaplan–Meier estimator provides a <span class="sc">**</span>point estimate<span class="sc">**</span> of the survival probability. As with any statistical estimate, however, we also want to know <span class="sc">**</span>how precise<span class="sc">**</span> that estimate is.</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>The uncertainty of the Kaplan–Meier estimator is estimated using <span class="sc">**</span>Greenwood<span class="st">'s formula**, which provides an estimate of its variance:</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>The estimated survival probability declines over follow-up as deaths occur. The widening confidence interval toward the right-hand tail reflects the decreasing number of individuals remaining under observation. ### Quantifying Uncertainty: Greenwood’s Formula</p>
+<p>The Kaplan–Meier estimator provides a <strong>point estimate</strong> of the survival probability. As with any statistical estimate, however, we also want to know <strong>how precise</strong> that estimate is.</p>
+<p>The uncertainty of the Kaplan–Meier estimator is estimated using <strong>Greenwood’s formula</strong>, which provides an estimate of its variance:</p>
 <p><span class="math display">\[
 \widehat{\mathrm{Var}}{\hat S(t)}
 =\hat S(t)^2
@@ -789,42 +790,144 @@ Traceback:
 <li>Multiply the accumulated variance term by the current survival estimate to obtain the standard error.</li>
 </ol>
 <p>The implementation below follows these three steps directly.</p>
-<div id="0e10f954-640d-421a-96c8-28770988d9fd" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual Greenwood standard error</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>cum_var_term <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>km_manual<span class="sc">$</span>se <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(event_times)) {</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  n_j <span class="ot">&lt;-</span> km_manual<span class="sc">$</span>n[i]</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> km_manual<span class="sc">$</span>d[i]</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update Kaplan–Meier estimate</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> S <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> d_j <span class="sc">/</span> n_j)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Greenwood variance contribution</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  cum_var_term <span class="ot">&lt;-</span> cum_var_term <span class="sc">+</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    d_j <span class="sc">/</span> (n_j <span class="sc">*</span> (n_j <span class="sc">-</span> d_j))</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Standard error</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  km_manual<span class="sc">$</span>se[i] <span class="ot">&lt;-</span> S <span class="sc">*</span> <span class="fu">sqrt</span>(cum_var_term)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>km_manual[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"S"</span>, <span class="st">"se"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0e10f954-640d-421a-96c8-28770988d9fd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.139019Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.137035Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.181187Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.178596Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual Greenwood standard error</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cum_var_term <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>km_manual<span class="sc">$</span>se <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(event_times)) {</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  n_j <span class="ot">&lt;-</span> km_manual<span class="sc">$</span>n[i]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> km_manual<span class="sc">$</span>d[i]</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update Kaplan–Meier estimate</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> S <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> d_j <span class="sc">/</span> n_j)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Greenwood variance contribution</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  cum_var_term <span class="ot">&lt;-</span> cum_var_term <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    d_j <span class="sc">/</span> (n_j <span class="sc">*</span> (n_j <span class="sc">-</span> d_j))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Standard error</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  km_manual<span class="sc">$</span>se[i] <span class="ot">&lt;-</span> S <span class="sc">*</span> <span class="fu">sqrt</span>(cum_var_term)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>km_manual[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"S"</span>, <span class="st">"se"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 5 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">time</th>
+<th data-quarto-table-cell-role="th" scope="col">S</th>
+<th data-quarto-table-cell-role="th" scope="col">se</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td>0.9000000</td>
+<td>0.09486833</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>0.8000000</td>
+<td>0.12649111</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.6857143</td>
+<td>0.15149402</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>0.5485714</td>
+<td>0.17243785</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>0.1828571</td>
+<td>0.15998445</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>We can now compare both the manually calculated survival probabilities and their standard errors with the values returned by <code>survfit()</code>.</p>
-<div id="db10b208" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>time,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_surv =</span> km_manual<span class="sc">$</span>S,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">survfit_surv =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>surv,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_se =</span> km_manual<span class="sc">$</span>se,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">survfit_se =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>std.err</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="db10b208" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.186779Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.185026Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.216029Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.213645Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>time,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_surv =</span> km_manual<span class="sc">$</span>S,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">survfit_surv =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>surv,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_se =</span> km_manual<span class="sc">$</span>se,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">survfit_se =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>std.err</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 5 × 5</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">time</th>
+<th data-quarto-table-cell-role="th" scope="col">manual_surv</th>
+<th data-quarto-table-cell-role="th" scope="col">survfit_surv</th>
+<th data-quarto-table-cell-role="th" scope="col">manual_se</th>
+<th data-quarto-table-cell-role="th" scope="col">survfit_se</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td>0.9000000</td>
+<td>0.9000000</td>
+<td>0.09486833</td>
+<td>0.09486833</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>0.8000000</td>
+<td>0.8000000</td>
+<td>0.12649111</td>
+<td>0.12649111</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.6857143</td>
+<td>0.6857143</td>
+<td>0.15149402</td>
+<td>0.15149402</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>0.5485714</td>
+<td>0.5485714</td>
+<td>0.17243785</td>
+<td>0.17243785</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>0.1828571</td>
+<td>0.1828571</td>
+<td>0.15998445</td>
+<td>0.15998445</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>The manually calculated survival probabilities and standard errors should match those returned by <code>survfit()</code> to numerical precision. This demonstrates that the Kaplan–Meier estimator and Greenwood’s standard error are not separate algorithms, but rather direct implementations of the mathematical formulas derived above.</p>
 </section>
@@ -940,12 +1043,12 @@ L_p(\beta)
 <li><code>status = 0</code> for censored and <code>status = 1</code> for an observed event.</li>
 <li><code>sex = 0</code> for male and <code>sex = 1</code> for female.</li>
 </ul>
-<div id="fbc05fe6-cd99-4d6b-ae2a-c019d03e78d5" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lung2 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(lung[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"status"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>)])</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>lung2<span class="sc">$</span>status <span class="ot">&lt;-</span> lung2<span class="sc">$</span>status <span class="sc">-</span> <span class="dv">1</span>   <span class="co"># 0 = censored, 1 = event</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>lung2<span class="sc">$</span>sex    <span class="ot">&lt;-</span> lung2<span class="sc">$</span>sex <span class="sc">-</span> <span class="dv">1</span>      <span class="co"># 0 = male, 1 = female</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fbc05fe6-cd99-4d6b-ae2a-c019d03e78d5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.221530Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.219547Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.238301Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.235876Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>lung2 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(lung[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"status"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>)])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>lung2<span class="sc">$</span>status <span class="ot">&lt;-</span> lung2<span class="sc">$</span>status <span class="sc">-</span> <span class="dv">1</span>   <span class="co"># 0 = censored, 1 = event</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>lung2<span class="sc">$</span>sex    <span class="ot">&lt;-</span> lung2<span class="sc">$</span>sex <span class="sc">-</span> <span class="dv">1</span>      <span class="co"># 0 = male, 1 = female</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The function below calculates the negative log partial likelihood. For each distinct event time, it identifies:</p>
 <ul>
@@ -958,72 +1061,88 @@ L_p(\beta)
 \ell_p(\beta)
 =\sum_{j}\left[\beta^T X_{i_j}-\log\left{\sum_{l\in R(t_j)}\exp(\beta^T X_l)\right}\right].
 \]</span></p>
-<div id="fa285b59-f0ac-46ad-bee1-88d54657a7cd" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative log partial likelihood</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>neg_log_pl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, data) {</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(data[, <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)])</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  time <span class="ot">&lt;-</span> data<span class="sc">$</span>time</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  status <span class="ot">&lt;-</span> data<span class="sc">$</span>status</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(time[status <span class="sc">==</span> <span class="dv">1</span>]))</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  log_partial_likelihood <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (tj <span class="cf">in</span> event_times) {</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Individuals still at risk immediately before tj</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    risk_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(time <span class="sc">&gt;=</span> tj)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Individuals experiencing the event at tj</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    event_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(time <span class="sc">==</span> tj <span class="sc">&amp;</span> status <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Linear predictors for the risk set</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    linear_predictor <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>      X[risk_idx, , <span class="at">drop =</span> <span class="cn">FALSE</span>] <span class="sc">%*%</span> beta</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add one contribution for each event at tj</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> event_idx) {</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>      log_partial_likelihood <span class="ot">&lt;-</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        log_partial_likelihood <span class="sc">+</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(X[i, ] <span class="sc">*</span> beta) <span class="sc">-</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(linear_predictor)))</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># optim() minimizes, so return the negative value</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>log_partial_likelihood</span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fa285b59-f0ac-46ad-bee1-88d54657a7cd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.244161Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.242038Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.257705Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.255222Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative log partial likelihood</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>neg_log_pl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, data) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(data[, <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  time <span class="ot">&lt;-</span> data<span class="sc">$</span>time</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  status <span class="ot">&lt;-</span> data<span class="sc">$</span>status</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(time[status <span class="sc">==</span> <span class="dv">1</span>]))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  log_partial_likelihood <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (tj <span class="cf">in</span> event_times) {</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Individuals still at risk immediately before tj</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    risk_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(time <span class="sc">&gt;=</span> tj)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Individuals experiencing the event at tj</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    event_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(time <span class="sc">==</span> tj <span class="sc">&amp;</span> status <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Linear predictors for the risk set</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    linear_predictor <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>      X[risk_idx, , <span class="at">drop =</span> <span class="cn">FALSE</span>] <span class="sc">%*%</span> beta</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add one contribution for each event at tj</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> event_idx) {</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>      log_partial_likelihood <span class="ot">&lt;-</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        log_partial_likelihood <span class="sc">+</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(X[i, ] <span class="sc">*</span> beta) <span class="sc">-</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(linear_predictor)))</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># optim() minimizes, so return the negative value</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>log_partial_likelihood</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We use <code>optim()</code> to minimize the negative log partial likelihood. The Hessian matrix returned by the optimizer provides an estimate of the covariance matrix of the regression coefficients.</p>
-<div id="d978a3f7-de54-4119-81de-8e101d347d6d" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fit_manual <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fn =</span> neg_log_pl,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung2,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>beta_manual <span class="ot">&lt;-</span> <span class="fu">setNames</span>(</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  fit_manual<span class="sc">$</span>par,</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>se_manual <span class="ot">&lt;-</span> <span class="fu">setNames</span>(</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(fit_manual<span class="sc">$</span>hessian))),</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(beta_manual, <span class="dv">4</span>)</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(se_manual, <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="d978a3f7-de54-4119-81de-8e101d347d6d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.264098Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.261659Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.709295Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.705752Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fit_manual <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fn =</span> neg_log_pl,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung2,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>beta_manual <span class="ot">&lt;-</span> <span class="fu">setNames</span>(</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  fit_manual<span class="sc">$</span>par,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>se_manual <span class="ot">&lt;-</span> <span class="fu">setNames</span>(</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(fit_manual<span class="sc">$</span>hessian))),</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(beta_manual, <span class="dv">4</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(se_manual, <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>age</dt><dd>0.017</dd><dt>sex</dt><dd>-0.5126</dd></dl>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>age</dt><dd>0.0092</dd><dt>sex</dt><dd>0.1675</dd></dl>
+</div>
 </div>
 </section>
 <section id="handling-tied-event-times" class="level3" data-number="4.7">
@@ -1031,34 +1150,109 @@ L_p(\beta)
 <p>In real survival datasets, multiple individuals may experience the event at exactly the same recorded time. These are called <strong>tied events</strong>.</p>
 <p>The manual implementation above uses the <strong>Breslow approximation</strong>: all events occurring at the same time share the same risk-set denominator.</p>
 <p>To make the comparison technically consistent, we must therefore instruct <code>coxph()</code> to use the same method:</p>
-<div id="5f4ea781-3b8e-472b-82a0-e032351f3fac" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fit_cox <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> sex,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung2,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ties =</span> <span class="st">"breslow"</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_cox)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="5f4ea781-3b8e-472b-82a0-e032351f3fac" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.714863Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.712837Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.744843Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.742707Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fit_cox <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> sex,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung2,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ties =</span> <span class="st">"breslow"</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_cox)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>Call:
+coxph(formula = Surv(time, status) ~ age + sex, data = lung2, 
+    ties = "breslow")
+
+  n= 228, number of events= 165 
+
+         coef exp(coef)  se(coef)      z Pr(&gt;|z|)   
+age  0.017013  1.017158  0.009222  1.845  0.06506 . 
+sex -0.512565  0.598957  0.167462 -3.061  0.00221 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+    exp(coef) exp(-coef) lower .95 upper .95
+age     1.017     0.9831    0.9989    1.0357
+sex     0.599     1.6696    0.4314    0.8316
+
+Concordance= 0.603  (se = 0.025 )
+Likelihood ratio test= 14.08  on 2 df,   p=9e-04
+Wald test            = 13.44  on 2 df,   p=0.001
+Score (logrank) test = 13.69  on 2 df,   p=0.001</code></pre>
+</div>
 </div>
 <p>We can compare the manually estimated coefficients and standard errors with those returned by <code>coxph()</code>:</p>
-<div id="e8f1edc7-970e-42fb-ba4e-cbfe0661b437" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>),</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_beta =</span> <span class="fu">as.numeric</span>(beta_manual),</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph_beta =</span> <span class="fu">as.numeric</span>(<span class="fu">coef</span>(fit_cox)),</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_se =</span> <span class="fu">as.numeric</span>(se_manual),</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph_se =</span> <span class="fu">as.numeric</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">vcov</span>(fit_cox))))</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>comparison[, <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(comparison[, <span class="sc">-</span><span class="dv">1</span>], <span class="dv">4</span>)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e8f1edc7-970e-42fb-ba4e-cbfe0661b437" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.750195Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.748274Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.775850Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.773417Z&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_beta =</span> <span class="fu">as.numeric</span>(beta_manual),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph_beta =</span> <span class="fu">as.numeric</span>(<span class="fu">coef</span>(fit_cox)),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_se =</span> <span class="fu">as.numeric</span>(se_manual),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph_se =</span> <span class="fu">as.numeric</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">vcov</span>(fit_cox))))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>comparison[, <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(comparison[, <span class="sc">-</span><span class="dv">1</span>], <span class="dv">4</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 2 × 5</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">term</th>
+<th data-quarto-table-cell-role="th" scope="col">manual_beta</th>
+<th data-quarto-table-cell-role="th" scope="col">coxph_beta</th>
+<th data-quarto-table-cell-role="th" scope="col">manual_se</th>
+<th data-quarto-table-cell-role="th" scope="col">coxph_se</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>age</td>
+<td>0.0170</td>
+<td>0.0170</td>
+<td>0.0092</td>
+<td>0.0092</td>
+</tr>
+<tr class="even">
+<td>sex</td>
+<td>-0.5126</td>
+<td>-0.5126</td>
+<td>0.1675</td>
+<td>0.1675</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>The manual and <code>coxph()</code> estimates should agree closely because both calculations now use the same partial likelihood and the same method for handling tied event times.</p>
 <p>The fitted coefficients are expressed on the <strong>log-hazard scale</strong>. Exponentiating them gives the corresponding hazard ratios:</p>
-<div id="325ee879-98e7-4fa1-b3f2-b88b1d70ef0b" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(beta_manual)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit_cox))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="325ee879-98e7-4fa1-b3f2-b88b1d70ef0b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.780511Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.779016Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.800983Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.799014Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(beta_manual)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit_cox))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>age</dt><dd>1.01715863844201</dd><dt>sex</dt><dd>0.598955202302099</dd></dl>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>age</dt><dd>1.01715843259764</dd><dt>sex</dt><dd>0.598957406233886</dd></dl>
+</div>
 </div>
 <p>For age, the hazard ratio represents the multiplicative change in the hazard associated with a one-year increase in age, holding sex constant.</p>
 <p>For sex, the hazard ratio compares females (<code>sex = 1</code>) with males (<code>sex = 0</code>), holding age constant. A hazard ratio below 1 indicates a lower estimated hazard for females than for males.</p>
@@ -1132,12 +1326,12 @@ I(\hat\beta)^{-1}
 }.
 \]</span></p>
 <p>In our implementation, <code>optim()</code> minimizes the <strong>negative log partial likelihood</strong>. Therefore, when <code>hessian = TRUE</code>, the returned Hessian is already the observed information matrix:</p>
-<div id="77bcb3e7-fd5f-4555-8c5e-2ae1c20e21a5" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>information_matrix <span class="ot">&lt;-</span> fit_manual<span class="sc">$</span>hessian</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>covariance_matrix <span class="ot">&lt;-</span> <span class="fu">solve</span>(information_matrix)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>se_manual <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(covariance_matrix))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="77bcb3e7-fd5f-4555-8c5e-2ae1c20e21a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.806081Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.804106Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.821428Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.819394Z&quot;}}" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>information_matrix <span class="ot">&lt;-</span> fit_manual<span class="sc">$</span>hessian</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>covariance_matrix <span class="ot">&lt;-</span> <span class="fu">solve</span>(information_matrix)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>se_manual <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(covariance_matrix))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This means the same optimization procedure provides both</p>
 <ul>
@@ -1206,8 +1400,8 @@ M_i
 <p>Because of their asymmetry, martingale residuals are <strong>not ideal for identifying outliers directly</strong>. Instead, they are primarily used to assess whether the functional form of a continuous covariate is appropriate.</p>
 <p>For example, after fitting a Cox model with age as a linear predictor, one can plot the martingale residuals against age. If the residuals exhibit a systematic curved pattern rather than random scatter, this suggests that the effect of age may not be linear and that a transformation or spline term could provide a better fit.</p>
 <p>In R, martingale residuals can be obtained directly from a fitted Cox model using</p>
-<div id="95523b0d-f711-47c7-8390-91e0092ea42d" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>martingale_residuals <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit_cox, <span class="at">type =</span> <span class="st">"martingale"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="95523b0d-f711-47c7-8390-91e0092ea42d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.826673Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.824987Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.838613Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.836383Z&quot;}}" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>martingale_residuals <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit_cox, <span class="at">type =</span> <span class="st">"martingale"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In the next section, we will examine <strong>Schoenfeld residuals</strong>, which play a different role: testing whether the proportional hazards assumption underlying the Cox model is satisfied.</p>
 </section>
@@ -1215,16 +1409,16 @@ M_i
 <h3 data-number="5.3" class="anchored" data-anchor-id="computing-martingale-residuals-by-hand"><span class="header-section-number">5.3</span> Computing Martingale Residuals by Hand</h3>
 <p>We can reproduce the martingale residuals returned by <code>coxph()</code> by calculating the Breslow baseline cumulative hazard directly.</p>
 <p>First, we extract the fitted coefficients and calculate each individual’s relative hazard:</p>
-<div id="8fd1f3e2-8339-42fe-865f-0229bd2cc8b6" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>beta_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_cox)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  lung2[, <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)]</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>relative_hazard <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(X <span class="sc">%*%</span> beta_hat)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8fd1f3e2-8339-42fe-865f-0229bd2cc8b6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.844259Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.842544Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.861107Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.859293Z&quot;}}" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>beta_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_cox)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  lung2[, <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>relative_hazard <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(X <span class="sc">%*%</span> beta_hat)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we estimate the baseline cumulative hazard using the Breslow estimator:</p>
 <p><span class="math display">\[
@@ -1234,56 +1428,56 @@ M_i
 {\sum_{l\in R(t_j)}
 \exp(\hat\beta^T X_l)}.
 \]</span></p>
-<div id="8114f165-1197-4b74-8b43-f92d4c3ceb79" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distinct observed event times</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(lung2<span class="sc">$</span>time[lung2<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>])</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Breslow baseline cumulative hazard</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>H0 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(event_times))</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>cumulative_hazard <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(event_times)) {</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  tj <span class="ot">&lt;-</span> event_times[j]</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Number of events at tj</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    lung2<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    lung2<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Individuals in the risk set at tj</span></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  risk_set <span class="ot">&lt;-</span> lung2<span class="sc">$</span>time <span class="sc">&gt;=</span> tj</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Breslow increment</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  hazard_increment <span class="ot">&lt;-</span></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    d_j <span class="sc">/</span> <span class="fu">sum</span>(relative_hazard[risk_set])</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  cumulative_hazard <span class="ot">&lt;-</span></span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    cumulative_hazard <span class="sc">+</span> hazard_increment</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  H0[j] <span class="ot">&lt;-</span> cumulative_hazard</span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8114f165-1197-4b74-8b43-f92d4c3ceb79" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.866979Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.865575Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.896203Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.893581Z&quot;}}" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distinct observed event times</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(lung2<span class="sc">$</span>time[lung2<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Breslow baseline cumulative hazard</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>H0 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(event_times))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>cumulative_hazard <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(event_times)) {</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  tj <span class="ot">&lt;-</span> event_times[j]</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Number of events at tj</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    lung2<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    lung2<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Individuals in the risk set at tj</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  risk_set <span class="ot">&lt;-</span> lung2<span class="sc">$</span>time <span class="sc">&gt;=</span> tj</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Breslow increment</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  hazard_increment <span class="ot">&lt;-</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    d_j <span class="sc">/</span> <span class="fu">sum</span>(relative_hazard[risk_set])</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  cumulative_hazard <span class="ot">&lt;-</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    cumulative_hazard <span class="sc">+</span> hazard_increment</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>  H0[j] <span class="ot">&lt;-</span> cumulative_hazard</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The cumulative baseline hazard is a step function. For each individual, we therefore need the value corresponding to the most recent event time at or before their observed follow-up time.</p>
 <p>Before the first event, the cumulative hazard must equal zero.</p>
-<div id="247e7dee-8ff5-4b8c-82c5-176cd9e54336" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Locate the final event time at or before each observed time</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>interval_index <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  lung2<span class="sc">$</span>time,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  event_times</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate H0(t) at each individual's observed follow-up time</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>H0_at_Y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  interval_index <span class="sc">==</span> <span class="dv">0</span>,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  H0[interval_index]</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="247e7dee-8ff5-4b8c-82c5-176cd9e54336" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.901729Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.899796Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.917240Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.914854Z&quot;}}" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Locate the final event time at or before each observed time</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>interval_index <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  lung2<span class="sc">$</span>time,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  event_times</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate H0(t) at each individual's observed follow-up time</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>H0_at_Y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  interval_index <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  H0[interval_index]</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The expected cumulative number of events for individual (i) is</p>
 <p><span class="math display">\[
@@ -1296,33 +1490,90 @@ M_i
 =\delta_i \widehat H_0(Y_i)
 \exp(\hat\beta^T X_i).
 \]</span></p>
-<div id="9278344d-632f-4356-bc76-4a599d9f5a0d" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>martingale_manual <span class="ot">&lt;-</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  lung2<span class="sc">$</span>status <span class="sc">-</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  H0_at_Y <span class="sc">*</span> relative_hazard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="9278344d-632f-4356-bc76-4a599d9f5a0d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.922924Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.920691Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.933726Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.931784Z&quot;}}" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>martingale_manual <span class="ot">&lt;-</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  lung2<span class="sc">$</span>status <span class="sc">-</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  H0_at_Y <span class="sc">*</span> relative_hazard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can compare the manual calculation with the residuals returned by <code>coxph()</code>:</p>
-<div id="6d6df668-0fce-4ee8-ae7b-381951777553" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>martingale_coxph <span class="ot">&lt;-</span> <span class="fu">residuals</span>(</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  fit_cox,</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"martingale"</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual =</span> martingale_manual,</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph =</span> <span class="fu">as.numeric</span>(martingale_coxph),</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">difference =</span> martingale_manual <span class="sc">-</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>(martingale_coxph)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transform</span>(</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    comparison,</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">manual =</span> <span class="fu">round</span>(manual, <span class="dv">4</span>),</span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">coxph =</span> <span class="fu">round</span>(coxph, <span class="dv">4</span>),</span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">difference =</span> <span class="fu">round</span>(difference, <span class="dv">8</span>)</span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="6d6df668-0fce-4ee8-ae7b-381951777553" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:24.938691Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:24.937013Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:24.996880Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:24.963001Z&quot;}}" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>martingale_coxph <span class="ot">&lt;-</span> <span class="fu">residuals</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  fit_cox,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"martingale"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual =</span> martingale_manual,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph =</span> <span class="fu">as.numeric</span>(martingale_coxph),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">difference =</span> martingale_manual <span class="sc">-</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>(martingale_coxph)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transform</span>(</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    comparison,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">manual =</span> <span class="fu">round</span>(manual, <span class="dv">4</span>),</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">coxph =</span> <span class="fu">round</span>(coxph, <span class="dv">4</span>),</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">difference =</span> <span class="fu">round</span>(difference, <span class="dv">8</span>)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 6 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">manual</th>
+<th data-quarto-table-cell-role="th" scope="col">coxph</th>
+<th data-quarto-table-cell-role="th" scope="col">difference</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">1</th>
+<td>0.0062</td>
+<td>0.0062</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">2</th>
+<td>-0.5030</td>
+<td>-0.5030</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">3</th>
+<td>-3.1272</td>
+<td>-3.1272</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">4</th>
+<td>0.5335</td>
+<td>0.5335</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">5</th>
+<td>-2.3474</td>
+<td>-2.3474</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">6</th>
+<td>-4.2477</td>
+<td>-4.2477</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>The two sets of residuals should agree to numerical precision, provided that <code>fit_cox</code> was fitted using the Breslow method:</p>
 </section>
@@ -1340,12 +1591,64 @@ r_j = X_{i_j} - \bar X(\hat\beta, t_j), \qquad
 <section id="computing-schoenfeld-residuals-in-r" class="level3" data-number="5.5">
 <h3 data-number="5.5" class="anchored" data-anchor-id="computing-schoenfeld-residuals-in-r"><span class="header-section-number">5.5</span> Computing Schoenfeld Residuals in R</h3>
 <p>The <code>survival</code> package computes Schoenfeld residuals directly from a fitted Cox model. The residual matrix has <strong>one row for each observed event</strong> and <strong>one column for each covariate</strong>.</p>
-<div id="f6054434-bd6d-4032-9ddb-c27b8c8f2628" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sch <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit_cox, <span class="at">type =</span> <span class="st">"schoenfeld"</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sch)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="f6054434-bd6d-4032-9ddb-c27b8c8f2628" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.003113Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.001410Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.037873Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.035604Z&quot;}}" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sch <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit_cox, <span class="at">type =</span> <span class="st">"schoenfeld"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sch)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>165</li><li>2</li></ol>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A matrix: 6 × 2 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">age</th>
+<th data-quarto-table-cell-role="th" scope="col">sex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">5</th>
+<td>0.9382653</td>
+<td>0.7269349</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">11</th>
+<td>9.9412847</td>
+<td>-0.2707258</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">11</th>
+<td>16.9412847</td>
+<td>-0.2707258</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">11</th>
+<td>2.9412847</td>
+<td>-0.2707258</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">12</th>
+<td>10.1431920</td>
+<td>-0.2759338</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">13</th>
+<td>12.2083432</td>
+<td>-0.2777061</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>In practice, the proportional hazards assumption is usually assessed by plotting the <strong>scaled Schoenfeld residuals</strong> against event time and testing whether their slope differs significantly from zero. In R, the <code>cox.zph()</code> function performs both the graphical diagnostic and the corresponding statistical test.</p>
 <p>Deviance residuals, Cox–Snell residuals, and DFBETAs are additional diagnostic measures derived from the same martingale and score-function framework. They are useful for identifying outliers, assessing overall model fit, and evaluating influential observations, and are beyond the scope of this tutorial.</p>
@@ -1353,30 +1656,37 @@ r_j = X_{i_j} - \bar X(\hat\beta, t_j), \qquad
 <section id="comparing-survival-between-groups" class="level3" data-number="5.6">
 <h3 data-number="5.6" class="anchored" data-anchor-id="comparing-survival-between-groups"><span class="header-section-number">5.6</span> Comparing Survival Between Groups</h3>
 <p>Before performing the log-rank test, the group-specific Kaplan–Meier curves provide a visual summary of the survival difference.</p>
-<div id="8cfbecc9-f013-47d8-9cf3-23ccaba8274c" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>km_sex <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> sex, <span class="at">data =</span> lung2)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  km_sex,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Time"</span>,</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Estimated survival probability"</span>,</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Kaplan–Meier Curves by Sex"</span>,</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">mark.time =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"bottomleft"</span>,</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>),</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>),</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span></span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8cfbecc9-f013-47d8-9cf3-23ccaba8274c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.043139Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.041338Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.162879Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.160550Z&quot;}}" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>km_sex <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> sex, <span class="at">data =</span> lung2)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  km_sex,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Time"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Estimated survival probability"</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Kaplan–Meier Curves by Sex"</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">mark.time =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"bottomleft"</span>,</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>),</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>),</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="survival-analysis-tutorial_files/figure-html/cell-20-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 <p>The separation between the curves gives an immediate visual impression of the group difference, while the log-rank test formally evaluates whether the survival experiences differ over follow-up.</p>
 </section>
@@ -1432,88 +1742,114 @@ Z^2
 <li><code>young</code>: age at or below the median.</li>
 </ul>
 <p>At each observed event time, the code calculates the numbers at risk and the observed events in the older group, then accumulates the observed count, expected count, and variance across follow-up.</p>
-<div id="0886af4f-38ff-4da6-92ad-82df50dda719" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>lung3 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(lung[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"status"</span>, <span class="st">"age"</span>)])</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>lung3<span class="sc">$</span>status <span class="ot">&lt;-</span> lung3<span class="sc">$</span>status <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>lung3<span class="sc">$</span>agegrp <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  lung3<span class="sc">$</span>age <span class="sc">&gt;</span> <span class="fu">median</span>(lung3<span class="sc">$</span>age),</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"old"</span>,</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"young"</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(lung3<span class="sc">$</span>time[lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>])</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>O1 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>E1 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>V  <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (tj <span class="cf">in</span> event_times) {</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Individuals at risk immediately before tj</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  risk_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(lung3<span class="sc">$</span>time <span class="sc">&gt;=</span> tj)</span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  n_j  <span class="ot">&lt;-</span> <span class="fu">length</span>(risk_idx)</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  n1j  <span class="ot">&lt;-</span> <span class="fu">sum</span>(lung3<span class="sc">$</span>agegrp[risk_idx] <span class="sc">==</span> <span class="st">"old"</span>)</span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  n2j  <span class="ot">&lt;-</span> n_j <span class="sc">-</span> n1j</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Total events and events in the older group at tj</span></span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span></span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  d1j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>agegrp <span class="sc">==</span> <span class="st">"old"</span></span>
-<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Accumulate observed and expected events</span></span>
-<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>  O1 <span class="ot">&lt;-</span> O1 <span class="sc">+</span> d1j</span>
-<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>  E1 <span class="ot">&lt;-</span> E1 <span class="sc">+</span> (n1j <span class="sc">/</span> n_j) <span class="sc">*</span> d_j</span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Accumulate the variance</span></span>
-<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (n_j <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
-<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> V <span class="sc">+</span></span>
-<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>      (n1j <span class="sc">*</span> n2j <span class="sc">*</span> d_j <span class="sc">*</span> (n_j <span class="sc">-</span> d_j)) <span class="sc">/</span></span>
-<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>      (n_j<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (n_j <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>Z2 <span class="ot">&lt;-</span> (O1 <span class="sc">-</span> E1)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> V</span>
-<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
-<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">O1 =</span> O1,</span>
-<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">E1 =</span> <span class="fu">round</span>(E1, <span class="dv">3</span>),</span>
-<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">Var =</span> <span class="fu">round</span>(V, <span class="dv">3</span>),</span>
-<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">Z2 =</span> <span class="fu">round</span>(Z2, <span class="dv">3</span>)</span>
-<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0886af4f-38ff-4da6-92ad-82df50dda719" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.168633Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.166825Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.224922Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.222412Z&quot;}}" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>lung3 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(lung[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"status"</span>, <span class="st">"age"</span>)])</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>lung3<span class="sc">$</span>status <span class="ot">&lt;-</span> lung3<span class="sc">$</span>status <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>lung3<span class="sc">$</span>agegrp <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  lung3<span class="sc">$</span>age <span class="sc">&gt;</span> <span class="fu">median</span>(lung3<span class="sc">$</span>age),</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"old"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"young"</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(lung3<span class="sc">$</span>time[lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>O1 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>E1 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>V  <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (tj <span class="cf">in</span> event_times) {</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Individuals at risk immediately before tj</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  risk_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(lung3<span class="sc">$</span>time <span class="sc">&gt;=</span> tj)</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  n_j  <span class="ot">&lt;-</span> <span class="fu">length</span>(risk_idx)</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>  n1j  <span class="ot">&lt;-</span> <span class="fu">sum</span>(lung3<span class="sc">$</span>agegrp[risk_idx] <span class="sc">==</span> <span class="st">"old"</span>)</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  n2j  <span class="ot">&lt;-</span> n_j <span class="sc">-</span> n1j</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Total events and events in the older group at tj</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>  d1j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>agegrp <span class="sc">==</span> <span class="st">"old"</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Accumulate observed and expected events</span></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>  O1 <span class="ot">&lt;-</span> O1 <span class="sc">+</span> d1j</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>  E1 <span class="ot">&lt;-</span> E1 <span class="sc">+</span> (n1j <span class="sc">/</span> n_j) <span class="sc">*</span> d_j</span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Accumulate the variance</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (n_j <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> V <span class="sc">+</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>      (n1j <span class="sc">*</span> n2j <span class="sc">*</span> d_j <span class="sc">*</span> (n_j <span class="sc">-</span> d_j)) <span class="sc">/</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>      (n_j<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (n_j <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>Z2 <span class="ot">&lt;-</span> (O1 <span class="sc">-</span> E1)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> V</span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">O1 =</span> O1,</span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">E1 =</span> <span class="fu">round</span>(E1, <span class="dv">3</span>),</span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">Var =</span> <span class="fu">round</span>(V, <span class="dv">3</span>),</span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">Z2 =</span> <span class="fu">round</span>(Z2, <span class="dv">3</span>)</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>O1</dt><dd>85</dd><dt>E1</dt><dd>76.237</dd><dt>Var</dt><dd>40.821</dd><dt>Z2</dt><dd>1.881</dd></dl>
+</div>
 </div>
 <p>Here, (O_1) is the total number of observed events in the older group, (E_1) is the number expected under equal survival, and (Z^2) is the log-rank chi-squared statistic.</p>
 <p>We can compare the manual result with R’s <code>survdiff()</code> function:</p>
-<div id="a3376dcc" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>fit_logrank <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> agegrp,</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung3</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>fit_logrank</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_Z2 =</span> Z2,</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">survdiff_Z2 =</span> fit_logrank<span class="sc">$</span>chisq</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="a3376dcc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.230845Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.228623Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.260018Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.257668Z&quot;}}" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>fit_logrank <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> agegrp,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung3</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>fit_logrank</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_Z2 =</span> Z2,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">survdiff_Z2 =</span> fit_logrank<span class="sc">$</span>chisq</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>Call:
+survdiff(formula = Surv(time, status) ~ agegrp, data = lung3)
+
+               N Observed Expected (O-E)^2/E (O-E)^2/V
+agegrp=old   111       85     76.2     1.007      1.88
+agegrp=young 117       80     88.8     0.865      1.88
+
+ Chisq= 1.9  on 1 degrees of freedom, p= 0.2 </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>manual_Z2</dt><dd>1.88099912472048</dd><dt>survdiff_Z2</dt><dd>1.88099912472049</dd></dl>
+</div>
 </div>
 <p>The two chi-squared statistics should agree to numerical precision.</p>
 </section>
@@ -1530,16 +1866,60 @@ D_i = \text{sign}(M_i)\sqrt{-2\left[M_i + \delta_i \log(\delta_i - M_i)\right]}.
 <blockquote class="blockquote">
 <p><strong>Why bother transforming at all?</strong> <span class="math inline">\(D_i\)</span> is approximately symmetric around 0 for a well-fitting model, the way ordinary residuals are in linear regression. That makes them far more useful than martingale residuals for spotting individual outliers by eye.</p>
 </blockquote>
-<div id="c4e4f81e" class="cell">
+<div id="c4e4f81e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.265335Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.263484Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.290202Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.287819Z&quot;}}" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dev_manual <span class="ot">&lt;-</span> <span class="fu">sign</span>(martingale_manual) <span class="sc">*</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">pmax</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> (martingale_manual <span class="sc">+</span> lung2<span class="sc">$</span>status <span class="sc">*</span> <span class="fu">log</span>(lung2<span class="sc">$</span>status <span class="sc">-</span> martingale_manual))))</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>dev_coxph <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit_cox, <span class="at">type =</span> <span class="st">"deviance"</span>)</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">head</span>(<span class="fu">cbind</span>(<span class="at">manual =</span> dev_manual, <span class="at">coxph =</span> dev_coxph)), <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A matrix: 6 × 2 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">manual</th>
+<th data-quarto-table-cell-role="th" scope="col">coxph</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">1</th>
+<td>0.0062</td>
+<td>0.0062</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">2</th>
+<td>-0.4371</td>
+<td>-0.4371</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">3</th>
+<td>-2.5009</td>
+<td>-2.5009</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">4</th>
+<td>0.6767</td>
+<td>0.6767</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">5</th>
+<td>-1.5095</td>
+<td>-1.5095</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">6</th>
+<td>-2.9147</td>
+<td>-2.9147</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>The manually computed deviance residuals match those returned by <code>coxph()</code>. Plotting deviance residuals against the linear predictor (= X) is a standard diagnostic for identifying potential outliers and assessing model fit.</p>
 <p>Plotting the deviance residuals against the fitted linear predictor provides a simple visual check for unusual observations or systematic departures from the fitted Cox model.</p>
-<div id="f974babe" class="cell">
+<div id="f974babe" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.295722Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.293596Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.401231Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.398199Z&quot;}}" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>lp <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_cox, <span class="at">type =</span> <span class="st">"lp"</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1554,6 +1934,13 @@ D_i = \text{sign}(M_i)\sqrt{-2\left[M_i + \delta_i \log(\delta_i - M_i)\right]}.
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"grey40"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="survival-analysis-tutorial_files/figure-html/cell-24-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 <p>As you can see, the residuals are scattered roughly symmetrically around zero, with no obvious trend or a small number of extreme outlying observations.</p>
 <p>No individual sits far outside the band formed by the rest, and there is no visible curvature — no sign that a transformation of <code>age</code> or <code>sex</code> is needed.</p>
@@ -1569,7 +1956,7 @@ R_i = \hat H_0(Y_i)\exp(\hat\beta^T X_i)
 <p><strong>How is that checked in practice?</strong> Treat <span class="math inline">\(\{R_i, \delta_i\}\)</span> as a new survival dataset and estimate its own Kaplan–Meier cumulative hazard, <span class="math inline">\(-\log \hat S_R(r)\)</span>. If the original model fits well, this cumulative hazard should trace the 45° line <span class="math inline">\(y = r\)</span>, since that is the cumulative hazard of a unit-rate exponential.</p>
 </blockquote>
 <p>Conveniently, <span class="math inline">\(R_i = \delta_i - M_i\)</span>, so no separate calculation is needed beyond the martingale residuals already computed.</p>
-<div id="067b20fa" class="cell">
+<div id="067b20fa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.407621Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.405773Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.486240Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.483877Z&quot;}}" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>coxsnell <span class="ot">&lt;-</span> lung2<span class="sc">$</span>status <span class="sc">-</span> martingale_manual   <span class="co"># R_i = delta_i - M_i</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cs_fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnell, lung2<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1577,6 +1964,13 @@ R_i = \hat H_0(Y_i)\exp(\hat\beta^T X_i)
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Cox-Snell residual"</span>, <span class="at">ylab =</span> <span class="st">"Estimated cumulative hazard"</span>,</span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Cox-Snell Residual Plot"</span>)</span>
 <span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="survival-analysis-tutorial_files/figure-html/cell-25-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 <p>The step function tracks the reference line closely apart from some flattening in the right tail, where only a handful of individuals remain at risk and the empirical cumulative hazard becomes noisy by construction. This is the expected pattern for an adequately fitting Cox model, rather than evidence of poor fit.</p>
 </section>
@@ -1587,13 +1981,26 @@ R_i = \hat H_0(Y_i)\exp(\hat\beta^T X_i)
 <p><strong>What does a significant result mean?</strong></p>
 <p>A small p-value for a covariate indicates that its estimated effect on the hazard changes over follow-up time. In other words, the proportional hazards assumption may be violated for that covariate. The <code>GLOBAL</code> test evaluates the proportional hazards assumption for all covariates jointly.</p>
 </blockquote>
-<div id="745d6cc1" class="cell">
+<div id="745d6cc1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.491837Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.489693Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.512769Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.510328Z&quot;}}" data-execution_count="25">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>zph_fit <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(fit_cox)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>zph_fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>       chisq df    p
+age    0.208  1 0.65
+sex    2.599  1 0.11
+GLOBAL 2.761  2 0.25</code></pre>
 </div>
-<div id="42ea8186" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(zph_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="42ea8186" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:59:25.517961Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:59:25.516149Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:59:25.618442Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:59:25.614627Z&quot;}}" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(zph_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="survival-analysis-tutorial_files/figure-html/cell-27-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 <p>Neither covariate shows evidence of a violation of the proportional hazards assumption (age: (p = 0.65); sex: (p = 0.11); global test: (p = 0.25)). In both panels, the smoothed curves remain approximately horizontal and fluctuate around zero throughout follow-up. The proportional hazards assumption therefore appears reasonable for this model, and the estimated hazard ratios can be interpreted as approximately constant over the observed follow-up period.</p>
 </section>

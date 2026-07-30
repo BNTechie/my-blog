@@ -1,0 +1,32 @@
+<svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', ui-monospace, monospace">
+  <rect x="0" y="0" width="800" height="340" rx="16" fill="#f5f3ee"/>
+  <text x="400.0" y="40" text-anchor="middle" font-family="'Fraunces', Georgia, serif" font-size="21" fill="#1c2b39" font-weight="600">From Raw Reads to GWAS-Ready Data</text>
+  <text x="400.0" y="64" text-anchor="middle" font-size="11.5" fill="#4a5a68">alignment &#8594; calling &#8594; joint genotyping &#8594; harmonization &#8594; phasing &#8594; imputation &#8594; association testing</text>
+
+  <rect x="23.0" y="150" width="130" height="76" rx="10" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2.2"/>
+  <text x="88.0" y="193.0" text-anchor="middle" font-size="13.5" fill="#1f4d4a" font-weight="600">FASTQ</text>
+  <line x1="157.0" y1="188.0" x2="175.0" y2="188.0" stroke="#4a5a68" stroke-width="2" marker-end="url(#arrowNgs)"/>
+  <rect x="179.0" y="150" width="130" height="76" rx="10" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2.2"/>
+  <text x="244.0" y="193.0" text-anchor="middle" font-size="13.5" fill="#1f4d4a" font-weight="600">BAM / CRAM</text>
+  <line x1="313.0" y1="188.0" x2="331.0" y2="188.0" stroke="#4a5a68" stroke-width="2" marker-end="url(#arrowNgs)"/>
+  <rect x="335.0" y="150" width="130" height="76" rx="10" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2.2"/>
+  <text x="400.0" y="193.0" text-anchor="middle" font-size="13.5" fill="#1f4d4a" font-weight="600">VCF</text>
+  <line x1="469.0" y1="188.0" x2="487.0" y2="188.0" stroke="#4a5a68" stroke-width="2" marker-end="url(#arrowNgs)"/>
+  <rect x="491.0" y="150" width="130" height="76" rx="10" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2.2"/>
+  <text x="556.0" y="186.0" text-anchor="middle" font-size="13" fill="#1f4d4a" font-weight="600">Phased &amp;</text>
+  <text x="556.0" y="204.0" text-anchor="middle" font-size="13" fill="#1f4d4a" font-weight="600">Imputed</text>
+  <line x1="625.0" y1="188.0" x2="643.0" y2="188.0" stroke="#4a5a68" stroke-width="2" marker-end="url(#arrowNgs)"/>
+  <rect x="647.0" y="150" width="130" height="76" rx="10" fill="#fbfaf7" stroke="#b9812c" stroke-width="2.2"/>
+  <text x="712.0" y="186.0" text-anchor="middle" font-size="13" fill="#b9812c" font-weight="600">GWAS-Ready</text>
+  <text x="712.0" y="204.0" text-anchor="middle" font-size="13" fill="#b9812c" font-weight="600">Matrix</text>
+
+  <text x="88.0" y="254" text-anchor="middle" font-size="10.5" fill="#4a5a68">Part 1</text>
+  <text x="257.0" y="254" text-anchor="middle" font-size="10.5" fill="#4a5a68">Part 2</text>
+  <text x="537.8" y="254" text-anchor="middle" font-size="10.5" fill="#4a5a68">Part 3</text>
+
+  <defs>
+    <marker id="arrowNgs" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#4a5a68"/>
+    </marker>
+  </defs>
+</svg>

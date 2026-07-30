@@ -1,0 +1,36 @@
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', ui-monospace, monospace">
+  <rect x="0" y="0" width="800" height="380" rx="16" fill="#f5f3ee"/>
+  <text x="400.0" y="40" text-anchor="middle" font-family="'Fraunces', Georgia, serif" font-size="21" fill="#1c2b39" font-weight="600">Local Machine vs. HPC / SLURM</text>
+
+  <rect x="50" y="90" width="260" height="210" rx="12" fill="#fbfaf7" stroke="#ddd8cd" stroke-width="2"/>
+  <rect x="135.0" y="112" width="90" height="39.4" rx="4" fill="none" stroke="#2f6f6b" stroke-width="2.5"/>
+  <rect x="127.0" y="151.4" width="106" height="9" rx="3" fill="#2f6f6b"/>
+  <text x="72" y="204" font-size="12.5" fill="#1c2b39">&#10003; Errors visible immediately</text>
+  <text x="72" y="226" font-size="12.5" fill="#1c2b39">&#10003; Working directory known</text>
+  <text x="72" y="248" font-size="12.5" fill="#1c2b39">&#10003; Environment already active</text>
+  <text x="72" y="270" font-size="12.5" fill="#1c2b39">&#10003; Files nearby</text>
+  <text x="180.0" y="284" text-anchor="middle" font-size="14" fill="#1f4d4a" font-weight="600">Local</text>
+
+  <rect x="490" y="90" width="260" height="210" rx="12" fill="#fbfaf7" stroke="#b9812c" stroke-width="2"/>
+  <rect x="575.0" y="110" width="90" height="14" rx="3" fill="#fbfaf7" stroke="#b9812c" stroke-width="2"/>
+  <circle cx="655.0" cy="117" r="2.2" fill="#b9812c"/>
+  <rect x="575.0" y="130" width="90" height="14" rx="3" fill="#fbfaf7" stroke="#b9812c" stroke-width="2"/>
+  <circle cx="655.0" cy="137" r="2.2" fill="#b9812c"/>
+  <rect x="575.0" y="150" width="90" height="14" rx="3" fill="#fbfaf7" stroke="#b9812c" stroke-width="2"/>
+  <circle cx="655.0" cy="157" r="2.2" fill="#b9812c"/>
+  <text x="512" y="186" font-size="12.5" fill="#1c2b39">&#8226; Runs as a scheduled job</text>
+  <text x="512" y="208" font-size="12.5" fill="#1c2b39">&#8226; Output goes to log files</text>
+  <text x="512" y="230" font-size="12.5" fill="#1c2b39">&#8226; Fixed CPU / memory / time</text>
+  <text x="512" y="252" font-size="12.5" fill="#1c2b39">&#8226; Node may be unseen</text>
+  <text x="620.0" y="284" text-anchor="middle" font-size="14" fill="#b9812c" font-weight="600">HPC / SLURM</text>
+
+  <path d="M320 195.0 L480 195.0" fill="none" stroke="#4a5a68" stroke-width="2.5" marker-end="url(#arrowHpc)"/>
+  <text x="400.0" y="183.0" text-anchor="middle" font-size="12" fill="#4a5a68">sbatch</text>
+  <text x="400.0" y="217.0" text-anchor="middle" font-size="11" fill="#4a5a68">train_model.slurm</text>
+
+  <defs>
+    <marker id="arrowHpc" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5a68"/>
+    </marker>
+  </defs>
+</svg>

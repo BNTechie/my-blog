@@ -8,6 +8,7 @@
 
 <meta name="author" content="Nivedita Bhadra">
 <meta name="dcterms.date" content="2026-07-27">
+<meta name="description" content="HE regression, GREML, and LDSC as the same underlying idea in two different spaces – individuals vs.&nbsp;markers – extended to LD score regression for genetic correlation between traits.">
 
 <title>Heritability and Genetic Correlation: From First Principles to Summary Statistics – Nivedita Bhadra</title>
 <style>
@@ -218,6 +219,11 @@ window.Quarto = {
   </div>
   </div>
 
+<div>
+  <div class="description">
+    HE regression, GREML, and LDSC as the same underlying idea in two different spaces – individuals vs.&nbsp;markers – extended to LD score regression for genetic correlation between traits.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -244,6 +250,15 @@ window.Quarto = {
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/heritability-duality.svg" alt="Two scatter plots with fitted regression lines: HE regression plotting phenotype cross-products against relatedness, and LDSC plotting chi-squared statistics against LD score -- both recovering heritability as the slope" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The core duality this tutorial builds toward: HE regression works in the space of individuals (relatedness), LDSC works in the space of markers (LD score) – but in both, heritability is just a regression slope. These panels are plotted from the tutorial’s own simulated data.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">Heritability</span> <span class="tag">LDSC</span> <span class="tag">GREML</span> <span class="tag">R</span></p>
+</div>
 <p>Every quantitative genetics question eventually runs into the same two words: <strong>heritability</strong> and <strong>genetic correlation</strong>. How much of height is genetic? Do depression and obesity share genetic causes? Is a GWAS signal confounded by population structure?</p>
 <p>Answering any of these requires estimating variance and covariance — not of the phenotype itself, but of its <em>genetic component</em>. This tutorial builds that machinery from the ground up: starting with individual-level methods you could run by hand on a handful of relatives, and ending with the summary-statistics methods (LD Score Regression) that power essentially every modern GWAS consortium paper.</p>
 <blockquote class="blockquote">
@@ -327,7 +342,7 @@ window.Quarto = {
 </section>
 <section id="a-simulated-illustration" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="a-simulated-illustration"><span class="header-section-number">2.5</span> A Simulated Illustration</h2>
-<div id="e6911a37" class="cell" data-execution_count="1">
+<div id="e6911a37" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T19:08:05.684062Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T19:08:05.672081Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T19:08:05.899182Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T19:08:05.891631Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate a simple additive-genetic scenario across pairs of relatives</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n_pairs <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
@@ -393,22 +408,36 @@ F-statistic: 66.24 on 1 and 1998 DF,  p-value: 6.93e-16</code></pre>
 <section id="building-the-grm" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="building-the-grm"><span class="header-section-number">3.2</span> Building the GRM</h2>
 <p>The GRM quantifies genetic similarity between every pair of individuals in a sample, estimated from genome-wide genotype data rather than known family relationships — which is what makes it applicable to unrelated individuals in large cohorts like biobanks, not just close relatives.</p>
-<div id="f2ccfa2b" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>        Person A   Person B   Person C</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>A         <span class="fl">1.00</span>       <span class="fl">0.10</span>       <span class="fl">0.02</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>B         <span class="fl">0.10</span>       <span class="fl">1.00</span>       <span class="fl">0.08</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>C         <span class="fl">0.02</span>       <span class="fl">0.08</span>       <span class="fl">1.00</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-error">
-<pre><code>ERROR: Error in parse(text = input): &lt;text&gt;:1:16: unexpected symbol
-1:         Person A
-                   ^
-
-Error in parse(text = input): &lt;text&gt;:1:16: unexpected symbol
-1:         Person A
-                   ^
-Traceback:</code></pre>
-</div>
-</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Person A</th>
+<th>Person B</th>
+<th>Person C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A</strong></td>
+<td>1.00</td>
+<td>0.10</td>
+<td>0.02</td>
+</tr>
+<tr class="even">
+<td><strong>B</strong></td>
+<td>0.10</td>
+<td>1.00</td>
+<td>0.08</td>
+</tr>
+<tr class="odd">
+<td><strong>C</strong></td>
+<td>0.02</td>
+<td>0.08</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
 <p>The diagonal (self-relatedness) is close to 1; off-diagonal entries reflect how much genome-wide genetic material each pair shares. The core logic is the same intuition as HE regression: if genetics influences the trait, individuals who are more genetically similar (higher GRM entries) should be more phenotypically similar too — GREML just estimates this via restricted maximum likelihood rather than OLS, over a full genome-wide GRM rather than a handful of relatedness categories.</p>
 </section>
 <section id="why-greml-matters" class="level2" data-number="3.3">
@@ -486,31 +515,55 @@ Traceback:</code></pre>
 </section>
 <section id="a-simulated-illustration-1" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="a-simulated-illustration-1"><span class="header-section-number">5.3</span> A Simulated Illustration</h2>
-<div id="086179a9" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Illustrative LDSC-style simulation</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">5000</span>          <span class="co"># number of SNPs</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">50000</span>         <span class="co"># GWAS sample size</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>h2_true <span class="ot">&lt;-</span> <span class="fl">0.3</span>     <span class="co"># true heritability</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>a_true  <span class="ot">&lt;-</span> <span class="fl">0.01</span>    <span class="co"># confounding/stratification inflation</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate LD scores (in reality, computed from a reference panel like 1000 Genomes)</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>ld_score <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(M, <span class="at">shape =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="dv">20</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate chi-squared statistics under the LDSC expectation, plus noise</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>expected_chisq <span class="ot">&lt;-</span> (N <span class="sc">*</span> h2_true <span class="sc">/</span> M) <span class="sc">*</span> ld_score <span class="sc">+</span> N <span class="sc">*</span> a_true <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>chisq_obs <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(M, <span class="at">shape =</span> <span class="dv">2</span>, <span class="at">rate =</span> <span class="dv">2</span> <span class="sc">/</span> expected_chisq)  <span class="co"># noisy draws around expectation</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>ldsc_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(chisq_obs <span class="sc">~</span> ld_score)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ldsc_fit)</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Recovering h2 and the intercept from the fitted slope/intercept</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>slope_hat     <span class="ot">&lt;-</span> <span class="fu">coef</span>(ldsc_fit)[[<span class="st">"ld_score"</span>]]</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>intercept_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(ldsc_fit)[[<span class="st">"(Intercept)"</span>]]</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>h2_hat <span class="ot">&lt;-</span> slope_hat <span class="sc">*</span> M <span class="sc">/</span> N</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimated h2:"</span>, <span class="fu">round</span>(h2_hat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimated intercept (stratification proxy):"</span>, <span class="fu">round</span>(intercept_hat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="086179a9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T19:08:06.034862Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T19:08:05.911447Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T19:08:06.109889Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T19:08:06.107873Z&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Illustrative LDSC-style simulation</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">5000</span>          <span class="co"># number of SNPs</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">50000</span>         <span class="co"># GWAS sample size</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>h2_true <span class="ot">&lt;-</span> <span class="fl">0.3</span>     <span class="co"># true heritability</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>a_true  <span class="ot">&lt;-</span> <span class="fl">0.01</span>    <span class="co"># confounding/stratification inflation</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate LD scores (in reality, computed from a reference panel like 1000 Genomes)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>ld_score <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(M, <span class="at">shape =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="dv">20</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate chi-squared statistics under the LDSC expectation, plus noise</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>expected_chisq <span class="ot">&lt;-</span> (N <span class="sc">*</span> h2_true <span class="sc">/</span> M) <span class="sc">*</span> ld_score <span class="sc">+</span> N <span class="sc">*</span> a_true <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>chisq_obs <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(M, <span class="at">shape =</span> <span class="dv">2</span>, <span class="at">rate =</span> <span class="dv">2</span> <span class="sc">/</span> expected_chisq)  <span class="co"># noisy draws around expectation</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>ldsc_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(chisq_obs <span class="sc">~</span> ld_score)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ldsc_fit)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Recovering h2 and the intercept from the fitted slope/intercept</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>slope_hat     <span class="ot">&lt;-</span> <span class="fu">coef</span>(ldsc_fit)[[<span class="st">"ld_score"</span>]]</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>intercept_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(ldsc_fit)[[<span class="st">"(Intercept)"</span>]]</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>h2_hat <span class="ot">&lt;-</span> slope_hat <span class="sc">*</span> M <span class="sc">/</span> N</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimated h2:"</span>, <span class="fu">round</span>(h2_hat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimated intercept (stratification proxy):"</span>, <span class="fu">round</span>(intercept_hat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = chisq_obs ~ ld_score)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-907.6 -318.0  -97.4  198.9 4064.4 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 486.5597    11.0465   44.05   &lt;2e-16 ***
+ld_score      3.4683     0.2255   15.38   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 452.4 on 4998 degrees of freedom
+Multiple R-squared:  0.04519,   Adjusted R-squared:  0.045 
+F-statistic: 236.6 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Estimated h2: 0.347 
+Estimated intercept (stratification proxy): 486.56 </code></pre>
+</div>
 </div>
 <p>The point of this simulation isn’t the exact numbers — it’s the mechanic: <strong>regress <span class="math inline">\(\chi^2\)</span> statistics on LD scores, and the slope (rescaled by <span class="math inline">\(M/N\)</span>) is your heritability estimate.</strong></p>
 </section>
@@ -721,7 +774,7 @@ Traceback:</code></pre>
 </section>
 <section id="a-simulated-illustration-2" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="a-simulated-illustration-2"><span class="header-section-number">7.5</span> A Simulated Illustration</h2>
-<div id="5f19c6eb" class="cell">
+<div id="5f19c6eb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T19:08:06.114574Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T19:08:06.112867Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T19:08:06.177065Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T19:08:06.175026Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Illustrative cross-trait LDSC simulation</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>M  <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
@@ -742,6 +795,29 @@ Traceback:</code></pre>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>rho_g_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(cross_ldsc_fit)[[<span class="st">"ld_score"</span>]] <span class="sc">*</span> M <span class="sc">/</span> <span class="fu">sqrt</span>(N1 <span class="sc">*</span> N2)</span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimated genetic covariance:"</span>, <span class="fu">round</span>(rho_g_hat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = z1z2_obs ~ ld_score)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.4236 -1.3460 -0.0022  1.3030  6.7866 
+
+Coefficients:
+            Estimate Std. Error  t value Pr(&gt;|t|)    
+(Intercept) 0.052421   0.049026    1.069    0.285    
+ld_score    2.398684   0.001003 2391.175   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.984 on 4998 degrees of freedom
+Multiple R-squared:  0.9991,    Adjusted R-squared:  0.9991 
+F-statistic: 5.718e+06 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Estimated genetic covariance: 0.3 </code></pre>
+</div>
 </div>
 <p>Exactly as with single-trait LDSC, the mechanic is what matters: <strong>regress the product of Z-scores across two traits on LD score, and the slope gives genetic covariance.</strong></p>
 <blockquote class="blockquote">

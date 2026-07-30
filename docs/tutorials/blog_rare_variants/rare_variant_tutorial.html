@@ -6,6 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-06-20">
+<meta name="description" content="Why single-variant GWAS fails for rare variants, and how burden, SKAT, SKAT-O, and the saddlepoint approximation solve it – every statistic derived by hand and checked against simulation.">
 
 <title>Genetic Association Testing for Rare Variants – Nivedita Bhadra</title>
 <style>
@@ -210,13 +213,36 @@ window.Quarto = {
 <div class="quarto-title">
 <h1 class="title">Genetic Association Testing for Rare Variants</h1>
 <p class="subtitle lead">Building burden, SKAT, and SKAT-O tests from scratch in R</p>
-</div>
+  <div class="quarto-categories">
+    <div class="quarto-category">Statistical Genetics</div>
+    <div class="quarto-category">Rare Variants</div>
+    <div class="quarto-category">SKAT</div>
+    <div class="quarto-category">R</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Why single-variant GWAS fails for rare variants, and how burden, SKAT, SKAT-O, and the saddlepoint approximation solve it – every statistic derived by hand and checked against simulation.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 20, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -226,6 +252,15 @@ window.Quarto = {
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/rare-variant-tests.svg" alt="A 12-variant gene track, colored by true effect direction, branching into a burden test that cancels the mixed effects out (p = 0.46) and a SKAT test that recovers the signal (p = 0.011)" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The tutorial’s central result in one picture: the same 12-variant gene, with the same causal architecture, gives two completely different answers depending on whether the test sums effects (burden) or sums their squares (SKAT).</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">SKAT</span> <span class="tag">Burden Test</span> <span class="tag">Rare Variants</span> <span class="tag">R</span></p>
+</div>
 <p>Rare variants are, by definition, seen in only a handful of people. That single fact breaks almost every assumption a standard GWAS relies on, and it forces a completely different statistical toolkit.</p>
 <p>This tutorial builds that toolkit from the ground up. We start with why single-variant testing fails, work through burden tests and SKAT by deriving their score statistics by hand, and finish with the saddlepoint approximation that makes rare-variant testing usable at biobank scale. Every statistic below is implemented in base R and checked against either a built-in R function or a Monte Carlo simulation.</p>
 <section id="why-single-variant-tests-fail-for-rare-variants" class="level1" data-number="1">
@@ -241,7 +276,7 @@ window.Quarto = {
 <p><span class="math display">\[
 P(\text{at least one copy}) = 1 - (1-p)^{2N} &gt; 0.999 \quad\Longrightarrow\quad N &gt; \frac{\log(0.001)}{2\log(1-p)}
 \]</span></p>
-<div id="94e57a14" class="cell" data-execution_count="1">
+<div id="94e57a14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:30.272059Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:30.262033Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:30.388837Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:30.382518Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample size needed to observe &gt;= 1 copy of a variant with 99.9% probability</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>, <span class="fl">0.0001</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>required_n <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fl">0.001</span>) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> maf))</span>
@@ -289,7 +324,7 @@ P(\text{at least one copy}) = 1 - (1-p)^{2N} &gt; 0.999 \quad\Longrightarrow\qua
 <p><strong>If no single variant has enough carriers, what do we test instead?</strong> We stop asking about one variant and start asking about a gene. Define a carrier as anyone with at least one rare variant in the region, and test whether carriers and non-carriers differ in disease risk.</p>
 </blockquote>
 <p>This converts a sparse, high-dimensional problem (many rare variants, few carriers each) into a simple 2x2 question: <strong>are carriers more likely to be cases than non-carriers?</strong></p>
-<div id="f318aeb9" class="cell" data-execution_count="2">
+<div id="f318aeb9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:30.487052Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:30.398354Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:30.573211Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:30.567904Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A toy burden contingency table: carriers of a rare-variant burden vs disease status</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>burden_table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">15</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">Status =</span> <span class="fu">c</span>(<span class="st">"Case"</span>, <span class="st">"Control"</span>),</span>
@@ -351,7 +386,7 @@ odds ratio
 P = \frac{\binom{a+b}{a}\binom{c+d}{c}}{\binom{n}{a+c}}
 \]</span></p>
 <p>The two-sided p-value sums this probability over every table with the same margins that is <strong>at least as unlikely</strong> as the one observed — not just the fraction for the observed table alone.</p>
-<div id="2eab5ccc" class="cell" data-execution_count="3">
+<div id="2eab5ccc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:30.585603Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:30.583962Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:30.621924Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:30.620115Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify the hypergeometric formula by hand against R's Fisher test</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">14</span>; b <span class="ot">&lt;-</span> <span class="dv">6</span>; c <span class="ot">&lt;-</span> <span class="dv">5</span>; d <span class="ot">&lt;-</span> <span class="dv">15</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>row1 <span class="ot">&lt;-</span> a <span class="sc">+</span> b; row2 <span class="ot">&lt;-</span> c <span class="sc">+</span> d</span>
@@ -398,7 +433,7 @@ Y = X\alpha + G_1\beta_1 + G_2\beta_2 + \dots + G_q\beta_q + \varepsilon, \qquad
 <section id="simulating-a-rare-variant-test-gene" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Simulating a Rare-Variant Test Gene</h1>
 <p>To make the rest of this tutorial concrete, we simulate a 12-variant gene in 4,000 individuals: four variants that increase disease risk, two that are protective, and six with no effect at all. This bidirectional architecture — some variants increase risk, others decrease it — is deliberately chosen, because it’s the setting where burden and variance-component tests are expected to behave differently.</p>
-<div id="fbc47627" class="cell" data-execution_count="4">
+<div id="fbc47627" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:30.626512Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:30.624873Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:30.678684Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:30.676727Z&quot;}}" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">4000</span>                      <span class="co"># sample size</span></span>
@@ -435,7 +470,7 @@ MAFs: 0.0071 0.0058 0.0018 0.0032 0.0058 7e-04 0.0049 0.0087 0.0029 0.006 6e-04 
 </div>
 <p>A roughly 1:9 case-to-control ratio, which is typical of a moderately prevalent disease in a biobank cohort. This imbalance will matter a great deal later on.</p>
 <p>With the gene simulated, we can now compute the Wu weight for each variant from its true MAF.</p>
-<div id="73d20b9b" class="cell" data-execution_count="5">
+<div id="73d20b9b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:30.683134Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:30.681512Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:30.709686Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:30.708048Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -565,7 +600,7 @@ Q_B = U(0)^2 = \left[\sum_i (y_i-\hat\pi_i)\sum_j w_j g_{i,j}\right]^2
 <section id="testing-the-burden-model-in-r" class="level1" data-number="8">
 <h1 data-number="8"><span class="header-section-number">8</span> Testing the Burden Model in R</h1>
 <p>We fit the null model once (covariates only), compute residuals, and turn the derivation above directly into code.</p>
-<div id="a92644d8" class="cell" data-execution_count="6">
+<div id="a92644d8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:30.714637Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:30.712908Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:30.914666Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:30.912520Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> sim<span class="sc">$</span>G; X <span class="ot">&lt;-</span> sim<span class="sc">$</span>X; y <span class="ot">&lt;-</span> sim<span class="sc">$</span>y; maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
@@ -608,7 +643,7 @@ Burden score p-value   : 0.4608
 Wald test p-value (glm): 0.4362 </code></pre>
 </div>
 </div>
-<p>Two things stand out. First, the score and Wald p-values are close (0.46 and 0.72 land in the same non-significant territory), exactly the asymptotic equivalence discussed above. Second, and more importantly: <strong>the burden test completely misses this gene</strong>, despite it having six genuinely causal variants.</p>
+<p>Two things stand out. First, the score and Wald p-values are close (0.46 and 0.44 land in the same non-significant territory), exactly the asymptotic equivalence discussed above. Second, and more importantly: <strong>the burden test completely misses this gene</strong>, despite it having six genuinely causal variants.</p>
 <p>That’s not a bug in the implementation. It’s the burden test doing exactly what it’s designed to do, in a setting it’s poorly suited for.</p>
 </section>
 <section id="when-burden-tests-fail-the-variance-component-alternative" class="level1" data-number="9">
@@ -630,7 +665,7 @@ Q_S = \sum_j w_j^2 S_j^2 = \sum_j w_j^2\left[\sum_i g_{i,j}(y_i-\hat\pi_i)\right
 <section id="implementing-skat-from-scratch" class="level1" data-number="10">
 <h1 data-number="10"><span class="header-section-number">10</span> Implementing SKAT From Scratch</h1>
 <p><span class="math inline">\(Q_S\)</span> is a quadratic form in the vector of per-variant score statistics, and under the null it follows a <strong>mixture of weighted <span class="math inline">\(\chi^2_1\)</span> distributions</strong> rather than a single chi-squared distribution — one weight per eigenvalue of the statistic’s covariance kernel. We build that kernel directly, residualizing the genotype matrix on the covariates first, then get a p-value using the four-moment chi-squared approximation of Liu, Tang &amp; Zhang (2009).</p>
-<div id="eb670c8a" class="cell" data-execution_count="7">
+<div id="eb670c8a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:30.920207Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:30.918198Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:32.118477Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:32.116546Z&quot;}}" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> sim<span class="sc">$</span>G; X <span class="ot">&lt;-</span> sim<span class="sc">$</span>X; y <span class="ot">&lt;-</span> sim<span class="sc">$</span>y; maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
@@ -695,7 +730,7 @@ SKAT p-value (Liu et al. 2009 approximation): 0.01069 </code></pre>
 </div>
 <p>SKAT recovers the association (p = 0.011) that the burden test missed entirely (p = 0.46), on the exact same data. This is the textbook case for variance-component tests: causal variants with mixed effect directions.</p>
 <p>It’s worth checking this analytic p-value against a direct simulation, since the moment-matching approximation is, after all, an approximation.</p>
-<div id="b5ad44d4" class="cell" data-execution_count="8">
+<div id="b5ad44d4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:32.123288Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:32.121615Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:38.417234Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:38.415171Z&quot;}}" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> sim<span class="sc">$</span>G; X <span class="ot">&lt;-</span> sim<span class="sc">$</span>X; y <span class="ot">&lt;-</span> sim<span class="sc">$</span>y; maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
@@ -735,7 +770,7 @@ SKAT p-value (Liu et al. 2009 approximation): 0.01069 </code></pre>
 Q_{\text{SKAT-O}} = (1-\rho)Q_S + \rho Q_B, \qquad 0 \le \rho \le 1
 \]</span></p>
 <p>and searching over a grid of <span class="math inline">\(\rho\)</span> values, with a correction for having tested several of them. <span class="math inline">\(\rho=0\)</span> recovers pure SKAT; <span class="math inline">\(\rho=1\)</span> recovers the pure burden test.</p>
-<div id="f94c43bd" class="cell" data-execution_count="9">
+<div id="f94c43bd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:38.422082Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:38.420519Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:38.773796Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:38.771965Z&quot;}}" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> sim<span class="sc">$</span>G; X <span class="ot">&lt;-</span> sim<span class="sc">$</span>X; y <span class="ot">&lt;-</span> sim<span class="sc">$</span>y; maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
@@ -850,7 +885,7 @@ Minimum p-value across rho grid: 0.01069 at rho = 0
 <h1 data-number="13"><span class="header-section-number">13</span> The Hidden Problem at Biobank Scale: Case-Control Imbalance</h1>
 <p>Everything above relies on the Central Limit Theorem: the null distribution of a score statistic is assumed to converge to a symmetric Normal. That assumption quietly depends on having enough carriers <em>and</em> a reasonably balanced number of cases and controls. Biobank-scale binary traits routinely have neither.</p>
 <p>We can see this directly by simulating the null distribution of a single-variant score statistic under three regimes.</p>
-<div id="0d081324" class="cell" data-execution_count="10">
+<div id="0d081324" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:38.778707Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:38.777205Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:13:59.803315Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:13:59.801508Z&quot;}}" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -897,7 +932,7 @@ Rare variant, imbalanced     skewness =  1.292   empirical tail P(Z&gt;3) = 0.02
 </blockquote>
 <p>The CGF is the log of the moment generating function, <span class="math inline">\(K(t) = \log \mathbb{E}[e^{tX}]\)</span>. Its derivatives at <span class="math inline">\(t=0\)</span> recover the ordinary moments (variance, skewness, kurtosis), but its real advantage is computational: because our score statistic is a sum of independent per-individual contributions, <span class="math inline">\(K(t)\)</span> for the total is just the <strong>sum</strong> of each individual’s CGF, whereas the moment generating functions would need to be <strong>multiplied</strong> — a much less numerically stable operation once you’re summing thousands of terms.</p>
 <p>The saddlepoint approximation (SPA) uses the full CGF to re-center the approximation exactly at the observed test statistic, rather than at the mean. It solves for a ‘tilting’ parameter <span class="math inline">\(\hat t\)</span> satisfying <span class="math inline">\(K'(\hat t) = q_{\text{obs}}\)</span>, then uses the curvature of <span class="math inline">\(K\)</span> at that point to get an accurate tail probability — the Lugannani-Rice formula. This is the method behind SAIGE-GENE+’s improved type-I error control at rare, imbalanced traits.</p>
-<div id="5e706971" class="cell" data-execution_count="11">
+<div id="5e706971" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:13:59.809252Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:13:59.807685Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:18:05.072494Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:18:05.070712Z&quot;}}" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fl">0.005</span></span>

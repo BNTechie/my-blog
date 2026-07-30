@@ -8,6 +8,7 @@
 
 <meta name="author" content="Nivedita Bhadra">
 <meta name="dcterms.date" content="2026-06-22">
+<meta name="description" content="Why MZ and DZ twins let us split trait variance into genetic and environmental pieces – from Falconer’s back-of-envelope formula to a fitted ACE model to SNP-based heritability in unrelated people.">
 
 <title>Twins, Variance, and the Logic of Heritability – Nivedita Bhadra</title>
 <style>
@@ -220,6 +221,11 @@ window.Quarto = {
   </div>
   </div>
 
+<div>
+  <div class="description">
+    Why MZ and DZ twins let us split trait variance into genetic and environmental pieces – from Falconer’s back-of-envelope formula to a fitted ACE model to SNP-based heritability in unrelated people.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -246,6 +252,15 @@ window.Quarto = {
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/ace-twin-model.svg" alt="Path diagram of the ACE twin model: latent factors A (genetic), C (shared environment), and E (unique environment) connecting to Twin 1 and Twin 2, with A shared 100% in MZ twins and 50% in DZ twins" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The one fact this whole tutorial runs on: MZ and DZ twins share C and E equally, but differ in exactly how much of A they share – which is enough, on its own, to separate genetic from environmental variance.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">Heritability</span> <span class="tag">ACE Model</span> <span class="tag">Twin Studies</span> <span class="tag">R</span></p>
+</div>
 <p>Why do some siblings look and behave almost identically, while others in the same family seem to have little in common?</p>
 <p>Height, cognitive ability, disease risk — nearly every measurable human trait varies from person to person.</p>
 <blockquote class="blockquote">
@@ -292,7 +307,7 @@ E   =  unique environment               (everything that differs within a pair,
 <p>Subtracting the two correlation equations gives a strikingly simple estimator, due to Falconer (1960):</p>
 <p><span class="math display">\[\hat{A} = 2(r_{MZ} - r_{DZ})\]</span> <span class="math display">\[\hat{C} = r_{MZ} - \hat{A}\]</span> <span class="math display">\[\hat{E} = 1 - r_{MZ}\]</span></p>
 <p>No model-fitting software required — just two correlations and arithmetic. Let’s simulate twin data with known true variance components and check whether this recovers them.</p>
-<div id="5ae96590" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-22T11:07:22.545107Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-22T11:07:22.530926Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-22T11:07:22.918282Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-22T11:07:22.910891Z&quot;}}" data-execution_count="1">
+<div id="5ae96590" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:36:05.190800Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:36:05.179472Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:36:05.406893Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:36:05.400705Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>simulate_twins <span class="ot">&lt;-</span> <span class="cf">function</span>(n, a, c, e, shared_genetic_fraction) {</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># a, c, e are given as SDs; shared_genetic_fraction = 1 for MZ, 0.5 for DZ</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  A_shared  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, a)</span>
@@ -326,7 +341,7 @@ E   =  unique environment               (everything that differs within a pair,
 DZ correlation: 0.439</code></pre>
 </div>
 </div>
-<div id="916d9eb6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-22T11:07:23.029755Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-22T11:07:22.929141Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-22T11:07:23.065742Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-22T11:07:23.063495Z&quot;}}" data-execution_count="2">
+<div id="916d9eb6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:36:05.510203Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:36:05.419662Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:36:05.541020Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:36:05.539254Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>h2_falconer <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (r_mz <span class="sc">-</span> r_dz)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>c2_falconer <span class="ot">&lt;-</span> r_mz <span class="sc">-</span> h2_falconer</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>e2_falconer <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> r_mz</span>
@@ -380,7 +395,7 @@ DZ correlation: 0.439</code></pre>
 <p><span class="math display">\[\Sigma_{MZ} = \begin{pmatrix} 1 &amp; A + C \\ A + C &amp; 1 \end{pmatrix}, \qquad
 \Sigma_{DZ} = \begin{pmatrix} 1 &amp; \tfrac{1}{2}A + C \\ \tfrac{1}{2}A + C &amp; 1 \end{pmatrix}\]</span></p>
 <p>Fitting these by likelihood, rather than reading them off two correlations, buys three things at once: standard errors on <span class="math inline">\(A\)</span>, <span class="math inline">\(C\)</span>, and <span class="math inline">\(E\)</span>; the ability to constrain <span class="math inline">\(C=0\)</span> or <span class="math inline">\(A=0\)</span> and formally test whether that constrained model fits significantly worse; and a natural way to add covariates or handle missing data. This is exactly what dedicated twin-modeling software like OpenMx does under the hood — the version below implements the same likelihood directly, so the mechanics stay visible.</p>
-<div id="8cd875e1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-22T11:07:23.070955Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-22T11:07:23.069410Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-22T11:07:23.084185Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-22T11:07:23.082143Z&quot;}}" data-execution_count="3">
+<div id="8cd875e1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:36:05.545294Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:36:05.544310Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:36:05.556231Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:36:05.554566Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bivariate normal log-likelihood for a set of twin pairs, given a 2x2 covariance matrix (mean 0)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>biv_normal_loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(dat, Sigma) {</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dat)</span>
@@ -407,7 +422,7 @@ DZ correlation: 0.439</code></pre>
 <section id="fitting-ace-ae-and-ce" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="fitting-ace-ae-and-ce"><span class="header-section-number">5.1</span> Fitting ACE, AE, and CE</h3>
 <p>Three models, nested inside each other: the full ACE model, and two restricted versions that force one component to zero.</p>
-<div id="3d7f649b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-22T11:07:23.088792Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-22T11:07:23.087382Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-22T11:07:23.313230Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-22T11:07:23.311079Z&quot;}}" data-execution_count="4">
+<div id="3d7f649b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:36:05.560341Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:36:05.559080Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:36:05.737490Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:36:05.735538Z&quot;}}" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fit_ACE <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  opt <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), neg_ll_ACE, <span class="at">method =</span> <span class="st">"Nelder-Mead"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  a2 <span class="ot">&lt;-</span> <span class="fu">plogis</span>(opt<span class="sc">$</span>par[<span class="dv">1</span>]); c2 <span class="ot">&lt;-</span> <span class="fu">plogis</span>(opt<span class="sc">$</span>par[<span class="dv">2</span>]) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> a2); e2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> a2 <span class="sc">-</span> c2</span>
@@ -488,7 +503,7 @@ DZ correlation: 0.439</code></pre>
 <section id="is-the-extra-complexity-of-ace-actually-justified" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="is-the-extra-complexity-of-ace-actually-justified"><span class="header-section-number">5.2</span> Is the Extra Complexity of ACE Actually Justified?</h3>
 <p>A likelihood ratio test answers this directly: is the improvement in fit from adding <span class="math inline">\(C\)</span> back in bigger than you’d expect from noise alone?</p>
-<div id="84e38a67" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-22T11:07:23.318297Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-22T11:07:23.316701Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-22T11:07:23.343601Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-22T11:07:23.341773Z&quot;}}" data-execution_count="5">
+<div id="84e38a67" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:36:05.742148Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:36:05.740346Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:36:05.764616Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:36:05.762810Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lrt_stat <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> ae<span class="sc">$</span>negLL <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> ace<span class="sc">$</span>negLL</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lrt_df   <span class="ot">&lt;-</span> ace<span class="sc">$</span>df <span class="sc">-</span> ae<span class="sc">$</span>df</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>lrt_p    <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(lrt_stat, lrt_df)</span>
@@ -524,7 +539,7 @@ AIC by model (lower is better):
 <p>Pairs of people who are more genetically similar should also be more phenotypically similar — in direct proportion to how related they are.</p>
 </blockquote>
 <p>Regressing pairwise phenotypic similarity on GRM values, the slope of that line is an estimate of SNP heritability. This is the logic that underlies GREML and GCTA (Yang et al.&nbsp;2010) applied at genome-wide scale — the toy version below applies it to a small simulated cohort of <em>unrelated</em> individuals.</p>
-<div id="12aef535" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-22T11:07:23.348500Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-22T11:07:23.346667Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-22T11:07:23.884835Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-22T11:07:23.882147Z&quot;}}" data-execution_count="6">
+<div id="12aef535" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:36:05.768650Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:36:05.767210Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:36:06.195246Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:36:06.193849Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>n_ind <span class="ot">&lt;-</span> <span class="dv">300</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>n_snps <span class="ot">&lt;-</span> <span class="dv">2000</span></span>

@@ -8,6 +8,7 @@
 
 <meta name="author" content="Nivedita Bhadra">
 <meta name="dcterms.date" content="2026-06-09">
+<meta name="description" content="How thousands of tiny GWAS effects become one number per person – clumping-and-thresholding, SBayesR, and SBayesRC, evaluated and stratified into risk groups.">
 
 <title>Polygenic Risk Scores (PRS): From GWAS to Genetic Prediction – Nivedita Bhadra</title>
 <style>
@@ -216,6 +217,11 @@ window.Quarto = {
   </div>
   </div>
 
+<div>
+  <div class="description">
+    How thousands of tiny GWAS effects become one number per person – clumping-and-thresholding, SBayesR, and SBayesRC, evaluated and stratified into risk groups.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -242,6 +248,15 @@ window.Quarto = {
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/prs-pipeline.svg" alt="Pipeline diagram showing GWAS summary statistics flowing through a PRS method (C+PT, SBayesR, or SBayesRC) into an individual polygenic risk score, visualized as a distribution split into low, average, and high risk groups" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The whole tutorial in one picture: millions of small GWAS effects, combined by a PRS method, collapse into a single number per person – which is only useful once you can place that person in a risk distribution.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">GWAS</span> <span class="tag">PRS</span> <span class="tag">SBayesRC</span> <span class="tag">PLINK</span></p>
+</div>
 <section id="why-polygenic-risk-scores" class="level2" data-number="0.1">
 <h2 data-number="0.1" class="anchored" data-anchor-id="why-polygenic-risk-scores"><span class="header-section-number">0.1</span> Why Polygenic Risk Scores?</h2>
 <p>Mendelian diseases (Huntington’s, cystic fibrosis, sickle cell anemia) are driven by mutations in a single gene. Most common diseases aren’t — height, BMI, coronary artery disease, schizophrenia, and depression are each influenced by thousands of variants, each with a tiny individual effect (<strong>polygenicity</strong>). No single SNP is informative enough to predict risk on its own, which raises the question: how do we combine thousands of tiny genetic effects into a useful predictor? A <strong>Polygenic Risk Score (PRS)</strong> — also called a Polygenic Score (PGS) — is the answer: a weighted sum of genetic variants across the genome, condensing an individual’s inherited predisposition into a single number.</p>
@@ -278,18 +293,16 @@ window.Quarto = {
 <p><span class="math display">\[\text{Null: Phenotype} \sim \text{Age} + \text{Sex} + \text{PCs}\]</span> <span class="math display">\[\text{Full: Phenotype} \sim \text{Age} + \text{Sex} + \text{PCs} + \text{PRS}\]</span></p>
 <p><span class="math display">\[\text{Incremental } R^2 = R^2_{\text{Full}} - R^2_{\text{Null}}\]</span></p>
 <p>This isolates the variance explained specifically by genetics, over and above known covariates.</p>
-<div id="befef82d" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>from sklearn.linear_model import LinearRegression</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>from sklearn.metrics import r2_score</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> r2_score</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">null_model.fit</span>(X_cov, y)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>r2_null <span class="ot">=</span> <span class="fu">r2_score</span>(y, <span class="fu">null_model.predict</span>(X_cov))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>null_model.fit(X_cov, y)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>r2_null <span class="op">=</span> r2_score(y, null_model.predict(X_cov))</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">full_model.fit</span>(X_full, y)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>r2_full <span class="ot">=</span> <span class="fu">r2_score</span>(y, <span class="fu">full_model.predict</span>(X_full))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>full_model.fit(X_full, y)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>r2_full <span class="op">=</span> r2_score(y, full_model.predict(X_full))</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>incremental_r2 <span class="ot">=</span> r2_full <span class="sc">-</span> r2_null</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>incremental_r2 <span class="op">=</span> r2_full <span class="op">-</span> r2_null</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="disease-traits-auc-pseudo-r²-liability-scale-r²" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="disease-traits-auc-pseudo-r²-liability-scale-r²"><span class="header-section-number">1.2</span> Disease Traits: AUC, Pseudo-R², Liability-Scale R²</h2>
@@ -328,10 +341,8 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<div id="10dc86ad" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>from sklearn.metrics import roc_auc_score</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>auc <span class="ot">=</span> <span class="fu">roc_auc_score</span>(y_true, prs_scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>auc <span class="op">=</span> roc_auc_score(y_true, prs_scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Real-world AUCs vary widely by trait and method: basic clumping-and-thresholding PRS for coronary artery disease or type 2 diabetes often land around 0.57–0.60, while well-optimized, large-biobank PRS have reported AUCs as high as 0.79–0.81 for coronary artery disease. There’s no single “typical” number — it depends heavily on trait architecture, discovery sample size, and how the PRS was built.</p>
 <ul>
 <li><strong>Liability-scale R²</strong> — case/control samples are usually enriched for cases relative to the true population prevalence, so raw R² on the observed scale can be misleading. The liability threshold model treats disease as arising once an underlying continuous liability (genetics + environment + noise) crosses a threshold; liability-scale R² estimates the proportion of that underlying liability explained by the PRS. This metric is especially common in psychiatric genetics.</li>
@@ -453,12 +464,10 @@ window.Quarto = {
 <h2 data-number="2.3" class="anchored" data-anchor-id="scoring-and-practical-use"><span class="header-section-number">2.3</span> Scoring and Practical Use</h2>
 <p>The final score uses the same formula as before, restricted to the selected SNP set:</p>
 <p><span class="math display">\[\text{PRS}_i = \sum_{j=1}^{m} \hat\beta_j\, x_{ij}\]</span></p>
-<div id="8fa28d05" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plink \</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>bfile target_data \</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>score selected_snps.txt <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> \</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>out prs_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">plink</span> <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--bfile</span> target_data <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--score</span> selected_snps.txt 1 2 3 <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--out</span> prs_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>(Column 1 = SNP ID, column 2 = effect allele, column 3 = effect size — PLINK multiplies genotype counts by effects and sums.)</p>
 </section>
 <section id="strengths-and-limitations" class="level2" data-number="2.4">
@@ -554,9 +563,7 @@ window.Quarto = {
 <h2 data-number="4.3" class="anchored" data-anchor-id="why-mcmc-is-needed"><span class="header-section-number">4.3</span> Why MCMC Is Needed</h2>
 <p>Bayesian posteriors for a million SNPs at once have no closed-form solution — the parameter space is far too high-dimensional to compute directly. <strong>Markov Chain Monte Carlo (MCMC)</strong> solves this by <em>sampling</em> from the posterior instead of solving it analytically. It combines two ideas: a <strong>Markov chain</strong> (each new state depends only on the current state, not the full history) and <strong>Monte Carlo</strong> sampling (random draws used to approximate otherwise intractable quantities, in the spirit of estimating <span class="math inline">\(\pi\)</span> by randomly throwing darts at a circle inscribed in a square). Over many iterations, MCMC spends more time in high-posterior-probability regions and less in low-probability ones, and the accumulated samples reconstruct the posterior distribution.</p>
 <p><strong>Gibbs sampling</strong> is the standard MCMC algorithm here: rather than updating SNP effects (<span class="math inline">\(\beta\)</span>), genetic variance (<span class="math inline">\(\sigma_\beta^2\)</span>), residual variance (<span class="math inline">\(\sigma_e^2\)</span>), and the inclusion probability (<span class="math inline">\(\pi\)</span>) all simultaneously, it updates them one at a time, cycling through thousands of iterations:</p>
-<div id="690a4a8c" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Update β → Update σ²β → Update σ²e → Update π → <span class="cf">repeat</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<pre class="text"><code>Update β → Update σ²β → Update σ²e → Update π → repeat</code></pre>
 <p><strong>Burn-in.</strong> Early samples reflect arbitrary starting values rather than the true posterior, so they’re discarded — e.g.&nbsp;of 50,000 total iterations, the first 10,000 might be burn-in, leaving 40,000 retained samples for inference.</p>
 <p><strong>Convergence diagnostics.</strong> A <strong>trace plot</strong> (parameter value vs.&nbsp;iteration) that fluctuates stably around a constant mean suggests convergence; a plot with a clear upward/downward trend suggests the chain hasn’t stabilized yet.</p>
 <p><strong>Extracting estimates.</strong> After convergence, the posterior mean <span class="math inline">\(\bar\beta = \frac{1}{N}\sum_i \beta^{(i)}\)</span> becomes the final SNP effect estimate, and posterior variance quantifies uncertainty (large variance = low confidence). A SNP’s <strong>Posterior Inclusion Probability (PIP)</strong> is simply the fraction of retained iterations in which it was included — e.g.&nbsp;included in 45,000 of 50,000 samples gives PIP = 0.90.</p>
@@ -622,13 +629,11 @@ window.Quarto = {
 </section>
 <section id="running-sbayesr" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="running-sbayesr"><span class="header-section-number">5.5</span> Running SBayesR</h2>
-<div id="ee67f7bd" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gctb \</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>sbayes R \</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>ldm ukbEURu_hm3_sparse \</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>gwas<span class="sc">-</span>summary trait.ma \</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>out trait_sbayesr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gctb</span> <span class="dt">\</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--sbayes</span> R <span class="dt">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--ldm</span> ukbEURu_hm3_sparse <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--gwas-summary</span> trait.ma <span class="dt">\</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--out</span> trait_sbayesr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Internally, GCTB reads the summary statistics, loads the LD matrix, runs MCMC (updating SNP effects, mixture-component membership, genetic variance, and residual variance each iteration), and outputs posterior mean SNP effects to <code>trait_sbayesr.snpRes</code> and MCMC/parameter diagnostics to <code>trait_sbayesr.parRes</code>. These posterior effects are typically less noisy than raw GWAS effects, and are combined with target genotypes using PLINK’s <code>--score</code>, exactly as in earlier methods.</p>
 </section>
 <section id="strengths-and-limitations-1" class="level2" data-number="5.6">
@@ -729,14 +734,12 @@ window.Quarto = {
 </section>
 <section id="running-sbayesrc" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="running-sbayesrc"><span class="header-section-number">6.3</span> Running SBayesRC</h2>
-<div id="a21d5d9f" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>gctb \</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>sbayes RC \</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>ldm ukbEURu_hm3_sparse \</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>annot annotations.txt \</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>gwas<span class="sc">-</span>summary trait.ma \</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>out trait_sbayesrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gctb</span> <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--sbayes</span> RC <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--ldm</span> ukbEURu_hm3_sparse <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--annot</span> annotations.txt <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--gwas-summary</span> trait.ma <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--out</span> trait_sbayesrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The only new input compared with SBayesR is the annotation file. Large-scale implementations commonly draw on baselineLD-style annotation sets spanning coding regions, conservation, regulatory elements, histone modifications, and gene expression — often dozens to hundreds of categories. Typical outputs add <code>trait_sbayesrc.enrich</code>, summarizing annotation-specific heritability enrichment, alongside the usual <code>.snpRes</code> and <code>.parRes</code> files.</p>
 </section>
 <section id="advantages-and-limitations-1" class="level2" data-number="6.4">
@@ -791,78 +794,64 @@ window.Quarto = {
 <h2 data-number="7.1" class="anchored" data-anchor-id="required-datasets-and-files"><span class="header-section-number">7.1</span> Required Datasets and Files</h2>
 <p>Three datasets, as in Part 2: <strong>discovery</strong> (produces GWAS summary statistics), <strong>target</strong> (genotypes, phenotypes, covariates for evaluation), and an <strong>LD reference</strong> for methods that need it (SBayesR, SBayesRC, LDpred) — commonly UK Biobank, 1000 Genomes, or HapMap3.</p>
 <p>A typical project layout:</p>
-<div id="4c71f4ec" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>GWAS<span class="sc">/</span>         trait.ma</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Target<span class="sc">/</span>       target.bed, target.bim, target.fam</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Covariates<span class="sc">/</span>   covariates.txt</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>Phenotypes<span class="sc">/</span>   phenotype.txt</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>LD<span class="sc">/</span>           ukb_ldm<span class="sc">/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<pre class="text"><code>GWAS/         trait.ma
+Target/       target.bed, target.bim, target.fam
+Covariates/   covariates.txt
+Phenotypes/   phenotype.txt
+LD/           ukb_ldm/</code></pre>
 </section>
 <section id="step-1-qc-summary-statistics-and-target-genotypes" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="step-1-qc-summary-statistics-and-target-genotypes"><span class="header-section-number">7.2</span> Step 1 — QC Summary Statistics and Target Genotypes</h2>
 <p>Check for missing SNP IDs, duplicate variants, strand ambiguity, allele mismatches, and incorrect sample sizes in the summary statistics — poor-quality summary stats reliably wreck downstream prediction.</p>
-<div id="1179cad3" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plink \</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>bfile target \</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>geno <span class="fl">0.02</span> \</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>mind <span class="fl">0.02</span> \</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>maf <span class="fl">0.01</span> \</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>make<span class="sc">-</span>bed \</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>out target_QC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">plink</span> <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--bfile</span> target <span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--geno</span> 0.02 <span class="dt">\</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--mind</span> 0.02 <span class="dt">\</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--maf</span> 0.01 <span class="dt">\</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--make-bed</span> <span class="dt">\</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--out</span> target_QC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="step-2-cpt-via-prsice" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="step-2-cpt-via-prsice"><span class="header-section-number">7.3</span> Step 2 — C+PT via PRSice</h2>
 <p><a href="https://choishingwan.github.io/PRSice/">PRSice</a> implements clumping, thresholding, PRS construction, and evaluation in one tool:</p>
-<div id="039dbb65" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Rscript PRSice.R \</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>prsice PRSice_linux \</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>base trait.ma \</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>target target_QC \</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>pheno phenotype.txt \</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>cov covariates.txt \</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>stat BETA \</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>beta \</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>out PRS_output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> PRSice.R <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--prsice</span> PRSice_linux <span class="dt">\</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--base</span> trait.ma <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--target</span> target_QC <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--pheno</span> phenotype.txt <span class="dt">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--cov</span> covariates.txt <span class="dt">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> BETA <span class="dt">\</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">--beta</span> <span class="dt">\</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--out</span> PRS_output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>--base</code> is the GWAS summary file, <code>--target</code> the target genotypes, <code>--pheno</code>/<code>--cov</code> the phenotype and covariates for evaluation. Outputs include <code>PRS_output.best</code> (best p-value threshold), <code>PRS_output.summary</code> (incremental R², SNP counts), and <code>PRS_output.all_score</code> (scores at every threshold tested).</p>
 </section>
 <section id="step-3-sbayesr-and-sbayesrc-via-gctb" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="step-3-sbayesr-and-sbayesrc-via-gctb"><span class="header-section-number">7.4</span> Step 3 — SBayesR and SBayesRC via GCTB</h2>
 <p>GCTB needs an LD reference matrix in addition to summary statistics — pre-computed sparse LD matrices derived from UK Biobank reference panels (e.g.&nbsp;<code>ukbEURu_hm3_sparse</code>) are commonly used:</p>
-<div id="88247d37" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gctb \</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>sbayes R \</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>ldm ukbEURu_hm3_sparse \</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>gwas<span class="sc">-</span>summary trait.ma \</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>out trait_sbayesr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gctb</span> <span class="dt">\</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--sbayes</span> R <span class="dt">\</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--ldm</span> ukbEURu_hm3_sparse <span class="dt">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--gwas-summary</span> trait.ma <span class="dt">\</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--out</span> trait_sbayesr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For SBayesRC, add an annotation file and switch <code>--sbayes R</code> to <code>--sbayes RC</code>:</p>
-<div id="8a2a054a" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gctb \</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>sbayes RC \</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>ldm ukbEURu_hm3_sparse \</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>annot annotations.txt \</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>gwas<span class="sc">-</span>summary trait.ma \</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>out trait_sbayesrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gctb</span> <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--sbayes</span> RC <span class="dt">\</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--ldm</span> ukbEURu_hm3_sparse <span class="dt">\</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--annot</span> annotations.txt <span class="dt">\</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--gwas-summary</span> trait.ma <span class="dt">\</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--out</span> trait_sbayesrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Both produce a <code>.snpRes</code> file with posterior SNP effects, generally less noisy than raw GWAS betas.</p>
 </section>
 <section id="step-4-scoring-and-evaluation" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="step-4-scoring-and-evaluation"><span class="header-section-number">7.5</span> Step 4 — Scoring and Evaluation</h2>
-<div id="c8ac94fd" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plink \</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>bfile target_QC \</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>score score.txt <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> \</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>out target_PRS</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">plink</span> <span class="dt">\</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--bfile</span> target_QC <span class="dt">\</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--score</span> score.txt 1 2 3 <span class="dt">\</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--out</span> target_PRS</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>producing per-individual scores (<code>FID IID SCORE1_SUM</code>). Evaluate exactly as in Part 2 — compare a full model (<code>Phenotype ~ Sex + Age + PCs + PRS</code>) against a null model (<code>Phenotype ~ Sex + Age + PCs</code>) and take the incremental <span class="math inline">\(R^2\)</span>:</p>
-<div id="5dc9cf48" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">null_model.fit</span>(X_cov, y);  r2_null <span class="ot">=</span> <span class="fu">r2_score</span>(y, <span class="fu">null_model.predict</span>(X_cov))</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">full_model.fit</span>(X_full, y); r2_full <span class="ot">=</span> <span class="fu">r2_score</span>(y, <span class="fu">full_model.predict</span>(X_full))</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>incremental_r2 <span class="ot">=</span> r2_full <span class="sc">-</span> r2_null</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>null_model.fit(X_cov, y)<span class="op">;</span>  r2_null <span class="op">=</span> r2_score(y, null_model.predict(X_cov))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>full_model.fit(X_full, y)<span class="op">;</span> r2_full <span class="op">=</span> r2_score(y, full_model.predict(X_full))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>incremental_r2 <span class="op">=</span> r2_full <span class="op">-</span> r2_null</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then stratify by risk group (e.g.&nbsp;bottom 10% / middle 80% / top 10%) and compare disease prevalence across them.</p>
 <p><strong>Illustrative method comparison</strong> (values are trait-dependent, not universal constants):</p>
 <table class="caption-top table">

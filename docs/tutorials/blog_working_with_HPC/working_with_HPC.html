@@ -8,6 +8,7 @@
 
 <meta name="author" content="Nivedita Bhadra">
 <meta name="dcterms.date" content="2026-05-03">
+<meta name="description" content="A field guide to the assumptions that break when an ML script moves from an interactive laptop session to a non-interactive SLURM job – paths, environments, memory limits, and six real debugging examples.">
 
 <title>Why My Model Worked Locally but Failed on HPC – Nivedita Bhadra</title>
 <style>
@@ -112,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../style.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -172,29 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#local-machine-vs-hpc" id="toc-local-machine-vs-hpc" class="nav-link active" data-scroll-target="#local-machine-vs-hpc"><span class="header-section-number">1</span> Local Machine vs HPC</a></li>
-  <li><a href="#a-simple-local-training-script" id="toc-a-simple-local-training-script" class="nav-link" data-scroll-target="#a-simple-local-training-script"><span class="header-section-number">2</span> A Simple Local Training Script</a></li>
-  <li><a href="#problem-1-relative-paths-break" id="toc-problem-1-relative-paths-break" class="nav-link" data-scroll-target="#problem-1-relative-paths-break"><span class="header-section-number">3</span> Problem 1: Relative Paths Break</a></li>
-  <li><a href="#problem-2-output-directory-does-not-exist" id="toc-problem-2-output-directory-does-not-exist" class="nav-link" data-scroll-target="#problem-2-output-directory-does-not-exist"><span class="header-section-number">4</span> Problem 2: Output Directory Does Not Exist</a></li>
-  <li><a href="#problem-3-n_jobs-1-can-be-dangerous-on-hpc" id="toc-problem-3-n_jobs-1-can-be-dangerous-on-hpc" class="nav-link" data-scroll-target="#problem-3-n_jobs-1-can-be-dangerous-on-hpc"><span class="header-section-number">5</span> Problem 3: <code>n_jobs=-1</code> Can Be Dangerous on HPC</a></li>
-  <li><a href="#a-better-hpc-ready-python-script" id="toc-a-better-hpc-ready-python-script" class="nav-link" data-scroll-target="#a-better-hpc-ready-python-script"><span class="header-section-number">6</span> A Better HPC-Ready Python Script</a></li>
-  <li><a href="#a-basic-slurm-script" id="toc-a-basic-slurm-script" class="nav-link" data-scroll-target="#a-basic-slurm-script"><span class="header-section-number">7</span> A Basic SLURM Script</a></li>
-  <li><a href="#real-debugging-example-1-file-not-found" id="toc-real-debugging-example-1-file-not-found" class="nav-link" data-scroll-target="#real-debugging-example-1-file-not-found"><span class="header-section-number">8</span> Real Debugging Example 1: “File Not Found”</a></li>
-  <li><a href="#real-debugging-example-2-module-not-found" id="toc-real-debugging-example-2-module-not-found" class="nav-link" data-scroll-target="#real-debugging-example-2-module-not-found"><span class="header-section-number">9</span> Real Debugging Example 2: “Module Not Found”</a></li>
-  <li><a href="#real-debugging-example-3-job-was-killed-because-of-memory" id="toc-real-debugging-example-3-job-was-killed-because-of-memory" class="nav-link" data-scroll-target="#real-debugging-example-3-job-was-killed-because-of-memory"><span class="header-section-number">10</span> Real Debugging Example 3: Job Was Killed Because of Memory</a></li>
-  <li><a href="#real-debugging-example-4-job-times-out" id="toc-real-debugging-example-4-job-times-out" class="nav-link" data-scroll-target="#real-debugging-example-4-job-times-out"><span class="header-section-number">11</span> Real Debugging Example 4: Job Times Out</a></li>
-  <li><a href="#real-debugging-example-5-the-job-runs-but-output-is-missing" id="toc-real-debugging-example-5-the-job-runs-but-output-is-missing" class="nav-link" data-scroll-target="#real-debugging-example-5-the-job-runs-but-output-is-missing"><span class="header-section-number">12</span> Real Debugging Example 5: The Job Runs but Output Is Missing</a></li>
-  <li><a href="#real-debugging-example-6-parallel-jobs-overwrite-each-other" id="toc-real-debugging-example-6-parallel-jobs-overwrite-each-other" class="nav-link" data-scroll-target="#real-debugging-example-6-parallel-jobs-overwrite-each-other"><span class="header-section-number">13</span> Real Debugging Example 6: Parallel Jobs Overwrite Each Other</a></li>
-  <li><a href="#running-multiple-experiments-with-a-slurm-array" id="toc-running-multiple-experiments-with-a-slurm-array" class="nav-link" data-scroll-target="#running-multiple-experiments-with-a-slurm-array"><span class="header-section-number">14</span> Running Multiple Experiments with a SLURM Array</a></li>
-  <li><a href="#a-practical-debugging-checklist-before-submitting" id="toc-a-practical-debugging-checklist-before-submitting" class="nav-link" data-scroll-target="#a-practical-debugging-checklist-before-submitting"><span class="header-section-number">15</span> A Practical Debugging Checklist Before Submitting</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -204,9 +183,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p class="subtitle lead">A practical guide to debugging machine learning workflows when moving from local environments to HPC systems using SLURM</p>
   <div class="quarto-categories">
     <div class="quarto-category">Tutorial</div>
+    <div class="quarto-category">HPC</div>
+    <div class="quarto-category">SLURM</div>
+    <div class="quarto-category">Machine Learning</div>
+    <div class="quarto-category">Debugging</div>
   </div>
   </div>
 
+<div>
+  <div class="description">
+    A field guide to the assumptions that break when an ML script moves from an interactive laptop session to a non-interactive SLURM job – paths, environments, memory limits, and six real debugging examples.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -233,6 +221,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/local-vs-hpc.svg" alt="Comparison diagram: a local machine with an interactive terminal on the left, connected by an sbatch command to an HPC/SLURM cluster with scheduled jobs and fixed resources on the right" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The core shift this tutorial is about: on your laptop, you and the script share an environment. On HPC, the scheduler stands between you – and every assumption your script quietly relied on has to be made explicit.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">SLURM</span> <span class="tag">HPC</span> <span class="tag">Debugging</span> <span class="tag">Python</span></p>
+</div>
 <p>When we develop a machine learning model on a local machine, the workflow often feels simple. We open a notebook, load a dataset, train a model, inspect the output, and save the results. Everything is visible and interactive. If something breaks, we see the error immediately.</p>
 <p>But moving the same model to an HPC system is a different experience.</p>
 <p>On HPC, your code does not run in the same environment, does not always start from the same directory, may not have access to the same packages, and is controlled by a scheduler. The model that worked locally is now running as a job, often without direct interaction. This is where many hidden assumptions begin to break.</p>

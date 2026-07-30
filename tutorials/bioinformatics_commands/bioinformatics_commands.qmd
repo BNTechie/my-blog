@@ -1,8 +1,11 @@
 ---
 title: "Bioinformatics Terminal Command Cheat Sheet"
+subtitle: "Essential Linux, Vim, awk, and HPC commands for genomic data workflows"
+description: "A quick-reference guide to the terminal commands used most often when inspecting, filtering, and processing sequencing and variant data."
 
 author: "Nivedita Bhadra"
 date: 2025-07-10
+image: images/bioinformatics-commands.svg
 
 categories:
   - Bash
@@ -30,7 +33,21 @@ execute:
 ---
 
 
-Bioinformatics often involves working with large datasets, sequencing files, and command-line tools to process and analyze biological data efficiently. Mastering a few essential commands can significantly speed up routine tasks like inspecting FASTQ files, counting sequences, or handling compressed genomic data. These commands are widely used in daily bioinformatics workflows, especially on high-performance computing (HPC) systems or Linux environments. By learning them, you can automate repetitive tasks, quickly validate datasets, and prepare inputs for downstream analyses. This tutorial will cover some of the most common bioinformatics commands that every researcher or data scientist in life sciences should know. Whether you’re managing raw sequencing data or manipulating biological file formats, these basics will help streamline your bioinformatics work.
+::: {.thesis-hero-wrap}
+<img src="images/bioinformatics-commands.svg" alt="Diagram of a terminal running common bioinformatics commands, alongside badges for FASTQ, VCF, BAM, and HPC/SLURM workflows" class="thesis-hero-art"/>
+
+::: {.thesis-hero-caption}
+The core command families this cheat sheet covers: file inspection, pattern matching, column processing, and job management on an HPC cluster.
+:::
+:::
+
+Bioinformatics workflows almost always come down to the terminal: inspecting sequencing files, filtering variant calls, and shepherding jobs through an HPC queue. This cheat sheet collects the commands reached for most often across those tasks — from basic Linux navigation to `awk`/`grep` one-liners for VCF files and SLURM job management. Everything below is copy-paste ready.
+
+::: {.tag-row}
+[Linux/Unix Shell]{.tag} [awk]{.tag} [grep]{.tag} [SLURM/HPC]{.tag}
+:::
+
+---
 
 
 
@@ -38,15 +55,6 @@ Bioinformatics often involves working with large datasets, sequencing files, and
 ## Basic Linux Commands
 
 - `cd <path/to/dir>` – Change working directory  
-- `count=0
-for dir in sumstats_FG*/; do
-    if ! ls "$dir"/*.gz >/dev/null 2>&1; then
-        echo "No .gz file in: $dir"
-        ((count++))
-    fi
-done
-echo "Total folders without .gz files: $count"` - to find the number of folder with missing .gz files
-
 - `pwd` – Print working directory  
 - `ll` (alias for `ls -l`) – Show the contents of the current directory as a list  
 - `head -n X <filename>` – Print the first X lines of a file  
@@ -83,6 +91,20 @@ echo "Total folders without .gz files: $count"` - to find the number of folder w
 - `df -h` – Display disk space usage for all mounted file systems (human-readable format)  
 - `df -h /path/to/dir` – Show available disk space for a specific directory path  
 
+### One-Liner: Counting Folders Missing Compressed Files
+
+A common HPC hygiene check — scanning a batch of result folders (e.g. GWAS summary statistics) for any that are missing their expected `.gz` output:
+
+```bash
+count=0
+for dir in sumstats_FG*/; do
+    if ! ls "$dir"/*.gz >/dev/null 2>&1; then
+        echo "No .gz file in: $dir"
+        ((count++))
+    fi
+done
+echo "Total folders without .gz files: $count"
+```
 
 ## Basic Vim Commands
 
@@ -121,7 +143,7 @@ echo "Total folders without .gz files: $count"` - to find the number of folder w
 - `awk 'NR>1' <filename>` – Skip header (first row)  
 - `awk 'BEGIN{FS="\t"} {print $2,$3}' <filename>` – Tab-delimited input  
 
-# Working with `.vcf.gz` Files
+## Working with `.vcf.gz` Files
 
 - `zcat file.vcf.gz | head`  
   *Shows the top lines including headers and first few variants*
@@ -184,7 +206,7 @@ echo "Total folders without .gz files: $count"` - to find the number of folder w
 
 ## Common HPC command
 
--`srun --time=02:00:00 --mem=8G --cpus-per-task=2 --pty bash` - to start an interactive session in HPC
+- `srun --time=02:00:00 --mem=8G --cpus-per-task=2 --pty bash` – Start an interactive session on the HPC
 
 - `squeue` – View the job queue  
 - `squeue -u <user_id>` – View jobs from a specific user  
@@ -200,4 +222,14 @@ echo "Total folders without .gz files: $count"` - to find the number of folder w
 - `squeue -u <user_id> --states=PD` – Show only your pending jobs  
 - `squeue | grep PD | wc -l` – Count how many jobs are pending system-wide  
 - `squeue -u <user_id> | grep PD | wc -l` – Count how many of your jobs are pending  
+
+---
+
+## Next Steps
+
+These commands cover the majority of day-to-day file inspection and job management, but a few directions are worth exploring next: writing small `awk`/`bash` scripts to automate recurring QC checks, learning `sbatch` for submitting batch (non-interactive) HPC jobs, and using `tmux` or `screen` to keep long-running sessions alive after disconnecting.
+
+::: {.tag-row}
+[sbatch]{.tag} [tmux]{.tag} [Shell Scripting]{.tag} [QC Automation]{.tag}
+:::
 

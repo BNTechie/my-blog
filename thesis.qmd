@@ -1,0 +1,91 @@
+---
+title: "Doctoral Research"
+subtitle: "Aspects of Temporal Perturbation in Dynamical Systems"
+format:
+  html:
+    toc: false
+---
+
+::: {.thesis-hero-wrap}
+<svg class="thesis-hero-art" viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematic illustration of an inverted Kapitza pendulum with a vibrating pivot, and a phase-space orbit">
+  <ellipse cx="600" cy="170" rx="150" ry="70" fill="none" stroke="var(--line)" stroke-width="2"/>
+  <ellipse cx="600" cy="170" rx="110" ry="48" fill="none" stroke="var(--line)" stroke-width="2"/>
+  <ellipse cx="600" cy="170" rx="70" ry="26" fill="none" stroke="var(--line)" stroke-width="2"/>
+  <line x1="150" y1="60" x2="150" y2="30" stroke="var(--amber)" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="150,24 144,36 156,36" fill="var(--amber)"/>
+  <line x1="150" y1="90" x2="150" y2="120" stroke="var(--amber)" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="150,126 144,114 156,114" fill="var(--amber)"/>
+  <circle cx="150" cy="90" r="7" fill="var(--ink)"/>
+  <line x1="150" y1="90" x2="150" y2="200" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="150" cy="210" r="14" fill="var(--signal)"/>
+  <path d="M 60 270 C 100 230, 130 230, 150 210 C 170 230, 200 230, 240 270" fill="none" stroke="var(--signal)" stroke-width="2.5"/>
+  <path d="M 60 270 C 100 300, 200 300, 240 270" fill="none" stroke="var(--ink-soft)" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <circle class="orbit-dot" r="5" fill="var(--amber)">
+    <animateMotion dur="6s" repeatCount="indefinite" path="M 750,170 A 150 70 0 1 1 450,170 A 150 70 0 1 1 750,170" />
+  </circle>
+</svg>
+<p class="thesis-hero-caption">An inverted Kapitza pendulum, stabilized by a vibrating pivot — the thesis's opening model</p>
+:::
+
+## Overview
+
+My PhD, completed in January 2019 at the **Department of Physical Sciences, IISER Kolkata**, under **Prof. Soumitro Banerjee**, explored how time-dependent perturbations reshape the behavior of nonlinear dynamical systems — from a single mechanical pendulum to networks of coupled oscillators, superconducting junctions, and the evolution of the universe itself.
+
+The unifying question across the thesis: *when a system is periodically or randomly perturbed in time, does it settle into a new, stable state that wouldn't exist otherwise — and what governs that transition?*
+
+## What the Thesis Covered
+
+::: {.thesis-chapter}
+**Pendulum with a vibrating suspension point (Kapitza pendulum)**
+
+A vertically vibrating pivot can stabilize a pendulum in its *upside-down* position — normally the least stable configuration possible. I derived the effective potential governing this "dynamic stabilization," mapped how damping and coupling shift the basin of stability, and extended the analysis to interacting pairs of pendula.
+:::
+
+::: {.thesis-chapter}
+**Networks of coupled inverted pendula**
+
+Extending the single-pendulum result to many-body systems — 1D chains, 2D lattices, and fully-connected (all-to-all) networks — to see how network topology itself affects whether the stabilized state survives.
+:::
+
+::: {.thesis-chapter}
+**Hamiltonian Mean-Field model with time-varying coupling**
+
+In a system with long-range interactions, I showed that periodically modulating the coupling strength shifts the critical point of the system's phase transition — the shift depends predictably on the frequency and amplitude of the modulation.
+:::
+
+::: {.thesis-chapter}
+**Noise-induced transitions in a Josephson junction**
+
+Introduced a temporal (noisy) modulation into a Josephson junction with both fundamental and second-harmonic current-phase terms, showing that the normally-unstable ϕ = π state can become stabilized — with direct relevance to real superconducting circuit behavior.
+:::
+
+::: {.thesis-chapter}
+**Dynamical systems analysis in cosmology**
+
+Applied the same dynamical-systems toolkit (phase space, stability analysis) to phantom dark energy models under five different scalar-field potentials — results consistent with current cosmological observations.
+:::
+
+---
+
+## Mathematical Background
+
+::: {.tag-row}
+[Nonlinear Dynamical Systems]{.tag} [Bifurcation Theory]{.tag} [Linear Stability Analysis]{.tag} [Perturbation Theory]{.tag} [Statistical Mechanics of Long-Range Systems]{.tag} [Stochastic Processes]{.tag} [Coupled Oscillator / Network Theory]{.tag} [General Relativity & Cosmology (FRW Metric)]{.tag} [Condensed Matter Physics]{.tag}
+:::
+
+## Technical Skills Earned
+
+::: {.tag-row}
+[Numerical ODE Simulation]{.tag} [Molecular Dynamics Simulation]{.tag} [Stochastic Simulation]{.tag} [Bifurcation & Stability Mapping]{.tag} [Scientific Visualization]{.tag} [LaTeX]{.tag} [Independent Research & Publication]{.tag}
+:::
+
+## Publications from the Thesis
+
+1. **Noise induced transition in Josephson junction with second harmonic.** *Eur. Phys. J. B* (2018) 91: 13
+2. **Hamiltonian mean field model: effect of temporal perturbation in coupling matrix.** (with Soumen Patra) *Mod. Phys. Lett. B* 32, 1850147 (2018)
+3. **Dynamical systems analysis of phantom dark energy models.** (with Nandan Roy) *J. Cosmol. Astropart. Phys.* 2018, 06 (2018)
+4. **Dynamics of a system of coupled inverted pendula with vertical forcing.** [arXiv:1803.01643](https://arxiv.org/abs/1803.01643)
+
+---
+
+*This foundation in nonlinear dynamics, stochastic methods, and large-scale numerical simulation carries directly into my current work in statistical genetics and computational modeling — the mathematics of stability, perturbation, and noise turn out to matter just as much in a genome as in a pendulum.*

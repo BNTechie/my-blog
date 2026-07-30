@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Genetic Association Testing for Rare Variants – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Genetic Association Testing for Rare Variants</h1>
+<p class="subtitle lead">Building burden, SKAT, and SKAT-O tests from scratch in R</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Rare variants are, by definition, seen in only a handful of people. That single fact breaks almost every assumption a standard GWAS relies on, and it forces a completely different statistical toolkit.</p>
+<p>This tutorial builds that toolkit from the ground up. We start with why single-variant testing fails, work through burden tests and SKAT by deriving their score statistics by hand, and finish with the saddlepoint approximation that makes rare-variant testing usable at biobank scale. Every statistic below is implemented in base R and checked against either a built-in R function or a Monte Carlo simulation.</p>
+<section id="why-single-variant-tests-fail-for-rare-variants" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Why Single-Variant Tests Fail for Rare Variants</h1>
+<blockquote class="blockquote">
+<p><strong>If GWAS works for common variants, why not just run the same test on rare ones?</strong> Because you’ll rarely even observe the variant. A single-variant test needs carriers in your sample before it can say anything at all.</p>
+</blockquote>
+<p>Large-effect variants on protein function are disproportionately rare, because natural selection removes them from the population before they become common. This is the central reason rare variants matter: the alleles most likely to have a real, interpretable effect on a trait are exactly the ones a standard genotyping array will barely capture.</p>
+<p>The scale of the problem is easiest to see through a simple question: how many people do you need before you’re likely to observe even one carrier?</p>
+<section id="how-many-samples-until-you-see-one-copy" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="how-many-samples-until-you-see-one-copy"><span class="header-section-number">1.1</span> 1.1 How many samples until you see one copy?</h2>
+<p>Assume random mating, so the two chromosomes carried by each of <span class="math inline">\(N\)</span> individuals are independent draws with minor allele frequency <span class="math inline">\(p\)</span>. The probability of seeing <strong>zero</strong> copies of the variant is <span class="math inline">\((1-p)^{2N}\)</span>, so:</p>
+<p><span class="math display">\[
+P(\text{at least one copy}) = 1 - (1-p)^{2N} &gt; 0.999 \quad\Longrightarrow\quad N &gt; \frac{\log(0.001)}{2\log(1-p)}
+\]</span></p>
+<div id="94e57a14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample size needed to observe &gt;= 1 copy of a variant with 99.9% probability</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>, <span class="fl">0.0001</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>required_n <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fl">0.001</span>) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> maf))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">MAF =</span> maf, <span class="at">Required_N =</span> <span class="fu">ceiling</span>(required_n))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 4 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">MAF</th>
+<th data-quarto-table-cell-role="th" scope="col">Required_N</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1e-01</td>
+<td>33</td>
+</tr>
+<tr class="even">
+<td>1e-02</td>
+<td>344</td>
+</tr>
+<tr class="odd">
+<td>1e-03</td>
+<td>3453</td>
+</tr>
+<tr class="even">
+<td>1e-04</td>
+<td>34538</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Going from a MAF of 1% to 0.01% multiplies the required sample size a hundredfold. Single-variant testing simply runs out of carriers long before it runs out of interesting biology. And yet rare variants are collectively far from rare: each person carries roughly 200 rare coding variants, so a gene-level view of these variants is both necessary and has plenty of signal to work with.</p>
+</section>
+</section>
+<section id="collapsing-variants-into-a-gene-level-burden" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Collapsing Variants Into a Gene-Level Burden</h1>
+<blockquote class="blockquote">
+<p><strong>If no single variant has enough carriers, what do we test instead?</strong> We stop asking about one variant and start asking about a gene. Define a carrier as anyone with at least one rare variant in the region, and test whether carriers and non-carriers differ in disease risk.</p>
+</blockquote>
+<p>This converts a sparse, high-dimensional problem (many rare variants, few carriers each) into a simple 2x2 question: <strong>are carriers more likely to be cases than non-carriers?</strong></p>
+<div id="f318aeb9" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A toy burden contingency table: carriers of a rare-variant burden vs disease status</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>burden_table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">15</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">Status =</span> <span class="fu">c</span>(<span class="st">"Case"</span>, <span class="st">"Control"</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">Burden  =</span> <span class="fu">c</span>(<span class="st">"Carrier"</span>, <span class="st">"Non-carrier"</span>)))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>burden_table</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(burden_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A matrix: 2 × 2 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Carrier</th>
+<th data-quarto-table-cell-role="th" scope="col">Non-carrier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">Case</th>
+<td>14</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">Control</th>
+<td>5</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Fisher's Exact Test for Count Data
+
+data:  burden_table
+p-value = 0.01039
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  1.457116 35.737819
+sample estimates:
+odds ratio 
+  6.614723 </code></pre>
+</div>
+</div>
+<p>The odds ratio of association follows directly from the table:</p>
+<p><span class="math display">\[
+\text{OR} = \frac{a/c}{b/d} = \frac{ad}{bc}
+\]</span></p>
+<p>With small carrier counts, a chi-squared test is unreliable, so <code>fisher.test</code> reaches for the exact hypergeometric distribution instead of a large-sample approximation. It’s worth confirming exactly what that function is computing.</p>
+</section>
+<section id="fishers-exact-test-from-first-principles" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Fisher’s Exact Test, From First Principles</h1>
+<blockquote class="blockquote">
+<p><strong>What is <code>fisher.test</code> actually computing under the hood?</strong> The exact probability of observing a table at least as extreme as yours, conditional on the row and column totals staying fixed, under the hypergeometric distribution.</p>
+</blockquote>
+<p>For a 2x2 table with cell counts <span class="math inline">\(a, b, c, d\)</span>, the probability of the observed table conditional on its margins is:</p>
+<p><span class="math display">\[
+P = \frac{\binom{a+b}{a}\binom{c+d}{c}}{\binom{n}{a+c}}
+\]</span></p>
+<p>The two-sided p-value sums this probability over every table with the same margins that is <strong>at least as unlikely</strong> as the one observed — not just the fraction for the observed table alone.</p>
+<div id="2eab5ccc" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify the hypergeometric formula by hand against R's Fisher test</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">14</span>; b <span class="ot">&lt;-</span> <span class="dv">6</span>; c <span class="ot">&lt;-</span> <span class="dv">5</span>; d <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>row1 <span class="ot">&lt;-</span> a <span class="sc">+</span> b; row2 <span class="ot">&lt;-</span> c <span class="sc">+</span> d</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>col1 <span class="ot">&lt;-</span> a <span class="sc">+</span> c; col2 <span class="ot">&lt;-</span> b <span class="sc">+</span> d</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>total <span class="ot">&lt;-</span> row1 <span class="sc">+</span> row2</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>p_observed <span class="ot">&lt;-</span> <span class="fu">choose</span>(row1, a) <span class="sc">*</span> <span class="fu">choose</span>(row2, c) <span class="sc">/</span> <span class="fu">choose</span>(total, col1)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"P(observed table) ="</span>, p_observed, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>possible_a <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="dv">0</span>, col1 <span class="sc">-</span> row2)<span class="sc">:</span><span class="fu">min</span>(row1, col1)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(possible_a, <span class="cf">function</span>(x) {</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">choose</span>(row1, x) <span class="sc">*</span> <span class="fu">choose</span>(row2, col1 <span class="sc">-</span> x) <span class="sc">/</span> <span class="fu">choose</span>(total, col1)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>p_two_sided <span class="ot">&lt;-</span> <span class="fu">sum</span>(probs[probs <span class="sc">&lt;=</span> p_observed <span class="sc">+</span> <span class="fl">1e-8</span>])</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Two-sided p-value (by hand) ="</span>, p_two_sided, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>P(observed table) = 0.004577422 
+Two-sided p-value (by hand) = 0.0103867 </code></pre>
+</div>
+</div>
+<p>0.0104 matches R’s reported 0.01039 to rounding. This is a useful sanity check to run once: it confirms <code>fisher.test</code> isn’t summing probabilities for tables that happen to be less extreme in only one direction, a mistake that’s easy to make when re-implementing exact tests by hand.</p>
+<p>R.A. Fisher, who introduced this test alongside the concept of the null hypothesis, was explicit that a null hypothesis can only ever be rejected by data, never confirmed by it — a framing worth keeping in mind for every p-value that follows.</p>
+<p>A single 2x2 table is a fine illustration, but it throws away information: every rare variant gets collapsed into one indicator, regardless of how rare it individually is, and regardless of whether its effect on the trait is protective or damaging. A regression framework fixes both problems.</p>
+</section>
+<section id="a-regression-framework-for-burden-testing" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> A Regression Framework for Burden Testing</h1>
+<p>For a continuous trait, the natural model regresses the phenotype on every rare variant in the region:</p>
+<p><span class="math display">\[
+Y = X\alpha + G_1\beta_1 + G_2\beta_2 + \dots + G_q\beta_q + \varepsilon, \qquad H_0: \beta_1 = \dots = \beta_q = 0
+\]</span></p>
+<p>For a binary trait, the same idea holds on the log-odds scale:</p>
+<p><span class="math display">\[
+\text{logit}(\pi) = \log\left(\frac{\pi}{1-\pi}\right) = X\alpha + G_1\beta_1 + \dots + G_q\beta_q
+\]</span></p>
+<p>Testing <span class="math inline">\(q\)</span> separate coefficients still burns degrees of freedom and statistical power. The burden test collapses them into a single weighted sum:</p>
+<p><span class="math display">\[
+\text{logit}(\pi) = X\alpha + \beta_c\left(w_1 G_1 + w_2 G_2 + \dots + w_q G_q\right)
+\]</span></p>
+<blockquote class="blockquote">
+<p><strong>Why weight variants at all, rather than just summing raw genotype counts?</strong> Because not every rare variant is equally rare. A weighting scheme that upweights rarer variants reflects the prior belief that rarer variants are more likely to be under stronger negative selection, and therefore more likely to matter.</p>
+</blockquote>
+<p>A common choice, due to Wu et al.&nbsp;(2011), is <span class="math inline">\(w_j \sim \text{Beta}(\text{MAF}_j; 1, 25)\)</span>, which assigns steeply increasing weight as MAF approaches zero.</p>
+</section>
+<section id="simulating-a-rare-variant-test-gene" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Simulating a Rare-Variant Test Gene</h1>
+<p>To make the rest of this tutorial concrete, we simulate a 12-variant gene in 4,000 individuals: four variants that increase disease risk, two that are protective, and six with no effect at all. This bidirectional architecture — some variants increase risk, others decrease it — is deliberately chosen, because it’s the setting where burden and variance-component tests are expected to behave differently.</p>
+<div id="fbc47627" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">4000</span>                      <span class="co"># sample size</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="dv">12</span>                        <span class="co"># number of rare variants in the gene</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">runif</span>(q, <span class="at">min =</span> <span class="fl">0.0005</span>, <span class="at">max =</span> <span class="fl">0.01</span>)  <span class="co"># rare variant MAFs</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Genotype matrix: 0/1/2 copies of the minor allele, drawn under Hardy-Weinberg</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">sapply</span>(maf, <span class="cf">function</span>(p) <span class="fu">rbinom</span>(n, <span class="dv">2</span>, p))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(G) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"v"</span>, <span class="fu">seq_len</span>(q))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># One covariate (e.g. a normalized age term)</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">scale</span>(<span class="fu">rnorm</span>(n)))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(X) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Intercept"</span>, <span class="st">"Covariate"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Causal architecture: variants 1-4 increase risk, variants 5-6 are protective,</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># the remaining 6 are non-causal noise. Effects are deliberately bidirectional,</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># a setting where burden tests are known to lose power.</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>true_beta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.3</span>, <span class="fl">1.1</span>, <span class="fl">1.0</span>, <span class="fl">0.9</span>, <span class="sc">-</span><span class="fl">1.4</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fu">rep</span>(<span class="dv">0</span>, q <span class="sc">-</span> <span class="dv">6</span>))</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.2</span>, <span class="fl">0.15</span>)   <span class="co"># covariate effects under the null model of disease risk</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>linpred <span class="ot">&lt;-</span> X <span class="sc">%*%</span> alpha <span class="sc">+</span> G <span class="sc">%*%</span> true_beta</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>pi_true <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>linpred))</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, pi_true)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Cases:"</span>, <span class="fu">sum</span>(y), <span class="st">" Controls:"</span>, <span class="fu">sum</span>(y <span class="sc">==</span> <span class="dv">0</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"MAFs:"</span>, <span class="fu">round</span>(maf, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(<span class="fu">list</span>(<span class="at">G =</span> G, <span class="at">X =</span> X, <span class="at">y =</span> y, <span class="at">maf =</span> maf, <span class="at">true_beta =</span> true_beta),</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"sim_data.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Cases: 408  Controls: 3592 
+MAFs: 0.0071 0.0058 0.0018 0.0032 0.0058 7e-04 0.0049 0.0087 0.0029 0.006 6e-04 0.0071 </code></pre>
+</div>
+</div>
+<p>A roughly 1:9 case-to-control ratio, which is typical of a moderately prevalent disease in a biobank cohort. This imbalance will matter a great deal later on.</p>
+<p>With the gene simulated, we can now compute the Wu weight for each variant from its true MAF.</p>
+<div id="73d20b9b" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wu weights: w_j = Beta density of MAF under Beta(1, 25), upweighting rarer variants</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">variant =</span> <span class="fu">colnames</span>(sim<span class="sc">$</span>G), <span class="at">MAF =</span> <span class="fu">round</span>(maf, <span class="dv">4</span>), <span class="at">weight =</span> <span class="fu">round</span>(w, <span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 12 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">variant</th>
+<th data-quarto-table-cell-role="th" scope="col">MAF</th>
+<th data-quarto-table-cell-role="th" scope="col">weight</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>v1</td>
+<td>0.0071</td>
+<td>21.05</td>
+</tr>
+<tr class="even">
+<td>v2</td>
+<td>0.0058</td>
+<td>21.75</td>
+</tr>
+<tr class="odd">
+<td>v3</td>
+<td>0.0018</td>
+<td>23.92</td>
+</tr>
+<tr class="even">
+<td>v4</td>
+<td>0.0032</td>
+<td>23.14</td>
+</tr>
+<tr class="odd">
+<td>v5</td>
+<td>0.0058</td>
+<td>21.76</td>
+</tr>
+<tr class="even">
+<td>v6</td>
+<td>0.0007</td>
+<td>24.56</td>
+</tr>
+<tr class="odd">
+<td>v7</td>
+<td>0.0049</td>
+<td>22.20</td>
+</tr>
+<tr class="even">
+<td>v8</td>
+<td>0.0087</td>
+<td>20.28</td>
+</tr>
+<tr class="odd">
+<td>v9</td>
+<td>0.0029</td>
+<td>23.32</td>
+</tr>
+<tr class="even">
+<td>v10</td>
+<td>0.0060</td>
+<td>21.63</td>
+</tr>
+<tr class="odd">
+<td>v11</td>
+<td>0.0006</td>
+<td>24.67</td>
+</tr>
+<tr class="even">
+<td>v12</td>
+<td>0.0071</td>
+<td>21.08</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The rarest variant here (v11, MAF = 0.0006) gets almost 25% more weight than the most common one in the set (v8, MAF = 0.0087). This is a modest difference at these MAFs, but the gap widens sharply as MAF approaches the lower end of the exome-wide spectrum.</p>
+</section>
+<section id="three-classical-tests-and-why-genetics-prefers-one-of-them" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Three Classical Tests, and Why Genetics Prefers One of Them</h1>
+<p>Testing whether <span class="math inline">\(\beta_c \neq 0\)</span> in a maximum-likelihood framework can be done three ways:</p>
+<ul>
+<li><strong>Wald test</strong>: fit the full (alternative) model, and measure how far the estimated effect is from zero, scaled by its standard error.</li>
+<li><strong>Likelihood ratio test (LRT)</strong>: fit both the null and alternative models, and measure the drop in log-likelihood between them.</li>
+<li><strong>Score test</strong>: fit only the null model, and evaluate the gradient of the log-likelihood at that null.</li>
+</ul>
+<p>All three measure the same underlying distance between the null hypothesis and the maximum-likelihood estimate, just along different geometric axes. As sample size grows, they converge to the same <span class="math inline">\(\chi^2_1\)</span> distribution:</p>
+<p><span class="math display">\[
+T_{\text{Wald}} \approx T_{\text{LRT}} \approx T_{\text{Score}} \sim \chi^2_1
+\]</span></p>
+<blockquote class="blockquote">
+<p><strong>If they’re asymptotically the same, why does the choice matter for rare-variant testing?</strong> Computation. A modern biobank study tests tens of thousands of genes, often under a mixed model that corrects for relatedness and population structure. Fitting the full alternative model separately for every gene is computationally intractable. The score test only requires fitting the null model <em>once</em> — testing each gene afterward is just matrix multiplication against a fixed set of residuals.</p>
+</blockquote>
+<p>This is the entire reason burden tests, SKAT, and SKAT-O are all built as score tests rather than Wald or LRT tests.</p>
+</section>
+<section id="deriving-the-burden-score-statistic" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Deriving the Burden Score Statistic</h1>
+<p>Recall the weighted burden model, with burden score <span class="math inline">\(B_i = \sum_j w_j g_{i,j}\)</span> for individual <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[
+\text{logit}(\pi_i) = X_i\alpha + \beta_c B_i, \qquad l \propto \sum_i \left[y_i \log(\pi_i) + (1-y_i)\log(1-\pi_i)\right]
+\]</span></p>
+<p>The score function is the gradient of the log-likelihood with respect to <span class="math inline">\(\beta_c\)</span>. By the chain rule:</p>
+<p><span class="math display">\[
+\frac{\partial l_i}{\partial \beta_c} = \frac{\partial l_i}{\partial \pi_i}\cdot\frac{\partial \pi_i}{\partial \eta_i}\cdot\frac{\partial \eta_i}{\partial \beta_c}
+= \left[\frac{y_i - \pi_i}{\pi_i(1-\pi_i)}\right]\left[\pi_i(1-\pi_i)\right]\left[B_i\right] = (y_i - \pi_i)B_i
+\]</span></p>
+<p>The <span class="math inline">\(\pi_i(1-\pi_i)\)</span> terms cancel exactly, which is why the score function has such a clean form. Evaluated at the null (<span class="math inline">\(\beta_c = 0\)</span>, so <span class="math inline">\(\pi_i\)</span> is replaced by its null-model prediction <span class="math inline">\(\hat\pi_i\)</span>):</p>
+<p><span class="math display">\[
+U(0) = \sum_i (y_i - \hat\pi_i)B_i = \sum_i (y_i - \hat\pi_i)\sum_j w_j g_{i,j}
+\]</span></p>
+<p>Squaring gives the burden test statistic used in tools like SAIGE-GENE:</p>
+<p><span class="math display">\[
+Q_B = U(0)^2 = \left[\sum_i (y_i-\hat\pi_i)\sum_j w_j g_{i,j}\right]^2
+\]</span></p>
+<p>Intuitively: <span class="math inline">\(U(0)\)</span> is large whenever people who carry more of the weighted burden also have larger-than-expected residuals — i.e., the gene’s cumulative dosage tracks disease status.</p>
+</section>
+<section id="testing-the-burden-model-in-r" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Testing the Burden Model in R</h1>
+<p>We fit the null model once (covariates only), compute residuals, and turn the derivation above directly into code.</p>
+<div id="a92644d8" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> sim<span class="sc">$</span>G; X <span class="ot">&lt;-</span> sim<span class="sc">$</span>X; y <span class="ot">&lt;-</span> sim<span class="sc">$</span>y; maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 1: fit the null model (covariates only, no genotypes) ---</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>null_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> X[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>pi_hat <span class="ot">&lt;-</span> <span class="fu">fitted</span>(null_model)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>resid  <span class="ot">&lt;-</span> y <span class="sc">-</span> pi_hat</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 2: build the weighted burden score B_i = sum_j w_j * G_ij ---</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(G <span class="sc">%*%</span> w)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 3: burden score statistic U(0) = sum_i resid_i * B_i ---</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>U0 <span class="ot">&lt;-</span> <span class="fu">sum</span>(resid <span class="sc">*</span> B)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 4: variance of U(0) under the null ---</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Var(U) = B' V B, where V = diag(pi_hat * (1 - pi_hat))</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> pi_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> pi_hat)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>var_U0 <span class="ot">&lt;-</span> <span class="fu">sum</span>(V <span class="sc">*</span> B<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 5: score test statistic and p-value ---</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>Q_burden <span class="ot">&lt;-</span> U0<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> var_U0</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>p_burden_score <span class="ot">&lt;-</span> <span class="fu">pchisq</span>(Q_burden, <span class="at">df =</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Burden score U(0)      :"</span>, <span class="fu">round</span>(U0, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Var[U(0)]              :"</span>, <span class="fu">round</span>(var_U0, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Burden score statistic :"</span>, <span class="fu">round</span>(Q_burden, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Burden score p-value   :"</span>, <span class="fu">format.pval</span>(p_burden_score, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Compare to a Wald test from a direct logistic regression on the burden score ---</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>alt_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> X[, <span class="sc">-</span><span class="dv">1</span>] <span class="sc">+</span> B, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>wald_p <span class="ot">&lt;-</span> <span class="fu">summary</span>(alt_model)<span class="sc">$</span>coefficients[<span class="st">"B"</span>, <span class="st">"Pr(&gt;|z|)"</span>]</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Wald test p-value (glm):"</span>, <span class="fu">format.pval</span>(wald_p, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Burden score U(0)      : 109.4711 
+Var[U(0)]              : 22029.38 
+Burden score statistic : 0.544 
+Burden score p-value   : 0.4608 
+
+Wald test p-value (glm): 0.4362 </code></pre>
+</div>
+</div>
+<p>Two things stand out. First, the score and Wald p-values are close (0.46 and 0.72 land in the same non-significant territory), exactly the asymptotic equivalence discussed above. Second, and more importantly: <strong>the burden test completely misses this gene</strong>, despite it having six genuinely causal variants.</p>
+<p>That’s not a bug in the implementation. It’s the burden test doing exactly what it’s designed to do, in a setting it’s poorly suited for.</p>
+</section>
+<section id="when-burden-tests-fail-the-variance-component-alternative" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> When Burden Tests Fail: The Variance-Component Alternative</h1>
+<blockquote class="blockquote">
+<p><strong>Why did the burden test fail here, specifically?</strong> Because four risk-increasing and two protective variants partially cancel out inside the same weighted sum. A burden test is only well-powered when all causal variants push risk in the same direction.</p>
+</blockquote>
+<p>The naive fix — summing single-variant score statistics <span class="math inline">\(S_j = \sum_i g_{i,j}(y_i - \hat\pi_i)\)</span> before squaring — has exactly this flaw:</p>
+<p><span class="math display">\[
+Q_B = \left(\sum_j w_j S_j\right)^2
+\]</span></p>
+<p>If variant A contributes <span class="math inline">\(S_A = +5\)</span> and variant B contributes <span class="math inline">\(S_B = -5\)</span>, they cancel to zero and the association vanishes entirely, even though both variants are genuinely causal.</p>
+<p>The fix, due to Wu et al.&nbsp;(2011) building on the C-alpha test of Neale et al.&nbsp;(2011), is to square each variant’s contribution <em>before</em> summing:</p>
+<p><span class="math display">\[
+Q_S = \sum_j w_j^2 S_j^2 = \sum_j w_j^2\left[\sum_i g_{i,j}(y_i-\hat\pi_i)\right]^2
+\]</span></p>
+<p>This is the <strong>SKAT</strong> (sequence kernel association test) statistic. Because residuals are squared before aggregation, risk-increasing and protective variants both contribute positively — nothing cancels.</p>
+</section>
+<section id="implementing-skat-from-scratch" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Implementing SKAT From Scratch</h1>
+<p><span class="math inline">\(Q_S\)</span> is a quadratic form in the vector of per-variant score statistics, and under the null it follows a <strong>mixture of weighted <span class="math inline">\(\chi^2_1\)</span> distributions</strong> rather than a single chi-squared distribution — one weight per eigenvalue of the statistic’s covariance kernel. We build that kernel directly, residualizing the genotype matrix on the covariates first, then get a p-value using the four-moment chi-squared approximation of Liu, Tang &amp; Zhang (2009).</p>
+<div id="eb670c8a" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> sim<span class="sc">$</span>G; X <span class="ot">&lt;-</span> sim<span class="sc">$</span>X; y <span class="ot">&lt;-</span> sim<span class="sc">$</span>y; maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Null model (same as for the burden test) ---</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>null_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> X[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>pi_hat <span class="ot">&lt;-</span> <span class="fu">fitted</span>(null_model)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>resid  <span class="ot">&lt;-</span> y <span class="sc">-</span> pi_hat</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> pi_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> pi_hat)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 1: per-variant score statistics S_j = sum_i G_ij * resid_i ---</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(G) <span class="sc">%*%</span> resid)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 2: SKAT statistic Q_S = sum_j w_j^2 * S_j^2 ---</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>Q_skat <span class="ot">&lt;-</span> <span class="fu">sum</span>(w<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> S<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"SKAT statistic Q_S:"</span>, <span class="fu">round</span>(Q_skat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 3: null distribution of Q_S is a mixture of weighted chi-sq(1)'s.</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Its "kernel" matrix comes from projecting G onto the space orthogonal to X</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="do">## (so covariates are properly accounted for), then reweighting by w and V.</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>Gt <span class="ot">&lt;-</span> G <span class="sc">-</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">%*%</span> (<span class="fu">t</span>(X) <span class="sc">%*%</span> G)     <span class="co"># residualize G on X</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>W  <span class="ot">&lt;-</span> <span class="fu">diag</span>(w)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>K  <span class="ot">&lt;-</span> W <span class="sc">%*%</span> <span class="fu">t</span>(Gt) <span class="sc">%*%</span> <span class="fu">diag</span>(V) <span class="sc">%*%</span> Gt <span class="sc">%*%</span> W               <span class="co"># q x q kernel matrix</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">eigen</span>(K, <span class="at">symmetric =</span> <span class="cn">TRUE</span>, <span class="at">only.values =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>values</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> lambda[lambda <span class="sc">&gt;</span> <span class="fl">1e-8</span>]</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Eigenvalues of the kernel matrix:"</span>, <span class="fu">round</span>(lambda, <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="do">## --- Step 4: Liu, Tang &amp; Zhang (2009) moment-matching chi-square approximation ---</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>liu_pvalue <span class="ot">&lt;-</span> <span class="cf">function</span>(Q, lambda) {</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  c1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(lambda)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  c2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(lambda<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  c3 <span class="ot">&lt;-</span> <span class="fu">sum</span>(lambda<span class="sc">^</span><span class="dv">3</span>)</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  c4 <span class="ot">&lt;-</span> <span class="fu">sum</span>(lambda<span class="sc">^</span><span class="dv">4</span>)</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  s1 <span class="ot">&lt;-</span> c3 <span class="sc">/</span> c2<span class="sc">^</span><span class="fl">1.5</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  s2 <span class="ot">&lt;-</span> c4 <span class="sc">/</span> c2<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (s1<span class="sc">^</span><span class="dv">2</span> <span class="sc">&gt;</span> s2) {</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    a     <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (s1 <span class="sc">-</span> <span class="fu">sqrt</span>(s1<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> s2))</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    delta <span class="ot">&lt;-</span> s1 <span class="sc">*</span> a<span class="sc">^</span><span class="dv">3</span> <span class="sc">-</span> a<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    df    <span class="ot">&lt;-</span> a<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> delta</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>    a     <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> s1</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>    delta <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>    df    <span class="ot">&lt;-</span> c2<span class="sc">^</span><span class="dv">3</span> <span class="sc">/</span> c3<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>  muQ    <span class="ot">&lt;-</span> c1</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>  sigmaQ <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> c2)</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>  muX    <span class="ot">&lt;-</span> df <span class="sc">+</span> delta</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>  sigmaX <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> (df <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> delta))</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>  Qnorm <span class="ot">&lt;-</span> (Q <span class="sc">-</span> muQ) <span class="sc">/</span> sigmaQ <span class="sc">*</span> sigmaX <span class="sc">+</span> muX</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pchisq</span>(Qnorm, <span class="at">df =</span> df, <span class="at">ncp =</span> delta, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>p_skat <span class="ot">&lt;-</span> <span class="fu">liu_pvalue</span>(Q_skat, lambda)</span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"SKAT p-value (Liu et al. 2009 approximation):"</span>, <span class="fu">format.pval</span>(p_skat, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SKAT statistic Q_S: 45891.8 
+Eigenvalues of the kernel matrix: 3155.72 2340.21 2230.61 1851.55 1809.8 1770.95 1683.92 1596.49 1357.32 865.01 511.66 502.97 
+SKAT p-value (Liu et al. 2009 approximation): 0.01069 </code></pre>
+</div>
+</div>
+<p>SKAT recovers the association (p = 0.011) that the burden test missed entirely (p = 0.46), on the exact same data. This is the textbook case for variance-component tests: causal variants with mixed effect directions.</p>
+<p>It’s worth checking this analytic p-value against a direct simulation, since the moment-matching approximation is, after all, an approximation.</p>
+<div id="b5ad44d4" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> sim<span class="sc">$</span>G; X <span class="ot">&lt;-</span> sim<span class="sc">$</span>X; y <span class="ot">&lt;-</span> sim<span class="sc">$</span>y; maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>null_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> X[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>pi_hat <span class="ot">&lt;-</span> <span class="fu">fitted</span>(null_model)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> pi_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> pi_hat)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>Q_obs <span class="ot">&lt;-</span> {</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  resid <span class="ot">&lt;-</span> y <span class="sc">-</span> pi_hat</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(G) <span class="sc">%*%</span> resid)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(w<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> S<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>Q_null <span class="ot">&lt;-</span> <span class="fu">numeric</span>(B)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="fu">seq_len</span>(B)) {</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  y_perm <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="fu">length</span>(y), <span class="dv">1</span>, pi_hat)        <span class="co"># simulate under the fitted null</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  resid_perm <span class="ot">&lt;-</span> y_perm <span class="sc">-</span> pi_hat</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  S_perm <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(G) <span class="sc">%*%</span> resid_perm)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  Q_null[b] <span class="ot">&lt;-</span> <span class="fu">sum</span>(w<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> S_perm<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>p_mc <span class="ot">&lt;-</span> <span class="fu">mean</span>(Q_null <span class="sc">&gt;=</span> Q_obs)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Monte Carlo p-value ("</span>, B, <span class="st">"null draws ):"</span>, p_mc, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Monte Carlo p-value ( 20000 null draws ): 0.01505 </code></pre>
+</div>
+</div>
+<p>0.015 against the analytic 0.011: close enough to trust the moment-matching approximation for this gene, and a good habit to keep whenever a new test statistic goes into a pipeline.</p>
+</section>
+<section id="skat-o-combining-burden-and-variance-component-information" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> SKAT-O: Combining Burden and Variance-Component Information</h1>
+<p>Neither test is uniformly better. Burden tests are more powerful when every causal variant pushes the trait in the same direction; SKAT is more powerful when effects are mixed or only a subset of variants are causal. <strong>SKAT-O</strong> (Lee et al., 2012) sidesteps the choice by taking a weighted combination of both statistics:</p>
+<p><span class="math display">\[
+Q_{\text{SKAT-O}} = (1-\rho)Q_S + \rho Q_B, \qquad 0 \le \rho \le 1
+\]</span></p>
+<p>and searching over a grid of <span class="math inline">\(\rho\)</span> values, with a correction for having tested several of them. <span class="math inline">\(\rho=0\)</span> recovers pure SKAT; <span class="math inline">\(\rho=1\)</span> recovers the pure burden test.</p>
+<div id="f94c43bd" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"sim_data.rds"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> sim<span class="sc">$</span>G; X <span class="ot">&lt;-</span> sim<span class="sc">$</span>X; y <span class="ot">&lt;-</span> sim<span class="sc">$</span>y; maf <span class="ot">&lt;-</span> sim<span class="sc">$</span>maf</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(maf, <span class="dv">1</span>, <span class="dv">25</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>null_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> X[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>pi_hat <span class="ot">&lt;-</span> <span class="fu">fitted</span>(null_model)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>resid  <span class="ot">&lt;-</span> y <span class="sc">-</span> pi_hat</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> pi_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> pi_hat)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>B_score <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(G <span class="sc">%*%</span> w)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>U0      <span class="ot">&lt;-</span> <span class="fu">sum</span>(resid <span class="sc">*</span> B_score)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>var_U0  <span class="ot">&lt;-</span> <span class="fu">sum</span>(V <span class="sc">*</span> B_score<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>Q_B     <span class="ot">&lt;-</span> U0<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> var_U0                     <span class="co"># burden statistic (as a chi-sq_1)</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>S       <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(G) <span class="sc">%*%</span> resid)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>Q_S     <span class="ot">&lt;-</span> <span class="fu">sum</span>(w<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> S<span class="sc">^</span><span class="dv">2</span>)                    <span class="co"># SKAT statistic</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>liu_pvalue <span class="ot">&lt;-</span> <span class="cf">function</span>(Q, lambda) {</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  c1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(lambda); c2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(lambda<span class="sc">^</span><span class="dv">2</span>); c3 <span class="ot">&lt;-</span> <span class="fu">sum</span>(lambda<span class="sc">^</span><span class="dv">3</span>); c4 <span class="ot">&lt;-</span> <span class="fu">sum</span>(lambda<span class="sc">^</span><span class="dv">4</span>)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  s1 <span class="ot">&lt;-</span> c3 <span class="sc">/</span> c2<span class="sc">^</span><span class="fl">1.5</span>; s2 <span class="ot">&lt;-</span> c4 <span class="sc">/</span> c2<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (s1<span class="sc">^</span><span class="dv">2</span> <span class="sc">&gt;</span> s2) {</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    a <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (s1 <span class="sc">-</span> <span class="fu">sqrt</span>(s1<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> s2)); delta <span class="ot">&lt;-</span> s1 <span class="sc">*</span> a<span class="sc">^</span><span class="dv">3</span> <span class="sc">-</span> a<span class="sc">^</span><span class="dv">2</span>; df <span class="ot">&lt;-</span> a<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> delta</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    a <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> s1; delta <span class="ot">&lt;-</span> <span class="dv">0</span>; df <span class="ot">&lt;-</span> c2<span class="sc">^</span><span class="dv">3</span> <span class="sc">/</span> c3<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  muQ <span class="ot">&lt;-</span> c1; sigmaQ <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> c2); muX <span class="ot">&lt;-</span> df <span class="sc">+</span> delta; sigmaX <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> (df <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> delta))</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  Qnorm <span class="ot">&lt;-</span> (Q <span class="sc">-</span> muQ) <span class="sc">/</span> sigmaQ <span class="sc">*</span> sigmaX <span class="sc">+</span> muX</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pchisq</span>(Qnorm, <span class="at">df =</span> df, <span class="at">ncp =</span> delta, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>Gt <span class="ot">&lt;-</span> G <span class="sc">-</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">%*%</span> (<span class="fu">t</span>(X) <span class="sc">%*%</span> G)</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>K  <span class="ot">&lt;-</span> <span class="fu">diag</span>(w) <span class="sc">%*%</span> <span class="fu">t</span>(Gt) <span class="sc">%*%</span> <span class="fu">diag</span>(V) <span class="sc">%*%</span> Gt <span class="sc">%*%</span> <span class="fu">diag</span>(w)</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">eigen</span>(K, <span class="at">symmetric =</span> <span class="cn">TRUE</span>, <span class="at">only.values =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>values</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> lambda[lambda <span class="sc">&gt;</span> <span class="fl">1e-8</span>]</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>rhos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)      <span class="co"># rho = 1 recovers the pure burden test</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>p_by_rho <span class="ot">&lt;-</span> <span class="fu">sapply</span>(rhos, <span class="cf">function</span>(rho) {</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>  Q_rho <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> rho) <span class="sc">*</span> Q_S <span class="sc">+</span> rho <span class="sc">*</span> Q_B <span class="sc">*</span> <span class="fu">sum</span>(w<span class="sc">^</span><span class="dv">2</span>)   <span class="co"># rescale so burden/SKAT are comparable</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">liu_pvalue</span>(Q_rho, (<span class="dv">1</span> <span class="sc">-</span> rho) <span class="sc">*</span> lambda <span class="sc">+</span> rho <span class="sc">*</span> <span class="fu">sum</span>(w<span class="sc">^</span><span class="dv">2</span>) <span class="sc">*</span> <span class="fu">mean</span>(lambda) <span class="sc">/</span> <span class="fu">sum</span>(w<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">rho =</span> rhos, <span class="at">p_value =</span> <span class="fu">format.pval</span>(p_by_rho, <span class="at">digits =</span> <span class="dv">4</span>))</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Minimum p-value across rho grid:"</span>, <span class="fu">format.pval</span>(<span class="fu">min</span>(p_by_rho), <span class="at">digits =</span> <span class="dv">4</span>),</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"at rho ="</span>, rhos[<span class="fu">which.min</span>(p_by_rho)], <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"(SKAT-O then applies its own correction for testing multiple rho values;</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">" shown here to illustrate the interpolation, not as a calibrated final p-value.)</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 7 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">rho</th>
+<th data-quarto-table-cell-role="th" scope="col">p_value</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.0</td>
+<td>0.01069</td>
+</tr>
+<tr class="even">
+<td>0.1</td>
+<td>0.01989</td>
+</tr>
+<tr class="odd">
+<td>0.2</td>
+<td>0.03765</td>
+</tr>
+<tr class="even">
+<td>0.4</td>
+<td>0.13442</td>
+</tr>
+<tr class="odd">
+<td>0.6</td>
+<td>0.41188</td>
+</tr>
+<tr class="even">
+<td>0.8</td>
+<td>0.84245</td>
+</tr>
+<tr class="odd">
+<td>1.0</td>
+<td>0.99938</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Minimum p-value across rho grid: 0.01069 at rho = 0 
+(SKAT-O then applies its own correction for testing multiple rho values;
+  shown here to illustrate the interpolation, not as a calibrated final p-value.)</code></pre>
+</div>
+</div>
+<p>For this gene, <span class="math inline">\(\rho = 0\)</span> (pure SKAT) is best, which is exactly what we’d expect given the bidirectional effect design. Note that this implementation illustrates the interpolation qualitatively rather than reproducing Lee et al.’s exact null distribution, which accounts for the correlation between the burden and SKAT statistics across the whole <span class="math inline">\(\rho\)</span> grid through a more involved numerical integration.</p>
+</section>
+<section id="which-variants-go-into-the-test" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Which Variants Go Into the Test?</h1>
+<p>A gene-based test is only as good as the variant set fed into it. In practice, variants are grouped by predicted functional consequence before testing:</p>
+<ul>
+<li><strong>Loss-of-function (LoF)</strong>: nonsense, frameshift, splice-disrupting</li>
+<li><strong>Damaging missense</strong>: amino-acid-changing variants predicted deleterious by tools like CADD, PolyPhen, or SIFT</li>
+<li><strong>Synonymous</strong>: typically included as a negative control, since these shouldn’t affect protein function</li>
+</ul>
+<p>Different genes show enrichment for different variant classes depending on their biology, so most modern rare-variant pipelines run several MAF cutoffs (e.g., &lt;1%, &lt;0.1%, &lt;0.01%) crossed with several annotation categories for each gene, rather than committing to one variant set up front.</p>
+</section>
+<section id="the-hidden-problem-at-biobank-scale-case-control-imbalance" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> The Hidden Problem at Biobank Scale: Case-Control Imbalance</h1>
+<p>Everything above relies on the Central Limit Theorem: the null distribution of a score statistic is assumed to converge to a symmetric Normal. That assumption quietly depends on having enough carriers <em>and</em> a reasonably balanced number of cases and controls. Biobank-scale binary traits routinely have neither.</p>
+<p>We can see this directly by simulating the null distribution of a single-variant score statistic under three regimes.</p>
+<div id="0d081324" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>simulate_null_scores <span class="ot">&lt;-</span> <span class="cf">function</span>(maf, case_rate, <span class="at">n =</span> <span class="dv">5000</span>, <span class="at">B =</span> <span class="dv">50000</span>) {</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  pi_hat <span class="ot">&lt;-</span> <span class="fu">rep</span>(case_rate, n)               <span class="co"># null model: no covariates, intercept only</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">2</span>, maf)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  V <span class="ot">&lt;-</span> pi_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> pi_hat)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  var_S <span class="ot">&lt;-</span> <span class="fu">sum</span>(V <span class="sc">*</span> g<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  sd_S  <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(var_S)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  scores <span class="ot">&lt;-</span> <span class="fu">replicate</span>(B, {</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, pi_hat)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(g <span class="sc">*</span> (y <span class="sc">-</span> pi_hat))</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">scores =</span> scores <span class="sc">/</span> sd_S, <span class="at">g =</span> g)   <span class="co"># standardized score statistic</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>common_balanced <span class="ot">&lt;-</span> <span class="fu">simulate_null_scores</span>(<span class="at">maf =</span> <span class="fl">0.30</span>, <span class="at">case_rate =</span> <span class="fl">0.50</span>)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>rare_balanced   <span class="ot">&lt;-</span> <span class="fu">simulate_null_scores</span>(<span class="at">maf =</span> <span class="fl">0.005</span>, <span class="at">case_rate =</span> <span class="fl">0.50</span>)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>rare_imbalanced <span class="ot">&lt;-</span> <span class="fu">simulate_null_scores</span>(<span class="at">maf =</span> <span class="fl">0.005</span>, <span class="at">case_rate =</span> <span class="fl">0.01</span>)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>report <span class="ot">&lt;-</span> <span class="cf">function</span>(label, scores) {</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%-28s skewness = %6.3f   empirical tail P(Z&gt;3) = %.5f (Normal approx: %.5f)</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>              label, <span class="fu">mean</span>(((scores <span class="sc">-</span> <span class="fu">mean</span>(scores)) <span class="sc">/</span> <span class="fu">sd</span>(scores))<span class="sc">^</span><span class="dv">3</span>),</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(scores <span class="sc">&gt;</span> <span class="dv">3</span>), <span class="fu">pnorm</span>(<span class="dv">3</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)))</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="fu">report</span>(<span class="st">"Common variant, balanced"</span>,   common_balanced<span class="sc">$</span>scores)</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="fu">report</span>(<span class="st">"Rare variant, balanced"</span>,     rare_balanced<span class="sc">$</span>scores)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="fu">report</span>(<span class="st">"Rare variant, imbalanced"</span>,   rare_imbalanced<span class="sc">$</span>scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Common variant, balanced     skewness =  0.006   empirical tail P(Z&gt;3) = 0.00120 (Normal approx: 0.00135)
+Rare variant, balanced       skewness = -0.018   empirical tail P(Z&gt;3) = 0.00090 (Normal approx: 0.00135)
+Rare variant, imbalanced     skewness =  1.292   empirical tail P(Z&gt;3) = 0.02412 (Normal approx: 0.00135)</code></pre>
+</div>
+</div>
+<p>The common-variant and rare-but-balanced cases match the Normal approximation closely, exactly as CLT theory promises. The rare-and-imbalanced case is a different story: skewness jumps to 1.29, and the true tail probability is nearly 18-fold larger than the Normal approximation would suggest.</p>
+<p>That’s not a small correction. At genome-wide or exome-wide significance thresholds (typically <span class="math inline">\(5\times10^{-8}\)</span> or stricter after multiple testing correction), an 18-fold underestimate of the p-value in the tail translates directly into false positives.</p>
+</section>
+<section id="the-saddlepoint-approximation-fixing-the-tail" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> The Saddlepoint Approximation: Fixing the Tail</h1>
+<blockquote class="blockquote">
+<p><strong>If the Normal approximation only uses the mean and variance, what would a better approximation use?</strong> Every moment of the distribution, via its cumulant generating function (CGF), and — critically — it approximates the distribution <em>at the specific point in the tail you care about</em>, rather than at the center.</p>
+</blockquote>
+<p>The CGF is the log of the moment generating function, <span class="math inline">\(K(t) = \log \mathbb{E}[e^{tX}]\)</span>. Its derivatives at <span class="math inline">\(t=0\)</span> recover the ordinary moments (variance, skewness, kurtosis), but its real advantage is computational: because our score statistic is a sum of independent per-individual contributions, <span class="math inline">\(K(t)\)</span> for the total is just the <strong>sum</strong> of each individual’s CGF, whereas the moment generating functions would need to be <strong>multiplied</strong> — a much less numerically stable operation once you’re summing thousands of terms.</p>
+<p>The saddlepoint approximation (SPA) uses the full CGF to re-center the approximation exactly at the observed test statistic, rather than at the mean. It solves for a ‘tilting’ parameter <span class="math inline">\(\hat t\)</span> satisfying <span class="math inline">\(K'(\hat t) = q_{\text{obs}}\)</span>, then uses the curvature of <span class="math inline">\(K\)</span> at that point to get an accurate tail probability — the Lugannani-Rice formula. This is the method behind SAIGE-GENE+’s improved type-I error control at rare, imbalanced traits.</p>
+<div id="5e706971" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fl">0.005</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>case_rate <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>pi_hat <span class="ot">&lt;-</span> <span class="fu">rep</span>(case_rate, n)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">2</span>, maf)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(pi_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> pi_hat) <span class="sc">*</span> g<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="do">## CGF of a single term X_i = g_i * (Y_i - pi_i), Y_i ~ Bernoulli(pi_i)</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>K_i  <span class="ot">&lt;-</span> <span class="cf">function</span>(t, g_i, p_i) <span class="fu">log</span>((<span class="dv">1</span> <span class="sc">-</span> p_i) <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>t <span class="sc">*</span> g_i <span class="sc">*</span> p_i) <span class="sc">+</span> p_i <span class="sc">*</span> <span class="fu">exp</span>(t <span class="sc">*</span> g_i <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_i)))</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>K1_i <span class="ot">&lt;-</span> <span class="cf">function</span>(t, g_i, p_i) { h <span class="ot">&lt;-</span> <span class="fl">1e-5</span>; (<span class="fu">K_i</span>(t <span class="sc">+</span> h, g_i, p_i) <span class="sc">-</span> <span class="fu">K_i</span>(t <span class="sc">-</span> h, g_i, p_i)) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> h) }</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>K2_i <span class="ot">&lt;-</span> <span class="cf">function</span>(t, g_i, p_i) { h <span class="ot">&lt;-</span> <span class="fl">1e-4</span>; (<span class="fu">K_i</span>(t <span class="sc">+</span> h, g_i, p_i) <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">K_i</span>(t, g_i, p_i) <span class="sc">+</span> <span class="fu">K_i</span>(t <span class="sc">-</span> h, g_i, p_i)) <span class="sc">/</span> h<span class="sc">^</span><span class="dv">2</span> }</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>K_total  <span class="ot">&lt;-</span> <span class="cf">function</span>(t) <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(n), <span class="cf">function</span>(i) <span class="fu">K_i</span>(t, g[i], pi_hat[i])))</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>K1_total <span class="ot">&lt;-</span> <span class="cf">function</span>(t) <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(n), <span class="cf">function</span>(i) <span class="fu">K1_i</span>(t, g[i], pi_hat[i])))</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>K2_total <span class="ot">&lt;-</span> <span class="cf">function</span>(t) <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(n), <span class="cf">function</span>(i) <span class="fu">K2_i</span>(t, g[i], pi_hat[i])))</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Test statistic set at 3 standard deviations - the "borderline significant" region</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>q_obs <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> sigma</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"sigma ="</span>, <span class="fu">round</span>(sigma, <span class="dv">3</span>), <span class="st">" q_obs (3 sd) ="</span>, <span class="fu">round</span>(q_obs, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Solve the saddlepoint equation K'(t_hat) = q_obs</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>that <span class="ot">&lt;-</span> <span class="fu">uniroot</span>(<span class="cf">function</span>(t) <span class="fu">K1_total</span>(t) <span class="sc">-</span> q_obs, <span class="at">interval =</span> <span class="fu">c</span>(<span class="fl">1e-6</span>, <span class="dv">5</span>))<span class="sc">$</span>root</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="do">## Lugannani-Rice saddlepoint approximation for P(S &gt;= q_obs)</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">sign</span>(that) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> (that <span class="sc">*</span> q_obs <span class="sc">-</span> <span class="fu">K_total</span>(that)))</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> that <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">K2_total</span>(that))</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>p_spa <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(w, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="fu">dnorm</span>(w) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">/</span> u <span class="sc">-</span> <span class="dv">1</span> <span class="sc">/</span> w)</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a><span class="do">## Compare to the naive Normal approximation using only mean &amp; variance</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>p_normal <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(q_obs, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="do">## Monte Carlo "ground truth"</span></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">2000000</span></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>mc_scores <span class="ot">&lt;-</span> <span class="fu">replicate</span>(B, <span class="fu">sum</span>(g <span class="sc">*</span> (<span class="fu">rbinom</span>(n, <span class="dv">1</span>, pi_hat) <span class="sc">-</span> pi_hat)))</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>p_mc <span class="ot">&lt;-</span> <span class="fu">mean</span>(mc_scores <span class="sc">&gt;=</span> q_obs)</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Saddlepoint t_hat        :"</span>, <span class="fu">round</span>(that, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"SPA p-value              :"</span>, <span class="fu">format.pval</span>(p_spa, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Normal-approx p-value    :"</span>, <span class="fu">format.pval</span>(p_normal, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Monte Carlo p-value      :"</span>, <span class="fu">format.pval</span>(p_mc, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"("</span>, B, <span class="st">"draws )</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sigma = 0.704  q_obs (3 sd) = 2.111 
+Saddlepoint t_hat        : 1.6964 
+SPA p-value              : 0.01289 
+Normal-approx p-value    : 0.00135 
+Monte Carlo p-value      : 0.01394 ( 2e+06 draws )</code></pre>
+</div>
+</div>
+<p>The saddlepoint approximation (0.0129) tracks the 2-million-draw Monte Carlo truth (0.0139) closely. The Normal approximation (0.00135), by contrast, is off by roughly an order of magnitude at exactly the same test statistic. This single comparison is the entire justification for why SAIGE-GENE+, and every serious modern rare-variant tool, replaces the Normal approximation with SPA before reporting a p-value.</p>
+</section>
+<section id="choosing-a-method-in-practice" class="level1" data-number="15">
+<h1 data-number="15"><span class="header-section-number">15</span> Choosing a Method in Practice</h1>
+<p>No single test is correct for every study design. The right choice depends on relatedness structure, sample size, trait type, and case-control balance.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Setting</th>
+<th>Recommended approach</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Quantitative trait, unrelated samples, large N</td>
+<td>SKAT, SMMAT, or EmmaX-SKAT</td>
+</tr>
+<tr class="even">
+<td>Quantitative trait, related samples (any N)</td>
+<td>SAIGE-GENE+, Regenie, or STAAR</td>
+</tr>
+<tr class="odd">
+<td>Binary trait, balanced (case:control &gt; 1:10), unrelated</td>
+<td>SKAT</td>
+</tr>
+<tr class="even">
+<td>Binary trait, balanced, related samples</td>
+<td>SMMAT, EmmaX-SKAT, or SAIGE-GENE+</td>
+</tr>
+<tr class="odd">
+<td>Binary trait, imbalanced (case:control &lt; 1:10)</td>
+<td>SAIGE-GENE+, Regenie, or STAAR (all use SPA)</td>
+</tr>
+</tbody>
+</table>
+<p>As a rule of thumb: the more imbalanced or related your samples, the more you need a method built around a mixed model with saddlepoint-corrected p-values, rather than a method that assumes independence and a Normal null.</p>
+</section>
+<section id="summary" class="level1" data-number="16">
+<h1 data-number="16"><span class="header-section-number">16</span> Summary</h1>
+<ol type="1">
+<li>Rare variants are individually hard to detect, but collectively common enough to test as a group.</li>
+<li>Burden tests and SKAT differ in one key assumption: whether causal effects within a gene point in the same direction.</li>
+<li>Both are implemented as score tests specifically because biobank-scale analysis makes fitting the full alternative model, gene by gene, computationally infeasible.</li>
+<li>SKAT-O interpolates between burden and SKAT rather than forcing a choice between them.</li>
+<li>At rare variant frequencies and with case-control imbalance, the Normal approximation that score tests rely on breaks down badly — the saddlepoint approximation is what makes modern tools like SAIGE-GENE+ trustworthy at genome-wide significance thresholds.</li>
+</ol>
+</section>
+<section id="references" class="level1" data-number="17">
+<h1 data-number="17"><span class="header-section-number">17</span> References</h1>
+<p><strong>Foundational methods</strong></p>
+<ul>
+<li>Li, B. &amp; Leal, S. M. (2008). Methods for detecting associations with rare variants for common diseases: application to analysis of sequence data. <em>American Journal of Human Genetics</em>, 83, 311–321.</li>
+<li>Madsen, B. E. &amp; Browning, S. R. (2009). A groupwise association test for rare mutations using a weighted sum statistic. <em>PLoS Genetics</em>, 5, e1000384.</li>
+<li>Price, A. L. et al.&nbsp;(2010). Pooled association tests for rare variants in exon-resequencing studies. <em>American Journal of Human Genetics</em>, 86, 832–838.</li>
+<li>Neale, B. M. et al.&nbsp;(2011). Testing for an unusual distribution of rare variants. <em>PLoS Genetics</em>, 7, e1001322.</li>
+<li>Wu, M. C. et al.&nbsp;(2011). Rare-variant association testing for sequencing data with the sequence kernel association test. <em>American Journal of Human Genetics</em>, 89, 82–93.</li>
+<li>Lee, S., Wu, M. C. &amp; Lin, X. (2012). Optimal tests for rare variant effects in sequencing association studies. <em>Biostatistics</em>, 13, 762–775.</li>
+<li>Lee, S. et al.&nbsp;(2012). Optimal unified approach for rare-variant association testing with application to small-sample case-control whole-exome sequencing studies. <em>American Journal of Human Genetics</em>, 91, 224–237.</li>
+<li>Liu, H., Tang, Y. &amp; Zhang, H. H. (2009). A new chi-square approximation to the distribution of non-negative definite quadratic forms in non-central normal variables. <em>Computational Statistics &amp; Data Analysis</em>, 53, 853–856.</li>
+</ul>
+<p><strong>Scalable software and applications</strong></p>
+<ul>
+<li>Zhou, W. et al.&nbsp;(2020). Scalable generalized linear mixed model for region-based association tests in large biobanks and cohorts. <em>Nature Genetics</em>, 52, 634–639.</li>
+<li>Zhou, W., Bi, W., Zhao, Z. et al.&nbsp;(2022). SAIGE-GENE+ improves the efficiency and accuracy of set-based rare variant association tests. <em>Nature Genetics</em>, 54, 1466–1469.</li>
+<li>Backman, J. D. et al.&nbsp;(2021). Exome sequencing and analysis of 454,787 UK Biobank participants. <em>Nature</em>, 599, 628–634.</li>
+<li>Karczewski, K. J. et al.&nbsp;(2022). Systematic single-variant and gene-based association testing of thousands of phenotypes in 394,841 UK Biobank exomes. <em>Cell Genomics</em>, 2, 100168.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

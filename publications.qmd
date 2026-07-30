@@ -1,0 +1,216 @@
+---
+title: "Publications"
+---
+
+<p class="hero-text" style="max-width: 640px;">
+Peer-reviewed research spanning biomedical data science, population health genomics, and computational/statistical physics. Full text and DOI links are noted where available.
+</p>
+
+## Biomedical, Genomics & Data Science
+
+::: {.grid}
+
+::: {.card}
+### Single-Cell Patch-Clamp/Proteomics of Human Alzheimer's Disease iPSC-Derived Excitatory Neurons Versus Isogenic Wild-Type Controls Suggests Novel Causation and Therapeutic Targets
+Ghatak S, Diedrich JK, Talantova M, **Bhadra N**, Scott H, Sharma M, et al.\
+*Advanced Science*, 2024
+
+Combines single-cell electrophysiology with proteomic profiling of Alzheimer's-derived neurons to surface candidate disease mechanisms and therapeutic targets not visible from either method alone.
+
+::: {.tag-row}
+[Co-Author]{.tag} [Journal Article]{.tag} [Neuroscience]{.tag}
+:::
+
+[Read Paper →](https://doi.org/10.1002/advs.202400545){.btn-secondary}
+:::
+
+::: {.card}
+### Heterogeneity Analysis of Associations Involving the Large-Scale Online MindCrowd Survey Memory Test
+**Bhadra N**, Don J, De Both M, Johnson M, Sharma S, Chambers D, et al.\
+*Gerontology*, 2025;71(10):823–834
+
+Examines how the relationship between memory performance and its predictors varies across subgroups in a large online cognitive testing cohort, arguing against one-size-fits-all models of memory decline.
+
+::: {.tag-row}
+[First Author]{.tag} [Journal Article]{.tag} [Cognitive Aging]{.tag}
+:::
+
+[Read Paper →](https://doi.org/10.1159/000547666){.btn-secondary}
+:::
+
+::: {.card}
+### T55. Genetic Heterogeneity Across ASD, ADHD, and IV
+Georgii Hellberg IK-L, Østerby Sørensen J, **Bhadra N**, et al.\
+*European Neuropsychopharmacology*, 2025 — Conference Abstract
+
+Investigates shared and distinct genetic contributions across autism spectrum disorder, ADHD, and a third diagnostic category, presented as a conference abstract.
+
+::: {.tag-row}
+[Co-Author]{.tag} [Conference Abstract]{.tag} [Genomics]{.tag}
+:::
+
+[Read Abstract →](https://www.sciencedirect.com/science/article/abs/pii/S0924977X25004870){.btn-secondary}
+:::
+
+::: {.card}
+### Predicting Individual Responses in Phase I Oncology Trials Using Routinely Collected Clinical Biomarkers
+**Bhadra N**, Boyd M, Smith S, Espirito J, Trent J, Powell C, Koktavy K, et al.\
+2024
+
+Builds predictive models of individual patient response in early-phase oncology trials from biomarkers already collected in routine clinical care, aimed at supporting trial design and patient stratification.
+
+::: {.tag-row}
+[First Author]{.tag} [Journal Article]{.tag} [Oncology]{.tag}
+:::
+
+[Read Paper →](https://doi.org/10.21203/rs.3.rs-4910461/v1){.btn-secondary}
+:::
+
+::: {.card}
+### Distance-Based Analysis of Longevity-Related Metabolomic Profiles
+Schork N, Podder A, **Bhadra N**, Don J, Raju A.\
+*Innovation in Aging*, 2023;7:632–632
+
+Applies distance-based statistical methods to metabolomic profiles to characterize patterns associated with longevity across a study cohort.
+
+::: {.tag-row}
+[Co-Author]{.tag} [Journal Article]{.tag} [Metabolomics]{.tag}
+:::
+
+[Read Paper →](https://doi.org/10.1093/geroni/igad104.2060){.btn-secondary}
+:::
+
+::: {.card}
+### A Time-Series Analysis of Blood-Based Biomarkers Within a 25-Year Longitudinal Dolphin Cohort
+Rangan AV, McGrouther CC, **Bhadra N**, Venn-Watson S, Jensen ED, et al.\
+*PLOS Computational Biology*, 2023;19(2):e1010890
+
+Uses time-series methods on a quarter-century of blood biomarker data from a longitudinal dolphin cohort to model long-term physiological trends, with implications for comparative aging research.
+
+::: {.tag-row}
+[Co-Author]{.tag} [Journal Article]{.tag} [Time-Series]{.tag}
+:::
+
+[Read Paper →](https://doi.org/10.1371/journal.pcbi.1010890){.btn-secondary}
+:::
+
+::: {.card}
+### Multiclass Classification of Environmental Chemical Stimuli From Unbalanced Plant Electrophysiological Data
+**Bhadra N**, Chatterjee SK, Das S.\
+*PLoS One*, 2023;18(5):e0285321
+
+Develops a classification approach for identifying environmental chemical stimuli from plant electrophysiological signals, addressing the class-imbalance challenges typical of this kind of biological sensing data.
+
+::: {.tag-row}
+[First Author]{.tag} [Journal Article]{.tag} [Machine Learning]{.tag}
+:::
+
+[Read Paper →](https://doi.org/10.1371/journal.pone.0285321){.btn-secondary}
+:::
+
+::: {.card}
+### Cross-Domain Affective Analysis of Large-Scale Textual Data Using Transformer-Based NLP Models
+**Bhadra N**.\
+Master of Engineering thesis, Arcada University of Applied Sciences, 2025
+
+MEng thesis applying transformer-based NLP models to affective analysis across multiple textual domains. Full project write-up available on this site.
+
+::: {.tag-row}
+[First Author]{.tag} [Thesis]{.tag} [NLP]{.tag}
+:::
+
+[Read Full Thesis →](affective-nlp-thesis.qmd){.btn-primary}
+:::
+
+:::
+
+## Computational & Statistical Physics
+
+::: {.grid}
+
+::: {.card}
+### Aspects of Temporal Perturbation in Dynamical Systems
+**Bhadra N**.\
+PhD thesis, IISER Kolkata, 2019
+
+PhD thesis studying how time-dependent perturbations affect the behavior of dynamical systems, spanning several coupled and driven physical models. Full project write-up available on this site.
+
+::: {.tag-row}
+[First Author]{.tag} [Thesis]{.tag} [Dynamical Systems]{.tag}
+:::
+
+[Read Full Thesis →](thesis.qmd){.btn-primary}
+:::
+
+::: {.card}
+### Dynamical Systems Analysis of Phantom Dark Energy Models
+Roy N, **Bhadra N**.\
+*Journal of Cosmology and Astroparticle Physics*, 2018
+
+Applies dynamical systems techniques to phantom dark energy cosmological models to characterize their long-term stability and behavior.
+
+::: {.tag-row}
+[Co-Author]{.tag} [Journal Article]{.tag} [Cosmology]{.tag}
+:::
+
+[Read Paper →](https://doi.org/10.1088/1475-7516/2018/06/002){.btn-secondary}
+:::
+
+::: {.card}
+### Hamiltonian Mean-Field Model: Effect of Temporal Perturbation in Coupling Matrix
+**Bhadra N**, Patra SK.\
+*Modern Physics Letters B*, 2018;32:1850147
+
+Studies how time-varying perturbations in the coupling matrix of the Hamiltonian Mean-Field model alter its collective dynamics.
+
+::: {.tag-row}
+[First Author]{.tag} [Journal Article]{.tag} [Statistical Physics]{.tag}
+:::
+
+[Read Paper →](https://arxiv.org/abs/1710.09633){.btn-secondary}
+:::
+
+::: {.card}
+### Noise Induced Transition in Josephson Junction With Second Harmonic
+**Bhadra N**.\
+*The European Physical Journal B*, 2018;91(1):13
+
+Examines how noise drives transitions between dynamical states in a Josephson junction model that includes a second-harmonic coupling term.
+
+::: {.tag-row}
+[First Author]{.tag} [Journal Article]{.tag} [Nonlinear Dynamics]{.tag}
+:::
+
+[Read Paper →](https://doi.org/10.1140/epjb/e2017-80421-0){.btn-secondary}
+:::
+
+::: {.card}
+### Dynamics of a System of Coupled Inverted Pendula With Vertical Forcing
+**Bhadra N**, Banerjee S.\
+*Chaos, Solitons & Fractals*, 2020;141:110358
+
+Analyzes the dynamics of coupled inverted pendula under vertical forcing, identifying regimes of stability and synchronization in the coupled system.
+
+::: {.tag-row}
+[First Author]{.tag} [Journal Article]{.tag} [Nonlinear Dynamics]{.tag}
+:::
+
+[Read Paper →](https://arxiv.org/abs/1803.01643){.btn-secondary}
+:::
+
+::: {.card}
+### Effect of Noise and Quantum Fluctuation on Josephson Junction Model With Second Harmonic
+**Bhadra N**, Lal S.\
+Conference on Nonlinear Systems & Dynamics, IISER Kolkata, 2016;16:18
+
+Extends the Josephson junction analysis to include quantum fluctuations alongside classical noise, presented at IISER Kolkata's nonlinear systems conference.
+
+::: {.tag-row}
+[Co-Author]{.tag} [Conference Abstract]{.tag} [Quantum Dynamics]{.tag}
+:::
+
+<!-- TODO: add DOI/abstract link -->
+[Read Abstract →](#){.btn-secondary}
+:::
+
+:::

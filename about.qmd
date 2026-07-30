@@ -1,0 +1,89 @@
+---
+title: "About"
+format:
+  html:
+    toc: false
+---
+
+## Nivedita Bhadra
+
+**Senior Computational Scientist** working at the intersection of physics, statistical modeling, and biomedical data.
+
+I trained as a physicist, then carried that quantitative foundation into biomedical research and statistical genetics — building models that have to hold up against real, messy, large-scale data.
+
+---
+
+## Background
+
+I'm currently at the **Institute of Biological Psychiatry, Denmark**, where I build statistical genetics models for risk prediction on large-scale cohort data — liability-scale modeling, polygenic risk scores, and related quantitative genetics methods.
+
+Before that, I spent several years at the **Translational Genomics Research Institute (TGen)**, applying high-dimensional statistical modeling to biomedical and clinical data.
+
+My path into this work started in physics: an M.Sc. from IIT Delhi, followed by a PhD in Computational Physics from IISER Kolkata, where I built numerical models of complex physical systems. That grounding in simulation, statistical inference, and large-scale computation is the thread connecting everything since — whether the system is physical, genomic, or textual.
+
+---
+
+## Education
+
+**PhD, Computational Physics**
+*Indian Institute of Science Education and Research (IISER), Kolkata, India* — 2012–2018
+[Read a summary of the doctoral research →](thesis.qmd)
+
+**M.Sc., Physics**
+*Indian Institute of Technology (IIT), Delhi, India* — 2009–2011
+
+**M.Eng., Big Data Analytics**
+*Arcada University of Applied Sciences, Finland* — 2024–2025
+[Read a summary of the Master's research →](affective-nlp-thesis.qmd)
+
+---
+
+## Publications
+
+A full list of peer-reviewed papers and theses — spanning biomedical data science and computational physics — is available on the [Publications](publications.qmd) page.
+
+---
+
+## Technical Skills
+
+::: {.skills-group}
+**Programming & Tools**
+
+::: {.tag-row}
+[Python]{.tag} [R]{.tag} [SQL]{.tag} [Bash / awk]{.tag} [Git & GitHub]{.tag} [Quarto]{.tag}
+:::
+:::
+
+::: {.skills-group}
+**Statistical & Quantitative Methods**
+
+::: {.tag-row}
+[GWAS]{.tag} [Polygenic Risk Scores]{.tag} [Liability-Scale Modeling]{.tag} [REML]{.tag} [SEM]{.tag} [SVD]{.tag} [Mendelian Randomization]{.tag} [Colocalization]{.tag} [Hypothesis Testing]{.tag}
+:::
+:::
+
+::: {.skills-group}
+**Machine Learning & NLP**
+
+::: {.tag-row}
+[Model Evaluation]{.tag} [Transformers]{.tag} [Local LLMs]{.tag} [Sentiment Analysis]{.tag} [Topic Modeling]{.tag}
+:::
+:::
+
+::: {.skills-group}
+**High-Performance & Reproducible Computing**
+
+::: {.tag-row}
+[HPC / Cluster Computing]{.tag} [Snakemake]{.tag} [Dask]{.tag} [Reproducible Pipelines]{.tag}
+:::
+:::
+
+---
+
+## Elsewhere
+
+- [Google Scholar](https://scholar.google.com/citations?hl=en&user=EWoE7sgAAAAJ&view_op=list_works&sortby=pubdate)
+- [LinkedIn](https://www.linkedin.com/in/nivedita-bhadra-b5149130/)
+- [GitHub](https://github.com/BNTechie)
+- [Medium](https://medium.com/@nivedita.home)
+- Email: nivedita.home@gmail.com

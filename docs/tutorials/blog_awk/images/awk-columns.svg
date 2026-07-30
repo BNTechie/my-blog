@@ -1,0 +1,52 @@
+<svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', ui-monospace, monospace">
+  <rect x="0" y="0" width="800" height="340" rx="16" fill="#f5f3ee"/>
+  <text x="400" y="40" text-anchor="middle" font-family="'Fraunces', Georgia, serif" font-size="21" fill="#1c2b39" font-weight="600">Extracting Columns with AWK</text>
+
+  <rect x="60" y="80" width="240" height="180" rx="8" fill="#fbfaf7" stroke="#ddd8cd" stroke-width="2"/>
+  <rect x="60" y="80" width="80" height="180" fill="#2f6f6b" fill-opacity="0.12"/>
+  <line x1="140" y1="80" x2="140" y2="260" stroke="#ddd8cd" stroke-width="1.5"/>
+  <line x1="220" y1="80" x2="220" y2="260" stroke="#ddd8cd" stroke-width="1.5"/>
+  <line x1="60" y1="125" x2="300" y2="125" stroke="#ddd8cd" stroke-width="1.5"/>
+  <line x1="60" y1="170" x2="300" y2="170" stroke="#ddd8cd" stroke-width="1.5"/>
+  <line x1="60" y1="215" x2="300" y2="215" stroke="#ddd8cd" stroke-width="1.5"/>
+
+  <text x="100" y="108" text-anchor="middle" font-size="13" fill="#1f4d4a" font-weight="600">name</text>
+  <text x="180" y="108" text-anchor="middle" font-size="13" fill="#4a5a68" font-weight="600">age</text>
+  <text x="260" y="108" text-anchor="middle" font-size="13" fill="#4a5a68" font-weight="600">score</text>
+
+  <text x="100" y="152" text-anchor="middle" font-size="13" fill="#1c2b39" font-weight="600">Alice</text>
+  <text x="180" y="152" text-anchor="middle" font-size="13" fill="#4a5a68">25</text>
+  <text x="260" y="152" text-anchor="middle" font-size="13" fill="#4a5a68">88</text>
+
+  <text x="100" y="197" text-anchor="middle" font-size="13" fill="#1c2b39" font-weight="600">Bob</text>
+  <text x="180" y="197" text-anchor="middle" font-size="13" fill="#4a5a68">30</text>
+  <text x="260" y="197" text-anchor="middle" font-size="13" fill="#4a5a68">64</text>
+
+  <text x="100" y="242" text-anchor="middle" font-size="13" fill="#1c2b39" font-weight="600">Charlie</text>
+  <text x="180" y="242" text-anchor="middle" font-size="13" fill="#4a5a68">28</text>
+  <text x="260" y="242" text-anchor="middle" font-size="13" fill="#4a5a68">73</text>
+
+  <text x="180" y="280" text-anchor="middle" font-size="11" fill="#4a5a68">Input Table</text>
+
+  <path d="M300 170 L410 170" fill="none" stroke="#2f6f6b" stroke-width="3" marker-end="url(#arrowAwk1)"/>
+
+  <rect x="420" y="140" width="230" height="60" rx="10" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2"/>
+  <text x="535" y="176" text-anchor="middle" font-size="14" fill="#1f4d4a" font-weight="600">awk '{print $1}'</text>
+
+  <path d="M650 170 L700 170" fill="none" stroke="#2f6f6b" stroke-width="3" marker-end="url(#arrowAwk2)"/>
+
+  <rect x="710" y="80" width="90" height="180" rx="8" fill="#fbfaf7" stroke="#b9812c" stroke-width="2"/>
+  <text x="755" y="150" text-anchor="middle" font-size="13" fill="#b9812c" font-weight="600">Alice</text>
+  <text x="755" y="180" text-anchor="middle" font-size="13" fill="#b9812c" font-weight="600">Bob</text>
+  <text x="755" y="210" text-anchor="middle" font-size="13" fill="#b9812c" font-weight="600">Charlie</text>
+  <text x="755" y="280" text-anchor="middle" font-size="11" fill="#4a5a68">Output</text>
+
+  <defs>
+    <marker id="arrowAwk1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2f6f6b"/>
+    </marker>
+    <marker id="arrowAwk2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2f6f6b"/>
+    </marker>
+  </defs>
+</svg>

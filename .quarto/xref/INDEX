@@ -187,5 +187,86 @@
   },
   "tutorials/blog_GWAS_expert/Advanced_GWAS.ipynb": {
     "Advanced_GWAS.html": "39ac7790"
+  },
+  "tutorials/blog_GWAS_expert/Advanced_GWAS_python_example.ipynb": {
+    "Advanced_GWAS_python_example.html": "e54a1bc3"
+  },
+  "tutorials/blog_GWAS_expert/Advanced_GWAS_R_example.ipynb": {
+    "Advanced_GWAS_R_example.html": "76bff976"
+  },
+  "tutorials/blog_NGS_pipeline_raw_data_to_GWAS/ngs_to_gwas_pipeline_tutorial.md": {
+    "ngs_to_gwas_pipeline_tutorial.html": "bfd53c53"
+  },
+  "tutorials/blog_NGS_pipeline_raw_data_to_GWAS/index.qmd": {
+    "index.html": "20319f97"
+  },
+  "tutorials/blog_NGS_pipeline_raw_data_to_GWAS/files/index.qmd": {
+    "index.html": "728b08af"
+  },
+  "tutorials/blog_pgls/pgls_tutorial.ipynb": {
+    "pgls_tutorial.html": "42b4f7b7"
+  },
+  "tutorials/blog_gen_env_comp/twin_heritability_tutorial.ipynb": {
+    "twin_heritability_tutorial.html": "ac1474f6"
+  },
+  "tutorials/blog_survival_analysis/survival-analysis-tutorial.ipynb": {
+    "survival-analysis-tutorial.html": "3d314210"
+  },
+  "tutorials/blog_twin_heritability/twin_heritability_tutorial.ipynb": {
+    "twin_heritability_tutorial.html": "8e44425f"
+  },
+  "tutorials/blog_covariance_matrix/covariance-matrix-association-tests.qmd": {
+    "covariance-matrix-association-tests.html": "dfadbb06"
+  },
+  "tutorials/blog_covariance_matrix/Covariance_matrix.ipynb": {
+    "Covariance_matrix.html": "ca464180"
+  },
+  "tutorials/blog_mendelianR/Mendelian_Randomization.ipynb": {
+    "Mendelian_Randomization.html": "d923184b"
+  },
+  "tutorials/blog_SEM/Structural_Equation_Modeling.ipynb": {
+    "Structural_Equation_Modeling.html": "06b371c1"
+  },
+  "tutorials/blog_Finemapping/Statistical_Fine_Mapping.ipynb": {
+    "Statistical_Fine_Mapping.html": "a5f1b993"
+  },
+  "tutorials/blog_PRS/Polygenic_Risk_Scores.ipynb": {
+    "Polygenic_Risk_Scores.html": "6b3466f9"
+  },
+  "tutorials/blog_Heritability_genetic_correlation/Heritability_and_Genetic_Correlation.ipynb": {
+    "Heritability_and_Genetic_Correlation.html": "70bf31a5"
+  },
+  "tutorials/blog_rare_variants/rare_variant_tutorial.ipynb": {
+    "rare_variant_tutorial.html": "ad4f6273"
+  },
+  "files/index.qmd": {
+    "index.html": "bf1613a0"
+  },
+  "files/about.qmd": {
+    "about.html": "d6b97b6d"
+  },
+  "files/mnt/user-data/outputs/my-blog-updates/blog/index.qmd": {
+    "index.html": "4ed12c08"
+  },
+  "tutorials/blog_ridge_lasso/ridge_lasso_tutorial.ipynb": {
+    "ridge_lasso_tutorial.html": "1d451bbe"
+  },
+  "tutorials/blog_Bayesian_regression/bayesian_regression_tutorial.ipynb": {
+    "bayesian_regression_tutorial.html": "1a40a49b"
+  },
+  "thesis.qmd": {
+    "thesis.html": "1b5089b8"
+  },
+  "files/thesis.qmd": {
+    "thesis.html": "47438a77"
+  },
+  "affective-nlp-thesis.qmd": {
+    "affective-nlp-thesis.html": "30b796a0"
+  },
+  "files 2/thesis.qmd": {
+    "thesis.html": "828ad58a"
+  },
+  "files 2/affective-nlp-thesis.qmd": {
+    "affective-nlp-thesis.html": "aec65891"
   }
 }

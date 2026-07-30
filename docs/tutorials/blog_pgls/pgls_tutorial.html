@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-07-22">
+
+<title>Phylogenetic Generalized Least Squares (PGLS) – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-problem-ordinary-regression-ignores" id="toc-the-problem-ordinary-regression-ignores" class="nav-link active" data-scroll-target="#the-problem-ordinary-regression-ignores"><span class="header-section-number">1</span> The problem ordinary regression ignores</a></li>
+  <li><a href="#from-independent-contrasts-to-pgls" id="toc-from-independent-contrasts-to-pgls" class="nav-link" data-scroll-target="#from-independent-contrasts-to-pgls"><span class="header-section-number">2</span> From independent contrasts to PGLS</a></li>
+  <li><a href="#the-model-formally" id="toc-the-model-formally" class="nav-link" data-scroll-target="#the-model-formally"><span class="header-section-number">3</span> The model, formally</a></li>
+  <li><a href="#worked-example-in-r" id="toc-worked-example-in-r" class="nav-link" data-scroll-target="#worked-example-in-r"><span class="header-section-number">4</span> Worked example in R</a>
+  <ul class="collapse">
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">4.1</span> Packages</a></li>
+  <li><a href="#simulating-a-tree-and-correlated-trait-data" id="toc-simulating-a-tree-and-correlated-trait-data" class="nav-link" data-scroll-target="#simulating-a-tree-and-correlated-trait-data"><span class="header-section-number">4.2</span> Simulating a tree and correlated trait data</a></li>
+  <li><a href="#naive-ols-ignoring-the-phylogeny" id="toc-naive-ols-ignoring-the-phylogeny" class="nav-link" data-scroll-target="#naive-ols-ignoring-the-phylogeny"><span class="header-section-number">4.3</span> Naive OLS (ignoring the phylogeny)</a></li>
+  <li><a href="#pgls-assuming-brownian-motion" id="toc-pgls-assuming-brownian-motion" class="nav-link" data-scroll-target="#pgls-assuming-brownian-motion"><span class="header-section-number">4.4</span> PGLS assuming Brownian motion</a></li>
+  <li><a href="#pgls-with-pagels-λ-estimated-from-the-data" id="toc-pgls-with-pagels-λ-estimated-from-the-data" class="nav-link" data-scroll-target="#pgls-with-pagels-λ-estimated-from-the-data"><span class="header-section-number">4.5</span> PGLS with Pagel’s λ estimated from the data</a></li>
+  <li><a href="#comparing-models" id="toc-comparing-models" class="nav-link" data-scroll-target="#comparing-models"><span class="header-section-number">4.6</span> Comparing models</a></li>
+  </ul></li>
+  <li><a href="#applying-this-to-your-own-data" id="toc-applying-this-to-your-own-data" class="nav-link" data-scroll-target="#applying-this-to-your-own-data"><span class="header-section-number">5</span> Applying this to your own data</a></li>
+  <li><a href="#common-pitfalls" id="toc-common-pitfalls" class="nav-link" data-scroll-target="#common-pitfalls"><span class="header-section-number">6</span> Common pitfalls</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Phylogenetic Generalized Least Squares (PGLS)</h1>
+<p class="subtitle lead">Estimating trait relationships when species share evolutionary history</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Genetics</div>
+    <div class="quarto-category">Statistics</div>
+    <div class="quarto-category">Phylogenetics</div>
+    <div class="quarto-category">Tutorial</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 22, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-problem-ordinary-regression-ignores" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-problem-ordinary-regression-ignores"><span class="header-section-number">1</span> The problem ordinary regression ignores</h2>
+<p>Suppose you want to test whether brain size scales with body size across mammals, or whether flower color predicts pollinator visitation across plant species. The natural instinct is to collect one data point per species and run an ordinary least squares (OLS) regression. This is wrong, and has been known to be wrong since Felsenstein’s foundational 1985 paper.</p>
+<p>The reason is simple. Species are not independent samples from some population; they are the tips of a phylogenetic tree. Two closely related species — say, a chimpanzee and a bonobo — resemble each other not because of some causal relationship between the traits under study, but because they inherited both traits from a recent common ancestor. Standard regression assumes residuals are independently and identically distributed. When your data points are structured by a phylogeny, that assumption is violated, and violated systematically: closely related species will tend to have correlated residuals. The practical consequence is that OLS understates its own uncertainty. Effective sample size is smaller than the number of species you counted, degrees of freedom are inflated, and p-values are optimistic — sometimes dramatically so (Felsenstein 1985; Freckleton et al.&nbsp;2002).</p>
+<p>Phylogenetic Generalized Least Squares (PGLS) addresses this directly. Rather than discarding the phylogeny or trying to “correct for” it after the fact, PGLS builds the expected pattern of non-independence into the regression itself, as a covariance structure on the residuals.</p>
+</section>
+<section id="from-independent-contrasts-to-pgls" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="from-independent-contrasts-to-pgls"><span class="header-section-number">2</span> From independent contrasts to PGLS</h2>
+<p>Felsenstein’s original solution was phylogenetically independent contrasts (PICs): transform the raw trait values into a set of statistically independent contrasts computed along the branches of the tree, then run a standard regression on the contrasts, forced through the origin (Felsenstein 1985). This works well but is somewhat inflexible — it handles only Brownian motion evolution, offers no natural way to include multiple predictors or categorical covariates, and doesn’t extend cleanly to generalized linear models.</p>
+<p>Grafen (1989) reframed the problem as one of generalized least squares regression, showing that PICs are mathematically equivalent to a GLS fit in which the residual covariance matrix is derived from the tree. Martins and Hansen (1997) generalized this further, and Pagel (1997, 1999) introduced scaling parameters — most importantly λ (lambda) — that let the strength of the phylogenetic signal in the residuals be estimated from the data rather than assumed. Freckleton, Harvey, and Pagel (2002) demonstrated that this λ-based approach is robust and statistically powerful even when the phylogeny is incompletely known. This is the method now generally called PGLS, and it is the standard tool in modern phylogenetic comparative biology (Symonds and Blomberg 2014).</p>
+</section>
+<section id="the-model-formally" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-model-formally"><span class="header-section-number">3</span> The model, formally</h2>
+<p>An ordinary least squares regression assumes</p>
+<p><span class="math display">\[y = X\beta + \varepsilon, \quad \varepsilon \sim N(0, \sigma^2 I)\]</span></p>
+<p>that is, residuals are independent and identically distributed with covariance matrix <span class="math inline">\(\sigma^2 I\)</span>. PGLS replaces this with</p>
+<p><span class="math display">\[y = X\beta + \varepsilon, \quad \varepsilon \sim N(0, \sigma^2 V)\]</span></p>
+<p>where <span class="math inline">\(V\)</span> is an <span class="math inline">\(n \times n\)</span> matrix encoding the expected covariance between species’ residuals, derived from the phylogeny. Under a Brownian motion model of evolution, the covariance between two species is proportional to the amount of shared branch length between them and the root: closely related species (which share a longer path from the root) get a higher covariance, tips connected only near the root get a lower one. The generalized least squares estimator is then</p>
+<p><span class="math display">\[\hat{\beta} = (X^\top V^{-1} X)^{-1} X^\top V^{-1} y\]</span></p>
+<p>which is just OLS after “whitening” the data by the inverse of the phylogenetic covariance structure. In practice, <span class="math inline">\(V\)</span> is rarely used raw; it is common to allow it to be scaled by Pagel’s <span class="math inline">\(\lambda\)</span>, which multiplies the off-diagonal (shared ancestry) elements of the correlation matrix by <span class="math inline">\(\lambda\)</span> while leaving the diagonal untouched. <span class="math inline">\(\lambda = 1\)</span> recovers the full Brownian expectation; <span class="math inline">\(\lambda = 0\)</span> collapses the model back to OLS, since it implies no phylogenetic signal in the residuals at all. <span class="math inline">\(\lambda\)</span> is estimated by maximum likelihood alongside the regression coefficients, so the data themselves tell you how much phylogenetic correction is warranted (Pagel 1999; Freckleton et al.&nbsp;2002).</p>
+</section>
+<section id="worked-example-in-r" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="worked-example-in-r"><span class="header-section-number">4</span> Worked example in R</h2>
+<p>The example below is fully self-contained: it simulates a tree and trait data with a known phylogenetic structure, so PGLS can be shown recovering the correct relationship where OLS does not.</p>
+<section id="packages" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="packages"><span class="header-section-number">4.1</span> Packages</h3>
+<p><code>ape</code> provides the phylogenetic infrastructure — tree objects, trait simulation, and the correlation structures (<code>corBrownian</code>, <code>corPagel</code>, <code>corMartins</code>, <code>corGrafen</code>) that plug directly into <code>nlme::gls()</code>. This combination is the base implementation of PGLS in R (Paradis and Schliep 2019; Pinheiro and Bates 2000). The <code>caper</code> package (Orme et al.&nbsp;2013) offers a popular alternative interface (<code>caper::pgls</code>) built specifically for comparative datasets, and <code>phytools</code> (Revell 2012) provides complementary tools for tree manipulation and visualization; either integrates well with the workflow below.</p>
+<div id="644b9171" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"ape"</span>, <span class="st">"nlme"</span>))   <span class="co"># if not already installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape)   <span class="co"># tree handling and correlation structures</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)  <span class="co"># gls(), the workhorse for PGLS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+The downloaded binary packages are in
+    /var/folders/vm/xtvv8jb542s04t61c12lsnvr0000gn/T//RtmpgOJBH7/downloaded_packages</code></pre>
+</div>
+</div>
+</section>
+<section id="simulating-a-tree-and-correlated-trait-data" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="simulating-a-tree-and-correlated-trait-data"><span class="header-section-number">4.2</span> Simulating a tree and correlated trait data</h3>
+<div id="a690a793" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. A random ultrametric tree with 40 tips ("species")</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">rcoal</span>(<span class="dv">40</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>tree<span class="sc">$</span>tip.label <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"sp"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. A predictor trait evolving under Brownian motion along the tree</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rTraitCont</span>(tree, <span class="at">model =</span> <span class="st">"BM"</span>, <span class="at">sigma =</span> <span class="dv">1</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. A response trait built as a linear function of x (true slope = 0.8),</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#    plus its own phylogenetically structured error term</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>phylo_error <span class="ot">&lt;-</span> <span class="fu">rTraitCont</span>(tree, <span class="at">model =</span> <span class="st">"BM"</span>, <span class="at">sigma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">0.8</span> <span class="sc">*</span> x <span class="sc">+</span> phylo_error</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">species =</span> tree<span class="sc">$</span>tip.label, <span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(dat) <span class="ot">&lt;-</span> dat<span class="sc">$</span>species</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 6 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">species</th>
+<th data-quarto-table-cell-role="th" scope="col">x</th>
+<th data-quarto-table-cell-role="th" scope="col">y</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">sp1</th>
+<td>sp1</td>
+<td>1.533555</td>
+<td>1.119959</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">sp2</th>
+<td>sp2</td>
+<td>1.578064</td>
+<td>1.176384</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">sp3</th>
+<td>sp3</td>
+<td>1.524573</td>
+<td>1.050779</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">sp4</th>
+<td>sp4</td>
+<td>1.752620</td>
+<td>1.301077</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">sp5</th>
+<td>sp5</td>
+<td>1.429647</td>
+<td>2.070559</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">sp6</th>
+<td>sp6</td>
+<td>1.223539</td>
+<td>1.970735</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="85ff2a99" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tree, <span class="at">show.tip.label =</span> <span class="cn">FALSE</span>, <span class="at">main =</span> <span class="st">"Simulated 40-tip phylogeny"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pgls_tutorial_files/figure-html/cell-4-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Because both <code>x</code> and the error term were generated under Brownian motion on the same tree, the residuals of any regression of <code>y</code> on <code>x</code> will themselves carry phylogenetic signal — exactly the situation PGLS is designed for.</p>
+</section>
+<section id="naive-ols-ignoring-the-phylogeny" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="naive-ols-ignoring-the-phylogeny"><span class="header-section-number">4.3</span> Naive OLS (ignoring the phylogeny)</h3>
+<div id="1df030e0" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m_ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> dat)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_ols)<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A matrix: 2 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Estimate</th>
+<th data-quarto-table-cell-role="th" scope="col">Std. Error</th>
+<th data-quarto-table-cell-role="th" scope="col">t value</th>
+<th data-quarto-table-cell-role="th" scope="col">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">(Intercept)</th>
+<td>-0.1581428</td>
+<td>0.09203221</td>
+<td>-1.718342</td>
+<td>9.387331e-02</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">x</th>
+<td>1.1539112</td>
+<td>0.08223846</td>
+<td>14.031284</td>
+<td>1.304257e-16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>OLS estimates the slope well above the true value of 0.8, with a tight standard error and an extremely small p-value. This is precisely the failure mode Felsenstein warned about: shared ancestry inflates the apparent strength and certainty of the relationship.</p>
+</section>
+<section id="pgls-assuming-brownian-motion" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="pgls-assuming-brownian-motion"><span class="header-section-number">4.4</span> PGLS assuming Brownian motion</h3>
+<div id="c58e4e14" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>corBM <span class="ot">&lt;-</span> <span class="fu">corBrownian</span>(<span class="dv">1</span>, <span class="at">phy =</span> tree, <span class="at">form =</span> <span class="sc">~</span>species)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>m_bm <span class="ot">&lt;-</span> <span class="fu">gls</span>(y <span class="sc">~</span> x, <span class="at">data =</span> dat, <span class="at">correlation =</span> corBM, <span class="at">method =</span> <span class="st">"ML"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_bm)<span class="sc">$</span>tTable</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A matrix: 2 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Value</th>
+<th data-quarto-table-cell-role="th" scope="col">Std.Error</th>
+<th data-quarto-table-cell-role="th" scope="col">t-value</th>
+<th data-quarto-table-cell-role="th" scope="col">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">(Intercept)</th>
+<td>-0.3596555</td>
+<td>0.4085034</td>
+<td>-0.8804222</td>
+<td>3.841651e-01</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">x</th>
+<td>0.8462925</td>
+<td>0.0751379</td>
+<td>11.2631903</td>
+<td>1.131397e-13</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Once the Brownian covariance structure is built into the residuals, the slope estimate sits much closer to the true value (0.8), and the standard error is appropriately larger, reflecting the smaller effective sample size once phylogenetic redundancy is accounted for.</p>
+</section>
+<section id="pgls-with-pagels-λ-estimated-from-the-data" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="pgls-with-pagels-λ-estimated-from-the-data"><span class="header-section-number">4.5</span> PGLS with Pagel’s λ estimated from the data</h3>
+<div id="b34bd377" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>corPagel_str <span class="ot">&lt;-</span> <span class="fu">corPagel</span>(<span class="at">value =</span> <span class="fl">0.5</span>, <span class="at">phy =</span> tree, <span class="at">form =</span> <span class="sc">~</span>species)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>m_lambda <span class="ot">&lt;-</span> <span class="fu">gls</span>(y <span class="sc">~</span> x, <span class="at">data =</span> dat, <span class="at">correlation =</span> corPagel_str, <span class="at">method =</span> <span class="st">"ML"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_lambda)<span class="sc">$</span>tTable</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A matrix: 2 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Value</th>
+<th data-quarto-table-cell-role="th" scope="col">Std.Error</th>
+<th data-quarto-table-cell-role="th" scope="col">t-value</th>
+<th data-quarto-table-cell-role="th" scope="col">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">(Intercept)</th>
+<td>-0.3579659</td>
+<td>0.41925874</td>
+<td>-0.8538067</td>
+<td>3.985625e-01</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">x</th>
+<td>0.8421314</td>
+<td>0.07516831</td>
+<td>11.2032762</td>
+<td>1.323633e-13</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="8d127da5" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>m_lambda<span class="sc">$</span>modelStruct<span class="sc">$</span>corStruct</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>Correlation structure of class corPagel representing
+  lambda 
+1.000392 </code></pre>
+</div>
+</div>
+<p>Here λ is estimated at essentially 1, correctly recovering the fact that the simulated residual error really was generated under pure Brownian motion. In real data, λ will rarely be exactly 0 or 1; it is precisely this intermediate value that tells you how much phylogenetic correction the data support, rather than forcing an all-or-nothing assumption.</p>
+</section>
+<section id="comparing-models" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="comparing-models"><span class="header-section-number">4.6</span> Comparing models</h3>
+<div id="24b59c2e" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(m_ols, m_bm, m_lambda)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 3 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">AIC</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">m_ols</th>
+<td>3</td>
+<td>49.61137</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">m_bm</th>
+<td>3</td>
+<td>-35.29059</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">m_lambda</th>
+<td>4</td>
+<td>-33.89102</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Both PGLS models vastly outperform OLS by AIC, confirming that the phylogenetic structure in the residuals is real and that ignoring it costs a great deal of model fit. The Brownian and λ models are nearly indistinguishable here (as expected, since λ ≈ 1), but in general, letting λ be estimated rather than fixed at 1 is the safer default, since it nests both extremes.</p>
+</section>
+</section>
+<section id="applying-this-to-your-own-data" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="applying-this-to-your-own-data"><span class="header-section-number">5</span> Applying this to your own data</h2>
+<ol type="1">
+<li><strong>Match your tips to your data.</strong> The tree’s tip labels and your data frame’s row names (or a species-name column) must correspond exactly; mismatches are the most common source of silent errors.</li>
+<li><strong>Prune the tree to your species.</strong> Use <code>ape::keep.tip()</code> (or <code>drop.tip()</code>) to reduce a large reference phylogeny down to just the species in your dataset before fitting.</li>
+<li><strong>Check for polytomies and zero-length branches.</strong> These can make some correlation structures numerically unstable; <code>ape::multi2di()</code> resolves polytomies at random for testing purposes, though ideally branch lengths should come from a proper phylogenetic analysis.</li>
+<li><strong>Don’t assume Brownian motion by default.</strong> Fit λ (or, alternatively, Pagel’s κ or δ, or an Ornstein-Uhlenbeck model via <code>ape::corMartins</code>) and let the likelihood tell you which structure the data support, rather than hard-coding an assumption.</li>
+<li><strong>Diagnose the fitted model</strong> as you would any GLS: examine standardized residuals for outliers or remaining structure, and consider whether the trait itself might need a transformation before modeling.</li>
+</ol>
+</section>
+<section id="common-pitfalls" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="common-pitfalls"><span class="header-section-number">6</span> Common pitfalls</h2>
+<ul>
+<li>Fitting PGLS with <code>method = "REML"</code> when comparing models with different fixed effects via likelihood ratio tests or AIC; use <code>method = "ML"</code> for that purpose, and switch to REML only when your final model’s fixed effects are settled.</li>
+<li>Treating a λ estimate of 0 as evidence that phylogeny “doesn’t matter” without checking the confidence interval on λ; with modest sample sizes, that interval is often wide.</li>
+<li>Applying PGLS to trait pairs measured on different subsets of species without pruning both the tree and the data consistently.</li>
+<li>Forgetting that PGLS corrects for correlated residuals due to shared ancestry — it does not, by itself, tell you whether a relationship is causal or convergent.</li>
+</ul>
+</section>
+<section id="references" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="references"><span class="header-section-number">7</span> References</h2>
+<p>Felsenstein, J. (1985). Phylogenies and the comparative method. <em>The American Naturalist</em>, 125(1), 1–15.</p>
+<p>Freckleton, R. P., Harvey, P. H., &amp; Pagel, M. (2002). Phylogenetic analysis and comparative data: A test and review of evidence. <em>The American Naturalist</em>, 160(6), 712–726.</p>
+<p>Grafen, A. (1989). The phylogenetic regression. <em>Philosophical Transactions of the Royal Society of London B</em>, 326(1233), 119–157.</p>
+<p>Martins, E. P., &amp; Hansen, T. F. (1997). Phylogenies and the comparative method: A general approach to incorporating phylogenetic information into the analysis of interspecific data. <em>The American Naturalist</em>, 149(4), 646–667.</p>
+<p>Orme, D., Freckleton, R., Thomas, G., Petzoldt, T., Fritz, S., Isaac, N., &amp; Pearse, W. (2013). <em>caper: Comparative Analyses of Phylogenetics and Evolution in R.</em> R package.</p>
+<p>Pagel, M. (1999). Inferring the historical patterns of biological evolution. <em>Nature</em>, 401(6756), 877–884.</p>
+<p>Paradis, E., &amp; Schliep, K. (2019). ape 5.0: An environment for modern phylogenetics and evolutionary analyses in R. <em>Bioinformatics</em>, 35(3), 526–528.</p>
+<p>Pinheiro, J., &amp; Bates, D. (2000). <em>Mixed-Effects Models in S and S-PLUS.</em> Springer.</p>
+<p>Revell, L. J. (2012). phytools: An R package for phylogenetic comparative biology (and other things). <em>Methods in Ecology and Evolution</em>, 3(2), 217–223.</p>
+<p>Symonds, M. R. E., &amp; Blomberg, S. P. (2014). A primer on phylogenetic generalised least squares. In L. Z. Garamszegi (Ed.), <em>Modern Phylogenetic Comparative Methods and Their Application in Evolutionary Biology</em> (pp.&nbsp;105–130). Springer.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

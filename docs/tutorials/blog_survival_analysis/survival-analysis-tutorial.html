@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-07-26">
+
+<title>Survival Analysis: Deriving the Kaplan–Meier Estimator and the Cox Model From Scratch – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Survival Analysis: Deriving the Kaplan–Meier Estimator and the Cox Model From Scratch</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 26, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Suppose a new cancer treatment is introduced, and researchers want to know whether it helps patients live longer. They recruit volunteers, follow them for several years, and record when each patient experiences an event such as disease recurrence or death.</p>
+<p>At first glance, this might seem like a straightforward prediction problem. Why not simply calculate the average survival time or fit a standard regression model?</p>
+<p>The challenge is that real-world studies are not so straightforward. Some patients leave the study early, some are still alive when the study ends, and others are lost to follow-up. For these individuals, we know that the event has <strong>not yet occurred</strong>, but we do not know exactly <strong>when</strong> it eventually will. Ignoring these partially observed cases discards valuable information, while treating them as complete observations leads to biased conclusions.</p>
+<p><strong>Survival analysis</strong> helps to solve this problem.</p>
+<p>Survival analysis is designed to analyze <strong>time-to-event data</strong>—that is, data in which the outcome of interest is not simply <em>whether</em> an event occurs, but <strong>when</strong> it occurs. Although the name originated in medical research, where the event was often death or disease recurrence, the methodology applies to various situations involving the timing of an event.</p>
+<p>Example cases:</p>
+<ul>
+<li>How long do cancer patients survive after treatment?</li>
+<li>When does a patient experience disease relapse?</li>
+<li>How long until a machine fails in a manufacturing plant?</li>
+<li>When does a customer cancel a subscription service?</li>
+<li>How long before a software system crashes?</li>
+<li>When does a genetic mutation become fixed in a population?</li>
+</ul>
+<p>What makes these problems unique is that the timing of the event carries just as much information as the event itself.</p>
+<p>A defining feature of survival data is <strong>censoring</strong>. Not every participant experiences the event during the observation period. For example, if a clinical trial ends after five years and a patient is still alive, we only know that their survival time is <strong>at least five years</strong>—their true survival time remains unknown. Classical statistical methods such as linear regression are not designed to handle these incomplete observations appropriately, whereas survival analysis incorporates them naturally, allowing researchers to use all available information without introducing systematic bias.</p>
+<p>Over the past several decades, survival analysis has become one of the most important statistical tools in medicine, epidemiology, public health, engineering, economics, reliability analysis, and increasingly in data science and machine learning. Whether evaluating new therapies, estimating equipment reliability, modeling customer retention, or studying disease progression, the central question remains the same:</p>
+<blockquote class="blockquote">
+<p><strong>Given what we know today, how does the probability of experiencing an event change over time?</strong></p>
+</blockquote>
+<p>In this tutorial, we will build an intuitive understanding of the two foundational methods in survival analysis:</p>
+<ul>
+<li><strong>Kaplan–Meier estimation</strong>, which estimates the probability of surviving over time without assuming a specific statistical model.</li>
+<li><strong>The Cox proportional hazards model</strong>, which quantifies how predictors such as age, treatment, or genetic factors influence the instantaneous risk of experiencing the event.</li>
+</ul>
+<p>We will try understand the statistical ideas and the underlying mathematics behind them , and implement each technique in <strong>R</strong> using some simple examples.</p>
+</section>
+<section id="basic-survival-quantities" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="basic-survival-quantities"><span class="header-section-number">2</span> Basic Survival Quantities</h2>
+<p>Before learning the Kaplan–Meier estimator or the Cox proportional hazards model, it is important to understand the three mathematical quantities that form the foundation of survival analysis.</p>
+<p>Suppose we follow an individual from the start of a study until an event occurs—for example, death, disease relapse, machine failure, or customer churn. The time until this event is called the <strong>survival time</strong> or <strong>event time</strong>.</p>
+<p>We denote this event time by the random variable <span class="math inline">\(T\)</span>.</p>
+<p>Because different individuals experience the event at different times, we treat <span class="math inline">\(T\)</span> as a <strong>random variable</strong>, meaning that its exact value is uncertain before we observe it.</p>
+<p>Survival analysis is built around three closely related functions:</p>
+<ul>
+<li><strong>The survival function</strong>, which tells us the probability that an individual remains event-free beyond a given time.</li>
+<li><strong>The hazard function</strong>, which measures the instantaneous risk of experiencing the event at a particular moment, assuming the individual has survived up to that time.</li>
+<li><strong>The cumulative hazard function</strong>, which accumulates this risk over time.</li>
+</ul>
+<p>Together, these three quantities describe the same underlying process from different perspectives.</p>
+<section id="survival-function" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="survival-function"><span class="header-section-number">2.1</span> 1. Survival Function</h3>
+<p>The most intuitive quantity is the <strong>survival function</strong>.</p>
+<p>It answers the question:</p>
+<blockquote class="blockquote">
+<p><strong>What is the probability that an individual survives beyond time <span class="math inline">\(t\)</span>?</strong></p>
+</blockquote>
+<p>Mathematically,</p>
+<p><span class="math display">\[
+S(t)=P(T&gt;t)=1-F(t),
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(T\)</span> is the event time,</li>
+<li><span class="math inline">\(F(t)\)</span> is the cumulative distribution function (CDF), representing the probability that the event has already occurred by time <span class="math inline">\(t\)</span>.</li>
+</ul>
+<p>As time increases, the survival probability can only stay the same or decrease.</p>
+<hr>
+</section>
+<section id="hazard-function" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="hazard-function"><span class="header-section-number">2.2</span> 2. Hazard Function</h3>
+<p>While the survival function describes the probability of remaining event-free, researchers are often interested in something slightly different:</p>
+<blockquote class="blockquote">
+<p><strong>Among individuals who have survived until time <span class="math inline">\(t\)</span>, how likely is the event to occur immediately afterward?</strong></p>
+</blockquote>
+<p>This idea is captured by the <strong>hazard function</strong>, sometimes called the <strong>instantaneous event rate</strong> or <strong>instantaneous risk</strong>.</p>
+<p>It is defined as</p>
+<p><span class="math display">\[
+h(t)=\lim_{\Delta t\rightarrow0}
+\frac{P(t\le T&lt;t+\Delta t\mid T\ge t)}
+{\Delta t}.
+\]</span></p>
+<p>Notice the conditioning.</p>
+<p>The hazard is <strong>not</strong> the probability of dying at time <span class="math inline">\(t\)</span>. Instead, it measures the instantaneous rate at which events occur among those who are still at risk just before time <span class="math inline">\(t\)</span>.</p>
+<p>This distinction is one of the most important concepts in survival analysis.</p>
+<hr>
+</section>
+<section id="relationship-between-hazard-and-survival" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="relationship-between-hazard-and-survival"><span class="header-section-number">2.3</span> 3. Relationship Between Hazard and Survival</h3>
+<p>Although the survival and hazard functions describe different ideas, they contain exactly the same information.</p>
+<p>Starting from the definition of conditional probability,</p>
+<p><span class="math display">\[
+h(t)=\frac{f(t)}{S(t)},
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(f(t)\)</span> is the probability density function (PDF),</li>
+<li><span class="math inline">\(S(t)\)</span> is the survival function.</li>
+</ul>
+<p>Since</p>
+<p><span class="math display">\[
+f(t)=-\frac{dS(t)}{dt},
+\]</span></p>
+<p>we obtain</p>
+<p><span class="math display">\[
+h(t)
+=-\frac{d}{dt}\log S(t).
+\]</span></p>
+<p>This equation tells us that the hazard is simply the rate at which the logarithm of the survival probability decreases over time.</p>
+<hr>
+</section>
+<section id="cumulative-hazard-function" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="cumulative-hazard-function"><span class="header-section-number">2.4</span> 4. Cumulative Hazard Function</h3>
+<p>Rather than looking only at the instantaneous hazard, it is often useful to consider the <strong>total accumulated hazard</strong> up to time <span class="math inline">\(t\)</span>.</p>
+<p>This is called the <strong>cumulative hazard function</strong>:</p>
+<p><span class="math display">\[
+H(t)
+=\int_0^t h(u),du.
+\]</span></p>
+<p>Integrating the previous relationship gives</p>
+<p><span class="math display">\[
+H(t)
+=-\log S(t),
+\]</span></p>
+<p>or equivalently,</p>
+<p><span class="math display">\[
+S(t)=\exp[-H(t)].
+\]</span></p>
+<p>This elegant identity shows that the survival function and cumulative hazard function are simply two different mathematical representations of the same underlying phenomenon.</p>
+<hr>
+</section>
+<section id="why-these-quantities-matter" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="why-these-quantities-matter"><span class="header-section-number">2.5</span> Why These Quantities Matter</h3>
+<p>These definitions are more than mathematical formalities—they motivate the two most widely used methods in survival analysis.</p>
+<ul>
+<li><strong>Kaplan–Meier estimation</strong> focuses on estimating the survival function <span class="math inline">\(S(t)\)</span> directly from observed data.</li>
+<li><strong>The Cox proportional hazards model</strong> focuses on modeling the hazard function <span class="math inline">\(h(t)\)</span> and how it changes with patient characteristics such as age, treatment, or genetic factors.</li>
+</ul>
+<p>Although the two methods approach the problem from different directions, they are linked through the relationship</p>
+<p><span class="math display">\[
+S(t)=\exp[-H(t)].
+\]</span></p>
+<p>Understanding this connection makes it much easier to see how the Kaplan–Meier estimator and the Cox model fit together within a single statistical framework.</p>
+</section>
+</section>
+<section id="the-kaplanmeier-estimator" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-kaplanmeier-estimator"><span class="header-section-number">3</span> The Kaplan–Meier Estimator</h2>
+<p>The <strong>Kaplan–Meier estimator</strong> is the most widely used non-parametric method for estimating the survival function from observed data.</p>
+<p>Its goal is straightforward:</p>
+<blockquote class="blockquote">
+<p><strong>Given a group of individuals, what is the probability of remaining event-free over time?</strong></p>
+</blockquote>
+<p>Unlike parametric survival models, the Kaplan–Meier estimator makes <strong>no assumptions</strong> about the underlying distribution of survival times. Instead, it estimates the survival curve directly from the observed data while naturally accounting for censored observations.</p>
+<section id="the-data-we-observe" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="the-data-we-observe"><span class="header-section-number">3.1</span> The Data We Observe</h3>
+<p>In an ideal study, we would know the exact event time for every individual. In practice, however, this is rarely possible. Some participants experience the event during follow-up, while others are still event-free when the study ends or are lost to follow-up. For these individuals, we only know that the event occurs <strong>after</strong> their last observed time.</p>
+<p>To accommodate this, survival analysis records two pieces of information for each individual:</p>
+<ol type="1">
+<li><strong>The observed follow-up time</strong></li>
+<li><strong>Whether the event occurred during follow-up</strong></li>
+</ol>
+<p>Mathematically, for the <span class="math inline">\(i\)</span>-th individual, we observe</p>
+<p><span class="math display">\[
+Y_i=\min(T_i,C_i),
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(T_i\)</span> is the true event time,</li>
+<li><span class="math inline">\(C_i\)</span> is the censoring time,</li>
+<li><span class="math inline">\(Y_i\)</span> is the observed follow-up time, equal to whichever occurs first.</li>
+</ul>
+<p>We also define an <strong>event indicator</strong></p>
+<p><span class="math display">\[
+\delta_i=
+\begin{cases}
+1, &amp; \text{if the event occurred},\
+0, &amp; \text{if the observation was censored}.
+\end{cases}
+\]</span></p>
+<p>Thus, each observation consists of the pair <span class="math inline">\((Y_i,\delta_i)\)</span>.</p>
+<hr>
+</section>
+<section id="constructing-the-risk-set" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="constructing-the-risk-set"><span class="header-section-number">3.2</span> Constructing the Risk Set</h3>
+<p>The Kaplan–Meier estimator builds the survival curve one event time at a time.</p>
+<p>Suppose the distinct observed event times are</p>
+<p><span class="math display">\[
+t_1,t_2,\ldots,t_k.
+\]</span></p>
+<p>Immediately before each event time <span class="math inline">\(t_j\)</span>, we define two important quantities:</p>
+<ul>
+<li><span class="math inline">\(n_j\)</span>: the number of individuals <strong>at risk</strong> just before <span class="math inline">\(t_j\)</span>.</li>
+<li><span class="math inline">\(d_j\)</span>: the number of events occurring exactly at <span class="math inline">\(t_j\)</span>.</li>
+</ul>
+<p>An individual is considered <strong>at risk</strong> if they have not experienced the event or been censored before time <span class="math inline">\(t_j\)</span>. Equivalently,</p>
+<p><span class="math display">\[
+Y_i \ge t_j.
+\]</span></p>
+<p>Notice that individuals who are censored <strong>after</strong> <span class="math inline">\(t_j\)</span> still belong to the risk set at time <span class="math inline">\(t_j\)</span>, because they were under observation until that point.</p>
+<hr>
+</section>
+<section id="deriving-the-kaplanmeier-estimator" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="deriving-the-kaplanmeier-estimator"><span class="header-section-number">3.3</span> Deriving the Kaplan–Meier Estimator</h3>
+<p>The key idea is simple.</p>
+<p>To survive beyond time <span class="math inline">\(t\)</span>, an individual must survive <strong>every earlier event time</strong>. Therefore, the overall survival probability can be written as the product of conditional survival probabilities:</p>
+<p><span class="math display">\[
+S(t)
+=\prod_{t_j\le t}
+P(T&gt;t_j \mid T\ge t_j).
+\]</span></p>
+<p>At each event time <span class="math inline">\(t_j\)</span>,</p>
+<ul>
+<li><span class="math inline">\(n_j\)</span> individuals are at risk,</li>
+<li><span class="math inline">\(d_j\)</span> experience the event.</li>
+</ul>
+<p>The empirical probability of experiencing the event at that instant is therefore</p>
+<p><span class="math display">\[
+\frac{d_j}{n_j},
+\]</span></p>
+<p>so the empirical probability of surviving beyond that event time is</p>
+<p><span class="math display">\[
+1-\frac{d_j}{n_j}.
+\]</span></p>
+<p>Multiplying these conditional survival probabilities across all event times gives the Kaplan–Meier estimator:</p>
+<p><span class="math display">\[
+\boxed{
+\hat S(t)
+=\prod_{t_j\le t}
+\left(
+1-\frac{d_j}{n_j}
+\right)
+}
+\]</span></p>
+<p>This estimator is called the <strong>product-limit estimator</strong> because it is obtained by multiplying together successive conditional survival probabilities.</p>
+<hr>
+</section>
+<section id="why-does-the-survival-curve-look-like-a-staircase" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="why-does-the-survival-curve-look-like-a-staircase"><span class="header-section-number">3.4</span> Why Does the Survival Curve Look Like a Staircase?</h3>
+<p>The Kaplan–Meier estimator is a <strong>step function</strong>.</p>
+<p>The survival probability changes <strong>only when an event occurs</strong>.</p>
+<p>Censored observations do <strong>not</strong> produce downward steps because no event has occurred. Instead, censored individuals are simply removed from the risk set for subsequent event times, reducing the denominator <span class="math inline">\(n_j\)</span> in later calculations.</p>
+<p>Consequently,</p>
+<ul>
+<li>observed events produce downward steps,</li>
+<li>censoring affects future risk sets but does not immediately change the estimated survival probability.</li>
+</ul>
+<hr>
+</section>
+<section id="implementing-the-kaplanmeier-estimator-in-r" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="implementing-the-kaplanmeier-estimator-in-r"><span class="header-section-number">3.5</span> Implementing the Kaplan–Meier Estimator in R</h3>
+<p>The following example implements the Kaplan–Meier estimator directly from its mathematical definition.</p>
+<p>We begin with a small toy dataset containing both observed events (<code>status = 1</code>) and censored observations (<code>status = 0</code>). For each distinct event time, we calculate</p>
+<ul>
+<li>the number of individuals at risk (<span class="math inline">\(n_j\)</span>),</li>
+<li>the number of observed events (<span class="math inline">\(d_j\)</span>),</li>
+<li>the updated survival probability using the product-limit formula.</li>
+</ul>
+<p>Finally, we compare our manual calculation with the result produced by the <code>survfit()</code> function from R’s <strong>survival</strong> package. Both methods should produce identical survival estimates, demonstrating that the Kaplan–Meier estimator implemented by <code>survfit()</code> is simply an efficient implementation of the mathematical definition derived above.</p>
+<div id="9f89447c-348f-4c59-bd80-f12e21b267bb" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>toy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">time   =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">14</span>, <span class="dv">14</span>, <span class="dv">18</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">status =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)   <span class="co"># 1 = event, 0 = censored</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>toy</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Distinct event times</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(toy<span class="sc">$</span>time[toy<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>]))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual Kaplan–Meier calculation</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>km_manual <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> event_times,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="cn">NA</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> <span class="cn">NA</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="cn">NA</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(event_times)) {</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  tj  <span class="ot">&lt;-</span> event_times[i]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Number at risk immediately before tj</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  n_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(toy<span class="sc">$</span>time <span class="sc">&gt;=</span> tj)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Number of events at tj</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(toy<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span> toy<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Product-limit update</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> S <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> d_j <span class="sc">/</span> n_j)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  km_manual<span class="sc">$</span>n[i] <span class="ot">&lt;-</span> n_j</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  km_manual<span class="sc">$</span>d[i] <span class="ot">&lt;-</span> d_j</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  km_manual<span class="sc">$</span>S[i] <span class="ot">&lt;-</span> S</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>km_manual</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare with survfit()</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> toy)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> event_times,</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual =</span> km_manual<span class="sc">$</span>S,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">survfit =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>surv</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>comparison</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 10 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">time</th>
+<th data-quarto-table-cell-role="th" scope="col">status</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 5 × 4</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">time</th>
+<th data-quarto-table-cell-role="th" scope="col">n</th>
+<th data-quarto-table-cell-role="th" scope="col">d</th>
+<th data-quarto-table-cell-role="th" scope="col">S</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td>10</td>
+<td>1</td>
+<td>0.9000000</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>9</td>
+<td>1</td>
+<td>0.8000000</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>7</td>
+<td>1</td>
+<td>0.6857143</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>5</td>
+<td>1</td>
+<td>0.5485714</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>3</td>
+<td>2</td>
+<td>0.1828571</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 5 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">time</th>
+<th data-quarto-table-cell-role="th" scope="col">manual</th>
+<th data-quarto-table-cell-role="th" scope="col">survfit</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td>0.9000000</td>
+<td>0.9000000</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>0.8000000</td>
+<td>0.8000000</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.6857143</td>
+<td>0.6857143</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>0.5485714</td>
+<td>0.5485714</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>0.1828571</td>
+<td>0.1828571</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The <code>comparison</code> table shows that the manually computed survival probabilities exactly match those returned by <code>survfit()</code>. This confirms that the Kaplan–Meier estimator is simply the cumulative product of conditional survival probabilities evaluated at each observed event time.</p>
+<p>The manually computed survival probabilities match those returned by <code>survfit()</code> exactly at every event time, confirming that the Kaplan–Meier estimator implemented in R is simply an efficient implementation of the product-limit formula derived above.</p>
+<blockquote class="blockquote">
+<p><strong>Why does the survival curve drop by different amounts at each event time?</strong></p>
+<p>The size of each downward step depends on the proportion of individuals who experience the event, not simply on the number of events. At event time <span class="math inline">\(t_j\)</span>, the drop is determined by</p>
+<p><span class="math display">\[
+\frac{d_j}{n_j},
+\]</span></p>
+<p>where <span class="math inline">\(d_j\)</span> is the number of events and <span class="math inline">\(n_j\)</span> is the number of individuals still at risk. Consequently, two events among only three individuals at risk produce a much larger decrease in the survival probability than one event among nine individuals at risk.</p>
+</blockquote>
+</section>
+<section id="visualizing-the-kaplanmeier-survival-curve" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="visualizing-the-kaplanmeier-survival-curve"><span class="header-section-number">3.6</span> Visualizing the Kaplan–Meier Survival Curve</h3>
+<p>The Kaplan–Meier estimate is conventionally displayed as a step function. The curve drops at observed event times and remains unchanged between events. Vertical marks indicate censored observations: these individuals were still event-free at their last recorded follow-up time, but their subsequent outcomes are unknown.</p>
+<div id="39068095-cc9a-430d-9b6a-e307f26d09e6" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>km_fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> lung2)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  km_fit,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Time"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Estimated survival probability"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Kaplan–Meier Survival Curve"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">mark.time =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>ERROR: Error in eval(expr, p): object 'lung2' not found
+
+Error in eval(expr, p): object 'lung2' not found
+Traceback:
+
+1. survfit.formula(Surv(time, status) ~ 1, data = lung2)
+2. eval.parent(temp)
+3. eval(expr, p)
+4. eval(expr, p)
+5. stats::model.frame(formula = Surv(time, status) ~ 1, data = lung2)
+6. model.frame.default(formula = Surv(time, status) ~ 1, data = lung2)
+7. is.data.frame(data)
+8. .handleSimpleError(function (cnd) 
+ . {
+ .     watcher$capture_plot_and_output()
+ .     cnd &lt;- sanitize_call(cnd)
+ .     watcher$push(cnd)
+ .     switch(on_error, continue = invokeRestart("eval_continue"), 
+ .         stop = invokeRestart("eval_stop"), error = NULL)
+ . }, "object 'lung2' not found", base::quote(eval(expr, p)))</code></pre>
+</div>
+</div>
+<div id="721a96a3-77f2-481b-aa44-0d821710cba6" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>The estimated survival probability declines over follow<span class="sc">-</span>up as deaths occur. The widening confidence interval toward the right<span class="sc">-</span>hand tail reflects the decreasing number of individuals remaining under observation.</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">### Quantifying Uncertainty: Greenwood's Formula</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>The Kaplan–Meier estimator provides a <span class="sc">**</span>point estimate<span class="sc">**</span> of the survival probability. As with any statistical estimate, however, we also want to know <span class="sc">**</span>how precise<span class="sc">**</span> that estimate is.</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>The uncertainty of the Kaplan–Meier estimator is estimated using <span class="sc">**</span>Greenwood<span class="st">'s formula**, which provides an estimate of its variance:</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="math display">\[
+\widehat{\mathrm{Var}}{\hat S(t)}
+=\hat S(t)^2
+\sum_{t_j\le t}
+\frac{d_j}
+{n_j(n_j-d_j)}.
+\]</span></p>
+<p>Taking the square root gives the estimated standard error:</p>
+<p><span class="math display">\[
+\widehat{\mathrm{SE}}{\hat S(t)}
+=\hat S(t)
+\sqrt{
+\sum_{t_j\le t}
+\frac{d_j}
+{n_j(n_j-d_j)}
+}.
+\]</span></p>
+<p>Each observed event contributes one term to the summation. As follow-up continues and fewer individuals remain in the risk set, the uncertainty of the survival estimate generally increases. This is why confidence intervals around Kaplan–Meier curves typically become wider toward the end of a study.</p>
+</section>
+<section id="implementing-greenwoods-formula" class="level3" data-number="3.7">
+<h3 data-number="3.7" class="anchored" data-anchor-id="implementing-greenwoods-formula"><span class="header-section-number">3.7</span> Implementing Greenwood’s Formula</h3>
+<p>Just as we manually computed the Kaplan–Meier estimator, we can also compute its standard error directly from Greenwood’s formula.</p>
+<p>At each event time we:</p>
+<ol type="1">
+<li>Update the Kaplan–Meier survival estimate.</li>
+<li>Add the Greenwood variance contribution <span class="math display">\[
+\frac{d_j}{n_j(n_j-d_j)}
+\]</span> to a running cumulative sum.</li>
+<li>Multiply the accumulated variance term by the current survival estimate to obtain the standard error.</li>
+</ol>
+<p>The implementation below follows these three steps directly.</p>
+<div id="0e10f954-640d-421a-96c8-28770988d9fd" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual Greenwood standard error</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>cum_var_term <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>km_manual<span class="sc">$</span>se <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(event_times)) {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  n_j <span class="ot">&lt;-</span> km_manual<span class="sc">$</span>n[i]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> km_manual<span class="sc">$</span>d[i]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update Kaplan–Meier estimate</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> S <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> d_j <span class="sc">/</span> n_j)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Greenwood variance contribution</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  cum_var_term <span class="ot">&lt;-</span> cum_var_term <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    d_j <span class="sc">/</span> (n_j <span class="sc">*</span> (n_j <span class="sc">-</span> d_j))</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Standard error</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  km_manual<span class="sc">$</span>se[i] <span class="ot">&lt;-</span> S <span class="sc">*</span> <span class="fu">sqrt</span>(cum_var_term)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>km_manual[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"S"</span>, <span class="st">"se"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can now compare both the manually calculated survival probabilities and their standard errors with the values returned by <code>survfit()</code>.</p>
+<div id="db10b208" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>time,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_surv =</span> km_manual<span class="sc">$</span>S,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">survfit_surv =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>surv,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_se =</span> km_manual<span class="sc">$</span>se,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">survfit_se =</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>std.err</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The manually calculated survival probabilities and standard errors should match those returned by <code>survfit()</code> to numerical precision. This demonstrates that the Kaplan–Meier estimator and Greenwood’s standard error are not separate algorithms, but rather direct implementations of the mathematical formulas derived above.</p>
+</section>
+</section>
+<section id="the-cox-proportional-hazards-model" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="the-cox-proportional-hazards-model"><span class="header-section-number">4</span> The Cox Proportional Hazards Model</h2>
+<p>The Kaplan–Meier estimator is an excellent tool for estimating the survival probability of a group over time. However, it has one important limitation: it cannot simultaneously evaluate the effect of multiple variables on survival.</p>
+<p>Suppose we want to answer questions such as:</p>
+<ul>
+<li>Does age increase the risk of death?</li>
+<li>Is a new treatment more effective than the standard treatment?</li>
+<li>Does smoking shorten survival after accounting for age?</li>
+<li>Do specific genetic variants influence disease progression?</li>
+</ul>
+<p>These questions involve <strong>covariates</strong>—variables that may influence the time until an event occurs. While Kaplan–Meier curves can compare a few predefined groups (for example, treated versus untreated patients), they cannot quantify the effect of several predictors simultaneously.</p>
+<p>To address this problem, Sir David Cox introduced the <strong>Cox proportional hazards model</strong> in 1972. Rather than modeling the survival probability directly, the Cox model describes <strong>how covariates influence the hazard</strong>, or instantaneous risk, of experiencing the event.</p>
+<section id="the-cox-model" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="the-cox-model"><span class="header-section-number">4.1</span> The Cox Model</h3>
+<p>For an individual with covariate vector <span class="math inline">\(X_i\)</span>, the hazard function is written as</p>
+<p><span class="math display">\[
+h_i(t \mid X_i)
+=h_0(t)\exp(\beta^T X_i),
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(h_i(t)\)</span> is the hazard for individual <span class="math inline">\(i\)</span>,</li>
+<li><span class="math inline">\(h_0(t)\)</span> is the <strong>baseline hazard</strong>, representing the hazard when all covariates are at their reference values,</li>
+<li><span class="math inline">\(X_i\)</span> is the vector of observed covariates (such as age, sex, or treatment),</li>
+<li><span class="math inline">\(\beta\)</span> is the vector of regression coefficients describing how each covariate affects the hazard.</li>
+</ul>
+<p>The exponential function ensures that the hazard remains positive while allowing covariates to increase or decrease the risk multiplicatively.</p>
+<hr>
+</section>
+<section id="hazard-ratios" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="hazard-ratios"><span class="header-section-number">4.2</span> Hazard Ratios</h3>
+<p>One of the most attractive features of the Cox model is that we can compare two individuals without knowing the baseline hazard.</p>
+<p>Suppose individuals <strong>A</strong> and <strong>B</strong> have covariate vectors <span class="math inline">\(X_A\)</span> and <span class="math inline">\(X_B\)</span>. Their hazard ratio is</p>
+<p><span class="math display">\[
+\frac{h(t\mid X_A)}
+{h(t\mid X_B)}
+=\exp{\beta^T(X_A-X_B)}.
+\]</span></p>
+<p>Notice that the baseline hazard <span class="math inline">\(h_0(t)\)</span> cancels completely.</p>
+<p>This means that the Cox model estimates <strong>relative risk</strong>, rather than absolute risk.</p>
+<p>For example, if</p>
+<p><span class="math display">\[
+\exp(\beta)=2,
+\]</span></p>
+<p>then one individual has <strong>twice the instantaneous risk</strong> of experiencing the event compared with another individual who differs by one unit in that covariate.</p>
+<hr>
+</section>
+<section id="why-is-it-called-the-proportional-hazards-model" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="why-is-it-called-the-proportional-hazards-model"><span class="header-section-number">4.3</span> Why Is It Called the Proportional Hazards Model?</h3>
+<p>The hazard ratio above does <strong>not</strong> depend on time.</p>
+<p>Regardless of whether the baseline hazard increases, decreases, or fluctuates during follow-up, the ratio between two individuals remains constant:</p>
+<p><span class="math display">\[
+\frac{h(t\mid X_A)}
+{h(t\mid X_B)}
+=\text{constant}.
+\]</span></p>
+<p>This assumption is known as the <strong>proportional hazards assumption</strong>, and it gives the model its name.</p>
+<p>Importantly, this is an <strong>assumption</strong>, not a mathematical guarantee. In practice, it should always be assessed after fitting the model, most commonly using <strong>Schoenfeld residuals</strong>, which we will discuss later.</p>
+<hr>
+</section>
+<section id="coxs-key-insight-the-partial-likelihood" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="coxs-key-insight-the-partial-likelihood"><span class="header-section-number">4.4</span> Cox’s Key Insight: The Partial Likelihood</h3>
+<p>At first glance, estimating the regression coefficients appears difficult because the baseline hazard <span class="math inline">\(h_0(t)\)</span> is completely unknown.</p>
+<p>Cox’s key insight was that we do not actually need to estimate the baseline hazard in order to estimate the regression coefficients.</p>
+<p>Instead of modeling the full likelihood, he considered the probability that, among all individuals still at risk at an observed event time, the individual who actually experienced the event was the one who failed.</p>
+<p>Suppose individual <span class="math inline">\(i_j\)</span> experiences the event at time <span class="math inline">\(t_j\)</span>, and let <span class="math inline">\(R(t_j)\)</span> denote the <strong>risk set</strong>—the individuals still under observation immediately before that event time.</p>
+<p>The conditional probability that individual <span class="math inline">\(i_j\)</span> experiences the event is</p>
+<p><span class="math display">\[
+P(i_j\text{ fails at }t_j
+\mid
+\text{one failure in }R(t_j))
+=\frac{\exp(\beta^T X_{i_j})}
+{\sum_{l\in R(t_j)}
+\exp(\beta^T X_l)}.
+\]</span></p>
+<p>Remarkably, the unknown baseline hazard cancels from this expression, just as it did in the hazard ratio.</p>
+<p>Multiplying these conditional probabilities across all observed event times produces the <strong>partial likelihood</strong>:</p>
+<p><span class="math display">\[
+L_p(\beta)
+=\prod_{j=1}^{k}
+\frac{\exp(\beta^T X_{i_j})}
+{\sum_{l\in R(t_j)}
+\exp(\beta^T X_l)}.
+\]</span></p>
+<p>Unlike an ordinary likelihood, the partial likelihood contains only the regression coefficients and no baseline hazard, making estimation much simpler.</p>
+<hr>
+</section>
+<section id="estimating-the-regression-coefficients" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="estimating-the-regression-coefficients"><span class="header-section-number">4.5</span> Estimating the Regression Coefficients</h3>
+<p>To estimate the regression coefficients, we maximize the <strong>log partial likelihood</strong> numerically.</p>
+<p>This produces the estimate</p>
+<p><span class="math display">\[
+\hat{\beta},
+\]</span></p>
+<p>which quantifies the effect of each covariate on the hazard.</p>
+<p>Modern statistical software performs this optimization automatically. In R, the <code>coxph()</code> function from the <strong>survival</strong> package fits the Cox proportional hazards model using this partial likelihood approach.</p>
+<p>To better understand how the method works, the following example first implements the log partial likelihood directly from its mathematical definition and optimizes it using <code>optim()</code>. We then compare the manually estimated regression coefficients with those returned by <code>coxph()</code> using the <code>lung</code> dataset and two covariates: <strong>age</strong> and <strong>sex</strong>.</p>
+</section>
+<section id="implementing-the-cox-partial-likelihood-by-hand" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="implementing-the-cox-partial-likelihood-by-hand"><span class="header-section-number">4.6</span> Implementing the Cox Partial Likelihood by Hand</h3>
+<p>We now implement the Cox partial likelihood directly from its mathematical definition. We use the <code>lung</code> dataset from the <strong>survival</strong> package and model survival using age and sex.</p>
+<p>In the original dataset:</p>
+<ul>
+<li><code>status = 1</code> indicates censoring and <code>status = 2</code> indicates death.</li>
+<li><code>sex = 1</code> indicates male and <code>sex = 2</code> indicates female.</li>
+</ul>
+<p>We recode both variables into a more conventional binary form:</p>
+<ul>
+<li><code>status = 0</code> for censored and <code>status = 1</code> for an observed event.</li>
+<li><code>sex = 0</code> for male and <code>sex = 1</code> for female.</li>
+</ul>
+<div id="fbc05fe6-cd99-4d6b-ae2a-c019d03e78d5" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lung2 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(lung[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"status"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>)])</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>lung2<span class="sc">$</span>status <span class="ot">&lt;-</span> lung2<span class="sc">$</span>status <span class="sc">-</span> <span class="dv">1</span>   <span class="co"># 0 = censored, 1 = event</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>lung2<span class="sc">$</span>sex    <span class="ot">&lt;-</span> lung2<span class="sc">$</span>sex <span class="sc">-</span> <span class="dv">1</span>      <span class="co"># 0 = male, 1 = female</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The function below calculates the negative log partial likelihood. For each distinct event time, it identifies:</p>
+<ul>
+<li>the individuals still in the risk set,</li>
+<li>the individuals experiencing the event,</li>
+<li>the linear predictor <span class="math inline">\(\beta^T X\)</span> for everyone in the risk set.</li>
+</ul>
+<p>It then adds each event’s contribution to the log partial likelihood:</p>
+<p><span class="math display">\[
+\ell_p(\beta)
+=\sum_{j}\left[\beta^T X_{i_j}-\log\left{\sum_{l\in R(t_j)}\exp(\beta^T X_l)\right}\right].
+\]</span></p>
+<div id="fa285b59-f0ac-46ad-bee1-88d54657a7cd" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative log partial likelihood</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>neg_log_pl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, data) {</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(data[, <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)])</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  time <span class="ot">&lt;-</span> data<span class="sc">$</span>time</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  status <span class="ot">&lt;-</span> data<span class="sc">$</span>status</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(time[status <span class="sc">==</span> <span class="dv">1</span>]))</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  log_partial_likelihood <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (tj <span class="cf">in</span> event_times) {</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Individuals still at risk immediately before tj</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    risk_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(time <span class="sc">&gt;=</span> tj)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Individuals experiencing the event at tj</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    event_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(time <span class="sc">==</span> tj <span class="sc">&amp;</span> status <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Linear predictors for the risk set</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    linear_predictor <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>      X[risk_idx, , <span class="at">drop =</span> <span class="cn">FALSE</span>] <span class="sc">%*%</span> beta</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add one contribution for each event at tj</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> event_idx) {</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>      log_partial_likelihood <span class="ot">&lt;-</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        log_partial_likelihood <span class="sc">+</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(X[i, ] <span class="sc">*</span> beta) <span class="sc">-</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(linear_predictor)))</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># optim() minimizes, so return the negative value</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>log_partial_likelihood</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We use <code>optim()</code> to minimize the negative log partial likelihood. The Hessian matrix returned by the optimizer provides an estimate of the covariance matrix of the regression coefficients.</p>
+<div id="d978a3f7-de54-4119-81de-8e101d347d6d" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fit_manual <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fn =</span> neg_log_pl,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung2,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>beta_manual <span class="ot">&lt;-</span> <span class="fu">setNames</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  fit_manual<span class="sc">$</span>par,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>se_manual <span class="ot">&lt;-</span> <span class="fu">setNames</span>(</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(fit_manual<span class="sc">$</span>hessian))),</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(beta_manual, <span class="dv">4</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(se_manual, <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="handling-tied-event-times" class="level3" data-number="4.7">
+<h3 data-number="4.7" class="anchored" data-anchor-id="handling-tied-event-times"><span class="header-section-number">4.7</span> Handling Tied Event Times</h3>
+<p>In real survival datasets, multiple individuals may experience the event at exactly the same recorded time. These are called <strong>tied events</strong>.</p>
+<p>The manual implementation above uses the <strong>Breslow approximation</strong>: all events occurring at the same time share the same risk-set denominator.</p>
+<p>To make the comparison technically consistent, we must therefore instruct <code>coxph()</code> to use the same method:</p>
+<div id="5f4ea781-3b8e-472b-82a0-e032351f3fac" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fit_cox <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> sex,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung2,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ties =</span> <span class="st">"breslow"</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_cox)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can compare the manually estimated coefficients and standard errors with those returned by <code>coxph()</code>:</p>
+<div id="e8f1edc7-970e-42fb-ba4e-cbfe0661b437" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_beta =</span> <span class="fu">as.numeric</span>(beta_manual),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph_beta =</span> <span class="fu">as.numeric</span>(<span class="fu">coef</span>(fit_cox)),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_se =</span> <span class="fu">as.numeric</span>(se_manual),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph_se =</span> <span class="fu">as.numeric</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">vcov</span>(fit_cox))))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>comparison[, <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(comparison[, <span class="sc">-</span><span class="dv">1</span>], <span class="dv">4</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The manual and <code>coxph()</code> estimates should agree closely because both calculations now use the same partial likelihood and the same method for handling tied event times.</p>
+<p>The fitted coefficients are expressed on the <strong>log-hazard scale</strong>. Exponentiating them gives the corresponding hazard ratios:</p>
+<div id="325ee879-98e7-4fa1-b3f2-b88b1d70ef0b" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(beta_manual)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit_cox))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For age, the hazard ratio represents the multiplicative change in the hazard associated with a one-year increase in age, holding sex constant.</p>
+<p>For sex, the hazard ratio compares females (<code>sex = 1</code>) with males (<code>sex = 0</code>), holding age constant. A hazard ratio below 1 indicates a lower estimated hazard for females than for males.</p>
+<p>The manually estimated coefficients and standard errors agree with those returned by <code>coxph()</code> to several decimal places. Because both implementations use the Breslow method for tied event times, the very small remaining differences are due only to numerical optimization and floating-point precision.</p>
+</section>
+<section id="interpreting-the-cox-coefficients" class="level3" data-number="4.8">
+<h3 data-number="4.8" class="anchored" data-anchor-id="interpreting-the-cox-coefficients"><span class="header-section-number">4.8</span> Interpreting the Cox Coefficients</h3>
+<p>The coefficients produced by a Cox model are expressed on the <strong>log-hazard scale</strong>. Exponentiating a coefficient converts it into a hazard ratio:</p>
+<p><span class="math display">\[
+\mathrm{HR}=\exp(\beta).
+\]</span></p>
+<p>A hazard ratio greater than 1 indicates a higher estimated hazard, while a hazard ratio below 1 indicates a lower estimated hazard, holding the other covariates fixed.</p>
+<p>For age, the estimated coefficient is approximately</p>
+<p><span class="math display">\[
+\hat\beta_{\text{age}}=0.017.
+\]</span></p>
+<p>Exponentiating gives</p>
+<p><span class="math display">\[
+\exp(0.017)\approx1.017.
+\]</span></p>
+<p>This means that each additional year of age is associated with an estimated <strong>1.7% increase in the instantaneous hazard of death</strong>, holding sex constant.</p>
+<p>The effect appears small because the coefficient describes a one-year difference. Over a ten-year age difference, the corresponding hazard ratio is</p>
+<p><span class="math display">\[
+\exp(10\times0.017)\approx1.19.
+\]</span></p>
+<p>Thus, a patient who is ten years older has an estimated hazard approximately 19% higher, assuming the proportional hazards model is appropriate and the other covariates remain fixed.</p>
+<p>For sex, coded as</p>
+<ul>
+<li><code>0 = male</code>,</li>
+<li><code>1 = female</code>,</li>
+</ul>
+<p>the estimated coefficient is approximately</p>
+<p><span class="math display">\[
+\hat\beta_{\text{sex}}=-0.513.
+\]</span></p>
+<p>The corresponding hazard ratio is</p>
+<p><span class="math display">\[
+\exp(-0.513)\approx0.60.
+\]</span></p>
+<p>Therefore, female patients in this cohort have an estimated hazard of death approximately <strong>0.60 times that of male patients</strong>, after adjusting for age. Equivalently, this corresponds to an estimated <strong>40% lower hazard</strong>:</p>
+<p><span class="math display">\[
+1-0.60=0.40.
+\]</span></p>
+<p>These interpretations describe associations within this dataset. They should not automatically be interpreted as causal effects.</p>
+</section>
+<section id="standard-errors-from-the-information-matrix" class="level3" data-number="4.9">
+<h3 data-number="4.9" class="anchored" data-anchor-id="standard-errors-from-the-information-matrix"><span class="header-section-number">4.9</span> Standard Errors from the Information Matrix</h3>
+<p>Estimating the coefficients is only part of the analysis. We also need to quantify their uncertainty.</p>
+<p>Let</p>
+<p><span class="math display">\[
+\ell_p(\beta)
+\]</span></p>
+<p>denote the Cox log partial likelihood. The observed information matrix is</p>
+<p><span class="math display">\[
+I(\beta)
+=-\frac{\partial^2\ell_p(\beta)}
+{\partial\beta,\partial\beta^T}.
+\]</span></p>
+<p>The estimated covariance matrix of the fitted coefficients is obtained by inverting the observed information matrix at the estimated parameter values:</p>
+<p><span class="math display">\[
+\widehat{\mathrm{Var}}(\hat\beta)
+=I(\hat\beta)^{-1}.
+\]</span></p>
+<p>The standard error of each coefficient is then the square root of the corresponding diagonal element:</p>
+<p><span class="math display">\[
+\mathrm{SE}(\hat\beta_j)
+=\sqrt{
+\left[
+I(\hat\beta)^{-1}
+\right]_{jj}
+}.
+\]</span></p>
+<p>In our implementation, <code>optim()</code> minimizes the <strong>negative log partial likelihood</strong>. Therefore, when <code>hessian = TRUE</code>, the returned Hessian is already the observed information matrix:</p>
+<div id="77bcb3e7-fd5f-4555-8c5e-2ae1c20e21a5" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>information_matrix <span class="ot">&lt;-</span> fit_manual<span class="sc">$</span>hessian</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>covariance_matrix <span class="ot">&lt;-</span> <span class="fu">solve</span>(information_matrix)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>se_manual <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(covariance_matrix))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This means the same optimization procedure provides both</p>
+<ul>
+<li>the coefficient estimates, through the location of the minimum, and</li>
+<li>their estimated uncertainty, through the curvature of the objective function around that minimum.</li>
+</ul>
+<p>A sharply curved likelihood produces smaller standard errors and more precise coefficient estimates. A flatter likelihood produces larger standard errors, indicating greater uncertainty about the fitted effects.</p>
+</section>
+</section>
+<section id="residual-diagnostics-in-the-cox-model" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="residual-diagnostics-in-the-cox-model"><span class="header-section-number">5</span> Residual Diagnostics in the Cox Model</h2>
+<p>In ordinary linear regression, residuals are easy to define—they are simply the difference between the observed and predicted values of the response variable.</p>
+<p>Survival analysis is different. Because many observations are <strong>censored</strong>, we often do not know the true event time for every individual. Consequently, there is no single “raw residual” analogous to that used in linear regression.</p>
+<p>Instead, the Cox proportional hazards model uses several specialized residuals, each designed to answer a different diagnostic question. Among the most commonly used are:</p>
+<ul>
+<li><strong>Martingale residuals</strong>, used to assess model fit and detect nonlinearity in covariate effects.</li>
+<li><strong>Deviance residuals</strong>, a transformation of martingale residuals that is more symmetric and useful for identifying outliers.</li>
+<li><strong>Schoenfeld residuals</strong>, used to assess the proportional hazards assumption.</li>
+<li><strong>Scaled Schoenfeld residuals</strong>, commonly used in formal tests of proportional hazards, such as the <code>cox.zph()</code> test in R.</li>
+</ul>
+<section id="martingale-residuals" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="martingale-residuals"><span class="header-section-number">5.1</span> Martingale Residuals</h3>
+<p>The <strong>martingale residual</strong> compares what was actually observed with what the fitted Cox model expected for each individual.</p>
+<p>It is defined as</p>
+<p><span class="math display">\[
+M_i
+=\delta_i \widehat{H}_0(t_i)
+\exp(\hat\beta^T X_i),
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(\delta_i\)</span> is the event indicator (1 = event, 0 = censored),</li>
+<li><span class="math inline">\(\widehat{H}_0(t_i)\)</span> is the estimated <strong>baseline cumulative hazard</strong> evaluated at the observed follow-up time,</li>
+<li><span class="math inline">\(X_i\)</span> is the individual’s covariate vector,</li>
+<li><span class="math inline">\(\hat\beta\)</span> is the vector of estimated regression coefficients.</li>
+</ul>
+<p>The estimated baseline cumulative hazard is usually obtained using the <strong>Breslow estimator</strong>,</p>
+<p><span class="math display">\[
+\widehat{H}_0(t)
+=\sum_{t_j\le t}
+\frac{d_j}
+{\sum_{l\in R(t_j)}
+\exp(\hat\beta^T X_l)},
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(d_j\)</span> is the number of events at time <span class="math inline">\(t_j\)</span>, and</li>
+<li><span class="math inline">\(R(t_j)\)</span> is the risk set immediately before time <span class="math inline">\(t_j\)</span>.</li>
+</ul>
+<p>Notice that the martingale residual is simply</p>
+<blockquote class="blockquote">
+<p><strong>Observed events − Expected cumulative hazard</strong></p>
+</blockquote>
+<p>making it conceptually similar to an observed-minus-expected residual used in many statistical models.</p>
+</section>
+<section id="interpreting-martingale-residuals" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="interpreting-martingale-residuals"><span class="header-section-number">5.2</span> Interpreting Martingale Residuals</h3>
+<p>Martingale residuals have some unusual mathematical properties.</p>
+<ul>
+<li>They are <strong>bounded above by 1</strong>.</li>
+<li>They are <strong>unbounded below</strong>.</li>
+<li>Their distribution is often highly skewed.</li>
+</ul>
+<p>A positive residual indicates that fewer events were expected than observed for that individual.</p>
+<p>A large negative residual indicates that the individual survived substantially longer than the model predicted based on their covariates.</p>
+<p>Because of their asymmetry, martingale residuals are <strong>not ideal for identifying outliers directly</strong>. Instead, they are primarily used to assess whether the functional form of a continuous covariate is appropriate.</p>
+<p>For example, after fitting a Cox model with age as a linear predictor, one can plot the martingale residuals against age. If the residuals exhibit a systematic curved pattern rather than random scatter, this suggests that the effect of age may not be linear and that a transformation or spline term could provide a better fit.</p>
+<p>In R, martingale residuals can be obtained directly from a fitted Cox model using</p>
+<div id="95523b0d-f711-47c7-8390-91e0092ea42d" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>martingale_residuals <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit_cox, <span class="at">type =</span> <span class="st">"martingale"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In the next section, we will examine <strong>Schoenfeld residuals</strong>, which play a different role: testing whether the proportional hazards assumption underlying the Cox model is satisfied.</p>
+</section>
+<section id="computing-martingale-residuals-by-hand" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="computing-martingale-residuals-by-hand"><span class="header-section-number">5.3</span> Computing Martingale Residuals by Hand</h3>
+<p>We can reproduce the martingale residuals returned by <code>coxph()</code> by calculating the Breslow baseline cumulative hazard directly.</p>
+<p>First, we extract the fitted coefficients and calculate each individual’s relative hazard:</p>
+<div id="8fd1f3e2-8339-42fe-865f-0229bd2cc8b6" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>beta_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit_cox)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  lung2[, <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>)]</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>relative_hazard <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(X <span class="sc">%*%</span> beta_hat)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next, we estimate the baseline cumulative hazard using the Breslow estimator:</p>
+<p><span class="math display">\[
+\widehat H_0(t)
+=\sum_{t_j\le t}
+\frac{d_j}
+{\sum_{l\in R(t_j)}
+\exp(\hat\beta^T X_l)}.
+\]</span></p>
+<div id="8114f165-1197-4b74-8b43-f92d4c3ceb79" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distinct observed event times</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(lung2<span class="sc">$</span>time[lung2<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Breslow baseline cumulative hazard</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>H0 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(event_times))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>cumulative_hazard <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(event_times)) {</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  tj <span class="ot">&lt;-</span> event_times[j]</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Number of events at tj</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    lung2<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    lung2<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Individuals in the risk set at tj</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  risk_set <span class="ot">&lt;-</span> lung2<span class="sc">$</span>time <span class="sc">&gt;=</span> tj</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Breslow increment</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  hazard_increment <span class="ot">&lt;-</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    d_j <span class="sc">/</span> <span class="fu">sum</span>(relative_hazard[risk_set])</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  cumulative_hazard <span class="ot">&lt;-</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    cumulative_hazard <span class="sc">+</span> hazard_increment</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  H0[j] <span class="ot">&lt;-</span> cumulative_hazard</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The cumulative baseline hazard is a step function. For each individual, we therefore need the value corresponding to the most recent event time at or before their observed follow-up time.</p>
+<p>Before the first event, the cumulative hazard must equal zero.</p>
+<div id="247e7dee-8ff5-4b8c-82c5-176cd9e54336" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Locate the final event time at or before each observed time</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>interval_index <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  lung2<span class="sc">$</span>time,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  event_times</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate H0(t) at each individual's observed follow-up time</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>H0_at_Y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  interval_index <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  H0[interval_index]</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The expected cumulative number of events for individual (i) is</p>
+<p><span class="math display">\[
+\widehat H_0(Y_i)
+\exp(\hat\beta^T X_i).
+\]</span></p>
+<p>The martingale residual is therefore</p>
+<p><span class="math display">\[
+M_i
+=\delta_i \widehat H_0(Y_i)
+\exp(\hat\beta^T X_i).
+\]</span></p>
+<div id="9278344d-632f-4356-bc76-4a599d9f5a0d" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>martingale_manual <span class="ot">&lt;-</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  lung2<span class="sc">$</span>status <span class="sc">-</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  H0_at_Y <span class="sc">*</span> relative_hazard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can compare the manual calculation with the residuals returned by <code>coxph()</code>:</p>
+<div id="6d6df668-0fce-4ee8-ae7b-381951777553" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>martingale_coxph <span class="ot">&lt;-</span> <span class="fu">residuals</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  fit_cox,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"martingale"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual =</span> martingale_manual,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">coxph =</span> <span class="fu">as.numeric</span>(martingale_coxph),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">difference =</span> martingale_manual <span class="sc">-</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>(martingale_coxph)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transform</span>(</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    comparison,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">manual =</span> <span class="fu">round</span>(manual, <span class="dv">4</span>),</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">coxph =</span> <span class="fu">round</span>(coxph, <span class="dv">4</span>),</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">difference =</span> <span class="fu">round</span>(difference, <span class="dv">8</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The two sets of residuals should agree to numerical precision, provided that <code>fit_cox</code> was fitted using the Breslow method:</p>
+</section>
+<section id="schoenfeld-residuals" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="schoenfeld-residuals"><span class="header-section-number">5.4</span> Schoenfeld Residuals</h3>
+<p>Whereas martingale residuals assess the fit of individual observations, <strong>Schoenfeld residuals</strong> are used to assess the <strong>proportional hazards assumption</strong>. At each observed event time (t_j), the Schoenfeld residual is defined as the difference between the covariate value of the individual who experienced the event and the risk-set-weighted average covariate value:</p>
+<p><span class="math display">\[
+r_j = X_{i_j} - \bar X(\hat\beta, t_j), \qquad
+\bar X(\hat\beta, t_j)
+=\frac{\sum_{l \in R(t_j)} X_l \exp(\hat\beta^T X_l)}
+{\sum_{l \in R(t_j)} \exp(\hat\beta^T X_l)}.
+\]</span></p>
+<p>There is <strong>one Schoenfeld residual for each event and each covariate</strong>, rather than one residual per individual. If the proportional hazards assumption holds, these residuals should show <strong>no systematic trend</strong> when plotted against time.</p>
+</section>
+<section id="computing-schoenfeld-residuals-in-r" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="computing-schoenfeld-residuals-in-r"><span class="header-section-number">5.5</span> Computing Schoenfeld Residuals in R</h3>
+<p>The <code>survival</code> package computes Schoenfeld residuals directly from a fitted Cox model. The residual matrix has <strong>one row for each observed event</strong> and <strong>one column for each covariate</strong>.</p>
+<div id="f6054434-bd6d-4032-9ddb-c27b8c8f2628" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sch <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit_cox, <span class="at">type =</span> <span class="st">"schoenfeld"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sch)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In practice, the proportional hazards assumption is usually assessed by plotting the <strong>scaled Schoenfeld residuals</strong> against event time and testing whether their slope differs significantly from zero. In R, the <code>cox.zph()</code> function performs both the graphical diagnostic and the corresponding statistical test.</p>
+<p>Deviance residuals, Cox–Snell residuals, and DFBETAs are additional diagnostic measures derived from the same martingale and score-function framework. They are useful for identifying outliers, assessing overall model fit, and evaluating influential observations, and are beyond the scope of this tutorial.</p>
+</section>
+<section id="comparing-survival-between-groups" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="comparing-survival-between-groups"><span class="header-section-number">5.6</span> Comparing Survival Between Groups</h3>
+<p>Before performing the log-rank test, the group-specific Kaplan–Meier curves provide a visual summary of the survival difference.</p>
+<div id="8cfbecc9-f013-47d8-9cf3-23ccaba8274c" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>km_sex <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> sex, <span class="at">data =</span> lung2)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  km_sex,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Time"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Estimated survival probability"</span>,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Kaplan–Meier Curves by Sex"</span>,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">mark.time =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"bottomleft"</span>,</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>),</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>),</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The separation between the curves gives an immediate visual impression of the group difference, while the log-rank test formally evaluates whether the survival experiences differ over follow-up.</p>
+</section>
+</section>
+<section id="the-log-rank-test" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="the-log-rank-test"><span class="header-section-number">6</span> The Log-Rank Test</h2>
+<p>The <strong>log-rank test</strong> is the most widely used statistical test for comparing survival curves between two or more groups. Unlike the Cox proportional hazards model, it does <strong>not</strong> estimate regression coefficients or require covariates. Instead, it tests the null hypothesis that the groups have the same underlying survival experience.</p>
+<p>At each observed event time, the test compares the <strong>observed</strong> number of events in each group with the <strong>expected</strong> number of events under the null hypothesis of equal survival.</p>
+<p>Mathematically,</p>
+<p><span class="math display">\[
+O_1 - E_1
+=\sum_{j=1}^{k}
+\left(
+d_{1j}
+-\frac{n_{1j}}{n_j}d_j
+\right),
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(d_{1j}\)</span> is the number of observed events in Group 1 at event time <span class="math inline">\(t_j\)</span>,</li>
+<li><span class="math inline">\(n_{1j}\)</span> is the number of individuals at risk in Group 1 just before <span class="math inline">\(t_j\)</span>,</li>
+<li><span class="math inline">\(d_j\)</span> is the total number of events at <span class="math inline">\(t_j\)</span>,</li>
+<li><span class="math inline">\(n_j\)</span> is the total number of individuals at risk at <span class="math inline">\(t_j\)</span>.</li>
+</ul>
+<p>The variance of the observed-minus-expected statistic is</p>
+<p><span class="math display">\[
+\mathrm{Var}(O_1-E_1)
+=\sum_{j=1}^{k}
+\frac{
+n_{1j}n_{2j}\,
+d_j(n_j-d_j)
+}{
+n_j^2(n_j-1)
+}.
+\]</span></p>
+<p>The log-rank test statistic is then</p>
+<p><span class="math display">\[
+Z^2
+=
+\frac{(O_1-E_1)^2}
+{\mathrm{Var}(O_1-E_1)},
+\]</span></p>
+<p>which follows approximately a chi-squared distribution with one degree of freedom under the null hypothesis.</p>
+<blockquote class="blockquote">
+<p><strong>Why does this look familiar?</strong></p>
+<p>The log-rank test is built from exactly the same <strong>risk-set bookkeeping</strong> used by the Kaplan–Meier estimator. At each event time, we count how many individuals remain at risk (<span class="math inline">\(n_j\)</span>) and how many events occur (<span class="math inline">\(d_j\)</span>). The only difference is that the log-rank test performs these calculations separately for each group and compares the observed and expected numbers of events over the entire follow-up period.</p>
+</blockquote>
+<section id="implementing-the-log-rank-test-by-hand" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="implementing-the-log-rank-test-by-hand"><span class="header-section-number">6.1</span> Implementing the Log-Rank Test by Hand</h3>
+<p>To illustrate the calculation, we divide the <code>lung</code> dataset into two groups using the median age:</p>
+<ul>
+<li><code>old</code>: age above the median,</li>
+<li><code>young</code>: age at or below the median.</li>
+</ul>
+<p>At each observed event time, the code calculates the numbers at risk and the observed events in the older group, then accumulates the observed count, expected count, and variance across follow-up.</p>
+<div id="0886af4f-38ff-4da6-92ad-82df50dda719" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>lung3 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(lung[, <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"status"</span>, <span class="st">"age"</span>)])</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>lung3<span class="sc">$</span>status <span class="ot">&lt;-</span> lung3<span class="sc">$</span>status <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>lung3<span class="sc">$</span>agegrp <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  lung3<span class="sc">$</span>age <span class="sc">&gt;</span> <span class="fu">median</span>(lung3<span class="sc">$</span>age),</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"old"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"young"</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>event_times <span class="ot">&lt;-</span> <span class="fu">sort</span>(</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(lung3<span class="sc">$</span>time[lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>O1 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>E1 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>V  <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (tj <span class="cf">in</span> event_times) {</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Individuals at risk immediately before tj</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  risk_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(lung3<span class="sc">$</span>time <span class="sc">&gt;=</span> tj)</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  n_j  <span class="ot">&lt;-</span> <span class="fu">length</span>(risk_idx)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  n1j  <span class="ot">&lt;-</span> <span class="fu">sum</span>(lung3<span class="sc">$</span>agegrp[risk_idx] <span class="sc">==</span> <span class="st">"old"</span>)</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  n2j  <span class="ot">&lt;-</span> n_j <span class="sc">-</span> n1j</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Total events and events in the older group at tj</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  d_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  d1j <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>time <span class="sc">==</span> tj <span class="sc">&amp;</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>    lung3<span class="sc">$</span>agegrp <span class="sc">==</span> <span class="st">"old"</span></span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Accumulate observed and expected events</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>  O1 <span class="ot">&lt;-</span> O1 <span class="sc">+</span> d1j</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>  E1 <span class="ot">&lt;-</span> E1 <span class="sc">+</span> (n1j <span class="sc">/</span> n_j) <span class="sc">*</span> d_j</span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Accumulate the variance</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (n_j <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> V <span class="sc">+</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>      (n1j <span class="sc">*</span> n2j <span class="sc">*</span> d_j <span class="sc">*</span> (n_j <span class="sc">-</span> d_j)) <span class="sc">/</span></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>      (n_j<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (n_j <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>Z2 <span class="ot">&lt;-</span> (O1 <span class="sc">-</span> E1)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> V</span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
+<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">O1 =</span> O1,</span>
+<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">E1 =</span> <span class="fu">round</span>(E1, <span class="dv">3</span>),</span>
+<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">Var =</span> <span class="fu">round</span>(V, <span class="dv">3</span>),</span>
+<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">Z2 =</span> <span class="fu">round</span>(Z2, <span class="dv">3</span>)</span>
+<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Here, (O_1) is the total number of observed events in the older group, (E_1) is the number expected under equal survival, and (Z^2) is the log-rank chi-squared statistic.</p>
+<p>We can compare the manual result with R’s <code>survdiff()</code> function:</p>
+<div id="a3376dcc" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>fit_logrank <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> agegrp,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> lung3</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>fit_logrank</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">manual_Z2 =</span> Z2,</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">survdiff_Z2 =</span> fit_logrank<span class="sc">$</span>chisq</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The two chi-squared statistics should agree to numerical precision.</p>
+</section>
+</section>
+<section id="a-full-proportional-hazards-diagnostic-workflow" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="a-full-proportional-hazards-diagnostic-workflow"><span class="header-section-number">7</span> A Full Proportional-Hazards Diagnostic Workflow</h2>
+<p>The residuals introduced above are the raw material. Used together, in a fixed order, they form a standard diagnostic workflow for a fitted Cox model: does the model fit at all (Cox–Snell), are there poorly-fit or influential individuals (deviance), and does the proportional hazards assumption actually hold (<code>cox.zph</code>).</p>
+<section id="deviance-residuals" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="deviance-residuals"><span class="header-section-number">7.1</span> Deviance residuals</h3>
+<p>Martingale residuals are useful but skewed: they range over <span class="math inline">\((-\infty, 1]\)</span>, so a handful of extreme negative values can dominate a plot. Deviance residuals are a variance-stabilizing transform of the martingale residual <span class="math inline">\(M_i\)</span>:</p>
+<p><span class="math display">\[
+D_i = \text{sign}(M_i)\sqrt{-2\left[M_i + \delta_i \log(\delta_i - M_i)\right]}.
+\]</span></p>
+<blockquote class="blockquote">
+<p><strong>Why bother transforming at all?</strong> <span class="math inline">\(D_i\)</span> is approximately symmetric around 0 for a well-fitting model, the way ordinary residuals are in linear regression. That makes them far more useful than martingale residuals for spotting individual outliers by eye.</p>
+</blockquote>
+<div id="c4e4f81e" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dev_manual <span class="ot">&lt;-</span> <span class="fu">sign</span>(martingale_manual) <span class="sc">*</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">pmax</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> (martingale_manual <span class="sc">+</span> lung2<span class="sc">$</span>status <span class="sc">*</span> <span class="fu">log</span>(lung2<span class="sc">$</span>status <span class="sc">-</span> martingale_manual))))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>dev_coxph <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit_cox, <span class="at">type =</span> <span class="st">"deviance"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">head</span>(<span class="fu">cbind</span>(<span class="at">manual =</span> dev_manual, <span class="at">coxph =</span> dev_coxph)), <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The manually computed deviance residuals match those returned by <code>coxph()</code>. Plotting deviance residuals against the linear predictor (= X) is a standard diagnostic for identifying potential outliers and assessing model fit.</p>
+<p>Plotting the deviance residuals against the fitted linear predictor provides a simple visual check for unusual observations or systematic departures from the fitted Cox model.</p>
+<div id="f974babe" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>lp <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_cox, <span class="at">type =</span> <span class="st">"lp"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  lp,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  dev_coxph,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">adjustcolor</span>(<span class="st">"steelblue"</span>, <span class="fl">0.6</span>),</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Linear predictor"</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Deviance residual"</span>,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Deviance Residuals vs Linear Predictor"</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"grey40"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>As you can see, the residuals are scattered roughly symmetrically around zero, with no obvious trend or a small number of extreme outlying observations.</p>
+<p>No individual sits far outside the band formed by the rest, and there is no visible curvature — no sign that a transformation of <code>age</code> or <code>sex</code> is needed.</p>
+</section>
+<section id="coxsnell-residuals" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="coxsnell-residuals"><span class="header-section-number">7.2</span> Cox–Snell residuals</h3>
+<p>Cox–Snell residuals check overall model fit rather than individual fit. For a correctly specified model, the residual</p>
+<p><span class="math display">\[
+R_i = \hat H_0(Y_i)\exp(\hat\beta^T X_i)
+\]</span></p>
+<p>should behave like a censored sample from an <span class="math inline">\(\text{Exponential}(1)\)</span> distribution — because <span class="math inline">\(R_i\)</span> is just <span class="math inline">\(\hat\Lambda_i(Y_i)\)</span>, and the cumulative hazard of any survival time evaluated at itself is exponential with rate 1.</p>
+<blockquote class="blockquote">
+<p><strong>How is that checked in practice?</strong> Treat <span class="math inline">\(\{R_i, \delta_i\}\)</span> as a new survival dataset and estimate its own Kaplan–Meier cumulative hazard, <span class="math inline">\(-\log \hat S_R(r)\)</span>. If the original model fits well, this cumulative hazard should trace the 45° line <span class="math inline">\(y = r\)</span>, since that is the cumulative hazard of a unit-rate exponential.</p>
+</blockquote>
+<p>Conveniently, <span class="math inline">\(R_i = \delta_i - M_i\)</span>, so no separate calculation is needed beyond the martingale residuals already computed.</p>
+<div id="067b20fa" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>coxsnell <span class="ot">&lt;-</span> lung2<span class="sc">$</span>status <span class="sc">-</span> martingale_manual   <span class="co"># R_i = delta_i - M_i</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cs_fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnell, lung2<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cs_fit<span class="sc">$</span>time, <span class="sc">-</span><span class="fu">log</span>(cs_fit<span class="sc">$</span>surv), <span class="at">type =</span> <span class="st">"s"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Cox-Snell residual"</span>, <span class="at">ylab =</span> <span class="st">"Estimated cumulative hazard"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Cox-Snell Residual Plot"</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The step function tracks the reference line closely apart from some flattening in the right tail, where only a handful of individuals remain at risk and the empirical cumulative hazard becomes noisy by construction. This is the expected pattern for an adequately fitting Cox model, rather than evidence of poor fit.</p>
+</section>
+<section id="testing-proportional-hazards-with-cox.zph" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="testing-proportional-hazards-with-cox.zph"><span class="header-section-number">7.3</span> Testing Proportional Hazards with <code>cox.zph()</code></h3>
+<p>Schoenfeld residuals were introduced earlier as raw per-event quantities. <code>cox.zph()</code> turns them into a formal test by examining whether the <strong>scaled Schoenfeld residuals</strong> vary systematically with a transformation of event time. By default, it uses a Kaplan–Meier transformation of time and tests whether the estimated time-dependent trend is zero.</p>
+<blockquote class="blockquote">
+<p><strong>What does a significant result mean?</strong></p>
+<p>A small p-value for a covariate indicates that its estimated effect on the hazard changes over follow-up time. In other words, the proportional hazards assumption may be violated for that covariate. The <code>GLOBAL</code> test evaluates the proportional hazards assumption for all covariates jointly.</p>
+</blockquote>
+<div id="745d6cc1" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>zph_fit <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(fit_cox)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>zph_fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="42ea8186" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(zph_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Neither covariate shows evidence of a violation of the proportional hazards assumption (age: (p = 0.65); sex: (p = 0.11); global test: (p = 0.25)). In both panels, the smoothed curves remain approximately horizontal and fluctuate around zero throughout follow-up. The proportional hazards assumption therefore appears reasonable for this model, and the estimated hazard ratios can be interpreted as approximately constant over the observed follow-up period.</p>
+</section>
+<section id="putting-the-workflow-together" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="putting-the-workflow-together"><span class="header-section-number">7.4</span> Putting the workflow together</h3>
+<p>For a fitted Cox model, the same three checks apply in the same order every time:</p>
+<ol type="1">
+<li><strong>Cox–Snell residuals</strong> — does the model fit overall? Compare their cumulative hazard to the 45° line.</li>
+<li><strong>Deviance residuals</strong> — which individuals fit badly? Plot against the linear predictor and scan for outliers or curvature.</li>
+<li><strong><code>cox.zph()</code></strong> — does proportional hazards hold, covariate by covariate? A significant result flags exactly which covariate needs a time-varying effect or stratification.</li>
+</ol>
+</section>
+</section>
+<section id="summary" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="summary"><span class="header-section-number">8</span> Summary</h2>
+<p>Kaplan–Meier estimation and Cox proportional hazards regression are built on the same counting-process framework but estimate different quantities.</p>
+<ul>
+<li><p><strong>Kaplan–Meier</strong> estimates the survival function (S(t)) directly as a product of conditional survival probabilities at each observed event time, with Greenwood’s formula providing its standard error.</p></li>
+<li><p><strong>Cox proportional hazards regression</strong> models the hazard as [ h(t X)=h_0(t)(^T X), ] and estimates () by maximizing the partial likelihood, which eliminates the unspecified baseline hazard by conditioning on the risk set at each event time.</p></li>
+</ul>
+<p>On top of the fitted Cox model, a complete diagnostic workflow was developed from three residual types:</p>
+<ul>
+<li><p><strong>Cox–Snell residuals</strong> assess overall model fit by comparing the estimated cumulative hazard with the 45° reference line.</p></li>
+<li><p><strong>Deviance residuals</strong> identify potential outliers and departures from the assumed functional form of the covariates.</p></li>
+<li><p><strong><code>cox.zph()</code></strong>, based on scaled Schoenfeld residuals, formally tests the proportional hazards assumption for each covariate and for the model as a whole.</p></li>
+</ul>
+<p>Every quantity derived in this tutorial—including the Kaplan–Meier estimator (S(t)), its standard error, the Cox regression coefficients (), their standard errors, martingale, deviance, and Cox–Snell residuals, and the log-rank test statistic—was implemented directly from its mathematical definition in base R and verified against the corresponding functions in the <strong>survival</strong> package (<code>survfit()</code>, <code>coxph()</code>, <code>survdiff()</code>, and <code>cox.zph()</code>), with agreement to at least three decimal places throughout.</p>
+</section>
+<section id="references" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="references"><span class="header-section-number">9</span> References</h2>
+<ol type="1">
+<li><p>Kaplan EL, Meier P. <em>Nonparametric Estimation from Incomplete Observations</em>. Journal of the American Statistical Association. 1958;53(282):457–481. https://www.jstor.org/stable/2281868</p></li>
+<li><p>Cox DR. <em>Regression Models and Life-Tables</em>. Journal of the Royal Statistical Society: Series B. 1972;34(2):187–220. https://www.jstor.org/stable/2985181</p></li>
+<li><p>Therneau TM, Grambsch PM. <em>Modeling Survival Data: Extending the Cox Model</em>. Springer; 2000. https://link.springer.com/book/10.1007/978-1-4757-3294-8</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

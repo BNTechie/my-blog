@@ -1,0 +1,19 @@
+project:
+  type: website
+  output-dir: docs
+
+
+website:
+  title: "Nivedita’s Blog"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Tutorials"
+        href: tutorials/index.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    css: style.css

@@ -2,10 +2,15 @@
 title: "Tutorials"
 listing:
   contents: "**/*.{ipynb,qmd}"
+  type: grid
   sort: "date desc"
-  type: default
+  categories: true
+  fields: [image, title, description, date, categories, reading-time]
+  grid-columns: 2
+  image-height: "180px"
+  feed: true
 ---
 
-
-
-
+<p class="hero-text" style="max-width: 640px;">
+Walkthroughs and code notebooks on statistical genetics, computational modeling, and applied machine learning — written to be run, not just read.
+</p>

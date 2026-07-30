@@ -6,6 +6,7 @@ date: 2025-07-01
 description: "Step-by-step guide to creating a local Git repository, linking it to GitHub, and pushing changes."
 
 categories: [Git, GitHub, Version Control, Data Science]
+image: images/github-workflow.svg
 
 format:
   html:
@@ -16,7 +17,19 @@ format:
 page-layout: article
 ---
 
-This tutorial provides a step-by-step guide to creating a local Git repository and pushing it to your GitHub account. It covers initializing a project folder, linking it to a remote GitHub repository, and committing your files. You will also learn how to update your repository when changes are made locally. These commands are beginner-friendly and can be directly copied and executed in your terminal. By the end, you'll have your project successfully version-controlled and hosted on GitHub.
+::: {.thesis-hero-wrap}
+<img src="images/github-workflow.svg" alt="Diagram showing a local Git repository pushing commits to a GitHub remote, with a commit history timeline" class="thesis-hero-art"/>
+
+::: {.thesis-hero-caption}
+The core workflow this tutorial covers: initialize locally, commit your work, and push it to a hosted GitHub remote.
+:::
+:::
+
+Version control is the foundation of any reproducible project, whether you're managing a single analysis script or a multi-contributor codebase. This tutorial walks through the complete lifecycle of a Git-tracked project — from initializing a local repository to hosting it on GitHub and keeping the two in sync. Every command below is copy-paste ready for your terminal.
+
+::: {.tag-row}
+[Git installed]{.tag} [GitHub account]{.tag} [Terminal access]{.tag}
+:::
 
 ---
 
@@ -41,7 +54,11 @@ git commit -m "Initial commit"    # Commit file
 
 ## Link to GitHub Repository
 
-(Create a repository on GitHub first: [https://github.com/new](https://github.com/new))
+Before running the commands below, create an empty repository on GitHub — don't initialize it with a README, since your local project already has one.
+
+[Create a new repository →](https://github.com/new){.btn-secondary}
+
+Once created, GitHub will show you a remote URL. Use either of the two methods below to connect it to your local project.
 
 ### Method 1: Using HTTPS
 ```bash
@@ -90,3 +107,13 @@ git add .
 git commit -m "Updated files"
 git push
 ```
+
+---
+
+## Next Steps
+
+You now have a fully version-controlled project hosted on GitHub, with a repeatable workflow for committing and pushing future changes. From here, consider exploring branching for parallel feature work, `.gitignore` for excluding files from version control, or GitHub Actions for automating tests and deployments.
+
+::: {.tag-row}
+[Branching]{.tag} [.gitignore]{.tag} [GitHub Actions]{.tag} [Pull Requests]{.tag}
+:::

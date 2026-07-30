@@ -4,13 +4,25 @@ project:
 
 
 website:
-  title: "Nivedita’s Blog"
+  title: "Nivedita Bhadra"
+  description: "Senior Computational Scientist — statistical genetics, computational modeling, and simulation."
   navbar:
     left:
       - text: "Home"
         href: index.qmd
+      - text: "Publications"
+        href: publications.qmd
       - text: "Tutorials"
         href: tutorials/index.qmd
+      - text: "Blog"
+        href: blog/index.qmd
+      - text: "About"
+        href: about.qmd
+    right:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/nivedita-bhadra-b5149130/
+      - icon: github
+        href: https://github.com/BNTechie
 
 format:
   html:

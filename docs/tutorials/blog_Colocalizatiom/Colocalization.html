@@ -9,7 +9,7 @@
 <meta name="author" content="Nivedita Bhadra">
 <meta name="dcterms.date" content="2026-05-29">
 
-<title>Colocalization Analysis in Statistical Genetics: Theory and Practical Example in R – Nivedita’s Blog</title>
+<title>Colocalization Analysis in Statistical Genetics: Theory and Practical Example in R – Nivedita Bhadra</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -115,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../style.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -123,7 +123,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Nivedita’s Blog</span>
+    <span class="navbar-title">Nivedita Bhadra</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -137,8 +137,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../tutorials/index.html"> 
 <span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -151,48 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
-  <li><a href="#why-colocalization-is-important" id="toc-why-colocalization-is-important" class="nav-link" data-scroll-target="#why-colocalization-is-important"><span class="header-section-number">2</span> Why Colocalization is Important</a></li>
-  <li><a href="#relationship-between-gwas-eqtl-and-colocalization" id="toc-relationship-between-gwas-eqtl-and-colocalization" class="nav-link" data-scroll-target="#relationship-between-gwas-eqtl-and-colocalization"><span class="header-section-number">3</span> Relationship Between GWAS, eQTL, and Colocalization</a></li>
-  <li><a href="#the-five-colocalization-hypotheses" id="toc-the-five-colocalization-hypotheses" class="nav-link" data-scroll-target="#the-five-colocalization-hypotheses"><span class="header-section-number">4</span> The Five Colocalization Hypotheses</a>
-  <ul class="collapse">
-  <li><a href="#h0-no-association-with-either-trait" id="toc-h0-no-association-with-either-trait" class="nav-link" data-scroll-target="#h0-no-association-with-either-trait"><span class="header-section-number">4.1</span> H0: No Association With Either Trait</a></li>
-  <li><a href="#h1-association-with-trait-1-only" id="toc-h1-association-with-trait-1-only" class="nav-link" data-scroll-target="#h1-association-with-trait-1-only"><span class="header-section-number">4.2</span> H1: Association With Trait 1 Only</a></li>
-  <li><a href="#h2-association-with-trait-2-only" id="toc-h2-association-with-trait-2-only" class="nav-link" data-scroll-target="#h2-association-with-trait-2-only"><span class="header-section-number">4.3</span> H2: Association With Trait 2 Only</a></li>
-  <li><a href="#h3-both-traits-associated-but-different-causal-variants" id="toc-h3-both-traits-associated-but-different-causal-variants" class="nav-link" data-scroll-target="#h3-both-traits-associated-but-different-causal-variants"><span class="header-section-number">4.4</span> H3: Both Traits Associated, But Different Causal Variants</a></li>
-  <li><a href="#h4-both-traits-associated-and-share-one-causal-variant" id="toc-h4-both-traits-associated-and-share-one-causal-variant" class="nav-link" data-scroll-target="#h4-both-traits-associated-and-share-one-causal-variant"><span class="header-section-number">4.5</span> H4: Both Traits Associated and Share One Causal Variant</a></li>
-  </ul></li>
-  <li><a href="#the-most-important-quantity-pp.h4" id="toc-the-most-important-quantity-pp.h4" class="nav-link" data-scroll-target="#the-most-important-quantity-pp.h4"><span class="header-section-number">5</span> The Most Important Quantity: PP.H4</a></li>
-  <li><a href="#simulated-example-using-the-coloc-package" id="toc-simulated-example-using-the-coloc-package" class="nav-link" data-scroll-target="#simulated-example-using-the-coloc-package"><span class="header-section-number">6</span> Simulated Example Using the coloc Package</a></li>
-  <li><a href="#prepare-data-for-coloc" id="toc-prepare-data-for-coloc" class="nav-link" data-scroll-target="#prepare-data-for-coloc"><span class="header-section-number">7</span> Prepare Data for coloc</a></li>
-  <li><a href="#examine-results" id="toc-examine-results" class="nav-link" data-scroll-target="#examine-results"><span class="header-section-number">8</span> Examine Results</a></li>
-  <li><a href="#understanding-h3-vs-h4" id="toc-understanding-h3-vs-h4" class="nav-link" data-scroll-target="#understanding-h3-vs-h4"><span class="header-section-number">9</span> Understanding H3 vs H4</a>
-  <ul class="collapse">
-  <li><a href="#h3-different-causal-variants" id="toc-h3-different-causal-variants" class="nav-link" data-scroll-target="#h3-different-causal-variants"><span class="header-section-number">9.1</span> H3: Different Causal Variants</a></li>
-  <li><a href="#h4-shared-causal-variant" id="toc-h4-shared-causal-variant" class="nav-link" data-scroll-target="#h4-shared-causal-variant"><span class="header-section-number">9.2</span> H4: Shared Causal Variant</a></li>
-  </ul></li>
-  <li><a href="#simulating-a-different-causal-variant-scenario" id="toc-simulating-a-different-causal-variant-scenario" class="nav-link" data-scroll-target="#simulating-a-different-causal-variant-scenario"><span class="header-section-number">10</span> Simulating a Different-Causal-Variant Scenario</a></li>
-  <li><a href="#why-visual-overlap-is-not-enough" id="toc-why-visual-overlap-is-not-enough" class="nav-link" data-scroll-target="#why-visual-overlap-is-not-enough"><span class="header-section-number">11</span> Why Visual Overlap Is Not Enough</a></li>
-  <li><a href="#colocalization-and-twas" id="toc-colocalization-and-twas" class="nav-link" data-scroll-target="#colocalization-and-twas"><span class="header-section-number">12</span> Colocalization and TWAS</a></li>
-  <li><a href="#colocalization-and-mendelian-randomization" id="toc-colocalization-and-mendelian-randomization" class="nav-link" data-scroll-target="#colocalization-and-mendelian-randomization"><span class="header-section-number">13</span> Colocalization and Mendelian Randomization</a></li>
-  <li><a href="#limitations-of-classical-colocalization" id="toc-limitations-of-classical-colocalization" class="nav-link" data-scroll-target="#limitations-of-classical-colocalization"><span class="header-section-number">14</span> Limitations of Classical Colocalization</a></li>
-  <li><a href="#modern-extensions" id="toc-modern-extensions" class="nav-link" data-scroll-target="#modern-extensions"><span class="header-section-number">15</span> Modern Extensions</a>
-  <ul class="collapse">
-  <li><a href="#susie-coloc" id="toc-susie-coloc" class="nav-link" data-scroll-target="#susie-coloc"><span class="header-section-number">15.1</span> SuSiE-Coloc</a></li>
-  <li><a href="#ecaviar" id="toc-ecaviar" class="nav-link" data-scroll-target="#ecaviar"><span class="header-section-number">15.2</span> eCAVIAR</a></li>
-  <li><a href="#fastenloc" id="toc-fastenloc" class="nav-link" data-scroll-target="#fastenloc"><span class="header-section-number">15.3</span> fastENLOC</a></li>
-  </ul></li>
-  <li><a href="#practical-interpretation-checklist" id="toc-practical-interpretation-checklist" class="nav-link" data-scroll-target="#practical-interpretation-checklist"><span class="header-section-number">16</span> Practical Interpretation Checklist</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">17</span> Summary</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">18</span> References</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -337,7 +320,7 @@ PP.H4 &gt; 0.90       very strong evidence</code></pre>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages if needed</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("coloc")</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a> <span class="co">#install.packages("coloc")</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ggplot2")</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("dplyr")</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>

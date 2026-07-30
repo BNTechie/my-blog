@@ -1,0 +1,20 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', ui-monospace, monospace">
+  <rect x="0" y="0" width="800" height="360" rx="16" fill="#f5f3ee"/>
+  <text x="400" y="40" text-anchor="middle" font-family="'Fraunces', Georgia, serif" font-size="21" fill="#1c2b39" font-weight="600">Bioinformatics Command-Line Toolkit</text>
+  <rect x="60" y="80" width="460" height="220" rx="12" fill="#fbfaf7" stroke="#ddd8cd" stroke-width="2"/>
+  <circle cx="85" cy="104" r="5" fill="#b9812c"/>
+  <circle cx="102" cy="104" r="5" fill="#ddd8cd"/>
+  <circle cx="119" cy="104" r="5" fill="#ddd8cd"/>
+  <text x="80" y="140" font-size="13.5" fill="#4a5a68">$ <tspan fill="#2f6f6b" font-weight="600">zcat</tspan> file.vcf.gz | grep '^#'</text>
+  <text x="80" y="182" font-size="13.5" fill="#4a5a68">$ <tspan fill="#2f6f6b" font-weight="600">awk</tspan> '{print $1,$4,$5}'</text>
+  <text x="80" y="224" font-size="13.5" fill="#4a5a68">$ <tspan fill="#2f6f6b" font-weight="600">samtools</tspan> view file.bam | head</text>
+  <text x="80" y="266" font-size="13.5" fill="#4a5a68">$ <tspan fill="#2f6f6b" font-weight="600">squeue</tspan> -u $USER | grep PD</text>
+  <rect x="560" y="90" width="180" height="44" rx="22" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2"/>
+  <text x="650" y="118" text-anchor="middle" font-size="14" fill="#1f4d4a" font-weight="600">FASTQ</text>
+  <rect x="560" y="146" width="180" height="44" rx="22" fill="#fbfaf7" stroke="#b9812c" stroke-width="2"/>
+  <text x="650" y="174" text-anchor="middle" font-size="14" fill="#b9812c" font-weight="600">VCF</text>
+  <rect x="560" y="202" width="180" height="44" rx="22" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2"/>
+  <text x="650" y="230" text-anchor="middle" font-size="14" fill="#1f4d4a" font-weight="600">BAM</text>
+  <rect x="560" y="258" width="180" height="44" rx="22" fill="#fbfaf7" stroke="#b9812c" stroke-width="2"/>
+  <text x="650" y="286" text-anchor="middle" font-size="14" fill="#b9812c" font-weight="600">HPC / SLURM</text>
+</svg>

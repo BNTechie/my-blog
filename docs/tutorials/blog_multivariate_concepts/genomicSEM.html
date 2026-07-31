@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nivedita Bhadra">
-<meta name="dcterms.date" content="2026-07-30">
+<meta name="dcterms.date" content="2026-07-28">
+<meta name="description" content="How LD Score Regression extends from single-trait heritability to cross-trait genetic covariance, and how Genomic SEM fits structural models – common factors, regressions, GWAS-by-subtraction – to that covariance structure.">
 
 <title>Multivariate Concepts in Statistical Genetics: From LD Score Regression to Genomic SEM – Nivedita Bhadra</title>
 <style>
@@ -219,47 +220,46 @@ window.Quarto = {
   <li><a href="#why-the-ldsc-intercept-matters" id="toc-why-the-ldsc-intercept-matters" class="nav-link" data-scroll-target="#why-the-ldsc-intercept-matters"><span class="header-section-number">1.0.6</span> 5. Why the LDSC Intercept Matters</a></li>
   <li><a href="#snp-heritability-using-ld-score-regression" id="toc-snp-heritability-using-ld-score-regression" class="nav-link" data-scroll-target="#snp-heritability-using-ld-score-regression"><span class="header-section-number">1.0.7</span> 3. SNP Heritability Using LD Score Regression</a></li>
   <li><a href="#genetic-covariance-and-genetic-correlation" id="toc-genetic-covariance-and-genetic-correlation" class="nav-link" data-scroll-target="#genetic-covariance-and-genetic-correlation"><span class="header-section-number">1.0.8</span> 4. Genetic Covariance and Genetic Correlation</a></li>
-  <li><a href="#from-ld-score-regression-to-genomic-sem" id="toc-from-ld-score-regression-to-genomic-sem" class="nav-link" data-scroll-target="#from-ld-score-regression-to-genomic-sem"><span class="header-section-number">1.0.9</span> 5. From LD Score Regression to Genomic SEM</a></li>
-  <li><a href="#the-two-stage-framework-of-genomic-sem" id="toc-the-two-stage-framework-of-genomic-sem" class="nav-link" data-scroll-target="#the-two-stage-framework-of-genomic-sem"><span class="header-section-number">1.0.10</span> 6. The Two-Stage Framework of Genomic SEM</a></li>
-  <li><a href="#genome-wide-sem-vs-multivariate-gwas" id="toc-genome-wide-sem-vs-multivariate-gwas" class="nav-link" data-scroll-target="#genome-wide-sem-vs-multivariate-gwas"><span class="header-section-number">1.0.11</span> 9. Genome-Wide SEM vs Multivariate GWAS</a></li>
-  <li><a href="#practical-setup-in-r" id="toc-practical-setup-in-r" class="nav-link" data-scroll-target="#practical-setup-in-r"><span class="header-section-number">1.0.12</span> 7. Practical Setup in R</a></li>
-  <li><a href="#step-1-munge-summary-statistics" id="toc-step-1-munge-summary-statistics" class="nav-link" data-scroll-target="#step-1-munge-summary-statistics"><span class="header-section-number">1.0.13</span> 8. Step 1: Munge Summary Statistics</a></li>
-  <li><a href="#step-2-run-multivariable-ld-score-regression" id="toc-step-2-run-multivariable-ld-score-regression" class="nav-link" data-scroll-target="#step-2-run-multivariable-ld-score-regression"><span class="header-section-number">1.0.14</span> 9. Step 2: Run Multivariable LD Score Regression</a></li>
-  <li><a href="#step-3-load-the-ldsc-output" id="toc-step-3-load-the-ldsc-output" class="nav-link" data-scroll-target="#step-3-load-the-ldsc-output"><span class="header-section-number">1.0.15</span> 10. Step 3: Load the LDSC Output</a></li>
-  <li><a href="#understanding-the-genetic-covariance-matrix" id="toc-understanding-the-genetic-covariance-matrix" class="nav-link" data-scroll-target="#understanding-the-genetic-covariance-matrix"><span class="header-section-number">1.0.16</span> 11. Understanding the Genetic Covariance Matrix</a></li>
-  <li><a href="#understanding-the-sampling-covariance-matrix" id="toc-understanding-the-sampling-covariance-matrix" class="nav-link" data-scroll-target="#understanding-the-sampling-covariance-matrix"><span class="header-section-number">1.0.17</span> 12. Understanding the Sampling Covariance Matrix</a></li>
-  <li><a href="#understanding-the-sampling-covariance-matrix-1" id="toc-understanding-the-sampling-covariance-matrix-1" class="nav-link" data-scroll-target="#understanding-the-sampling-covariance-matrix-1"><span class="header-section-number">1.0.18</span> 12. Understanding the Sampling Covariance Matrix</a></li>
-  <li><a href="#why-the-sampling-covariance-matrix-matters" id="toc-why-the-sampling-covariance-matrix-matters" class="nav-link" data-scroll-target="#why-the-sampling-covariance-matrix-matters"><span class="header-section-number">1.0.19</span> 13. Why the Sampling Covariance Matrix Matters</a></li>
-  <li><a href="#factor-identification-in-genomic-sem" id="toc-factor-identification-in-genomic-sem" class="nav-link" data-scroll-target="#factor-identification-in-genomic-sem"><span class="header-section-number">1.0.20</span> 10. Factor Identification in Genomic SEM</a></li>
-  <li><a href="#lavaan-model-syntax-used-in-genomic-sem" id="toc-lavaan-model-syntax-used-in-genomic-sem" class="nav-link" data-scroll-target="#lavaan-model-syntax-used-in-genomic-sem"><span class="header-section-number">1.0.21</span> 13. Lavaan Model Syntax Used in Genomic SEM</a></li>
-  <li><a href="#common-factor-model" id="toc-common-factor-model" class="nav-link" data-scroll-target="#common-factor-model"><span class="header-section-number">1.0.22</span> 14. Common Factor Model</a></li>
-  <li><a href="#genetic-multiple-regression" id="toc-genetic-multiple-regression" class="nav-link" data-scroll-target="#genetic-multiple-regression"><span class="header-section-number">1.0.23</span> 15. Genetic Multiple Regression</a></li>
-  <li><a href="#gwas-by-subtraction" id="toc-gwas-by-subtraction" class="nav-link" data-scroll-target="#gwas-by-subtraction"><span class="header-section-number">1.0.24</span> 16. GWAS-by-Subtraction</a></li>
-  <li><a href="#view-model-results" id="toc-view-model-results" class="nav-link" data-scroll-target="#view-model-results"><span class="header-section-number">1.0.25</span> 15. View Model Results</a></li>
-  <li><a href="#view-model-fit" id="toc-view-model-fit" class="nav-link" data-scroll-target="#view-model-fit"><span class="header-section-number">1.0.26</span> 16. View Model Fit</a></li>
-  <li><a href="#interpreting-the-common-factor-model" id="toc-interpreting-the-common-factor-model" class="nav-link" data-scroll-target="#interpreting-the-common-factor-model"><span class="header-section-number">1.0.27</span> 17. Interpreting the Common Factor Model</a></li>
-  <li><a href="#alternative-model-correlated-traits-model" id="toc-alternative-model-correlated-traits-model" class="nav-link" data-scroll-target="#alternative-model-correlated-traits-model"><span class="header-section-number">1.0.28</span> 18. Alternative Model: Correlated Traits Model</a></li>
-  <li><a href="#alternative-model-regression-model" id="toc-alternative-model-regression-model" class="nav-link" data-scroll-target="#alternative-model-regression-model"><span class="header-section-number">1.0.29</span> 19. Alternative Model: Regression Model</a></li>
-  <li><a href="#multivariate-gwas-in-genomic-sem" id="toc-multivariate-gwas-in-genomic-sem" class="nav-link" data-scroll-target="#multivariate-gwas-in-genomic-sem"><span class="header-section-number">1.0.30</span> 20. Multivariate GWAS in Genomic SEM</a></li>
-  <li><a href="#steps-for-multivariate-gwas" id="toc-steps-for-multivariate-gwas" class="nav-link" data-scroll-target="#steps-for-multivariate-gwas"><span class="header-section-number">1.0.31</span> 21. Steps for Multivariate GWAS</a></li>
-  <li><a href="#step-3-for-multivariate-gwas-prepare-snp-summary-statistics" id="toc-step-3-for-multivariate-gwas-prepare-snp-summary-statistics" class="nav-link" data-scroll-target="#step-3-for-multivariate-gwas-prepare-snp-summary-statistics"><span class="header-section-number">1.0.32</span> 22. Step 3 for Multivariate GWAS: Prepare SNP Summary Statistics</a></li>
-  <li><a href="#why-linprob-is-needed" id="toc-why-linprob-is-needed" class="nav-link" data-scroll-target="#why-linprob-is-needed"><span class="header-section-number">1.0.33</span> 23. Why <code>linprob</code> Is Needed</a></li>
-  <li><a href="#step-4-run-usergwas" id="toc-step-4-run-usergwas" class="nav-link" data-scroll-target="#step-4-run-usergwas"><span class="header-section-number">1.0.34</span> 24. Step 4: Run userGWAS</a></li>
-  <li><a href="#view-the-first-rows-of-the-multivariate-gwas-output" id="toc-view-the-first-rows-of-the-multivariate-gwas-output" class="nav-link" data-scroll-target="#view-the-first-rows-of-the-multivariate-gwas-output"><span class="header-section-number">1.0.35</span> 25. View the First Rows of the Multivariate GWAS Output</a></li>
-  <li><a href="#check-warnings-and-errors" id="toc-check-warnings-and-errors" class="nav-link" data-scroll-target="#check-warnings-and-errors"><span class="header-section-number">1.0.36</span> 26. Check Warnings and Errors</a></li>
-  <li><a href="#genome-wide-significant-factor-hits" id="toc-genome-wide-significant-factor-hits" class="nav-link" data-scroll-target="#genome-wide-significant-factor-hits"><span class="header-section-number">1.0.37</span> 27. Genome-Wide Significant Factor Hits</a></li>
-  <li><a href="#qsnp-testing-snp-level-heterogeneity" id="toc-qsnp-testing-snp-level-heterogeneity" class="nav-link" data-scroll-target="#qsnp-testing-snp-level-heterogeneity"><span class="header-section-number">1.0.38</span> 28. QSNP: Testing SNP-Level Heterogeneity</a></li>
-  <li><a href="#qsnp-as-a-qc-metric" id="toc-qsnp-as-a-qc-metric" class="nav-link" data-scroll-target="#qsnp-as-a-qc-metric"><span class="header-section-number">1.0.39</span> 29. QSNP as a QC Metric</a></li>
-  <li><a href="#qsnp-as-a-biological-result" id="toc-qsnp-as-a-biological-result" class="nav-link" data-scroll-target="#qsnp-as-a-biological-result"><span class="header-section-number">1.0.40</span> 30. QSNP as a Biological Result</a></li>
-  <li><a href="#multiple-factor-models-and-qsnp" id="toc-multiple-factor-models-and-qsnp" class="nav-link" data-scroll-target="#multiple-factor-models-and-qsnp"><span class="header-section-number">1.0.41</span> 31. Multiple-Factor Models and QSNP</a></li>
-  <li><a href="#interpreting-qsnp" id="toc-interpreting-qsnp" class="nav-link" data-scroll-target="#interpreting-qsnp"><span class="header-section-number">1.0.42</span> 29. Interpreting QSNP</a></li>
-  <li><a href="#practice-section-anthropometric-traits" id="toc-practice-section-anthropometric-traits" class="nav-link" data-scroll-target="#practice-section-anthropometric-traits"><span class="header-section-number">1.0.43</span> 31. Practice Section: Anthropometric Traits</a></li>
-  <li><a href="#example-anthropometric-factor-model" id="toc-example-anthropometric-factor-model" class="nav-link" data-scroll-target="#example-anthropometric-factor-model"><span class="header-section-number">1.0.44</span> 32. Example Anthropometric Factor Model</a></li>
-  <li><a href="#example-two-factor-model" id="toc-example-two-factor-model" class="nav-link" data-scroll-target="#example-two-factor-model"><span class="header-section-number">1.0.45</span> 33. Example Two-Factor Model</a></li>
-  <li><a href="#comparing-models" id="toc-comparing-models" class="nav-link" data-scroll-target="#comparing-models"><span class="header-section-number">1.0.46</span> 34. Comparing Models</a></li>
-  <li><a href="#important-practical-advice" id="toc-important-practical-advice" class="nav-link" data-scroll-target="#important-practical-advice"><span class="header-section-number">1.0.47</span> 35. Important Practical Advice</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.0.48</span> 36. Summary</a></li>
-  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">1.0.49</span> 37. Key Takeaways</a></li>
+  <li><a href="#why-shared-genetic-architecture-requires-new-models" id="toc-why-shared-genetic-architecture-requires-new-models" class="nav-link" data-scroll-target="#why-shared-genetic-architecture-requires-new-models"><span class="header-section-number">1.0.9</span> 8. Why Shared Genetic Architecture Requires New Models</a></li>
+  <li><a href="#from-ld-score-regression-to-genomic-sem" id="toc-from-ld-score-regression-to-genomic-sem" class="nav-link" data-scroll-target="#from-ld-score-regression-to-genomic-sem"><span class="header-section-number">1.0.10</span> 5. From LD Score Regression to Genomic SEM</a></li>
+  <li><a href="#the-two-stage-framework-of-genomic-sem" id="toc-the-two-stage-framework-of-genomic-sem" class="nav-link" data-scroll-target="#the-two-stage-framework-of-genomic-sem"><span class="header-section-number">1.0.11</span> 6. The Two-Stage Framework of Genomic SEM</a></li>
+  <li><a href="#genome-wide-sem-vs-multivariate-gwas" id="toc-genome-wide-sem-vs-multivariate-gwas" class="nav-link" data-scroll-target="#genome-wide-sem-vs-multivariate-gwas"><span class="header-section-number">1.0.12</span> 9. Genome-Wide SEM vs Multivariate GWAS</a></li>
+  <li><a href="#practical-setup-in-r" id="toc-practical-setup-in-r" class="nav-link" data-scroll-target="#practical-setup-in-r"><span class="header-section-number">1.0.13</span> 7. Practical Setup in R</a></li>
+  <li><a href="#step-1-munge-summary-statistics" id="toc-step-1-munge-summary-statistics" class="nav-link" data-scroll-target="#step-1-munge-summary-statistics"><span class="header-section-number">1.0.14</span> 8. Step 1: Munge Summary Statistics</a></li>
+  <li><a href="#step-2-run-multivariable-ld-score-regression" id="toc-step-2-run-multivariable-ld-score-regression" class="nav-link" data-scroll-target="#step-2-run-multivariable-ld-score-regression"><span class="header-section-number">1.0.15</span> 9. Step 2: Run Multivariable LD Score Regression</a></li>
+  <li><a href="#step-3-load-the-ldsc-output" id="toc-step-3-load-the-ldsc-output" class="nav-link" data-scroll-target="#step-3-load-the-ldsc-output"><span class="header-section-number">1.0.16</span> 10. Step 3: Load the LDSC Output</a></li>
+  <li><a href="#understanding-the-genetic-covariance-matrix" id="toc-understanding-the-genetic-covariance-matrix" class="nav-link" data-scroll-target="#understanding-the-genetic-covariance-matrix"><span class="header-section-number">1.0.17</span> 11. Understanding the Genetic Covariance Matrix</a></li>
+  <li><a href="#understanding-the-sampling-covariance-matrix" id="toc-understanding-the-sampling-covariance-matrix" class="nav-link" data-scroll-target="#understanding-the-sampling-covariance-matrix"><span class="header-section-number">1.0.18</span> 12. Understanding the Sampling Covariance Matrix</a></li>
+  <li><a href="#factor-identification-in-genomic-sem" id="toc-factor-identification-in-genomic-sem" class="nav-link" data-scroll-target="#factor-identification-in-genomic-sem"><span class="header-section-number">1.0.19</span> 10. Factor Identification in Genomic SEM</a></li>
+  <li><a href="#lavaan-model-syntax-used-in-genomic-sem" id="toc-lavaan-model-syntax-used-in-genomic-sem" class="nav-link" data-scroll-target="#lavaan-model-syntax-used-in-genomic-sem"><span class="header-section-number">1.0.20</span> 13. Lavaan Model Syntax Used in Genomic SEM</a></li>
+  <li><a href="#common-factor-model" id="toc-common-factor-model" class="nav-link" data-scroll-target="#common-factor-model"><span class="header-section-number">1.0.21</span> 14. Common Factor Model</a></li>
+  <li><a href="#genetic-multiple-regression" id="toc-genetic-multiple-regression" class="nav-link" data-scroll-target="#genetic-multiple-regression"><span class="header-section-number">1.0.22</span> 15. Genetic Multiple Regression</a></li>
+  <li><a href="#gwas-by-subtraction" id="toc-gwas-by-subtraction" class="nav-link" data-scroll-target="#gwas-by-subtraction"><span class="header-section-number">1.0.23</span> 16. GWAS-by-Subtraction</a></li>
+  <li><a href="#view-model-results" id="toc-view-model-results" class="nav-link" data-scroll-target="#view-model-results"><span class="header-section-number">1.0.24</span> 15. View Model Results</a></li>
+  <li><a href="#view-model-fit" id="toc-view-model-fit" class="nav-link" data-scroll-target="#view-model-fit"><span class="header-section-number">1.0.25</span> 16. View Model Fit</a></li>
+  <li><a href="#interpreting-the-common-factor-model" id="toc-interpreting-the-common-factor-model" class="nav-link" data-scroll-target="#interpreting-the-common-factor-model"><span class="header-section-number">1.0.26</span> 17. Interpreting the Common Factor Model</a></li>
+  <li><a href="#alternative-model-correlated-traits-model" id="toc-alternative-model-correlated-traits-model" class="nav-link" data-scroll-target="#alternative-model-correlated-traits-model"><span class="header-section-number">1.0.27</span> 18. Alternative Model: Correlated Traits Model</a></li>
+  <li><a href="#alternative-model-regression-model" id="toc-alternative-model-regression-model" class="nav-link" data-scroll-target="#alternative-model-regression-model"><span class="header-section-number">1.0.28</span> 19. Alternative Model: Regression Model</a></li>
+  <li><a href="#multivariate-gwas-in-genomic-sem" id="toc-multivariate-gwas-in-genomic-sem" class="nav-link" data-scroll-target="#multivariate-gwas-in-genomic-sem"><span class="header-section-number">1.0.29</span> 20. Multivariate GWAS in Genomic SEM</a></li>
+  <li><a href="#steps-for-multivariate-gwas" id="toc-steps-for-multivariate-gwas" class="nav-link" data-scroll-target="#steps-for-multivariate-gwas"><span class="header-section-number">1.0.30</span> 21. Steps for Multivariate GWAS</a></li>
+  <li><a href="#step-3-for-multivariate-gwas-prepare-snp-summary-statistics" id="toc-step-3-for-multivariate-gwas-prepare-snp-summary-statistics" class="nav-link" data-scroll-target="#step-3-for-multivariate-gwas-prepare-snp-summary-statistics"><span class="header-section-number">1.0.31</span> 22. Step 3 for Multivariate GWAS: Prepare SNP Summary Statistics</a></li>
+  <li><a href="#why-linprob-is-needed" id="toc-why-linprob-is-needed" class="nav-link" data-scroll-target="#why-linprob-is-needed"><span class="header-section-number">1.0.32</span> 23. Why <code>linprob</code> Is Needed</a></li>
+  <li><a href="#step-4-run-usergwas" id="toc-step-4-run-usergwas" class="nav-link" data-scroll-target="#step-4-run-usergwas"><span class="header-section-number">1.0.33</span> 24. Step 4: Run userGWAS</a></li>
+  <li><a href="#view-the-first-rows-of-the-multivariate-gwas-output" id="toc-view-the-first-rows-of-the-multivariate-gwas-output" class="nav-link" data-scroll-target="#view-the-first-rows-of-the-multivariate-gwas-output"><span class="header-section-number">1.0.34</span> 25. View the First Rows of the Multivariate GWAS Output</a></li>
+  <li><a href="#check-warnings-and-errors" id="toc-check-warnings-and-errors" class="nav-link" data-scroll-target="#check-warnings-and-errors"><span class="header-section-number">1.0.35</span> 26. Check Warnings and Errors</a></li>
+  <li><a href="#genome-wide-significant-factor-hits" id="toc-genome-wide-significant-factor-hits" class="nav-link" data-scroll-target="#genome-wide-significant-factor-hits"><span class="header-section-number">1.0.36</span> 27. Genome-Wide Significant Factor Hits</a></li>
+  <li><a href="#qsnp-testing-snp-level-heterogeneity" id="toc-qsnp-testing-snp-level-heterogeneity" class="nav-link" data-scroll-target="#qsnp-testing-snp-level-heterogeneity"><span class="header-section-number">1.0.37</span> 28. QSNP: Testing SNP-Level Heterogeneity</a></li>
+  <li><a href="#qsnp-as-a-qc-metric" id="toc-qsnp-as-a-qc-metric" class="nav-link" data-scroll-target="#qsnp-as-a-qc-metric"><span class="header-section-number">1.0.38</span> 29. QSNP as a QC Metric</a></li>
+  <li><a href="#qsnp-as-a-biological-result" id="toc-qsnp-as-a-biological-result" class="nav-link" data-scroll-target="#qsnp-as-a-biological-result"><span class="header-section-number">1.0.39</span> 30. QSNP as a Biological Result</a></li>
+  <li><a href="#multiple-factor-models-and-qsnp" id="toc-multiple-factor-models-and-qsnp" class="nav-link" data-scroll-target="#multiple-factor-models-and-qsnp"><span class="header-section-number">1.0.40</span> 31. Multiple-Factor Models and QSNP</a></li>
+  <li><a href="#interpreting-qsnp" id="toc-interpreting-qsnp" class="nav-link" data-scroll-target="#interpreting-qsnp"><span class="header-section-number">1.0.41</span> 29. Interpreting QSNP</a></li>
+  <li><a href="#practice-section-anthropometric-traits" id="toc-practice-section-anthropometric-traits" class="nav-link" data-scroll-target="#practice-section-anthropometric-traits"><span class="header-section-number">1.0.42</span> 31. Practice Section: Anthropometric Traits</a></li>
+  <li><a href="#example-anthropometric-factor-model" id="toc-example-anthropometric-factor-model" class="nav-link" data-scroll-target="#example-anthropometric-factor-model"><span class="header-section-number">1.0.43</span> 32. Example Anthropometric Factor Model</a></li>
+  <li><a href="#example-two-factor-model" id="toc-example-two-factor-model" class="nav-link" data-scroll-target="#example-two-factor-model"><span class="header-section-number">1.0.44</span> 33. Example Two-Factor Model</a></li>
+  <li><a href="#comparing-models" id="toc-comparing-models" class="nav-link" data-scroll-target="#comparing-models"><span class="header-section-number">1.0.45</span> 34. Comparing Models</a></li>
+  <li><a href="#important-practical-advice" id="toc-important-practical-advice" class="nav-link" data-scroll-target="#important-practical-advice"><span class="header-section-number">1.0.46</span> 35. Important Practical Advice</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.0.47</span> 36. Summary</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">1.0.48</span> 37. Key Takeaways</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -279,6 +279,11 @@ window.Quarto = {
   </div>
   </div>
 
+<div>
+  <div class="description">
+    How LD Score Regression extends from single-trait heritability to cross-trait genetic covariance, and how Genomic SEM fits structural models – common factors, regressions, GWAS-by-subtraction – to that covariance structure.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -293,7 +298,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 30, 2026</p>
+      <p class="date">July 28, 2026</p>
     </div>
   </div>
   
@@ -305,6 +310,15 @@ window.Quarto = {
 </header>
 
 
+<div class="thesis-hero-wrap">
+<p><img src="images/genomic-sem-factor.svg" alt="Path diagram of a Genomic SEM common factor model: a latent factor F1 with arrows loading onto four observed traits (MDD, PTSD, ALCH, ANX), each with its own residual variance" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The model this tutorial builds up to fitting: a single shared genetic factor F1, estimated not from individual-level data but from a genetic covariance matrix built out of GWAS summary statistics alone.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">Genomic SEM</span> <span class="tag">LDSC</span> <span class="tag">Structural Equation Modeling</span> <span class="tag">R</span></p>
+</div>
 <section id="multivariate-concepts-in-statistical-genetics" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Multivariate Concepts in Statistical Genetics</h1>
 <p>In many areas of statistical genetics, we are not only interested in whether a single trait is heritable. We are also interested in whether multiple traits share part of their genetic architecture.</p>
@@ -435,23 +449,22 @@ window.Quarto = {
 <p>A genetic correlation close to 1 means two traits share much of their genetic architecture.</p>
 <p>A genetic correlation close to 0 means little shared genetic influence.</p>
 <p>A negative genetic correlation means genetic variants that increase one trait tend to decrease the other.</p>
-<div id="62819955-1f36-4e0e-a852-17b2e9f317de" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">### 8. Why Shared Genetic Architecture Requires New Models</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 </section>
-<section id="from-ld-score-regression-to-genomic-sem" class="level3" data-number="1.0.9">
-<h3 data-number="1.0.9" class="anchored" data-anchor-id="from-ld-score-regression-to-genomic-sem"><span class="header-section-number">1.0.9</span> 5. From LD Score Regression to Genomic SEM</h3>
+<section id="why-shared-genetic-architecture-requires-new-models" class="level3" data-number="1.0.9">
+<h3 data-number="1.0.9" class="anchored" data-anchor-id="why-shared-genetic-architecture-requires-new-models"><span class="header-section-number">1.0.9</span> 8. Why Shared Genetic Architecture Requires New Models</h3>
+</section>
+<section id="from-ld-score-regression-to-genomic-sem" class="level3" data-number="1.0.10">
+<h3 data-number="1.0.10" class="anchored" data-anchor-id="from-ld-score-regression-to-genomic-sem"><span class="header-section-number">1.0.10</span> 5. From LD Score Regression to Genomic SEM</h3>
 <p>Genomic SEM stands for Genomic Structural Equation Modeling.</p>
 <p>It provides a flexible framework for fitting structural equation models to genetic covariance matrices estimated from GWAS summary statistics.</p>
 <p>The main advantage is that we can model genetic relationships among traits even when those traits were measured in different samples.</p>
 </section>
-<section id="the-two-stage-framework-of-genomic-sem" class="level3" data-number="1.0.10">
-<h3 data-number="1.0.10" class="anchored" data-anchor-id="the-two-stage-framework-of-genomic-sem"><span class="header-section-number">1.0.10</span> 6. The Two-Stage Framework of Genomic SEM</h3>
+<section id="the-two-stage-framework-of-genomic-sem" class="level3" data-number="1.0.11">
+<h3 data-number="1.0.11" class="anchored" data-anchor-id="the-two-stage-framework-of-genomic-sem"><span class="header-section-number">1.0.11</span> 6. The Two-Stage Framework of Genomic SEM</h3>
 <p>Genomic SEM has two main stages.</p>
-<section id="stage-1-estimate-genetic-covariance-structure" class="level4" data-number="1.0.10.1">
-<h4 data-number="1.0.10.1" class="anchored" data-anchor-id="stage-1-estimate-genetic-covariance-structure"><span class="header-section-number">1.0.10.1</span> Stage 1: Estimate Genetic Covariance Structure</h4>
+<section id="stage-1-estimate-genetic-covariance-structure" class="level4" data-number="1.0.11.1">
+<h4 data-number="1.0.11.1" class="anchored" data-anchor-id="stage-1-estimate-genetic-covariance-structure"><span class="header-section-number">1.0.11.1</span> Stage 1: Estimate Genetic Covariance Structure</h4>
 <p>Using multivariable LD Score Regression, we estimate:</p>
 <ol type="1">
 <li>A genetic covariance matrix</li>
@@ -469,17 +482,17 @@ cov_{g,13} &amp; cov_{g,23} &amp; h^2_3
 \end{bmatrix}\]</span>
 <p>$</p>
 </section>
-<section id="stage-2-fit-a-structural-equation-model" class="level4" data-number="1.0.10.2">
-<h4 data-number="1.0.10.2" class="anchored" data-anchor-id="stage-2-fit-a-structural-equation-model"><span class="header-section-number">1.0.10.2</span> Stage 2: Fit a Structural Equation Model</h4>
+<section id="stage-2-fit-a-structural-equation-model" class="level4" data-number="1.0.11.2">
+<h4 data-number="1.0.11.2" class="anchored" data-anchor-id="stage-2-fit-a-structural-equation-model"><span class="header-section-number">1.0.11.2</span> Stage 2: Fit a Structural Equation Model</h4>
 <p>After estimating (S), we fit a model to explain the covariance structure.</p>
 <p>For example, we may fit a common factor model where depression, anxiety, PTSD, and alcohol use disorder load on a shared internalizing factor.</p>
 </section>
 </section>
-<section id="genome-wide-sem-vs-multivariate-gwas" class="level3" data-number="1.0.11">
-<h3 data-number="1.0.11" class="anchored" data-anchor-id="genome-wide-sem-vs-multivariate-gwas"><span class="header-section-number">1.0.11</span> 9. Genome-Wide SEM vs Multivariate GWAS</h3>
+<section id="genome-wide-sem-vs-multivariate-gwas" class="level3" data-number="1.0.12">
+<h3 data-number="1.0.12" class="anchored" data-anchor-id="genome-wide-sem-vs-multivariate-gwas"><span class="header-section-number">1.0.12</span> 9. Genome-Wide SEM vs Multivariate GWAS</h3>
 <p>It is important to distinguish between genome-wide SEM and multivariate GWAS.</p>
-<section id="genome-wide-sem" class="level4" data-number="1.0.11.1">
-<h4 data-number="1.0.11.1" class="anchored" data-anchor-id="genome-wide-sem"><span class="header-section-number">1.0.11.1</span> Genome-Wide SEM</h4>
+<section id="genome-wide-sem" class="level4" data-number="1.0.12.1">
+<h4 data-number="1.0.12.1" class="anchored" data-anchor-id="genome-wide-sem"><span class="header-section-number">1.0.12.1</span> Genome-Wide SEM</h4>
 <p>Genome-wide SEM uses the genetic covariance matrix across traits.</p>
 <p>It asks:</p>
 <p>What is the genetic relationship among these traits?</p>
@@ -487,8 +500,8 @@ cov_{g,13} &amp; cov_{g,23} &amp; h^2_3
 <p>Do the traits load on one common factor? Are there multiple factors? Does one genetic trait predict another? How well does the model fit?</p>
 <p>This stage does not test SNP effects directly.</p>
 </section>
-<section id="multivariate-gwas" class="level4" data-number="1.0.11.2">
-<h4 data-number="1.0.11.2" class="anchored" data-anchor-id="multivariate-gwas"><span class="header-section-number">1.0.11.2</span> Multivariate GWAS</h4>
+<section id="multivariate-gwas" class="level4" data-number="1.0.12.2">
+<h4 data-number="1.0.12.2" class="anchored" data-anchor-id="multivariate-gwas"><span class="header-section-number">1.0.12.2</span> Multivariate GWAS</h4>
 <p>Multivariate GWAS adds SNP effects to the model.</p>
 <p>It asks:</p>
 <p>Which SNPs are associated with the latent genetic factor?</p>
@@ -498,8 +511,8 @@ cov_{g,13} &amp; cov_{g,23} &amp; h^2_3
 <p>So, genome-wide SEM models the covariance structure, while multivariate GWAS tests SNP-level effects on that structure.</p>
 </section>
 </section>
-<section id="practical-setup-in-r" class="level3" data-number="1.0.12">
-<h3 data-number="1.0.12" class="anchored" data-anchor-id="practical-setup-in-r"><span class="header-section-number">1.0.12</span> 7. Practical Setup in R</h3>
+<section id="practical-setup-in-r" class="level3" data-number="1.0.13">
+<h3 data-number="1.0.13" class="anchored" data-anchor-id="practical-setup-in-r"><span class="header-section-number">1.0.13</span> 7. Practical Setup in R</h3>
 <p>We will now follow the practical structure from the workshop.</p>
 <p>The main steps are:</p>
 <ol type="1">
@@ -512,13 +525,13 @@ cov_{g,13} &amp; cov_{g,23} &amp; h^2_3
 <li>Interpret factor GWAS and QSNP results</li>
 </ol>
 <div id="87b036b1-bd5f-4445-b506-b28caf101862" class="cell" data-execution_count="14">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"GenomicSEM/GenomicSEM"</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load GenomicSEM</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(GenomicSEM)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"GenomicSEM/GenomicSEM"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load GenomicSEM</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(GenomicSEM)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 The downloaded binary packages are in
@@ -600,11 +613,11 @@ e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
 </div>
 </div>
 <div id="9ba6f678-e100-4eaa-a9b6-81c2ba60a044" class="cell" data-execution_count="15">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GenomicSEM)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GenomicSEM)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="step-1-munge-summary-statistics" class="level3" data-number="1.0.13">
-<h3 data-number="1.0.13" class="anchored" data-anchor-id="step-1-munge-summary-statistics"><span class="header-section-number">1.0.13</span> 8. Step 1: Munge Summary Statistics</h3>
+<section id="step-1-munge-summary-statistics" class="level3" data-number="1.0.14">
+<h3 data-number="1.0.14" class="anchored" data-anchor-id="step-1-munge-summary-statistics"><span class="header-section-number">1.0.14</span> 8. Step 1: Munge Summary Statistics</h3>
 <p>Munging is the process of cleaning and harmonizing GWAS summary statistics.</p>
 <p>It usually includes:</p>
 <ul>
@@ -623,30 +636,30 @@ e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
 <li>ANX: Anxiety disorder</li>
 </ul>
 <div id="6526efce-66b8-480d-b325-7d65f8794fc1" class="cell" data-execution_count="16">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example file names</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ALCH_withrsID.txt"</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"SORTED_PTSD_EA9_ALL_study_specific_PCs1.txt"</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MDD_withNeff.txt"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ANX_withNeff.txt"</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># HapMap3 SNP reference file</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>hm3 <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/w_hm3.snplist"</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Effective sample size</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">5831.346</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Run munge</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># This is commented out because the workshop already provides prepared files.</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># munge(files = files, hm3 = hm3, trait.names = trait.names, N = N)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example file names</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ALCH_withrsID.txt"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"SORTED_PTSD_EA9_ALL_study_specific_PCs1.txt"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MDD_withNeff.txt"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ANX_withNeff.txt"</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># HapMap3 SNP reference file</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>hm3 <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/w_hm3.snplist"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Effective sample size</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">5831.346</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Run munge</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># This is commented out because the workshop already provides prepared files.</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># munge(files = files, hm3 = hm3, trait.names = trait.names, N = N)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="step-2-run-multivariable-ld-score-regression" class="level3" data-number="1.0.14">
-<h3 data-number="1.0.14" class="anchored" data-anchor-id="step-2-run-multivariable-ld-score-regression"><span class="header-section-number">1.0.14</span> 9. Step 2: Run Multivariable LD Score Regression</h3>
+<section id="step-2-run-multivariable-ld-score-regression" class="level3" data-number="1.0.15">
+<h3 data-number="1.0.15" class="anchored" data-anchor-id="step-2-run-multivariable-ld-score-regression"><span class="header-section-number">1.0.15</span> 9. Step 2: Run Multivariable LD Score Regression</h3>
 <p>After munging, we run LD Score Regression.</p>
 <p>This estimates:</p>
 <ul>
@@ -657,54 +670,54 @@ e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
 </ul>
 <p>The output is later used by Genomic SEM.</p>
 <div id="8dcd0581-faac-4881-a25a-9c2743b09ffe" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Munged summary statistics</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ALCH.sumstats.gz"</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PTSD.sumstats.gz"</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MDD.sumstats.gz"</span>,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ANX.sumstats.gz"</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample prevalence</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>sample.prev <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">5</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, .<span class="dv">5</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Population prevalence</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>population.prev <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">159</span>, .<span class="dv">3</span>, .<span class="dv">15</span>, .<span class="dv">20</span>)</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># LD score folders</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>ld <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/"</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>wld <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/"</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Run LDSC</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># This is commented out because the workshop provides LDSC_INT.RData.</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># LDSC_INT &lt;- ldsc(</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   traits = traits,</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#   sample.prev = sample.prev,</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#   population.prev = population.prev,</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   ld = ld,</span></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   wld = wld,</span></span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   trait.names = trait.names</span></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Save LDSC output</span></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># save(LDSC_INT, file = "LDSC_INT.RData")</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Munged summary statistics</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ALCH.sumstats.gz"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PTSD.sumstats.gz"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MDD.sumstats.gz"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ANX.sumstats.gz"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample prevalence</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>sample.prev <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">5</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, .<span class="dv">5</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Population prevalence</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>population.prev <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">159</span>, .<span class="dv">3</span>, .<span class="dv">15</span>, .<span class="dv">20</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># LD score folders</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>ld <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/"</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>wld <span class="ot">&lt;-</span> <span class="st">"eur_w_ld_chr/"</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Run LDSC</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># This is commented out because the workshop provides LDSC_INT.RData.</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># LDSC_INT &lt;- ldsc(</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   traits = traits,</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#   sample.prev = sample.prev,</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">#   population.prev = population.prev,</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   ld = ld,</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   wld = wld,</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   trait.names = trait.names</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Save LDSC output</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co"># save(LDSC_INT, file = "LDSC_INT.RData")</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="step-3-load-the-ldsc-output" class="level3" data-number="1.0.15">
-<h3 data-number="1.0.15" class="anchored" data-anchor-id="step-3-load-the-ldsc-output"><span class="header-section-number">1.0.15</span> 10. Step 3: Load the LDSC Output</h3>
+<section id="step-3-load-the-ldsc-output" class="level3" data-number="1.0.16">
+<h3 data-number="1.0.16" class="anchored" data-anchor-id="step-3-load-the-ldsc-output"><span class="header-section-number">1.0.16</span> 10. Step 3: Load the LDSC Output</h3>
 <p>The workshop practical already provides the LDSC object.</p>
 <p>This object contains the genetic covariance matrix and sampling covariance matrix.</p>
 <div id="1fdb33fb-e2c0-4012-9bc8-b25218cec072" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/LDSC_INT.RData"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic covariance matrix</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>LDSC_INT<span class="sc">$</span>S</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Sampling covariance matrix</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>LDSC_INT<span class="sc">$</span>V</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"LDSC_INT.RData"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic covariance matrix</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>LDSC_INT<span class="sc">$</span>S</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Sampling covariance matrix</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>LDSC_INT<span class="sc">$</span>V</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small">
 <caption>A matrix: 4 × 4 of type dbl</caption>
@@ -873,15 +886,15 @@ e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
 </div>
 </div>
 </section>
-<section id="understanding-the-genetic-covariance-matrix" class="level3" data-number="1.0.16">
-<h3 data-number="1.0.16" class="anchored" data-anchor-id="understanding-the-genetic-covariance-matrix"><span class="header-section-number">1.0.16</span> 11. Understanding the Genetic Covariance Matrix</h3>
+<section id="understanding-the-genetic-covariance-matrix" class="level3" data-number="1.0.17">
+<h3 data-number="1.0.17" class="anchored" data-anchor-id="understanding-the-genetic-covariance-matrix"><span class="header-section-number">1.0.17</span> 11. Understanding the Genetic Covariance Matrix</h3>
 <p>The matrix <code>LDSC_INT$S</code> contains genetic variances and covariances.</p>
 <p>The diagonal values are SNP heritabilities.</p>
 <p>The off-diagonal values are genetic covariances.</p>
 <p>For example, if the covariance between MDD and ANX is high, this suggests that depression and anxiety share genetic influences.</p>
 <div id="eae10bd9-67e8-4b21-bb1f-dc468b047775" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print genetic covariance matrix</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LDSC_INT<span class="sc">$</span>S)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print genetic covariance matrix</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LDSC_INT<span class="sc">$</span>S)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           ALCH       PTSD        MDD        ANX
 [1,] 0.13938790 0.05977947 0.05943021 0.08500236
@@ -891,20 +904,14 @@ e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
 </div>
 </div>
 </section>
-<section id="understanding-the-sampling-covariance-matrix" class="level3" data-number="1.0.17">
-<h3 data-number="1.0.17" class="anchored" data-anchor-id="understanding-the-sampling-covariance-matrix"><span class="header-section-number">1.0.17</span> 12. Understanding the Sampling Covariance Matrix</h3>
+<section id="understanding-the-sampling-covariance-matrix" class="level3" data-number="1.0.18">
+<h3 data-number="1.0.18" class="anchored" data-anchor-id="understanding-the-sampling-covariance-matrix"><span class="header-section-number">1.0.18</span> 12. Understanding the Sampling Covariance Matrix</h3>
 <p>The matrix <code>LDSC_INT$V</code> contains uncertainty around the estimates in <code>S</code>.</p>
 <p>This is important because some GWAS are more highly powered than others.</p>
 <p>It also models dependencies caused by sample overlap between GWAS studies.</p>
-</section>
-<section id="understanding-the-sampling-covariance-matrix-1" class="level3" data-number="1.0.18">
-<h3 data-number="1.0.18" class="anchored" data-anchor-id="understanding-the-sampling-covariance-matrix-1"><span class="header-section-number">1.0.18</span> 12. Understanding the Sampling Covariance Matrix</h3>
-</section>
-<section id="why-the-sampling-covariance-matrix-matters" class="level3" data-number="1.0.19">
-<h3 data-number="1.0.19" class="anchored" data-anchor-id="why-the-sampling-covariance-matrix-matters"><span class="header-section-number">1.0.19</span> 13. Why the Sampling Covariance Matrix Matters</h3>
 <div id="bc02db6b-7339-4bf0-83da-b7f515dfb66c" class="cell" data-execution_count="20">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print sampling covariance matrix</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LDSC_INT<span class="sc">$</span>V)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print sampling covariance matrix</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LDSC_INT<span class="sc">$</span>V)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              [,1]         [,2]         [,3]          [,4]          [,5]
  [1,] 6.041603e-04 4.630259e-05 1.329209e-05  2.110818e-05  1.699375e-04
@@ -931,8 +938,8 @@ e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
 </div>
 </div>
 </section>
-<section id="factor-identification-in-genomic-sem" class="level3" data-number="1.0.20">
-<h3 data-number="1.0.20" class="anchored" data-anchor-id="factor-identification-in-genomic-sem"><span class="header-section-number">1.0.20</span> 10. Factor Identification in Genomic SEM</h3>
+<section id="factor-identification-in-genomic-sem" class="level3" data-number="1.0.19">
+<h3 data-number="1.0.19" class="anchored" data-anchor-id="factor-identification-in-genomic-sem"><span class="header-section-number">1.0.19</span> 10. Factor Identification in Genomic SEM</h3>
 <p>Latent factors do not have a natural scale. Therefore, we must identify the scale of the factor.</p>
 <p>There are two common approaches.</p>
 <p>Option 1: Unit Variance Identification</p>
@@ -948,8 +955,8 @@ e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
 <p>Here, the scale of the factor is defined by MDD.</p>
 <p>Both approaches are valid, but they lead to different parameter scaling. The interpretation of the model should always consider how the factor was identified.</p>
 </section>
-<section id="lavaan-model-syntax-used-in-genomic-sem" class="level3" data-number="1.0.21">
-<h3 data-number="1.0.21" class="anchored" data-anchor-id="lavaan-model-syntax-used-in-genomic-sem"><span class="header-section-number">1.0.21</span> 13. Lavaan Model Syntax Used in Genomic SEM</h3>
+<section id="lavaan-model-syntax-used-in-genomic-sem" class="level3" data-number="1.0.20">
+<h3 data-number="1.0.20" class="anchored" data-anchor-id="lavaan-model-syntax-used-in-genomic-sem"><span class="header-section-number">1.0.20</span> 13. Lavaan Model Syntax Used in Genomic SEM</h3>
 <p>Genomic SEM uses lavaan-style model syntax.</p>
 <p>Here are the most important operators:</p>
 <table class="caption-top table">
@@ -988,30 +995,30 @@ e1071        (1.7-14 -&gt; 1.7-17   ) [CRAN]</code></pre>
 </table>
 <p>This syntax allows us to specify many different genetic models.</p>
 </section>
-<section id="common-factor-model" class="level3" data-number="1.0.22">
-<h3 data-number="1.0.22" class="anchored" data-anchor-id="common-factor-model"><span class="header-section-number">1.0.22</span> 14. Common Factor Model</h3>
+<section id="common-factor-model" class="level3" data-number="1.0.21">
+<h3 data-number="1.0.21" class="anchored" data-anchor-id="common-factor-model"><span class="header-section-number">1.0.21</span> 14. Common Factor Model</h3>
 <p>A common factor model assumes that several observed traits share one underlying latent genetic factor.</p>
 <p>For example:</p>
 <p>$ F1 MDD, PTSD, ALCH, ANX $</p>
 <p>Here, <code>F1</code> represents a shared internalizing genetic factor.</p>
 <div id="a38be58a-bae0-4d6b-942b-22c71bfd38e6" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariance structure</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> LDSC_INT</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Common factor model</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>INT.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="st">F1 =~ MDD + PTSD + ALCH + ANX</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Use unit variance identification</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>std.lv <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Run model</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>IntResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> INT.model,</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> std.lv</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariance structure</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> LDSC_INT</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Common factor model</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>INT.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="st">F1 =~ MDD + PTSD + ALCH + ANX</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Use unit variance identification</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>std.lv <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Run model</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>IntResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> INT.model,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> std.lv</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Running primary model"
 [1] "Calculating Standardized Results"
@@ -1021,8 +1028,8 @@ elapsed
 </div>
 </div>
 </section>
-<section id="genetic-multiple-regression" class="level3" data-number="1.0.23">
-<h3 data-number="1.0.23" class="anchored" data-anchor-id="genetic-multiple-regression"><span class="header-section-number">1.0.23</span> 15. Genetic Multiple Regression</h3>
+<section id="genetic-multiple-regression" class="level3" data-number="1.0.22">
+<h3 data-number="1.0.22" class="anchored" data-anchor-id="genetic-multiple-regression"><span class="header-section-number">1.0.22</span> 15. Genetic Multiple Regression</h3>
 <p>Genomic SEM is not limited to factor models. It can also estimate genetic regression models.</p>
 <p>For example, suppose we want to know whether the genetic component of educational attainment is associated with schizophrenia and bipolar disorder.</p>
 <p>A simplified model could be:</p>
@@ -1032,8 +1039,8 @@ elapsed
 <p>model &lt;- ” EA ~ SCZ + BIP SCZ <sub></sub> BIP ”</p>
 <p>This allows us to ask whether one trait explains unique genetic variation in another trait after accounting for additional genetically correlated traits.</p>
 </section>
-<section id="gwas-by-subtraction" class="level3" data-number="1.0.24">
-<h3 data-number="1.0.24" class="anchored" data-anchor-id="gwas-by-subtraction"><span class="header-section-number">1.0.24</span> 16. GWAS-by-Subtraction</h3>
+<section id="gwas-by-subtraction" class="level3" data-number="1.0.23">
+<h3 data-number="1.0.23" class="anchored" data-anchor-id="gwas-by-subtraction"><span class="header-section-number">1.0.23</span> 16. GWAS-by-Subtraction</h3>
 <p>GWAS-by-subtraction is one of the important applications of Genomic SEM.</p>
 <p>The idea is to separate shared and residual genetic components.</p>
 <p>For example, educational attainment and cognitive performance are genetically correlated. But educational attainment is influenced by both cognitive and non-cognitive factors.</p>
@@ -1046,8 +1053,8 @@ elapsed
 <p>What genetic signal remains in one trait after removing the genetic signal shared with another trait?</p>
 <p>This is useful when we want to isolate more specific genetic pathways.</p>
 </section>
-<section id="view-model-results" class="level3" data-number="1.0.25">
-<h3 data-number="1.0.25" class="anchored" data-anchor-id="view-model-results"><span class="header-section-number">1.0.25</span> 15. View Model Results</h3>
+<section id="view-model-results" class="level3" data-number="1.0.24">
+<h3 data-number="1.0.24" class="anchored" data-anchor-id="view-model-results"><span class="header-section-number">1.0.24</span> 15. View Model Results</h3>
 <p>The results table contains:</p>
 <ul>
 <li>Parameter estimates</li>
@@ -1057,7 +1064,7 @@ elapsed
 </ul>
 <p>The factor loadings tell us how strongly each trait relates to the latent genetic factor.</p>
 <div id="3458d1a1-1eac-4fad-a889-76189976a6f6" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>IntResults<span class="sc">$</span>results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>IntResults<span class="sc">$</span>results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 9 × 9</caption>
@@ -1201,8 +1208,8 @@ elapsed
 </div>
 </div>
 </section>
-<section id="view-model-fit" class="level3" data-number="1.0.26">
-<h3 data-number="1.0.26" class="anchored" data-anchor-id="view-model-fit"><span class="header-section-number">1.0.26</span> 16. View Model Fit</h3>
+<section id="view-model-fit" class="level3" data-number="1.0.25">
+<h3 data-number="1.0.25" class="anchored" data-anchor-id="view-model-fit"><span class="header-section-number">1.0.25</span> 16. View Model Fit</h3>
 <p>Model fit tells us whether the proposed model explains the observed genetic covariance matrix well.</p>
 <p>Important fit statistics include:</p>
 <ul>
@@ -1219,7 +1226,7 @@ elapsed
 <li>SRMR &lt; 0.05 suggests good fit</li>
 </ul>
 <div id="c7dce095-c099-44c1-b38f-2084d99989b5" class="cell" data-execution_count="25">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>IntResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>IntResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 1 × 6</caption>
@@ -1258,34 +1265,34 @@ elapsed
 </div>
 </div>
 </section>
-<section id="interpreting-the-common-factor-model" class="level3" data-number="1.0.27">
-<h3 data-number="1.0.27" class="anchored" data-anchor-id="interpreting-the-common-factor-model"><span class="header-section-number">1.0.27</span> 17. Interpreting the Common Factor Model</h3>
+<section id="interpreting-the-common-factor-model" class="level3" data-number="1.0.26">
+<h3 data-number="1.0.26" class="anchored" data-anchor-id="interpreting-the-common-factor-model"><span class="header-section-number">1.0.26</span> 17. Interpreting the Common Factor Model</h3>
 <p>A strong loading of MDD on F1 means that major depression strongly reflects the shared genetic factor.</p>
 <p>A weaker loading of ALCH on F1 means that alcohol use disorder may share some genetic risk with the factor, but also has more trait-specific genetic influences.</p>
 <p>The residual variance of each trait represents genetic variation not explained by the common factor.</p>
 </section>
-<section id="alternative-model-correlated-traits-model" class="level3" data-number="1.0.28">
-<h3 data-number="1.0.28" class="anchored" data-anchor-id="alternative-model-correlated-traits-model"><span class="header-section-number">1.0.28</span> 18. Alternative Model: Correlated Traits Model</h3>
+<section id="alternative-model-correlated-traits-model" class="level3" data-number="1.0.27">
+<h3 data-number="1.0.27" class="anchored" data-anchor-id="alternative-model-correlated-traits-model"><span class="header-section-number">1.0.27</span> 18. Alternative Model: Correlated Traits Model</h3>
 <p>Instead of forcing all traits to load on a common factor, we could estimate pairwise genetic covariances directly.</p>
 <p>This is useful when we do not want to assume a latent factor.</p>
 <div id="8e525361-73ca-4fcc-b579-cb1f7ee5365f" class="cell" data-execution_count="27">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>correlated.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ PTSD</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ ALCH</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ ANX</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ALCH</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ANX</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="st">ALCH ~~ ANX</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>CorResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> LDSC_INT,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> correlated.model,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">FALSE</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>CorResults<span class="sc">$</span>results</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>CorResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>correlated.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ PTSD</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ ALCH</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~~ ANX</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ALCH</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ANX</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="st">ALCH ~~ ANX</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>CorResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> LDSC_INT,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> correlated.model,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">FALSE</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>CorResults<span class="sc">$</span>results</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>CorResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Running primary model"
 [1] "Calculating Standardized Results"
@@ -1485,26 +1492,26 @@ elapsed
 </div>
 </div>
 </section>
-<section id="alternative-model-regression-model" class="level3" data-number="1.0.29">
-<h3 data-number="1.0.29" class="anchored" data-anchor-id="alternative-model-regression-model"><span class="header-section-number">1.0.29</span> 19. Alternative Model: Regression Model</h3>
+<section id="alternative-model-regression-model" class="level3" data-number="1.0.28">
+<h3 data-number="1.0.28" class="anchored" data-anchor-id="alternative-model-regression-model"><span class="header-section-number">1.0.28</span> 19. Alternative Model: Regression Model</h3>
 <p>Genomic SEM can also fit genetic regression models.</p>
 <p>For example, we can ask whether the genetic component of anxiety predicts the genetic component of depression.</p>
 <div id="f41487b9-8553-44ac-9278-04e4801e9495" class="cell" data-execution_count="28">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>regression.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~ ANX + PTSD + ALCH</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="st">ANX ~~ PTSD</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="st">ANX ~~ ALCH</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ALCH</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>RegResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> LDSC_INT,</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> regression.model,</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">FALSE</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>RegResults<span class="sc">$</span>results</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>RegResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>regression.model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="st">MDD ~ ANX + PTSD + ALCH</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="st">ANX ~~ PTSD</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="st">ANX ~~ ALCH</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="st">PTSD ~~ ALCH</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>RegResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> LDSC_INT,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> regression.model,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">FALSE</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>RegResults<span class="sc">$</span>results</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>RegResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Running primary model"
 [1] "Calculating Standardized Results"
@@ -1704,8 +1711,8 @@ elapsed
 </div>
 </div>
 </section>
-<section id="multivariate-gwas-in-genomic-sem" class="level3" data-number="1.0.30">
-<h3 data-number="1.0.30" class="anchored" data-anchor-id="multivariate-gwas-in-genomic-sem"><span class="header-section-number">1.0.30</span> 20. Multivariate GWAS in Genomic SEM</h3>
+<section id="multivariate-gwas-in-genomic-sem" class="level3" data-number="1.0.29">
+<h3 data-number="1.0.29" class="anchored" data-anchor-id="multivariate-gwas-in-genomic-sem"><span class="header-section-number">1.0.29</span> 20. Multivariate GWAS in Genomic SEM</h3>
 <p>So far, we estimated a genome-wide model using the genetic covariance matrix.</p>
 <p>Now we move to multivariate GWAS.</p>
 <p>The goal is to test SNP effects on a latent factor.</p>
@@ -1719,8 +1726,8 @@ elapsed
 </blockquote>
 <p>This can increase power and improve interpretation when traits share genetic architecture.</p>
 </section>
-<section id="steps-for-multivariate-gwas" class="level3" data-number="1.0.31">
-<h3 data-number="1.0.31" class="anchored" data-anchor-id="steps-for-multivariate-gwas"><span class="header-section-number">1.0.31</span> 21. Steps for Multivariate GWAS</h3>
+<section id="steps-for-multivariate-gwas" class="level3" data-number="1.0.30">
+<h3 data-number="1.0.30" class="anchored" data-anchor-id="steps-for-multivariate-gwas"><span class="header-section-number">1.0.30</span> 21. Steps for Multivariate GWAS</h3>
 <p>Multivariate GWAS in Genomic SEM has four main steps:</p>
 <ol type="1">
 <li>Munge summary statistics</li>
@@ -1730,38 +1737,38 @@ elapsed
 </ol>
 <p>The first two steps are the same as before. If we already ran LDSC for the same traits, we do not need to repeat it.</p>
 </section>
-<section id="step-3-for-multivariate-gwas-prepare-snp-summary-statistics" class="level3" data-number="1.0.32">
-<h3 data-number="1.0.32" class="anchored" data-anchor-id="step-3-for-multivariate-gwas-prepare-snp-summary-statistics"><span class="header-section-number">1.0.32</span> 22. Step 3 for Multivariate GWAS: Prepare SNP Summary Statistics</h3>
+<section id="step-3-for-multivariate-gwas-prepare-snp-summary-statistics" class="level3" data-number="1.0.31">
+<h3 data-number="1.0.31" class="anchored" data-anchor-id="step-3-for-multivariate-gwas-prepare-snp-summary-statistics"><span class="header-section-number">1.0.31</span> 22. Step 3 for Multivariate GWAS: Prepare SNP Summary Statistics</h3>
 <p>The <code>sumstats()</code> function prepares SNP-level summary statistics for <code>userGWAS</code>.</p>
 <p>In the workshop practical, reduced chromosome 4 files are used for demonstration.</p>
 <div id="678a59f0-a161-4c81-863a-7155bd18aed5" class="cell" data-execution_count="30">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Files must be in the same order as the LDSC traits</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ALCH4.txt"</span>, <span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/PTSD4.txt"</span>, <span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/MDD4.txt"</span>, <span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/ANX4.txt"</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Reference file for allele frequency</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>ref <span class="ot">&lt;-</span> <span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/reference.1000G.ch4.txt"</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Whether SEs are on logistic scale</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>se.logit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Whether linear probability model correction is needed</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>linprob <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample size argument</span></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare summary statistics</span></span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>INT_sumstats <span class="ot">&lt;-</span> <span class="fu">sumstats</span>(</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">files =</span> files,</span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref =</span> ref,</span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">trait.names =</span> trait.names,</span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">se.logit =</span> se.logit,</span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">linprob =</span> linprob,</span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> N</span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Files must be in the same order as the LDSC traits</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH4.txt"</span>, <span class="st">"PTSD4.txt"</span>, <span class="st">"MDD4.txt"</span>, <span class="st">"ANX4.txt"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Reference file for allele frequency</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>ref <span class="ot">&lt;-</span> <span class="st">"reference.1000G.ch4.txt"</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Trait names</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>trait.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALCH"</span>, <span class="st">"PTSD"</span>, <span class="st">"MDD"</span>, <span class="st">"ANX"</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Whether SEs are on logistic scale</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>se.logit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Whether linear probability model correction is needed</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>linprob <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample size argument</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare summary statistics</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>INT_sumstats <span class="ot">&lt;-</span> <span class="fu">sumstats</span>(</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">files =</span> files,</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref =</span> ref,</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">trait.names =</span> trait.names,</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">se.logit =</span> se.logit,</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">linprob =</span> linprob,</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> N</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The preparation of 4 summary statistics for use in Genomic SEM began at: 2026-06-10 12:44:42.44117
 Please note that the files should be in the same order that they were listed for the ldsc function
@@ -1856,14 +1863,14 @@ Please check the log file ALCH_PTSD_MDD_ANX_sumstats.log to ensure that all colu
 </div>
 </div>
 </section>
-<section id="why-linprob-is-needed" class="level3" data-number="1.0.33">
-<h3 data-number="1.0.33" class="anchored" data-anchor-id="why-linprob-is-needed"><span class="header-section-number">1.0.33</span> 23. Why <code>linprob</code> Is Needed</h3>
+<section id="why-linprob-is-needed" class="level3" data-number="1.0.32">
+<h3 data-number="1.0.32" class="anchored" data-anchor-id="why-linprob-is-needed"><span class="header-section-number">1.0.32</span> 23. Why <code>linprob</code> Is Needed</h3>
 <p>Sometimes binary traits are analyzed as continuous outcomes, or the summary statistics contain only Z-statistics.</p>
 <p>In these cases, Genomic SEM needs additional information to reconstruct the appropriate beta and standard error.</p>
 <p>In this practical, <code>linprob = TRUE</code> is used for ALCH.</p>
 </section>
-<section id="step-4-run-usergwas" class="level3" data-number="1.0.34">
-<h3 data-number="1.0.34" class="anchored" data-anchor-id="step-4-run-usergwas"><span class="header-section-number">1.0.34</span> 24. Step 4: Run userGWAS</h3>
+<section id="step-4-run-usergwas" class="level3" data-number="1.0.33">
+<h3 data-number="1.0.33" class="anchored" data-anchor-id="step-4-run-usergwas"><span class="header-section-number">1.0.33</span> 24. Step 4: Run userGWAS</h3>
 <p>Now we run a multivariate GWAS.</p>
 <p>The model is:</p>
 <p>$ F1 =~ MDD + PTSD + ALCH + ANX $</p>
@@ -1871,36 +1878,36 @@ Please check the log file ALCH_PTSD_MDD_ANX_sumstats.log to ensure that all colu
 <p>$ F1 SNP $</p>
 <p>This tests whether each SNP predicts the shared latent genetic factor.</p>
 <div id="e65dbd05-2af7-4fa8-bb29-e10af474a0b5" class="cell" data-execution_count="32">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Covariance structure from LDSC</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> LDSC_INT</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># SNP-level summary statistics</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>SNPs <span class="ot">&lt;-</span> INT_sumstats</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate GWAS model</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">"</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="st">F1 =~ MDD + PTSD + ALCH + ANX</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="st">F1 ~ SNP</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save only the SNP effect on F1</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">&lt;-</span> <span class="st">"F1~SNP"</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Practical uses serial processing</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>parallel <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate QSNP</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>Q_SNP <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Run multivariate GWAS</span></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>INT_GWAS <span class="ot">&lt;-</span> <span class="fu">userGWAS</span>(</span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">SNPs =</span> SNPs,</span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> model,</span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">sub =</span> sub,</span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel =</span> parallel,</span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">Q_SNP =</span> Q_SNP</span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Covariance structure from LDSC</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> LDSC_INT</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># SNP-level summary statistics</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>SNPs <span class="ot">&lt;-</span> INT_sumstats</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate GWAS model</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="st">F1 =~ MDD + PTSD + ALCH + ANX</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="st">F1 ~ SNP</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save only the SNP effect on F1</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">&lt;-</span> <span class="st">"F1~SNP"</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Practical uses serial processing</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>parallel <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate QSNP</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>Q_SNP <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Run multivariate GWAS</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>INT_GWAS <span class="ot">&lt;-</span> <span class="fu">userGWAS</span>(</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">SNPs =</span> SNPs,</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> model,</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">sub =</span> sub,</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel =</span> parallel,</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">Q_SNP =</span> Q_SNP</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Please note that an update was made to userGWAS on Sept 1 2023  so that the default behavior is to fix the measurement model using the fix_measurement argument."
 [1] "Starting GWAS Estimation"
@@ -1911,8 +1918,8 @@ elapsed
 </div>
 </div>
 </section>
-<section id="view-the-first-rows-of-the-multivariate-gwas-output" class="level3" data-number="1.0.35">
-<h3 data-number="1.0.35" class="anchored" data-anchor-id="view-the-first-rows-of-the-multivariate-gwas-output"><span class="header-section-number">1.0.35</span> 25. View the First Rows of the Multivariate GWAS Output</h3>
+<section id="view-the-first-rows-of-the-multivariate-gwas-output" class="level3" data-number="1.0.34">
+<h3 data-number="1.0.34" class="anchored" data-anchor-id="view-the-first-rows-of-the-multivariate-gwas-output"><span class="header-section-number">1.0.34</span> 25. View the First Rows of the Multivariate GWAS Output</h3>
 <p>The output contains:</p>
 <ul>
 <li>SNP effect on the factor</li>
@@ -1923,7 +1930,7 @@ elapsed
 <li>Warnings and errors</li>
 </ul>
 <div id="9aff38aa-fe7e-43a3-9cb4-1e97f562f147" class="cell" data-execution_count="33">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>INT_GWAS[[<span class="dv">1</span>]][<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>INT_GWAS[[<span class="dv">1</span>]][<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 5 × 24</caption>
@@ -2103,16 +2110,16 @@ elapsed
 </div>
 </div>
 </section>
-<section id="check-warnings-and-errors" class="level3" data-number="1.0.36">
-<h3 data-number="1.0.36" class="anchored" data-anchor-id="check-warnings-and-errors"><span class="header-section-number">1.0.36</span> 26. Check Warnings and Errors</h3>
+<section id="check-warnings-and-errors" class="level3" data-number="1.0.35">
+<h3 data-number="1.0.35" class="anchored" data-anchor-id="check-warnings-and-errors"><span class="header-section-number">1.0.35</span> 26. Check Warnings and Errors</h3>
 <p>Before interpreting results, always check warnings and errors.</p>
 <p>A value of 0 usually means the SNP was estimated successfully.</p>
 <div id="b1e9687e-5870-420c-8012-7cc24e0c4175" class="cell" data-execution_count="34">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Warnings</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>warning)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Errors</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>error)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Warnings</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>warning)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Errors</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>error)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>
 lavaan-&gt;lav_lavaan_step02_options():  \n   the following argument(s) override(s) the options in slotOptions: se 
@@ -2125,13 +2132,13 @@ lavaan-&gt;lav_lavaan_step02_options():  \n   the following argument(s) override
 </div>
 </div>
 </section>
-<section id="genome-wide-significant-factor-hits" class="level3" data-number="1.0.37">
-<h3 data-number="1.0.37" class="anchored" data-anchor-id="genome-wide-significant-factor-hits"><span class="header-section-number">1.0.37</span> 27. Genome-Wide Significant Factor Hits</h3>
+<section id="genome-wide-significant-factor-hits" class="level3" data-number="1.0.36">
+<h3 data-number="1.0.36" class="anchored" data-anchor-id="genome-wide-significant-factor-hits"><span class="header-section-number">1.0.36</span> 27. Genome-Wide Significant Factor Hits</h3>
 <p>The standard genome-wide significance threshold is:</p>
 <p>$ 5 ^{-8} $</p>
 <p>We can check how many SNPs are significantly associated with the latent factor.</p>
 <div id="abba0050-0f43-4ad2-9ae7-0456c362614e" class="cell" data-execution_count="36">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Pval_Estimate <span class="sc">&lt;</span> <span class="fl">5e-8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Pval_Estimate <span class="sc">&lt;</span> <span class="fl">5e-8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>
 FALSE 
@@ -2139,8 +2146,8 @@ FALSE
 </div>
 </div>
 </section>
-<section id="qsnp-testing-snp-level-heterogeneity" class="level3" data-number="1.0.38">
-<h3 data-number="1.0.38" class="anchored" data-anchor-id="qsnp-testing-snp-level-heterogeneity"><span class="header-section-number">1.0.38</span> 28. QSNP: Testing SNP-Level Heterogeneity</h3>
+<section id="qsnp-testing-snp-level-heterogeneity" class="level3" data-number="1.0.37">
+<h3 data-number="1.0.37" class="anchored" data-anchor-id="qsnp-testing-snp-level-heterogeneity"><span class="header-section-number">1.0.37</span> 28. QSNP: Testing SNP-Level Heterogeneity</h3>
 <p>QSNP tests whether the SNP effect fits the common pathway model.</p>
 <p>If a SNP acts mainly through the common factor, then its effects on individual traits should be consistent with the factor structure.</p>
 <p>If the SNP has a strong trait-specific effect, the common pathway model may not fit well.</p>
@@ -2151,8 +2158,8 @@ FALSE
 <p>As a QC metric, it can help identify SNPs that do not cleanly represent the common factor.</p>
 <p>As a biological result, it can highlight SNPs that differentiate related traits.</p>
 </section>
-<section id="qsnp-as-a-qc-metric" class="level3" data-number="1.0.39">
-<h3 data-number="1.0.39" class="anchored" data-anchor-id="qsnp-as-a-qc-metric"><span class="header-section-number">1.0.39</span> 29. QSNP as a QC Metric</h3>
+<section id="qsnp-as-a-qc-metric" class="level3" data-number="1.0.38">
+<h3 data-number="1.0.38" class="anchored" data-anchor-id="qsnp-as-a-qc-metric"><span class="header-section-number">1.0.38</span> 29. QSNP as a QC Metric</h3>
 <p>Suppose a SNP is significantly associated with an internalizing factor.</p>
 <p>If QSNP is not significant, this suggests that the SNP effect is consistent with the shared factor.</p>
 <p>But if QSNP is highly significant, the SNP may not be a clean factor SNP.</p>
@@ -2160,26 +2167,26 @@ FALSE
 <p>For example, a SNP may look associated with an internalizing factor, but the effect may actually be much stronger for depression than anxiety or PTSD.</p>
 <p>In that case, QSNP warns us that the SNP may have trait-specific effects.</p>
 </section>
-<section id="qsnp-as-a-biological-result" class="level3" data-number="1.0.40">
-<h3 data-number="1.0.40" class="anchored" data-anchor-id="qsnp-as-a-biological-result"><span class="header-section-number">1.0.40</span> 30. QSNP as a Biological Result</h3>
+<section id="qsnp-as-a-biological-result" class="level3" data-number="1.0.39">
+<h3 data-number="1.0.39" class="anchored" data-anchor-id="qsnp-as-a-biological-result"><span class="header-section-number">1.0.39</span> 30. QSNP as a Biological Result</h3>
 <p>QSNP is not only a warning. It can also be scientifically interesting.</p>
 <p>A significant QSNP result may reveal SNPs that distinguish traits that are otherwise genetically correlated.</p>
 <p>For example, depression and anxiety may share a broad genetic factor, but some variants may be more specific to depression.</p>
 <p>Similarly, schizophrenia and bipolar disorder may share genetic liability, but some variants may help differentiate them.</p>
 <p>Therefore, QSNP can be used to study genetic specificity within broader shared genetic architecture.</p>
 </section>
-<section id="multiple-factor-models-and-qsnp" class="level3" data-number="1.0.41">
-<h3 data-number="1.0.41" class="anchored" data-anchor-id="multiple-factor-models-and-qsnp"><span class="header-section-number">1.0.41</span> 31. Multiple-Factor Models and QSNP</h3>
+<section id="multiple-factor-models-and-qsnp" class="level3" data-number="1.0.40">
+<h3 data-number="1.0.40" class="anchored" data-anchor-id="multiple-factor-models-and-qsnp"><span class="header-section-number">1.0.40</span> 31. Multiple-Factor Models and QSNP</h3>
 <p>In models with multiple factors, QSNP can be calculated for each SNP-factor relationship.</p>
 <p>This is useful because a SNP may fit one factor well but show heterogeneity for another factor.</p>
 <p>For example, a SNP may operate cleanly through a substance-use factor but show disorder-specific effects within an internalizing factor.</p>
 <p>This makes QSNP especially useful in complex psychiatric models where several correlated factors are estimated together.</p>
 <div id="f98501bd-a727-4888-a1a6-2281fbe84ce0" class="cell" data-execution_count="37">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genome-wide significant QSNP hits</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Q_SNP_pval <span class="sc">&lt;</span> <span class="fl">5e-8</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Suggestive QSNP hits</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Q_SNP_pval <span class="sc">&lt;</span> <span class="fl">1e-5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genome-wide significant QSNP hits</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Q_SNP_pval <span class="sc">&lt;</span> <span class="fl">5e-8</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Suggestive QSNP hits</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(INT_GWAS[[<span class="dv">1</span>]]<span class="sc">$</span>Q_SNP_pval <span class="sc">&lt;</span> <span class="fl">1e-5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>
 FALSE 
@@ -2192,14 +2199,14 @@ FALSE  TRUE
 </div>
 </div>
 </section>
-<section id="interpreting-qsnp" class="level3" data-number="1.0.42">
-<h3 data-number="1.0.42" class="anchored" data-anchor-id="interpreting-qsnp"><span class="header-section-number">1.0.42</span> 29. Interpreting QSNP</h3>
+<section id="interpreting-qsnp" class="level3" data-number="1.0.41">
+<h3 data-number="1.0.41" class="anchored" data-anchor-id="interpreting-qsnp"><span class="header-section-number">1.0.41</span> 29. Interpreting QSNP</h3>
 <p>QSNP can be interpreted in two ways.</p>
 <p>First, it can be used as a quality-control metric. If a SNP has a strong factor association but also a very significant QSNP value, the SNP may not represent the common factor cleanly.</p>
 <p>Second, QSNP can be a result of interest. It may identify SNPs that differentiate traits from one another.</p>
 <p>For example, a SNP may be associated with depression but not anxiety, even though both traits load on the same internalizing factor.</p>
 <div id="e2c57d6c-4bc7-49c7-b5fb-bf4792fb45a8" class="cell" data-execution_count="38">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(INT_GWAS[[<span class="dv">1</span>]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(INT_GWAS[[<span class="dv">1</span>]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 1000 × 24</caption>
@@ -3660,8 +3667,8 @@ FALSE  TRUE
 </div>
 </div>
 </section>
-<section id="practice-section-anthropometric-traits" class="level3" data-number="1.0.43">
-<h3 data-number="1.0.43" class="anchored" data-anchor-id="practice-section-anthropometric-traits"><span class="header-section-number">1.0.43</span> 31. Practice Section: Anthropometric Traits</h3>
+<section id="practice-section-anthropometric-traits" class="level3" data-number="1.0.42">
+<h3 data-number="1.0.42" class="anchored" data-anchor-id="practice-section-anthropometric-traits"><span class="header-section-number">1.0.42</span> 31. Practice Section: Anthropometric Traits</h3>
 <p>The workshop also provides an additional LDSC object for anthropometric traits.</p>
 <p>These include:</p>
 <ul>
@@ -3677,14 +3684,14 @@ FALSE  TRUE
 </ul>
 <p>The goal is to practice specifying your own model.</p>
 <div id="40f937fd-a1a9-4990-b0f5-185072ef2a4b" class="cell" data-execution_count="39">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load anthropometric LDSC object</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"/Users/nbhadra/Documents/aSchork/ISG_2026/Scripts/script_day6/GenomicSEM_2026/Anthro_LDSC.RData"</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariance structure</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> anthro</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check available traits</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(anthro<span class="sc">$</span>S)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load anthropometric LDSC object</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"Anthro_LDSC.RData"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariance structure</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>covstruc <span class="ot">&lt;-</span> anthro</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check available traits</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(anthro<span class="sc">$</span>S)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <style>
 .list-inline {list-style: none; margin:0; padding: 0}
@@ -3695,25 +3702,25 @@ FALSE  TRUE
 </div>
 </div>
 </section>
-<section id="example-anthropometric-factor-model" class="level3" data-number="1.0.44">
-<h3 data-number="1.0.44" class="anchored" data-anchor-id="example-anthropometric-factor-model"><span class="header-section-number">1.0.44</span> 32. Example Anthropometric Factor Model</h3>
+<section id="example-anthropometric-factor-model" class="level3" data-number="1.0.43">
+<h3 data-number="1.0.43" class="anchored" data-anchor-id="example-anthropometric-factor-model"><span class="header-section-number">1.0.43</span> 32. Example Anthropometric Factor Model</h3>
 <p>One possible model is a general body-size factor.</p>
 <p>This is only an example. In real research, you should write down your model before running it.</p>
 <div id="98128b99-7865-4700-9383-a61a17a5013f" class="cell" data-execution_count="41">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>Your.Model <span class="ot">&lt;-</span> <span class="st">"</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="st">BodySize =~ BMI + WHR + Waist + Hip</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>std.lv <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>YourResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> Your.Model,</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> std.lv</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>results</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>Your.Model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="st">BodySize =~ BMI + WHR + Waist + Hip</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>std.lv <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>YourResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> Your.Model,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> std.lv</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>results</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Running primary model"
 [1] "Calculating Standardized Results"
@@ -3901,8 +3908,8 @@ elapsed
 </div>
 </div>
 </section>
-<section id="example-two-factor-model" class="level3" data-number="1.0.45">
-<h3 data-number="1.0.45" class="anchored" data-anchor-id="example-two-factor-model"><span class="header-section-number">1.0.45</span> 33. Example Two-Factor Model</h3>
+<section id="example-two-factor-model" class="level3" data-number="1.0.44">
+<h3 data-number="1.0.44" class="anchored" data-anchor-id="example-two-factor-model"><span class="header-section-number">1.0.44</span> 33. Example Two-Factor Model</h3>
 <p>We may hypothesize that body mass and early growth are partly distinct genetic dimensions.</p>
 <p>For example:</p>
 <ul>
@@ -3910,21 +3917,21 @@ elapsed
 <li>EarlyGrowth: BL, BW, IHC</li>
 </ul>
 <div id="9a26d22c-a737-4358-ac2c-05c8d48cdd36" class="cell" data-execution_count="42">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>TwoFactor.Model <span class="ot">&lt;-</span> <span class="st">"</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="st">AdultBody =~ BMI + WHR + Waist + Hip</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="st">EarlyGrowth =~ BL + BW + IHC</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="st">AdultBody ~~ EarlyGrowth</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>TwoFactorResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> TwoFactor.Model,</span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">TRUE</span></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>results</span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>TwoFactor.Model <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="st">AdultBody =~ BMI + WHR + Waist + Hip</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="st">EarlyGrowth =~ BL + BW + IHC</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="st">AdultBody ~~ EarlyGrowth</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>TwoFactorResults <span class="ot">&lt;-</span> <span class="fu">usermodel</span>(</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">covstruc =</span> covstruc,</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> TwoFactor.Model,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.lv =</span> <span class="cn">TRUE</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>results</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Running primary model"
 [1] "Calculating Standardized Results"
@@ -4208,14 +4215,14 @@ elapsed
 </div>
 </div>
 </section>
-<section id="comparing-models" class="level3" data-number="1.0.46">
-<h3 data-number="1.0.46" class="anchored" data-anchor-id="comparing-models"><span class="header-section-number">1.0.46</span> 34. Comparing Models</h3>
+<section id="comparing-models" class="level3" data-number="1.0.45">
+<h3 data-number="1.0.45" class="anchored" data-anchor-id="comparing-models"><span class="header-section-number">1.0.45</span> 34. Comparing Models</h3>
 <p>We can compare models using fit statistics such as AIC, CFI, and SRMR.</p>
 <p>Lower AIC suggests a better-fitting model among competing models.</p>
 <p>Higher CFI and lower SRMR suggest better absolute fit.</p>
 <div id="72b9b175-5fa2-4c91-868d-da6e01c4ffb9" class="cell" data-execution_count="43">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>modelfit</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>YourResults<span class="sc">$</span>modelfit</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>TwoFactorResults<span class="sc">$</span>modelfit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 1 × 6</caption>
@@ -4290,8 +4297,8 @@ elapsed
 </div>
 </div>
 </section>
-<section id="important-practical-advice" class="level3" data-number="1.0.47">
-<h3 data-number="1.0.47" class="anchored" data-anchor-id="important-practical-advice"><span class="header-section-number">1.0.47</span> 35. Important Practical Advice</h3>
+<section id="important-practical-advice" class="level3" data-number="1.0.46">
+<h3 data-number="1.0.46" class="anchored" data-anchor-id="important-practical-advice"><span class="header-section-number">1.0.46</span> 35. Important Practical Advice</h3>
 <p>Genomic SEM is flexible, but this flexibility should be used carefully.</p>
 <p>Do not simply try many models until one gives a significant result.</p>
 <p>A better workflow is:</p>
@@ -4305,8 +4312,8 @@ elapsed
 </ol>
 <p>This is especially important in multivariate genetic modeling because many reasonable models may appear plausible.</p>
 </section>
-<section id="summary" class="level3" data-number="1.0.48">
-<h3 data-number="1.0.48" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.0.48</span> 36. Summary</h3>
+<section id="summary" class="level3" data-number="1.0.47">
+<h3 data-number="1.0.47" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.0.47</span> 36. Summary</h3>
 <p>In this tutorial, we covered the main concepts behind multivariate genetic analysis using Genomic SEM.</p>
 <p>We learned that complex traits are highly polygenic and that LD Score Regression uses the relationship between LD score and GWAS signal to estimate SNP heritability.</p>
 <p>We then extended this idea to genetic covariance and genetic correlation across traits.</p>
@@ -4317,8 +4324,8 @@ elapsed
 </blockquote>
 <p>This makes it especially useful for psychiatric, behavioral, anthropometric, and medical traits where genetic overlap is common.</p>
 </section>
-<section id="key-takeaways" class="level3" data-number="1.0.49">
-<h3 data-number="1.0.49" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">1.0.49</span> 37. Key Takeaways</h3>
+<section id="key-takeaways" class="level3" data-number="1.0.48">
+<h3 data-number="1.0.48" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">1.0.48</span> 37. Key Takeaways</h3>
 <ul>
 <li>Complex traits are usually highly polygenic.</li>
 <li>LD scores summarize how much LD each SNP has with nearby SNPs.</li>

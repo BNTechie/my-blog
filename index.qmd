@@ -2,7 +2,7 @@
 title: "Nivedita Bhadra, PhD<br><span class='title-role' style='display:block; font-size:1.8rem; font-weight:400; margin-top:0.3rem; color:#555;'>Computational Scientist</span>"
 subtitle: "Modeling complex systems, from physics to the genome"
 page-layout: full
-description: "Computational scientist working on statistical genetics, biomedical modeling, and simulation, with a physics background from IIT Delhi and IISER Kolkata."
+description: "Practical notes on statistical genetics, machine learning, and computational modeling, from mathematical formulation to reproducible code."
 format:
   html:
     toc: false
@@ -115,42 +115,6 @@ Her aim is to make complex computational methods easier to understand through cl
 :::
 :::
 
-::: {.icon-cycle-wrap}
-::: {.icon-cycle}
-<svg class="cycle-icon icon-physics" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="48" cy="48" r="6" fill="var(--signal)"/>
-  <ellipse cx="48" cy="48" rx="34" ry="14" fill="none" stroke="var(--ink)" stroke-width="2.5"/>
-  <ellipse cx="48" cy="48" rx="34" ry="14" fill="none" stroke="var(--ink)" stroke-width="2.5" transform="rotate(60 48 48)"/>
-  <ellipse cx="48" cy="48" rx="34" ry="14" fill="none" stroke="var(--ink)" stroke-width="2.5" transform="rotate(120 48 48)"/>
-</svg>
-<svg class="cycle-icon icon-code" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
-  <rect x="14" y="20" width="68" height="56" rx="6" fill="none" stroke="var(--ink)" stroke-width="2.5"/>
-  <path d="M34 38 L22 48 L34 58" fill="none" stroke="var(--signal)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M62 38 L74 48 L62 58" fill="none" stroke="var(--signal)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <line x1="52" y1="34" x2="44" y2="62" stroke="var(--amber)" stroke-width="3.5" stroke-linecap="round"/>
-</svg>
-<svg class="cycle-icon icon-dna" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
-  <path d="M32 14 C 50 26, 46 38, 32 48 C 18 58, 22 70, 40 82" fill="none" stroke="var(--signal)" stroke-width="3" stroke-linecap="round"/>
-  <path d="M64 14 C 46 26, 50 38, 64 48 C 78 58, 74 70, 56 82" fill="none" stroke="var(--amber)" stroke-width="3" stroke-linecap="round"/>
-  <line x1="33" y1="22" x2="63" y2="22" stroke="var(--ink-soft)" stroke-width="2"/>
-  <line x1="30" y1="34" x2="66" y2="34" stroke="var(--ink-soft)" stroke-width="2"/>
-  <line x1="27" y1="48" x2="69" y2="48" stroke="var(--ink-soft)" stroke-width="2"/>
-  <line x1="30" y1="62" x2="66" y2="62" stroke="var(--ink-soft)" stroke-width="2"/>
-  <line x1="36" y1="74" x2="60" y2="74" stroke="var(--ink-soft)" stroke-width="2"/>
-</svg>
-:::
-::: {.icon-cycle-label}
-<span class="label-physics">Physics</span><span class="label-code">Code</span><span class="label-dna">Genome</span>
-:::
-:::
-
----
-
-## 🎓 Background
-
-Physicist by training, now working in statistical genetics and computational modeling — [read the full background on the About page](about.qmd).
-
-
 ---
 
 ## Areas I Write About
@@ -190,6 +154,8 @@ I’m still setting up a formal subscription option. For now, you can follow or 
 - GitHub: [BNTechie](https://github.com/BNTechie)
 - LinkedIn: [Nivedita Bhadra](https://www.linkedin.com/in/nivedita-bhadra-b5149130)
 - Medium: [@nivedita.home](https://medium.com/@nivedita.home)
-- Email: nivedita.home@gmail.com
+- Email: [nivedita.home@gmail.com](mailto:nivedita.home@gmail.com)
+
+[Send an Email](mailto:nivedita.home@gmail.com){.btn .btn-secondary}
 
 > If something helped you, feel free to share, comment, or connect.

@@ -274,5 +274,14 @@
   },
   "tutorials/blog_NGS_pipeline_raw_data_to_GWAS/ngs-to-gwas-pipeline.qmd": {
     "ngs-to-gwas-pipeline.html": "3b12522f"
+  },
+  "README_APPLY.md": {
+    "README_APPLY.html": "531f9bde"
+  },
+  "my-blog-redesign/README_APPLY.md": {
+    "README_APPLY.html": "62be10a7"
+  },
+  "my-blog-redesign/index.qmd": {
+    "index.html": "be227c4e"
   }
 }

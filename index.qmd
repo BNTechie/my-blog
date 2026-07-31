@@ -1,8 +1,8 @@
 ---
-title: "Nivedita Bhadra — Senior Computational Scientist"
+title: "Nivedita Bhadra, PhD<br><span class='title-role' style='display:block; font-size:1.8rem; font-weight:400; margin-top:0.3rem; color:#555;'>Computational Scientist</span>"
 subtitle: "Modeling complex systems, from physics to the genome"
 page-layout: full
-description: "Senior computational scientist working on statistical genetics, biomedical modeling, and simulation — with a physics background from IIT Delhi and IISER Kolkata."
+description: "Computational scientist working on statistical genetics, biomedical modeling, and simulation, with a physics background from IIT Delhi and IISER Kolkata."
 format:
   html:
     toc: false
@@ -36,16 +36,69 @@ format:
 :::
 
 ::: {.hero}
+
+::: {.equation-bg}
+<span class="eq eq1">∇²ψ = 0</span>
+<span class="eq eq2">P(y | X) = σ(Xβ)</span>
+<span class="eq eq3">β̂ = (XᵀX)⁻¹Xᵀy</span>
+<span class="eq eq4">L = Σ (yᵢ − ŷᵢ)²</span>
+<span class="eq eq5">h² = Vₐ / Vₚ</span>
+<span class="eq eq6">dx/dt = σ(y − x)</span>
+:::
+
+```{=html}
+<style>
+.hero { position: relative; overflow: hidden; }
+
+.equation-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.equation-bg .eq {
+  position: absolute;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #8a8f98;
+  opacity: 0.16;
+  white-space: nowrap;
+  animation: eq-drift 22s ease-in-out infinite;
+}
+
+.eq1 { top: 6%;  left: 4%;  animation-delay: 0s; }
+.eq2 { top: 18%; left: 78%; animation-delay: 3s; }
+.eq3 { top: 46%; left: 8%;  animation-delay: 6s; }
+.eq4 { top: 62%; left: 74%; animation-delay: 9s; }
+.eq5 { top: 82%; left: 12%; animation-delay: 12s; }
+.eq6 { top: 88%; left: 68%; animation-delay: 15s; }
+
+@keyframes eq-drift {
+  0%   { transform: translateY(0) translateX(0); opacity: 0.10; }
+  50%  { transform: translateY(-10px) translateX(4px); opacity: 0.20; }
+  100% { transform: translateY(0) translateX(0); opacity: 0.10; }
+}
+
+.hero-text, .hero-image { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .equation-bg .eq { animation: none; opacity: 0.14; }
+}
+</style>
+```
+
 ::: {.hero-text}
 
 
-Hi, I’m Nivedita Bhadra — a **Senior Computational Scientist** working at the intersection of physics, statistical modeling, and biomedical data.
+Nivedita Bhadra is a computational scientist with a PhD in Physics from IISER Kolkata and an M.Sc. from IIT Delhi. She was trained in the mathematical and numerical modelling of complex systems, including simulation, statistical inference, and large-scale computation. That foundation has shaped her work across disciplines: first at the Translational Genomics Research Institute, where she applied high-dimensional statistical and machine-learning methods to biomedical data, and now at the Institute of Biological Psychiatry in Denmark, where she develops statistical genetics workflows for risk modelling using large-scale cohort data.
 
-I trained as a physicist — an M.Sc. from IIT Delhi and a PhD in Computational Physics from IISER Kolkata — building numerical models of complex systems. That training in simulation, statistical inference, and large-scale computation is the thread running through everything I've done since: first at the Translational Genomics Research Institute (TGen), applying high-dimensional modeling to biomedical data, and now at the Institute of Biological Psychiatry in Denmark, where I build statistical genetics models for risk prediction on large-scale cohort data.
+Whether the problem involves physical systems, genomic data, or text, her approach remains consistent: define the question precisely, identify its mathematical structure, build a reproducible computational model, and validate it rigorously against data.
 
-Whatever the domain — physical systems, genomes, or text — my approach is the same: formalize the problem, build a model that respects its structure, and validate it rigorously against data. In this blog I document that process in the open — the models I'm building, the pipelines I'm debugging, and the computational methods (statistical genetics, machine learning, NLP, HPC) I use to get there.
+This blog documents that process in the open. It brings together practical work in statistical genetics, machine learning, natural language processing, high-performance computing, and scientific programming, from models and mathematical derivations to pipelines, debugging, and reproducible implementation.
 
-My aim is to make complex computational topics easier to understand through practical examples, readable code, and honest notes from real research.
+Her aim is to make complex computational methods easier to understand through clear explanations, practical examples, readable code, and honest notes from real research.
 
 
 
@@ -58,7 +111,7 @@ My aim is to make complex computational topics easier to understand through prac
 
 
   
-*Senior Computational Scientist*
+*Computational Scientist*
 :::
 :::
 

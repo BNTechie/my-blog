@@ -145,7 +145,7 @@ window.Quarto = {
 <link rel="stylesheet" href="../../style.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -205,65 +205,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#multivariate-concepts-in-statistical-genetics" id="toc-multivariate-concepts-in-statistical-genetics" class="nav-link active" data-scroll-target="#multivariate-concepts-in-statistical-genetics"><span class="header-section-number">1</span> Multivariate Concepts in Statistical Genetics</a>
-  <ul class="collapse">
-  <li><a href="#why-do-we-need-multivariate-genetic-models" id="toc-why-do-we-need-multivariate-genetic-models" class="nav-link" data-scroll-target="#why-do-we-need-multivariate-genetic-models"><span class="header-section-number">1.0.1</span> 1. Why Do We Need Multivariate Genetic Models?</a></li>
-  <li><a href="#from-genetic-overlap-to-genetic-architecture" id="toc-from-genetic-overlap-to-genetic-architecture" class="nav-link" data-scroll-target="#from-genetic-overlap-to-genetic-architecture"><span class="header-section-number">1.0.2</span> 2. From Genetic Overlap to Genetic Architecture</a></li>
-  <li><a href="#why-traits-do-not-need-to-come-from-the-same-sample" id="toc-why-traits-do-not-need-to-come-from-the-same-sample" class="nav-link" data-scroll-target="#why-traits-do-not-need-to-come-from-the-same-sample"><span class="header-section-number">1.0.3</span> 3. Why Traits Do Not Need to Come From the Same Sample</a></li>
-  <li><a href="#polygenicity-and-linkage-disequilibrium" id="toc-polygenicity-and-linkage-disequilibrium" class="nav-link" data-scroll-target="#polygenicity-and-linkage-disequilibrium"><span class="header-section-number">1.0.4</span> 2. Polygenicity and Linkage Disequilibrium</a></li>
-  <li><a href="#the-intuition-behind-ld-score-regression" id="toc-the-intuition-behind-ld-score-regression" class="nav-link" data-scroll-target="#the-intuition-behind-ld-score-regression"><span class="header-section-number">1.0.5</span> 4. The Intuition Behind LD Score Regression</a></li>
-  <li><a href="#why-the-ldsc-intercept-matters" id="toc-why-the-ldsc-intercept-matters" class="nav-link" data-scroll-target="#why-the-ldsc-intercept-matters"><span class="header-section-number">1.0.6</span> 5. Why the LDSC Intercept Matters</a></li>
-  <li><a href="#snp-heritability-using-ld-score-regression" id="toc-snp-heritability-using-ld-score-regression" class="nav-link" data-scroll-target="#snp-heritability-using-ld-score-regression"><span class="header-section-number">1.0.7</span> 3. SNP Heritability Using LD Score Regression</a></li>
-  <li><a href="#genetic-covariance-and-genetic-correlation" id="toc-genetic-covariance-and-genetic-correlation" class="nav-link" data-scroll-target="#genetic-covariance-and-genetic-correlation"><span class="header-section-number">1.0.8</span> 4. Genetic Covariance and Genetic Correlation</a></li>
-  <li><a href="#why-shared-genetic-architecture-requires-new-models" id="toc-why-shared-genetic-architecture-requires-new-models" class="nav-link" data-scroll-target="#why-shared-genetic-architecture-requires-new-models"><span class="header-section-number">1.0.9</span> 8. Why Shared Genetic Architecture Requires New Models</a></li>
-  <li><a href="#from-ld-score-regression-to-genomic-sem" id="toc-from-ld-score-regression-to-genomic-sem" class="nav-link" data-scroll-target="#from-ld-score-regression-to-genomic-sem"><span class="header-section-number">1.0.10</span> 5. From LD Score Regression to Genomic SEM</a></li>
-  <li><a href="#the-two-stage-framework-of-genomic-sem" id="toc-the-two-stage-framework-of-genomic-sem" class="nav-link" data-scroll-target="#the-two-stage-framework-of-genomic-sem"><span class="header-section-number">1.0.11</span> 6. The Two-Stage Framework of Genomic SEM</a></li>
-  <li><a href="#genome-wide-sem-vs-multivariate-gwas" id="toc-genome-wide-sem-vs-multivariate-gwas" class="nav-link" data-scroll-target="#genome-wide-sem-vs-multivariate-gwas"><span class="header-section-number">1.0.12</span> 9. Genome-Wide SEM vs Multivariate GWAS</a></li>
-  <li><a href="#practical-setup-in-r" id="toc-practical-setup-in-r" class="nav-link" data-scroll-target="#practical-setup-in-r"><span class="header-section-number">1.0.13</span> 7. Practical Setup in R</a></li>
-  <li><a href="#step-1-munge-summary-statistics" id="toc-step-1-munge-summary-statistics" class="nav-link" data-scroll-target="#step-1-munge-summary-statistics"><span class="header-section-number">1.0.14</span> 8. Step 1: Munge Summary Statistics</a></li>
-  <li><a href="#step-2-run-multivariable-ld-score-regression" id="toc-step-2-run-multivariable-ld-score-regression" class="nav-link" data-scroll-target="#step-2-run-multivariable-ld-score-regression"><span class="header-section-number">1.0.15</span> 9. Step 2: Run Multivariable LD Score Regression</a></li>
-  <li><a href="#step-3-load-the-ldsc-output" id="toc-step-3-load-the-ldsc-output" class="nav-link" data-scroll-target="#step-3-load-the-ldsc-output"><span class="header-section-number">1.0.16</span> 10. Step 3: Load the LDSC Output</a></li>
-  <li><a href="#understanding-the-genetic-covariance-matrix" id="toc-understanding-the-genetic-covariance-matrix" class="nav-link" data-scroll-target="#understanding-the-genetic-covariance-matrix"><span class="header-section-number">1.0.17</span> 11. Understanding the Genetic Covariance Matrix</a></li>
-  <li><a href="#understanding-the-sampling-covariance-matrix" id="toc-understanding-the-sampling-covariance-matrix" class="nav-link" data-scroll-target="#understanding-the-sampling-covariance-matrix"><span class="header-section-number">1.0.18</span> 12. Understanding the Sampling Covariance Matrix</a></li>
-  <li><a href="#factor-identification-in-genomic-sem" id="toc-factor-identification-in-genomic-sem" class="nav-link" data-scroll-target="#factor-identification-in-genomic-sem"><span class="header-section-number">1.0.19</span> 10. Factor Identification in Genomic SEM</a></li>
-  <li><a href="#lavaan-model-syntax-used-in-genomic-sem" id="toc-lavaan-model-syntax-used-in-genomic-sem" class="nav-link" data-scroll-target="#lavaan-model-syntax-used-in-genomic-sem"><span class="header-section-number">1.0.20</span> 13. Lavaan Model Syntax Used in Genomic SEM</a></li>
-  <li><a href="#common-factor-model" id="toc-common-factor-model" class="nav-link" data-scroll-target="#common-factor-model"><span class="header-section-number">1.0.21</span> 14. Common Factor Model</a></li>
-  <li><a href="#genetic-multiple-regression" id="toc-genetic-multiple-regression" class="nav-link" data-scroll-target="#genetic-multiple-regression"><span class="header-section-number">1.0.22</span> 15. Genetic Multiple Regression</a></li>
-  <li><a href="#gwas-by-subtraction" id="toc-gwas-by-subtraction" class="nav-link" data-scroll-target="#gwas-by-subtraction"><span class="header-section-number">1.0.23</span> 16. GWAS-by-Subtraction</a></li>
-  <li><a href="#view-model-results" id="toc-view-model-results" class="nav-link" data-scroll-target="#view-model-results"><span class="header-section-number">1.0.24</span> 15. View Model Results</a></li>
-  <li><a href="#view-model-fit" id="toc-view-model-fit" class="nav-link" data-scroll-target="#view-model-fit"><span class="header-section-number">1.0.25</span> 16. View Model Fit</a></li>
-  <li><a href="#interpreting-the-common-factor-model" id="toc-interpreting-the-common-factor-model" class="nav-link" data-scroll-target="#interpreting-the-common-factor-model"><span class="header-section-number">1.0.26</span> 17. Interpreting the Common Factor Model</a></li>
-  <li><a href="#alternative-model-correlated-traits-model" id="toc-alternative-model-correlated-traits-model" class="nav-link" data-scroll-target="#alternative-model-correlated-traits-model"><span class="header-section-number">1.0.27</span> 18. Alternative Model: Correlated Traits Model</a></li>
-  <li><a href="#alternative-model-regression-model" id="toc-alternative-model-regression-model" class="nav-link" data-scroll-target="#alternative-model-regression-model"><span class="header-section-number">1.0.28</span> 19. Alternative Model: Regression Model</a></li>
-  <li><a href="#multivariate-gwas-in-genomic-sem" id="toc-multivariate-gwas-in-genomic-sem" class="nav-link" data-scroll-target="#multivariate-gwas-in-genomic-sem"><span class="header-section-number">1.0.29</span> 20. Multivariate GWAS in Genomic SEM</a></li>
-  <li><a href="#steps-for-multivariate-gwas" id="toc-steps-for-multivariate-gwas" class="nav-link" data-scroll-target="#steps-for-multivariate-gwas"><span class="header-section-number">1.0.30</span> 21. Steps for Multivariate GWAS</a></li>
-  <li><a href="#step-3-for-multivariate-gwas-prepare-snp-summary-statistics" id="toc-step-3-for-multivariate-gwas-prepare-snp-summary-statistics" class="nav-link" data-scroll-target="#step-3-for-multivariate-gwas-prepare-snp-summary-statistics"><span class="header-section-number">1.0.31</span> 22. Step 3 for Multivariate GWAS: Prepare SNP Summary Statistics</a></li>
-  <li><a href="#why-linprob-is-needed" id="toc-why-linprob-is-needed" class="nav-link" data-scroll-target="#why-linprob-is-needed"><span class="header-section-number">1.0.32</span> 23. Why <code>linprob</code> Is Needed</a></li>
-  <li><a href="#step-4-run-usergwas" id="toc-step-4-run-usergwas" class="nav-link" data-scroll-target="#step-4-run-usergwas"><span class="header-section-number">1.0.33</span> 24. Step 4: Run userGWAS</a></li>
-  <li><a href="#view-the-first-rows-of-the-multivariate-gwas-output" id="toc-view-the-first-rows-of-the-multivariate-gwas-output" class="nav-link" data-scroll-target="#view-the-first-rows-of-the-multivariate-gwas-output"><span class="header-section-number">1.0.34</span> 25. View the First Rows of the Multivariate GWAS Output</a></li>
-  <li><a href="#check-warnings-and-errors" id="toc-check-warnings-and-errors" class="nav-link" data-scroll-target="#check-warnings-and-errors"><span class="header-section-number">1.0.35</span> 26. Check Warnings and Errors</a></li>
-  <li><a href="#genome-wide-significant-factor-hits" id="toc-genome-wide-significant-factor-hits" class="nav-link" data-scroll-target="#genome-wide-significant-factor-hits"><span class="header-section-number">1.0.36</span> 27. Genome-Wide Significant Factor Hits</a></li>
-  <li><a href="#qsnp-testing-snp-level-heterogeneity" id="toc-qsnp-testing-snp-level-heterogeneity" class="nav-link" data-scroll-target="#qsnp-testing-snp-level-heterogeneity"><span class="header-section-number">1.0.37</span> 28. QSNP: Testing SNP-Level Heterogeneity</a></li>
-  <li><a href="#qsnp-as-a-qc-metric" id="toc-qsnp-as-a-qc-metric" class="nav-link" data-scroll-target="#qsnp-as-a-qc-metric"><span class="header-section-number">1.0.38</span> 29. QSNP as a QC Metric</a></li>
-  <li><a href="#qsnp-as-a-biological-result" id="toc-qsnp-as-a-biological-result" class="nav-link" data-scroll-target="#qsnp-as-a-biological-result"><span class="header-section-number">1.0.39</span> 30. QSNP as a Biological Result</a></li>
-  <li><a href="#multiple-factor-models-and-qsnp" id="toc-multiple-factor-models-and-qsnp" class="nav-link" data-scroll-target="#multiple-factor-models-and-qsnp"><span class="header-section-number">1.0.40</span> 31. Multiple-Factor Models and QSNP</a></li>
-  <li><a href="#interpreting-qsnp" id="toc-interpreting-qsnp" class="nav-link" data-scroll-target="#interpreting-qsnp"><span class="header-section-number">1.0.41</span> 29. Interpreting QSNP</a></li>
-  <li><a href="#practice-section-anthropometric-traits" id="toc-practice-section-anthropometric-traits" class="nav-link" data-scroll-target="#practice-section-anthropometric-traits"><span class="header-section-number">1.0.42</span> 31. Practice Section: Anthropometric Traits</a></li>
-  <li><a href="#example-anthropometric-factor-model" id="toc-example-anthropometric-factor-model" class="nav-link" data-scroll-target="#example-anthropometric-factor-model"><span class="header-section-number">1.0.43</span> 32. Example Anthropometric Factor Model</a></li>
-  <li><a href="#example-two-factor-model" id="toc-example-two-factor-model" class="nav-link" data-scroll-target="#example-two-factor-model"><span class="header-section-number">1.0.44</span> 33. Example Two-Factor Model</a></li>
-  <li><a href="#comparing-models" id="toc-comparing-models" class="nav-link" data-scroll-target="#comparing-models"><span class="header-section-number">1.0.45</span> 34. Comparing Models</a></li>
-  <li><a href="#important-practical-advice" id="toc-important-practical-advice" class="nav-link" data-scroll-target="#important-practical-advice"><span class="header-section-number">1.0.46</span> 35. Important Practical Advice</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.0.47</span> 36. Summary</a></li>
-  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">1.0.48</span> 37. Key Takeaways</a></li>
-  </ul></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 

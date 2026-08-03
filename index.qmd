@@ -159,3 +159,9 @@ I’m still setting up a formal subscription option. For now, you can follow or 
 [Send an Email](mailto:nivedita.home@gmail.com){.btn .btn-secondary}
 
 > If something helped you, feel free to share, comment, or connect.
+
+---
+
+::: {.disclaimer-note style="font-size: 0.85rem; color: #6b7280; line-height: 1.6;"}
+Just a quick heads-up: while I am a tech professional at IBP here in Copenhagen, this blog is my personal playground. The ideas, tutorials, and opinions shared here are 100% mine and have not been reviewed or approved by my employer. Treat the code snippets and guides as educational resources—always test things in a safe sandbox environment before using them in production!
+:::

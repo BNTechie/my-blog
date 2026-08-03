@@ -283,5 +283,14 @@
   },
   "my-blog-redesign/index.qmd": {
     "index.html": "be227c4e"
+  },
+  "tutorials/blog_AI_humanGenome/the-barbeque-question.md": {
+    "the-barbeque-question.html": "d8d408fc"
+  },
+  "tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment.ipynb": {
+    "t-test-vs-anova-before-after-treatment.html": "261c52e7"
+  },
+  "tutorials/blog_AI_humanGenome/the-barbeque-question.ipynb": {
+    "the-barbeque-question.html": "fc8998f3"
   }
 }

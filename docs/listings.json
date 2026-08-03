@@ -2,8 +2,10 @@
   {
     "listing": "/tutorials/index.html",
     "items": [
+      "/tutorials/blog_AI_humanGenome/the-barbeque-question.html",
       "/tutorials/blog_Bayesian_regression/bayesian_regression_tutorial.html",
       "/tutorials/blog_ridge_lasso/ridge_lasso_tutorial.html",
+      "/tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment.html",
       "/tutorials/blog_multivariate_concepts/genomicSEM.html",
       "/tutorials/blog_Heritability_genetic_correlation/Heritability_and_Genetic_Correlation.html",
       "/tutorials/blog_survival_analysis/survival-analysis-tutorial.html",

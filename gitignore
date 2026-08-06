@@ -1,0 +1,12 @@
+# Quarto build artifacts
+/.quarto/
+_site/
+/*_files/
+
+# Jupyter / R local artifacts
+.ipynb_checkpoints/
+.Rhistory
+**/*.quarto_ipynb
+
+# OS files
+.DS_Store

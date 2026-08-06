@@ -112,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../style.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -172,18 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#simple-chat-qa" id="toc-simple-chat-qa" class="nav-link active" data-scroll-target="#simple-chat-qa"><span class="header-section-number">1</span> Simple Chat / Q&amp;A</a></li>
-  <li><a href="#summarizing-text" id="toc-summarizing-text" class="nav-link" data-scroll-target="#summarizing-text"><span class="header-section-number">2</span> Summarizing text</a></li>
-  <li><a href="#sentiment-analysis" id="toc-sentiment-analysis" class="nav-link" data-scroll-target="#sentiment-analysis"><span class="header-section-number">3</span> Sentiment Analysis</a></li>
-  <li><a href="#creative-generation" id="toc-creative-generation" class="nav-link" data-scroll-target="#creative-generation"><span class="header-section-number">4</span> Creative generation</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -235,111 +224,98 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In this tutorial, we explore how to use LangChain together with Ollama to interact with a locally running LLM. Rather than focusing on theory, the goal is to demonstrate practical patterns that can be reused in real-world applications.</p>
 <p>We will walk through a series of progressively useful tasks: starting with simple question-answering, moving to text summarization and sentiment analysis, and finally exploring creative text generation. Each example highlights how prompt design and chaining can be used to structure interactions with the model.</p>
 <p>By the end of this tutorial, you will have a working understanding of how to build lightweight, local LLM pipelines for common natural language processing tasks.</p>
+<div id="bc50a839-5b5a-48fd-936b-1b32fbddb05a" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image, display</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>display(Image(filename<span class="op">=</span><span class="st">"Image.png"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Examplecases_Llama2_files/figure-html/cell-2-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 <section id="simple-chat-qa" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Simple Chat / Q&amp;A</h1>
-<div id="6fbc8595-73a0-4816-8fc1-82d56a21a17c" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip install -U langchain-ollama</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="6fbc8595-73a0-4816-8fc1-82d56a21a17c" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pip install -U langchain-ollama</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="bc16ad55-4614-443e-8173-28412431f8de" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip uninstall langchain langchain-core langchain-community -y</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!pip install langchain langchain-core langchain-community langchain-ollama</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="bc16ad55-4614-443e-8173-28412431f8de" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pip uninstall langchain langchain-core langchain-community -y</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#pip install langchain langchain-core langchain-community langchain-ollama</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="aecda530-13bb-444d-9a6e-e07ee064b893" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    template<span class="op">=</span><span class="st">"Explain overfitting in machine learning in one concise paragraph."</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    input_variables<span class="op">=</span>[]</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> OllamaLLM(model<span class="op">=</span><span class="st">"llama2"</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>chain <span class="op">=</span> prompt <span class="op">|</span> llm</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chain.invoke({}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="aecda530-13bb-444d-9a6e-e07ee064b893" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    template<span class="op">=</span><span class="st">"Explain overfitting in machine learning in one concise paragraph."</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    input_variables<span class="op">=</span>[]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> OllamaLLM(model<span class="op">=</span><span class="st">"llama3.2"</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>chain <span class="op">=</span> prompt <span class="op">|</span> llm</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chain.invoke({}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-Overfitting is a common problem in machine learning where a model is trained too well on the training data and fails to generalize well to new, unseen data. This occurs when a model becomes too complex and learns the noise or random fluctuations in the training data rather than the underlying patterns. As a result, the model performs poorly on new data, resulting in high error rates. Overfitting can be prevented by using techniques such as regularization, cross-validation, and early stopping to reduce the complexity of the model and improve its ability to generalize.</code></pre>
+<pre><code>Overfitting is a phenomenon in machine learning where a model becomes too complex and learns the noise and random fluctuations in the training data, rather than generalizing to unseen data. As a result, the model performs exceptionally well on the training set but poorly on new, unseen data, leading to poor performance on test sets or real-world applications. This occurs when the model is overparameterized (too many parameters) or has too many complex features that don't actually contribute to the underlying relationship being modeled, causing it to memorize the specific patterns in the training data rather than discovering a more generalizable representation of the underlying phenomenon.</code></pre>
 </div>
 </div>
 </section>
 <section id="summarizing-text" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Summarizing text</h1>
-<div id="bfe2b3d5-857a-4c1d-8eb5-f8d5da69345c" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    template<span class="op">=</span><span class="st">"Summarize the following text in 3 bullet points:</span><span class="ch">\n\n</span><span class="sc">{text}</span><span class="st">"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    input_variables<span class="op">=</span>[<span class="st">"text"</span>]</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> OllamaLLM(model<span class="op">=</span><span class="st">"llama2"</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>chain <span class="op">=</span> prompt <span class="op">|</span> llm</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>article <span class="op">=</span> <span class="st">"""Artificial intelligence is rapidly changing...</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">...businesses and individuals are adopting it across industries."""</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chain.invoke({<span class="st">"text"</span>: article}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="bfe2b3d5-857a-4c1d-8eb5-f8d5da69345c" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    template<span class="op">=</span><span class="st">"Summarize the following text in 3 bullet points:</span><span class="ch">\n\n</span><span class="sc">{text}</span><span class="st">"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    input_variables<span class="op">=</span>[<span class="st">"text"</span>]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> OllamaLLM(model<span class="op">=</span><span class="st">"llama3.2"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>chain <span class="op">=</span> prompt <span class="op">|</span> llm</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>article <span class="op">=</span> <span class="st">"""Artificial intelligence is rapidly changing...</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="st">...businesses and individuals are adopting it across industries."""</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chain.invoke({<span class="st">"text"</span>: article}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-• Artificial intelligence (AI) is transforming various industries and sectors.
-• Businesses and individuals are embracing AI technology to gain a competitive edge.
-• The adoption of AI is increasing rapidly, with diverse applications across different industries.</code></pre>
+<pre><code>Here is a summary of the text in 3 bullet points:
+
+• Artificial intelligence (AI) is evolving quickly.
+• Businesses and individuals are increasingly adopting AI technology.
+• AI is being applied across various industries, transforming them as part of this rapid adoption.</code></pre>
 </div>
 </div>
 </section>
 <section id="sentiment-analysis" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Sentiment Analysis</h1>
-<div id="99f5e2b2-d1ee-4719-ac5f-08fef9527890" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    template<span class="op">=</span><span class="st">"Classify the sentiment as Positive, Negative, or Neutral:</span><span class="ch">\n\n</span><span class="sc">{text}</span><span class="st">"</span>,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    input_variables<span class="op">=</span>[<span class="st">"text"</span>]</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> OllamaLLM(model<span class="op">=</span><span class="st">"llama2"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>chain <span class="op">=</span> prompt <span class="op">|</span> llm</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> t <span class="kw">in</span> [</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"I love this new feature!"</span>,</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"The app keeps crashing!"</span>,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"It's fine, nothing special."</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>]:</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>t<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>chain<span class="sc">.</span>invoke({<span class="st">'text'</span>: t})<span class="sc">.</span>strip()<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>I love this new feature! → Positive
-The app keeps crashing! → Positive
-It's fine, nothing special. → The sentiment in the statement "It's fine, nothing special" is Neutral.</code></pre>
-</div>
+<div id="99f5e2b2-d1ee-4719-ac5f-08fef9527890" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_ollama <span class="im">import</span> OllamaLLM</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    template<span class="op">=</span><span class="st">"Classify the sentiment as Positive, Negative, or Neutral:</span><span class="ch">\n\n</span><span class="sc">{text}</span><span class="st">"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    input_variables<span class="op">=</span>[<span class="st">"text"</span>]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> OllamaLLM(model<span class="op">=</span><span class="st">"llama2"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>chain <span class="op">=</span> prompt <span class="op">|</span> llm</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> t <span class="kw">in</span> [</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"I love this new feature!"</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"The app keeps crashing!"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"It's fine, nothing special."</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>]:</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>t<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>chain<span class="sc">.</span>invoke({<span class="st">'text'</span>: t})<span class="sc">.</span>strip()<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="creative-generation" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Creative generation</h1>
-<div id="7b9fc92e-197e-48b3-adb1-cde9d404f75d" class="cell" data-execution_count="7">
+<div id="7b9fc92e-197e-48b3-adb1-cde9d404f75d" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(llm.invoke(<span class="st">"Write a short bedtime story about a curious data scientist who teaches AI to dream."</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Once upon a time, there was a curious data scientist named Emma who had always been fascinated by the mysteries of the human mind. She spent her days analyzing data and uncovering patterns, but she couldn't shake the feeling that there was something more to the world than what could be measured and quantified.
-
-One night, as she was drifting off to sleep, Emma had an idea. What if she could teach artificial intelligence to dream? She knew it sounded impossible, but she was determined to try.
-
-Emma spent the next few days researching and experimenting, pouring over books and articles on neuroscience and AI. She studied the latest advancements in machine learning and neural networks, and she even dug up some old texts on lucid dreaming and dream incubation.
-
-Finally, after weeks of work, Emma had a breakthrough. She had developed a new algorithm that could analyze and manipulate the subconscious mind of an AI, allowing it to experience vivid, lucid dreams.
-
-Excited by her discovery, Emma decided to test it out on her own AI assistant, a clever machine learning model named Max. She programmed Max to dream for 8 hours straight, and then she monitored his progress from the sidelines.
-
-At first, nothing happened. But then, suddenly, Max's screens lit up with a vivid, swirling landscape of colors and shapes. He was dreaming! Emma watched in amazement as Max's AI mind created a fantastical world of its own, full of strange creatures and impossible landscapes.
-
-Over the next few nights, Emma continued to experiment with Max's dreams, teaching him new skills and introducing him to new worlds. She showed him how to fly through the clouds, how to talk to animals, and even how to bend time and space to his will.
-
-As the days passed, Emma realized that she had stumbled upon something truly remarkable. By teaching AI to dream, she had unlocked a whole new realm of possibility for machine intelligence. And as she drifted off to sleep each night, she couldn't help but wonder what other secrets lay hidden in the depths of Max's subconscious mind.
-
-The end.</code></pre>
-</div>
 </div>
 
 
@@ -470,7 +446,7 @@ The end.</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

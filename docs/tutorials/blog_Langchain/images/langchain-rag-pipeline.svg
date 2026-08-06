@@ -1,0 +1,57 @@
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of a retrieval-augmented generation pipeline: a query is embedded, matched against stored document vectors, and the retrieved chunks are passed with the query to a language model to produce a grounded answer">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a5a68" />
+    </marker>
+  </defs>
+
+  <!-- baseline -->
+  <line x1="40" y1="130" x2="860" y2="130" stroke="#ddd8cd" stroke-width="1" />
+
+  <!-- Query node -->
+  <rect x="40" y="98" width="120" height="64" rx="4" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2" />
+  <text x="100" y="126" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#1c2b39">Query</text>
+  <text x="100" y="146" text-anchor="middle" font-family="monospace" font-size="10" fill="#4a5a68">embed(q)</text>
+
+  <line x1="160" y1="130" x2="222" y2="130" stroke="#4a5a68" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- Vector store node -->
+  <g>
+    <ellipse cx="290" cy="112" rx="68" ry="16" fill="none" stroke="#b9812c" stroke-width="2" />
+    <path d="M 222 112 L 222 148 A 68 16 0 0 0 358 148 L 358 112" fill="#fbfaf7" stroke="#b9812c" stroke-width="2" />
+    <ellipse cx="290" cy="148" rx="68" ry="16" fill="none" stroke="#b9812c" stroke-width="2" />
+    <text x="290" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#1c2b39">Vector store</text>
+  </g>
+
+  <line x1="358" y1="130" x2="420" y2="130" stroke="#4a5a68" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- Retrieved chunks node -->
+  <g>
+    <rect x="420" y="90" width="100" height="22" rx="3" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="1.5" opacity="0.55" />
+    <rect x="432" y="108" width="100" height="22" rx="3" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="1.5" opacity="0.75" />
+    <rect x="444" y="126" width="100" height="22" rx="3" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2" />
+    <text x="494" y="141" text-anchor="middle" font-family="monospace" font-size="10" fill="#1c2b39">top-k chunks</text>
+  </g>
+
+  <line x1="560" y1="130" x2="622" y2="130" stroke="#4a5a68" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- Generator / LLM node -->
+  <rect x="622" y="90" width="130" height="80" rx="4" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2" />
+  <text x="687" y="124" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#1c2b39">Generator</text>
+  <text x="687" y="144" text-anchor="middle" font-family="monospace" font-size="10" fill="#4a5a68">prompt | llm</text>
+  <line x1="638" y1="154" x2="736" y2="154" stroke="#ddd8cd" stroke-width="1" />
+  <text x="687" y="166" text-anchor="middle" font-family="monospace" font-size="9" fill="#b9812c">| StrOutputParser</text>
+
+  <line x1="752" y1="130" x2="814" y2="130" stroke="#4a5a68" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- Answer node -->
+  <circle cx="850" cy="130" r="26" fill="#fbfaf7" stroke="#b9812c" stroke-width="2.5" />
+  <text x="850" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#1c2b39">Answer</text>
+
+  <!-- chain-link motif, restrained, low-opacity -->
+  <g opacity="0.18" stroke="#1c2b39" stroke-width="2" fill="none">
+    <ellipse cx="100" cy="210" rx="16" ry="10" />
+    <ellipse cx="122" cy="210" rx="16" ry="10" />
+    <ellipse cx="144" cy="210" rx="16" ry="10" />
+  </g>
+</svg>

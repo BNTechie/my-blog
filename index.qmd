@@ -6,7 +6,17 @@ description: "Practical notes on statistical genetics, machine learning, and com
 format:
   html:
     toc: false
+listing:
+  id: latest-tutorials
+  contents: tutorials
+  type: default
+  max-items: 4
+  sort: "date desc"
+  fields: [image, date, title, categories]
+  categories: false
 ---
+
+::: {.hero-top-grid}
 
 ::: {.signal-helix-wrap}
 ```{=html}
@@ -33,6 +43,39 @@ format:
 </svg>
 ```
 <p class="signal-helix-caption">Signal → sequence: from physical modeling to the genome</p>
+:::
+
+::: {.latest-articles-col}
+
+## Latest Articles
+
+::: {#latest-tutorials}
+:::
+
+```{=html}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var container = document.getElementById("latest-tutorials");
+  if (!container) return;
+  var items = container.querySelectorAll(".quarto-post");
+  if (!items.length) return;
+  var viewport = document.createElement("div");
+  viewport.className = "tutorials-ticker";
+  var track = document.createElement("div");
+  track.className = "ticker-track";
+  items.forEach(function (item) { track.appendChild(item.cloneNode(true)); });
+  items.forEach(function (item) { track.appendChild(item.cloneNode(true)); });
+  viewport.appendChild(track);
+  container.innerHTML = "";
+  container.appendChild(viewport);
+});
+</script>
+```
+
+[Browse all tutorials →](tutorials/index.qmd){.btn .btn-secondary}
+
+:::
+
 :::
 
 ::: {.hero}

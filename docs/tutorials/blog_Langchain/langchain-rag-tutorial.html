@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita">
+<meta name="dcterms.date" content="2026-07-05">
+
+<title>LangChain and Retrieval-Augmented Generation – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">LangChain and Retrieval-Augmented Generation</h1>
+<p class="subtitle lead">Orchestration, memory, and retrieval, built against the current LangChain API</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 5, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>A language model on its own answers from what it learned during training: it has no access to a specific organization’s documents, no memory of earlier turns in a conversation, and no way to call an external tool. LangChain is an open-source framework for closing that gap — it provides standard interfaces for connecting a model to external data, giving it persistent conversational state, and composing several model calls into a single workflow.</p>
+<p>This notebook covers LangChain’s core abstractions and Retrieval-Augmented Generation (RAG) computationally, with every code example actually executed rather than described. Two constraints shape how that’s done. First, LangChain moved fast between 2023 and 2025: the framework reached its 1.0 release in October 2025, and several APIs commonly shown in older tutorials — <code>LLMChain</code>, <code>SimpleSequentialChain</code>, <code>SequentialChain</code>, and the classic <code>ConversationBufferMemory</code> family — have since been removed outright, not merely deprecated. This is verified directly below rather than asserted. Second, running real chains against a hosted model requires an API key and network access to that provider, neither of which is assumed here; instead, LangChain’s own deterministic fake models (<code>FakeListLLM</code>, <code>FakeListChatModel</code>) are used where a model call is needed, and a small self-contained retrieval pipeline is built by hand for the RAG section. This keeps every output in this notebook reproducible without external credentials, while the mechanics demonstrated — prompt composition, chaining, memory, and retrieval — are identical to what a real provider integration would do.</p>
+</section>
+<section id="checking-the-current-langchain-api-before-using-it" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="checking-the-current-langchain-api-before-using-it"><span class="header-section-number">2</span> Checking the Current LangChain API Before Using It</h2>
+<p>Before building anything, it’s worth confirming what’s actually available in the installed version, since this determines which patterns below are current and which older material (including common tutorials) would fail outright.</p>
+<div id="11c6a152-61c8-41c1-aff7-bf217d9b6e8d" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pip install langchain langchain-core langgraph numpy</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="2405a83a" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> langchain</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> langchain_core</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"langchain version:     "</span>, langchain.__version__)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"langchain_core version:"</span>, langchain_core.__version__)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># The pre-2024 chain and memory classes commonly shown in tutorials</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> module_name, names <span class="kw">in</span> [</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"langchain.chains"</span>, [<span class="st">"LLMChain"</span>, <span class="st">"SimpleSequentialChain"</span>, <span class="st">"SequentialChain"</span>]),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"langchain.memory"</span>, [<span class="st">"ConversationBufferMemory"</span>, <span class="st">"ConversationSummaryMemory"</span>]),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>]:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        mod <span class="op">=</span> <span class="bu">__import__</span>(module_name, fromlist<span class="op">=</span>names)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>module_name<span class="sc">}</span><span class="ss">: importable"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">ModuleNotFoundError</span> <span class="im">as</span> e:</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>module_name<span class="sc">}</span><span class="ss">: NOT importable -&gt; </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>langchain version:      1.3.14
+langchain_core version: 1.5.3
+langchain.chains: NOT importable -&gt; No module named 'langchain.chains'
+langchain.memory: NOT importable -&gt; No module named 'langchain.memory'</code></pre>
+</div>
+</div>
+<p>Both <code>langchain.chains</code> and <code>langchain.memory</code> fail to import in the installed version — these modules were removed, not just deprecated. <code>LLMChain</code> was marked deprecated in LangChain 0.1.17 (April 2024) with removal scheduled for 1.0; <code>ConversationBufferMemory</code> and the related memory classes followed the same path starting in 0.3.1. The 1.0 release (October 2025) carried out that removal. Any code written against these classes — including the pattern shown in older training material on this topic — needs to be rewritten against the current API, which is what the rest of this notebook does.</p>
+</section>
+<section id="current-architecture" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="current-architecture"><span class="header-section-number">3</span> Current Architecture</h2>
+<p>LangChain’s package layout reflects a deliberate split introduced as the framework matured:</p>
+<ul>
+<li><strong><code>langchain-core</code></strong> — the foundational abstractions: the <code>Runnable</code> interface, prompt templates, output parsers, and the LangChain Expression Language (LCEL), which is the <code>|</code> (pipe) syntax used to compose components.</li>
+<li><strong><code>langchain</code></strong> — higher-level, pre-built chains and utilities built on top of <code>langchain-core</code>.</li>
+<li><strong><code>langchain-community</code></strong> and provider packages (<code>langchain-openai</code>, <code>langchain-google-genai</code>, and so on) — integrations with specific model providers, vector stores, and document loaders, kept as optional dependencies so a project only installs what it needs.</li>
+<li><strong>LangGraph</strong> — a separate, closely integrated framework for stateful, multi-step agent workflows, now the recommended way to build anything involving persistent memory or multi-turn tool use.</li>
+</ul>
+<p>Every composable piece in this architecture — a prompt, a model, a retriever, an output parser — implements the same <code>Runnable</code> interface, which is why they can all be connected with the same <code>|</code> operator regardless of type. This single unifying abstraction has effectively replaced the older “six components” framing (Model I/O, Data Connection, Chains, Agents, Memory, Callbacks) used in pre-2024 documentation of this framework; the underlying concerns — models, prompts, retrieval, memory, and tool-using agents — are all still present, just organized around Runnables and LCEL rather than as six separate categories.</p>
+</section>
+<section id="chains" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="chains"><span class="header-section-number">4</span> Chains</h2>
+<p>A chain connects a sequence of steps — prompt formatting, a model call, output parsing, possibly a retrieval step — into a single callable pipeline, so an application doesn’t have to manually manage passing state from one step to the next. In the current API, “building a chain” means composing <code>Runnable</code> objects with the <code>|</code> operator; there is no separate <code>Chain</code> class to instantiate for the common cases.</p>
+<section id="the-simplest-chain-prompt-to-model-to-parser" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="the-simplest-chain-prompt-to-model-to-parser"><span class="header-section-number">4.1</span> The simplest chain: prompt to model to parser</h3>
+<p>The most basic pattern takes a prompt template, fills it with a variable, sends it to a model, and extracts the text from the response. Below, <code>FakeListLLM</code> stands in for a real provider – it returns a fixed, pre-specified response regardless of input, which is exactly what makes this reproducible without an API key.</p>
+<div id="81615dde" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.output_parsers <span class="im">import</span> StrOutputParser</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.language_models.fake <span class="im">import</span> FakeListLLM</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"GenomeCraft Analytics"</span>])</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> PromptTemplate.from_template(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What is a good name for a company that makes </span><span class="sc">{product}</span><span class="st">?"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>chain <span class="op">=</span> prompt <span class="op">|</span> llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> chain.invoke({<span class="st">"product"</span>: <span class="st">"genomics data pipelines"</span>})</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>GenomeCraft Analytics</code></pre>
+</div>
+</div>
+</section>
+<section id="sequential-composition" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="sequential-composition"><span class="header-section-number">4.2</span> Sequential composition</h3>
+<p>Where an older API would use <code>SimpleSequentialChain</code> to feed the output of one chain into the next, the current pattern uses <code>RunnablePassthrough.assign()</code> to build a dictionary that carries both the original input and each intermediate result forward.</p>
+<div id="de1d6346" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.runnables <span class="im">import</span> RunnablePassthrough</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>llm_name <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"GenomeCraft Analytics"</span>])</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>llm_description <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GenomeCraft Analytics builds reproducible pipelines for large-scale genomic data processing and interpretation."</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>name_prompt <span class="op">=</span> PromptTemplate.from_template(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What is a good name for a company that makes </span><span class="sc">{product}</span><span class="st">?"</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>description_prompt <span class="op">=</span> PromptTemplate.from_template(</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Write a 20-word description for the company: </span><span class="sc">{company_name}</span><span class="st">"</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>name_chain <span class="op">=</span> name_prompt <span class="op">|</span> llm_name <span class="op">|</span> StrOutputParser()</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>description_chain <span class="op">=</span> description_prompt <span class="op">|</span> llm_description <span class="op">|</span> StrOutputParser()</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>overall_chain <span class="op">=</span> (</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"company_name"</span>: name_chain}</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> RunnablePassthrough.assign(description<span class="op">=</span>description_chain)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> overall_chain.invoke({<span class="st">"product"</span>: <span class="st">"genomics data pipelines"</span>})</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>{'company_name': 'GenomeCraft Analytics',
+ 'description': 'GenomeCraft Analytics builds reproducible pipelines for large-scale genomic data processing and interpretation.'}</code></pre>
+</div>
+</div>
+</section>
+<section id="multiple-inputs-and-outputs" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="multiple-inputs-and-outputs"><span class="header-section-number">4.3</span> Multiple inputs and outputs</h3>
+<p>The older <code>SequentialChain</code> class was used when a workflow needed more than one input or output variable, and access to every intermediate result rather than just the final one. The equivalent LCEL pattern nests <code>RunnablePassthrough.assign()</code> calls, so each new field is added to a running dictionary without discarding the earlier ones – this reproduces a four-step translate to summarize to detect-language to follow-up workflow, with all four outputs available at the end.</p>
+<div id="2788f312" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>translate_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"The GamersTech laptops impress with their exceptional performance and elegant design."</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>summarize_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GamersTech laptops balance strong gaming performance with a sleek, portable design."</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>language_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"French"</span>])</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>followup_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Merci pour ce retour tres positif sur nos ordinateurs portables GamersTech."</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>review <span class="op">=</span> (</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Les ordinateurs portables GamersTech impressionnent par ses performances "</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"exceptionnelles et son design elegant."</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>translate_chain <span class="op">=</span> (</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    PromptTemplate.from_template(<span class="st">"Translate the following review to English:</span><span class="ch">\n\n</span><span class="sc">{review}</span><span class="st">"</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> translate_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>summarize_chain <span class="op">=</span> (</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    PromptTemplate.from_template(<span class="st">"Summarize the following review in one sentence:</span><span class="ch">\n\n</span><span class="sc">{english_review}</span><span class="st">"</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> summarize_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>language_chain <span class="op">=</span> (</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    PromptTemplate.from_template(<span class="st">"What language is the following review written in?</span><span class="ch">\n\n</span><span class="sc">{review}</span><span class="st">"</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> language_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>followup_chain <span class="op">=</span> (</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    PromptTemplate.from_template(</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Write a follow-up response to this summary, in the specified language.</span><span class="ch">\n\n</span><span class="st">"</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Summary: </span><span class="sc">{summary}</span><span class="ch">\n</span><span class="st">Language: </span><span class="sc">{language}</span><span class="st">"</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> followup_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> (</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    RunnablePassthrough.assign(english_review<span class="op">=</span>translate_chain)</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> RunnablePassthrough.assign(summary<span class="op">=</span>summarize_chain, language<span class="op">=</span>language_chain)</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> RunnablePassthrough.assign(followup_message<span class="op">=</span>followup_chain)</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> pipeline.invoke({<span class="st">"review"</span>: review})</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, value <span class="kw">in</span> output.items():</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">:</span><span class="ch">\n</span><span class="ss">  </span><span class="sc">{</span>value<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>review:
+  Les ordinateurs portables GamersTech impressionnent par ses performances exceptionnelles et son design elegant.
+
+english_review:
+  The GamersTech laptops impress with their exceptional performance and elegant design.
+
+summary:
+  GamersTech laptops balance strong gaming performance with a sleek, portable design.
+
+language:
+  French
+
+followup_message:
+  Merci pour ce retour tres positif sur nos ordinateurs portables GamersTech.
+</code></pre>
+</div>
+</div>
+</section>
+<section id="routing-between-sub-chains" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="routing-between-sub-chains"><span class="header-section-number">4.4</span> Routing between sub-chains</h3>
+<p>A router chain sends an input to one of several specialized sub-chains depending on what kind of input it is – for instance, routing a support query to a billing-specific prompt or a technical-specific prompt. The current equivalent is <code>RunnableBranch</code>, which evaluates a sequence of (condition, chain) pairs and runs the first one that matches.</p>
+<div id="b8b88f64" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.runnables <span class="im">import</span> RunnableBranch</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>billing_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"This looks like a billing question -- routing to the billing team."</span>])</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>technical_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"This looks like a technical question -- routing to the engineering team."</span>])</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>general_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"Routing to general support."</span>])</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>billing_chain <span class="op">=</span> PromptTemplate.from_template(<span class="st">"</span><span class="sc">{query}</span><span class="st">"</span>) <span class="op">|</span> billing_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>technical_chain <span class="op">=</span> PromptTemplate.from_template(<span class="st">"</span><span class="sc">{query}</span><span class="st">"</span>) <span class="op">|</span> technical_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>general_chain <span class="op">=</span> PromptTemplate.from_template(<span class="st">"</span><span class="sc">{query}</span><span class="st">"</span>) <span class="op">|</span> general_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>router <span class="op">=</span> RunnableBranch(</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">lambda</span> x: <span class="st">"invoice"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower() <span class="kw">or</span> <span class="st">"charge"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower(), billing_chain),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">lambda</span> x: <span class="st">"error"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower() <span class="kw">or</span> <span class="st">"crash"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower(), technical_chain),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    general_chain,  <span class="co"># default</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> query <span class="kw">in</span> [<span class="st">"Why was I charged twice on my invoice?"</span>,</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>              <span class="st">"The pipeline crashes with a segmentation fault."</span>,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>              <span class="st">"What are your support hours?"</span>]:</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(query, <span class="st">"-&gt;"</span>, router.invoke({<span class="st">"query"</span>: query}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Why was I charged twice on my invoice? -&gt; This looks like a billing question -- routing to the billing team.
+The pipeline crashes with a segmentation fault. -&gt; This looks like a technical question -- routing to the engineering team.
+What are your support hours? -&gt; Routing to general support.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="memory" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="memory"><span class="header-section-number">5</span> Memory</h2>
+<p>A language model call is stateless by default: nothing from one call is automatically available to the next unless it’s explicitly included in the prompt. “Memory” in this context means a mechanism for storing prior turns and re-injecting them, so a conversation feels continuous rather than resetting at every message.</p>
+<p>Four memory strategies recur across older LangChain material, distinguished by what they store:</p>
+<ul>
+<li><strong>Buffer memory</strong> – stores the full conversation verbatim.</li>
+<li><strong>Buffer window memory</strong> – stores only the most recent <em>k</em> exchanges, discarding older ones.</li>
+<li><strong>Token buffer memory</strong> – keeps as much recent conversation as fits within a token budget, verbatim.</li>
+<li><strong>Summary memory</strong> – replaces older turns with a running summary, generated by the model itself.</li>
+</ul>
+<p>Each represents a different trade-off between fidelity (how much detail is preserved) and cost (how many tokens are spent re-sending history on every call). All four are implemented as classes in <code>langchain.memory</code> in older versions – a module that, as confirmed above, no longer exists in the installed version. The current recommended approach uses LangGraph’s checkpointing system, which persists conversation state outside the chain itself and supports the buffer/window/summary trade-off through how the state is read back rather than through separate classes for each strategy.</p>
+<div id="0ca49610" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.graph <span class="im">import</span> StateGraph, MessagesState, START, END</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.checkpoint.memory <span class="im">import</span> InMemorySaver</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.language_models.fake_chat_models <span class="im">import</span> FakeListChatModel</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.messages <span class="im">import</span> HumanMessage</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>chat_model <span class="op">=</span> FakeListChatModel(responses<span class="op">=</span>[</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Hello! It's nice to meet you."</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Your name is Sarah -- you told me a moment ago."</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> call_model(state: MessagesState):</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> chat_model.invoke(state[<span class="st">"messages"</span>])</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"messages"</span>: [response]}</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>builder <span class="op">=</span> StateGraph(MessagesState)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>builder.add_node(<span class="st">"model"</span>, call_model)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>builder.add_edge(START, <span class="st">"model"</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>builder.add_edge(<span class="st">"model"</span>, END)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> builder.<span class="bu">compile</span>(checkpointer<span class="op">=</span>InMemorySaver())</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> {<span class="st">"configurable"</span>: {<span class="st">"thread_id"</span>: <span class="st">"session-1"</span>}}</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>turn_1 <span class="op">=</span> graph.invoke({<span class="st">"messages"</span>: [HumanMessage(<span class="st">"Hi, my name is Sarah."</span>)]}, config<span class="op">=</span>config)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Turn 1:"</span>, turn_1[<span class="st">"messages"</span>][<span class="op">-</span><span class="dv">1</span>].content)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>turn_2 <span class="op">=</span> graph.invoke({<span class="st">"messages"</span>: [HumanMessage(<span class="st">"What is my name?"</span>)]}, config<span class="op">=</span>config)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Turn 2:"</span>, turn_2[<span class="st">"messages"</span>][<span class="op">-</span><span class="dv">1</span>].content)</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>persisted_state <span class="op">=</span> graph.get_state(config)</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Messages held in the checkpoint:"</span>, <span class="bu">len</span>(persisted_state.values[<span class="st">"messages"</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Turn 1: Hello! It's nice to meet you.
+Turn 2: Your name is Sarah -- you told me a moment ago.
+
+Messages held in the checkpoint: 4</code></pre>
+</div>
+</div>
+<p>The second call correctly answers “Sarah” because the full message history was retrieved from the checkpointer and passed back into the model, not because the fake model has any memory of its own – <code>FakeListChatModel</code> simply returns its next scripted response regardless of input. The <code>thread_id</code> in the config is what scopes the stored history to this particular conversation; a different <code>thread_id</code> would start from empty state.</p>
+</section>
+<section id="retrieval-augmented-generation-rag" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="retrieval-augmented-generation-rag"><span class="header-section-number">6</span> Retrieval-Augmented Generation (RAG)</h2>
+<p>A model’s knowledge is fixed at training time. RAG addresses this by inserting a retrieval step before generation: given a query, first find the most relevant passages from an external document collection, then pass both the query and those passages to the model so its answer is grounded in retrieved material rather than in training data alone.</p>
+<p>The pipeline has two stages:</p>
+<ol type="1">
+<li><strong>Retriever</strong> – converts the query into a vector and finds the most similar vectors in a pre-built index of document chunks.</li>
+<li><strong>Generator</strong> – a language model that conditions its answer on both the original query and the retrieved chunks.</li>
+</ol>
+<p>This addresses three specific weaknesses of using a language model alone: the model’s knowledge can be extended to include material it was never trained on (private documents, content newer than its training cutoff), answers can be traced back to a specific retrieved source, and the retrieval step reduces (though does not eliminate) the tendency to generate a plausible-sounding but unsupported answer.</p>
+<section id="common-applications" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="common-applications"><span class="header-section-number">6.1</span> Common applications</h3>
+<p>RAG is the standard architecture behind several application categories: chatbots that answer from internal company documents, legal or financial Q&amp;A tools that summarize relevant clauses, research assistants that retrieve from academic or clinical literature, and support agents that answer from product documentation.</p>
+</section>
+</section>
+<section id="vector-databases" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="vector-databases"><span class="header-section-number">7</span> Vector Databases</h2>
+<p>A vector database is built to store and search high-dimensional numeric vectors – the embeddings produced by an embedding model – rather than the exact-match or range queries a conventional database is optimized for. Retrieval works by approximate nearest-neighbor search: given a query vector, find the stored vectors closest to it by some distance measure, typically cosine similarity.</p>
+<p>Several tools recur in this space, each with a different operating model rather than a strict quality ranking: <strong>Chroma</strong> (lightweight, easy to run locally, common for prototyping), <strong>FAISS</strong> (a similarity-search library rather than a managed database, built for large-scale offline or self-hosted use), <strong>Pinecone</strong> and <strong>Qdrant</strong> (managed or self-hostable services built for production-scale, low-latency search), <strong>Weaviate</strong> (a vector-native database with built-in classification and hybrid search), and <strong>Redis</strong> (a general-purpose store that added vector search as a capability rather than being purpose-built for it). Which one fits a given project depends on scale, latency requirements, and whether self-hosting or a managed service is preferred – not on one being categorically “better” than the others.</p>
+</section>
+<section id="essential-rag-components-built-by-hand" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="essential-rag-components-built-by-hand"><span class="header-section-number">8</span> Essential RAG Components, Built by Hand</h2>
+<p>The remaining pieces of a RAG pipeline – chunking, embedding, and similarity search – can be demonstrated directly without a hosted embedding model, using term-frequency vectors instead of dense neural embeddings. The mechanics (vectorize each chunk, vectorize the query the same way, rank by cosine similarity) are identical to what a real embedding model does; only the quality of the vectors themselves differs.</p>
+<section id="chunking" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="chunking"><span class="header-section-number">8.1</span> Chunking</h3>
+<p>Long documents are split into smaller pieces before embedding, because a single embedding vector for an entire document would blur together many different topics, making retrieval far less precise. Here, each chunk is already a short single-topic sentence, so this step is trivial – in practice a chunker would split a long document into passages of roughly a few hundred words each, often with a small overlap between consecutive chunks so a sentence spanning a chunk boundary isn’t lost entirely from either side.</p>
+<div id="89ef5cce" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>document_chunks <span class="op">=</span> [</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GWAS identifies associations between genetic variants and traits across the genome."</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fine-mapping narrows a GWAS locus down to the most likely causal variant."</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Polygenic risk scores aggregate many small-effect variants into a single predictive score."</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Retrieval-augmented generation grounds a language model's answer in retrieved documents."</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Vector databases store embeddings and support fast approximate nearest neighbor search."</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>document_chunks</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>['GWAS identifies associations between genetic variants and traits across the genome.',
+ 'Fine-mapping narrows a GWAS locus down to the most likely causal variant.',
+ 'Polygenic risk scores aggregate many small-effect variants into a single predictive score.',
+ "Retrieval-augmented generation grounds a language model's answer in retrieved documents.",
+ 'Vector databases store embeddings and support fast approximate nearest neighbor search.']</code></pre>
+</div>
+</div>
+</section>
+<section id="a-minimal-embedding-model" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="a-minimal-embedding-model"><span class="header-section-number">8.2</span> A minimal embedding model</h3>
+<p>Each chunk is converted to a vector using term-frequency counts weighted by inverse document frequency (TF-IDF) – common words shared across every chunk contribute little to the vector, while words distinctive to a particular chunk dominate it. This is a much cruder representation than a trained neural embedding model (it has no notion of synonyms or word order), but the retrieval mechanism built on top of it – cosine similarity ranking – is exactly the same mechanism a production vector database uses on dense embeddings.</p>
+<div id="980fff54" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>STOPWORDS <span class="op">=</span> {<span class="st">"a"</span>, <span class="st">"an"</span>, <span class="st">"the"</span>, <span class="st">"is"</span>, <span class="st">"are"</span>, <span class="st">"in"</span>, <span class="st">"on"</span>, <span class="st">"of"</span>, <span class="st">"to"</span>, <span class="st">"and"</span>, <span class="st">"or"</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"with"</span>, <span class="st">"how"</span>, <span class="st">"does"</span>, <span class="st">"do"</span>, <span class="st">"use"</span>, <span class="st">"s"</span>, <span class="st">"its"</span>, <span class="st">"this"</span>, <span class="st">"that"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"for"</span>, <span class="st">"by"</span>, <span class="st">"into"</span>, <span class="st">"across"</span>}</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tokenize(text):</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> re.findall(<span class="vs">r"</span><span class="pp">[a-z0-9]</span><span class="op">+</span><span class="vs">"</span>, text.lower())</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [t <span class="cf">for</span> t <span class="kw">in</span> tokens <span class="cf">if</span> t <span class="kw">not</span> <span class="kw">in</span> STOPWORDS]</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_vocabulary(chunks):</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    vocab <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">set</span>(tok <span class="cf">for</span> chunk <span class="kw">in</span> chunks <span class="cf">for</span> tok <span class="kw">in</span> tokenize(chunk)))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {tok: i <span class="cf">for</span> i, tok <span class="kw">in</span> <span class="bu">enumerate</span>(vocab)}</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> inverse_document_frequency(chunks, vocab):</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    n_chunks <span class="op">=</span> <span class="bu">len</span>(chunks)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    doc_freq <span class="op">=</span> np.zeros(<span class="bu">len</span>(vocab))</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk <span class="kw">in</span> chunks:</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tok <span class="kw">in</span> <span class="bu">set</span>(tokenize(chunk)):</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>            doc_freq[vocab[tok]] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.log((n_chunks <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> (doc_freq <span class="op">+</span> <span class="dv">1</span>)) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> embed(text, vocab, idf):</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    vec <span class="op">=</span> np.zeros(<span class="bu">len</span>(vocab))</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tok, count <span class="kw">in</span> Counter(tokenize(text)).items():</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> tok <span class="kw">in</span> vocab:</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>            vec[vocab[tok]] <span class="op">=</span> count <span class="op">*</span> idf[vocab[tok]]</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    norm <span class="op">=</span> np.linalg.norm(vec)</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> vec <span class="op">/</span> norm <span class="cf">if</span> norm <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> vec</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>vocabulary <span class="op">=</span> build_vocabulary(document_chunks)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>idf <span class="op">=</span> inverse_document_frequency(document_chunks, vocabulary)</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>chunk_embeddings <span class="op">=</span> [embed(chunk, vocabulary, idf) <span class="cf">for</span> chunk <span class="kw">in</span> document_chunks]</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Vocabulary size: </span><span class="sc">{</span><span class="bu">len</span>(vocabulary)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Embedding dimension per chunk: </span><span class="sc">{</span>chunk_embeddings[<span class="dv">0</span>]<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Vocabulary size: 46
+Embedding dimension per chunk: 46</code></pre>
+</div>
+</div>
+</section>
+<section id="similarity-search" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="similarity-search"><span class="header-section-number">8.3</span> Similarity search</h3>
+<p>The query is embedded with the same vocabulary and IDF weights, then ranked against every stored chunk by cosine similarity – since both vectors are already normalized to unit length, cosine similarity reduces to a plain dot product.</p>
+<div id="05b2730b" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cosine_similarity(a, b):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(np.dot(a, b))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> retrieve(query, chunks, chunk_embeddings, vocab, idf, top_k<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    query_embedding <span class="op">=</span> embed(query, vocab, idf)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> [cosine_similarity(query_embedding, emb) <span class="cf">for</span> emb <span class="kw">in</span> chunk_embeddings]</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    ranked <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">zip</span>(scores, chunks), reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ranked[:top_k]</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">"How does RAG use a vector database to ground an LLM's answer?"</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>top_matches <span class="op">=</span> retrieve(query, document_chunks, chunk_embeddings, vocabulary, idf, top_k<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> score, chunk <span class="kw">in</span> top_matches:</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>score<span class="sc">:.3f}</span><span class="ss">  </span><span class="sc">{</span>chunk<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.236  Retrieval-augmented generation grounds a language model's answer in retrieved documents.
+0.224  Vector databases store embeddings and support fast approximate nearest neighbor search.
+0.000  Polygenic risk scores aggregate many small-effect variants into a single predictive score.
+0.000  GWAS identifies associations between genetic variants and traits across the genome.
+0.000  Fine-mapping narrows a GWAS locus down to the most likely causal variant.</code></pre>
+</div>
+</div>
+<p>The two chunks about RAG and vector databases score well above the three unrelated genetics chunks, which score exactly zero – they share no distinctive vocabulary with the query once stopwords are removed. This is the retrieval step of a RAG pipeline in miniature: the same query-embed-and-rank mechanism, at a scale of five chunks instead of millions, and with TF-IDF vectors standing in for a trained embedding model’s dense vectors.</p>
+</section>
+<section id="assembling-the-full-pipeline" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="assembling-the-full-pipeline"><span class="header-section-number">8.4</span> Assembling the full pipeline</h3>
+<p>The retrieved chunks are then handed to a generator, exactly as in the earlier chain examples – a prompt template that includes the retrieved context, piped into a model.</p>
+<div id="8f1eb26b" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rag_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RAG grounds an LLM's answer by first retrieving relevant passages -- often from a "</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"vector database using similarity search -- and then conditioning generation on both "</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"the query and those retrieved passages, rather than relying on the model's training "</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"data alone."</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>rag_prompt <span class="op">=</span> PromptTemplate.from_template(</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Answer the question using only the context below.</span><span class="ch">\n\n</span><span class="st">"</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Context:</span><span class="ch">\n</span><span class="sc">{context}</span><span class="ch">\n\n</span><span class="st">Question: </span><span class="sc">{question}</span><span class="st">"</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>rag_chain <span class="op">=</span> rag_prompt <span class="op">|</span> rag_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>retrieved_context <span class="op">=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(chunk <span class="cf">for</span> _, chunk <span class="kw">in</span> top_matches[:<span class="dv">2</span>])</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>answer <span class="op">=</span> rag_chain.invoke({<span class="st">"context"</span>: retrieved_context, <span class="st">"question"</span>: query})</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(answer)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>RAG grounds an LLM's answer by first retrieving relevant passages -- often from a vector database using similarity search -- and then conditioning generation on both the query and those retrieved passages, rather than relying on the model's training data alone.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="best-practices" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="best-practices"><span class="header-section-number">9</span> Best Practices</h2>
+<ul>
+<li><strong>Build against LCEL, not the legacy <code>Chain</code> classes.</strong> As demonstrated above, <code>LLMChain</code> and its relatives are gone from the current package, so code written against them fails immediately rather than merely warning.</li>
+<li><strong>Choose memory strategy by conversation length and cost, not by default.</strong> Full buffer memory is simplest but grows unbounded; window or summary strategies trade some fidelity for a bounded cost.</li>
+<li><strong>Ground factual or domain-specific responses in retrieval.</strong> A RAG step reduces (not eliminates) the risk of a confident, unsupported answer.</li>
+<li><strong>Match the vector store to the deployment, not the other way around.</strong> A locally-run prototype and a production service under load have different requirements, and the “best” vector database differs accordingly.</li>
+<li><strong>Test each component of a pipeline independently before composing it.</strong> A <code>Runnable</code> can be invoked and inspected on its own before being piped into a longer chain.</li>
+<li><strong>Keep prompts concise and retrieval focused.</strong> Retrieving more chunks than the model needs increases cost and can dilute the most relevant context.</li>
+<li><strong>Treat this fast-moving ecosystem as fast-moving.</strong> As this notebook’s own deprecation check demonstrates, code and tutorials more than a year or so old are a reasonable place to start but should be verified against the current API before being relied on.</li>
+</ul>
+</section>
+<section id="limitations" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="limitations"><span class="header-section-number">10</span> Limitations</h2>
+<ul>
+<li><strong>Retrieval quality bounds answer quality.</strong> A generator conditioned on irrelevant or outdated retrieved chunks will produce a fluent but ungrounded answer regardless of how good the underlying model is.</li>
+<li><strong>Full conversation memory has a cost ceiling.</strong> Storing complete history without bound eventually exceeds context limits or becomes prohibitively expensive to resend on every call.</li>
+<li><strong>Composed pipelines are harder to test.</strong> A single model call is straightforward to evaluate; a multi-step chain with retrieval, memory, and several model calls has many more places a failure can originate from.</li>
+<li><strong>Latency compounds across steps.</strong> Each additional retrieval or model call in a pipeline adds to total response time.</li>
+<li><strong>The framework itself changes quickly.</strong> As shown directly above, APIs that were standard as recently as a year or two ago have since been removed, not just superseded – any documentation or tutorial, including this one eventually, is a snapshot rather than a permanent reference.</li>
+</ul>
+</section>
+<section id="summary" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="summary"><span class="header-section-number">11</span> Summary</h2>
+<p>LangChain provides a common <code>Runnable</code> interface – composed with the <code>|</code> operator via LCEL – that unifies prompts, models, retrievers, and output parsers into a single composition system, and this has superseded the older, separate <code>Chain</code> classes (<code>LLMChain</code>, <code>SimpleSequentialChain</code>, <code>SequentialChain</code>) entirely; this notebook confirmed their removal directly rather than assuming it. Memory has undergone the same shift, from the deprecated <code>ConversationBufferMemory</code> family to LangGraph’s checkpointing system, which persists conversation state outside the chain and was demonstrated here with a minimal two-turn example. Retrieval-Augmented Generation was built end-to-end at small scale – chunking, a hand-built TF-IDF embedding, cosine-similarity retrieval, and a generation step conditioned on the retrieved context – which exercises the same retrieve-then-generate mechanism a production system built on a real embedding model and vector database would use, just with a transparent, dependency-free stand-in for the embedding step itself.</p>
+</section>
+<section id="references" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="references"><span class="header-section-number">12</span> References</h2>
+<ul>
+<li>Lewis et al., “Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks” (2020) – <a href="https://arxiv.org/abs/2005.11401">arXiv:2005.11401</a></li>
+<li>Karpukhin et al., “Dense Passage Retrieval for Open-Domain Question Answering” (2020) – <a href="https://arxiv.org/abs/2004.04906">arXiv:2004.04906</a></li>
+<li>Vaswani et al., “Attention Is All You Need” (2017) – <a href="https://arxiv.org/abs/1706.03762">arXiv:1706.03762</a></li>
+<li>Gao et al., “Retrieval-Augmented Generation for Large Language Models: A Survey” (2023) – <a href="https://arxiv.org/abs/2312.10997">arXiv:2312.10997</a></li>
+<li>LangChain documentation – <a href="https://docs.langchain.com/">docs.langchain.com</a></li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>A correction to a common citation.</strong> Material on this topic sometimes cites arXiv:2301.12652 as “A Survey on Retrieval-Augmented Generation” by Karpukhin et al.&nbsp;(2023). That identifier actually belongs to a different paper (REPLUG, on retrieval-augmented black-box language models), and Karpukhin et al.’s well-known 2020 paper is on dense passage retrieval, not a RAG survey. The reference list above cites the actual survey (Gao et al., 2023) and the correctly attributed Karpukhin et al.&nbsp;paper separately.</p>
+</blockquote>
+</section>
+<section id="try-it-yourself" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="try-it-yourself"><span class="header-section-number">13</span> Try It Yourself</h2>
+<ol type="1">
+<li>Modify the router chain’s conditions so a query containing “refund” is also routed to the billing chain, and confirm the routing with a new test query.</li>
+<li>Extend the sequential pipeline (translate to summarize to detect language to follow-up) with a fifth step that scores the summary’s length against a target, reusing the <code>RunnablePassthrough.assign()</code> pattern.</li>
+<li>Add two more document chunks to the RAG retrieval example – one relevant to the existing query, one clearly not – and confirm the ranking places them where expected.</li>
+<li>Look up LangChain’s current documentation for one component used in this notebook (LCEL, LangGraph checkpointers, or <code>RunnableBranch</code>) and note anything that has changed since this notebook was written.</li>
+</ol>
+</section>
+<section id="solutions" class="level2" data-number="14">
+<h2 data-number="14" class="anchored" data-anchor-id="solutions"><span class="header-section-number">14</span> Solutions</h2>
+<p>Worked solutions to the four exercises above. Each was run against the same installed LangChain version confirmed at the top of this notebook.</p>
+<section id="routing-refund-queries-to-billing" class="level3" data-number="14.1">
+<h3 data-number="14.1" class="anchored" data-anchor-id="routing-refund-queries-to-billing"><span class="header-section-number">14.1</span> 1. Routing “refund” queries to billing</h3>
+<p>Adding a third <code>or</code> condition to the billing branch’s lambda is enough – no new branch is needed, since a refund question is a billing question.</p>
+<div id="cell-32" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.output_parsers <span class="im">import</span> StrOutputParser</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.language_models.fake <span class="im">import</span> FakeListLLM</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.runnables <span class="im">import</span> RunnableBranch</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>billing_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"This looks like a billing question -- routing to the billing team."</span>])</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>technical_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"This looks like a technical question -- routing to the engineering team."</span>])</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>general_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"Routing to general support."</span>])</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>billing_chain <span class="op">=</span> PromptTemplate.from_template(<span class="st">"</span><span class="sc">{query}</span><span class="st">"</span>) <span class="op">|</span> billing_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>technical_chain <span class="op">=</span> PromptTemplate.from_template(<span class="st">"</span><span class="sc">{query}</span><span class="st">"</span>) <span class="op">|</span> technical_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>general_chain <span class="op">=</span> PromptTemplate.from_template(<span class="st">"</span><span class="sc">{query}</span><span class="st">"</span>) <span class="op">|</span> general_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>router <span class="op">=</span> RunnableBranch(</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">lambda</span> x: <span class="st">"invoice"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower() <span class="kw">or</span> <span class="st">"charge"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower() <span class="kw">or</span> <span class="st">"refund"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower(), billing_chain),</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">lambda</span> x: <span class="st">"error"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower() <span class="kw">or</span> <span class="st">"crash"</span> <span class="kw">in</span> x[<span class="st">"query"</span>].lower(), technical_chain),</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    general_chain,  <span class="co"># default</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> query <span class="kw">in</span> [<span class="st">"Why was I charged twice on my invoice?"</span>,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>              <span class="st">"The pipeline crashes with a segmentation fault."</span>,</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>              <span class="st">"What are your support hours?"</span>,</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>              <span class="st">"Can I get a refund for last month's subscription?"</span>]:</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(query, <span class="st">"-&gt;"</span>, router.invoke({<span class="st">"query"</span>: query}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Why was I charged twice on my invoice? -&gt; This looks like a billing question -- routing to the billing team.
+The pipeline crashes with a segmentation fault. -&gt; This looks like a technical question -- routing to the engineering team.
+What are your support hours? -&gt; Routing to general support.
+Can I get a refund for last month's subscription? -&gt; This looks like a billing question -- routing to the billing team.</code></pre>
+</div>
+</div>
+<p>The new query about a refund is correctly routed to the billing chain alongside the existing invoice/charge queries.</p>
+</section>
+<section id="scoring-summary-length-against-a-target" class="level3" data-number="14.2">
+<h3 data-number="14.2" class="anchored" data-anchor-id="scoring-summary-length-against-a-target"><span class="header-section-number">14.2</span> 2. Scoring summary length against a target</h3>
+<p>A fifth <code>RunnablePassthrough.assign()</code> step adds a <code>length_score</code> field, following the exact pattern the rest of the pipeline already uses – the new step reads <code>summary</code> from the running dictionary and reports how far its word count is from a target.</p>
+<div id="cell-35" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> PromptTemplate</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.output_parsers <span class="im">import</span> StrOutputParser</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.language_models.fake <span class="im">import</span> FakeListLLM</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.runnables <span class="im">import</span> RunnablePassthrough, RunnableLambda</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>translate_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"The GamersTech laptops impress with their exceptional performance and elegant design."</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>summarize_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GamersTech laptops balance strong gaming performance with a sleek, portable design."</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>language_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[<span class="st">"French"</span>])</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>followup_llm <span class="op">=</span> FakeListLLM(responses<span class="op">=</span>[</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Merci pour ce retour tres positif sur nos ordinateurs portables GamersTech."</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>review <span class="op">=</span> (</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Les ordinateurs portables GamersTech impressionnent par ses performances "</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"exceptionnelles et son design elegant."</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>translate_chain <span class="op">=</span> (</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>    PromptTemplate.from_template(<span class="st">"Translate the following review to English:</span><span class="ch">\n\n</span><span class="sc">{review}</span><span class="st">"</span>)</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> translate_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>summarize_chain <span class="op">=</span> (</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>    PromptTemplate.from_template(<span class="st">"Summarize the following review in one sentence:</span><span class="ch">\n\n</span><span class="sc">{english_review}</span><span class="st">"</span>)</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> summarize_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>language_chain <span class="op">=</span> (</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>    PromptTemplate.from_template(<span class="st">"What language is the following review written in?</span><span class="ch">\n\n</span><span class="sc">{review}</span><span class="st">"</span>)</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> language_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>followup_chain <span class="op">=</span> (</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    PromptTemplate.from_template(</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Write a follow-up response to this summary, in the specified language.</span><span class="ch">\n\n</span><span class="st">"</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Summary: </span><span class="sc">{summary}</span><span class="ch">\n</span><span class="st">Language: </span><span class="sc">{language}</span><span class="st">"</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> followup_llm <span class="op">|</span> StrOutputParser()</span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a><span class="co"># New fifth step: score the summary's length against a target word count,</span></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="co"># reusing the RunnablePassthrough.assign() pattern from the rest of the pipeline.</span></span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>TARGET_WORDS <span class="op">=</span> <span class="dv">12</span></span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> score_summary_length(inputs):</span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>    word_count <span class="op">=</span> <span class="bu">len</span>(inputs[<span class="st">"summary"</span>].split())</span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>        <span class="st">"word_count"</span>: word_count,</span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>        <span class="st">"target_words"</span>: TARGET_WORDS,</span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>        <span class="st">"delta"</span>: word_count <span class="op">-</span> TARGET_WORDS,</span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>length_score_step <span class="op">=</span> RunnableLambda(score_summary_length)</span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> (</span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>    RunnablePassthrough.assign(english_review<span class="op">=</span>translate_chain)</span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> RunnablePassthrough.assign(summary<span class="op">=</span>summarize_chain, language<span class="op">=</span>language_chain)</span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> RunnablePassthrough.assign(followup_message<span class="op">=</span>followup_chain)</span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> RunnablePassthrough.assign(length_score<span class="op">=</span>length_score_step)</span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> pipeline.invoke({<span class="st">"review"</span>: review})</span>
+<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, value <span class="kw">in</span> output.items():</span>
+<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">:</span><span class="ch">\n</span><span class="ss">  </span><span class="sc">{</span>value<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>review:
+  Les ordinateurs portables GamersTech impressionnent par ses performances exceptionnelles et son design elegant.
+
+english_review:
+  The GamersTech laptops impress with their exceptional performance and elegant design.
+
+summary:
+  GamersTech laptops balance strong gaming performance with a sleek, portable design.
+
+language:
+  French
+
+followup_message:
+  Merci pour ce retour tres positif sur nos ordinateurs portables GamersTech.
+
+length_score:
+  {'word_count': 11, 'target_words': 12, 'delta': -1}
+</code></pre>
+</div>
+</div>
+<p>The generated summary comes in one word under the 12-word target – <code>delta: -1</code>. All five outputs, including the original input, remain available in the final dictionary, which is the main advantage of the nested-<code>assign()</code> pattern over a plain linear chain.</p>
+</section>
+<section id="adding-two-more-chunks-to-the-retrieval-example" class="level3" data-number="14.3">
+<h3 data-number="14.3" class="anchored" data-anchor-id="adding-two-more-chunks-to-the-retrieval-example"><span class="header-section-number">14.3</span> 3. Adding two more chunks to the retrieval example</h3>
+<p>One new chunk is written to be relevant to the existing query (about cosine similarity ranking), and one is written to be clearly unrelated (about heritability, matching the theme of the other irrelevant chunks already in the set).</p>
+<div id="cell-38" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>STOPWORDS <span class="op">=</span> {<span class="st">"a"</span>, <span class="st">"an"</span>, <span class="st">"the"</span>, <span class="st">"is"</span>, <span class="st">"are"</span>, <span class="st">"in"</span>, <span class="st">"on"</span>, <span class="st">"of"</span>, <span class="st">"to"</span>, <span class="st">"and"</span>, <span class="st">"or"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"with"</span>, <span class="st">"how"</span>, <span class="st">"does"</span>, <span class="st">"do"</span>, <span class="st">"use"</span>, <span class="st">"s"</span>, <span class="st">"its"</span>, <span class="st">"this"</span>, <span class="st">"that"</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"for"</span>, <span class="st">"by"</span>, <span class="st">"into"</span>, <span class="st">"across"</span>}</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tokenize(text):</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> re.findall(<span class="vs">r"</span><span class="pp">[a-z0-9]</span><span class="op">+</span><span class="vs">"</span>, text.lower())</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [t <span class="cf">for</span> t <span class="kw">in</span> tokens <span class="cf">if</span> t <span class="kw">not</span> <span class="kw">in</span> STOPWORDS]</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_vocabulary(chunks):</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    vocab <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">set</span>(tok <span class="cf">for</span> chunk <span class="kw">in</span> chunks <span class="cf">for</span> tok <span class="kw">in</span> tokenize(chunk)))</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {tok: i <span class="cf">for</span> i, tok <span class="kw">in</span> <span class="bu">enumerate</span>(vocab)}</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> inverse_document_frequency(chunks, vocab):</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    n_chunks <span class="op">=</span> <span class="bu">len</span>(chunks)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    doc_freq <span class="op">=</span> np.zeros(<span class="bu">len</span>(vocab))</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk <span class="kw">in</span> chunks:</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tok <span class="kw">in</span> <span class="bu">set</span>(tokenize(chunk)):</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>            doc_freq[vocab[tok]] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.log((n_chunks <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> (doc_freq <span class="op">+</span> <span class="dv">1</span>)) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> embed(text, vocab, idf):</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>    vec <span class="op">=</span> np.zeros(<span class="bu">len</span>(vocab))</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tok, count <span class="kw">in</span> Counter(tokenize(text)).items():</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> tok <span class="kw">in</span> vocab:</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>            vec[vocab[tok]] <span class="op">=</span> count <span class="op">*</span> idf[vocab[tok]]</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    norm <span class="op">=</span> np.linalg.norm(vec)</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> vec <span class="op">/</span> norm <span class="cf">if</span> norm <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> vec</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cosine_similarity(a, b):</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(np.dot(a, b))</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> retrieve(query, chunks, chunk_embeddings, vocab, idf, top_k<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>    query_embedding <span class="op">=</span> embed(query, vocab, idf)</span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> [cosine_similarity(query_embedding, emb) <span class="cf">for</span> emb <span class="kw">in</span> chunk_embeddings]</span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>    ranked <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">zip</span>(scores, chunks), reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ranked[:top_k]</span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>document_chunks <span class="op">=</span> [</span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GWAS identifies associations between genetic variants and traits across the genome."</span>,</span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fine-mapping narrows a GWAS locus down to the most likely causal variant."</span>,</span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Polygenic risk scores aggregate many small-effect variants into a single predictive score."</span>,</span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Retrieval-augmented generation grounds a language model's answer in retrieved documents."</span>,</span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Vector databases store embeddings and support fast approximate nearest neighbor search."</span>,</span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># New: one relevant to the query below, one clearly not.</span></span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cosine similarity ranks retrieved chunks by comparing their embedding vectors to the query vector."</span>,</span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Heritability partitions phenotypic variance into genetic and environmental components."</span>,</span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a>vocabulary <span class="op">=</span> build_vocabulary(document_chunks)</span>
+<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a>idf <span class="op">=</span> inverse_document_frequency(document_chunks, vocabulary)</span>
+<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a>chunk_embeddings <span class="op">=</span> [embed(chunk, vocabulary, idf) <span class="cf">for</span> chunk <span class="kw">in</span> document_chunks]</span>
+<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">"How does RAG use a vector database to ground an LLM's answer?"</span></span>
+<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a>top_matches <span class="op">=</span> retrieve(query, document_chunks, chunk_embeddings, vocabulary, idf, top_k<span class="op">=</span><span class="bu">len</span>(document_chunks))</span>
+<span id="cb26-59"><a href="#cb26-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-60"><a href="#cb26-60" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> score, chunk <span class="kw">in</span> top_matches:</span>
+<span id="cb26-61"><a href="#cb26-61" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>score<span class="sc">:.3f}</span><span class="ss">  </span><span class="sc">{</span>chunk<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.261  Retrieval-augmented generation grounds a language model's answer in retrieved documents.
+0.170  Vector databases store embeddings and support fast approximate nearest neighbor search.
+0.165  Cosine similarity ranks retrieved chunks by comparing their embedding vectors to the query vector.
+0.000  Polygenic risk scores aggregate many small-effect variants into a single predictive score.
+0.000  Heritability partitions phenotypic variance into genetic and environmental components.
+0.000  GWAS identifies associations between genetic variants and traits across the genome.
+0.000  Fine-mapping narrows a GWAS locus down to the most likely causal variant.</code></pre>
+</div>
+</div>
+<p>The new relevant chunk lands third, just behind the two chunks it shares vocabulary with (“vector”, “database”), and the new irrelevant chunk scores exactly zero alongside the other genetics chunks, since it shares no non-stopword vocabulary with the query. The ranking places both new chunks exactly where expected.</p>
+</section>
+<section id="whats-changed-in-the-current-documentation" class="level3" data-number="14.4">
+<h3 data-number="14.4" class="anchored" data-anchor-id="whats-changed-in-the-current-documentation"><span class="header-section-number">14.4</span> 4. What’s changed in the current documentation</h3>
+<p>Checked two components used in this notebook against LangChain’s current reference docs:</p>
+<ul>
+<li><strong><code>RunnableBranch</code></strong> is unchanged. The current reference lists it as available since v0.1 with no deprecation notice, so the routing pattern used above is still the recommended one, not a stopgap.</li>
+<li><strong>LangGraph checkpointing</strong> has grown a companion concept since this notebook’s core pattern was written. The current persistence docs now distinguish two systems: checkpointers (like <code>InMemorySaver</code>, used above) for short-term, thread-scoped memory, and a separate <code>Store</code> (for example <code>InMemoryStore</code>) for long-term, cross-thread memory such as user preferences or facts that should persist beyond a single conversation thread. The docs also now explicitly flag <code>InMemorySaver</code> as suitable for debugging and testing only, recommending <code>PostgresSaver</code> for production use, a distinction not called out above.</li>
+</ul>
+<p>For the two-turn example in this notebook, both points are consistent with what’s shown – <code>InMemorySaver</code> is exactly right for a scoped, in-memory demo, and there was no cross-thread memory need that would have called for a <code>Store</code>.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

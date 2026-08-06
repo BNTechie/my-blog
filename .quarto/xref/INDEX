@@ -292,5 +292,23 @@
   },
   "tutorials/blog_AI_humanGenome/the-barbeque-question.ipynb": {
     "the-barbeque-question.html": "fc8998f3"
+  },
+  "tutorials/blog_promt_engineering/prompt-engineering-tutorial.ipynb": {
+    "prompt-engineering-tutorial.html": "04b29a4f"
+  },
+  "tutorials/blog_promt_engineering/genai-prompt-engineering-tutorial.ipynb": {
+    "genai-prompt-engineering-tutorial.html": "3a8dbcb3"
+  },
+  "tutorials/blog_Langchain/langchain-rag-tutorial.ipynb": {
+    "langchain-rag-tutorial.html": "c7c1e924"
+  },
+  "tutorials/blog_LLM_API/llm-api-tutorial.ipynb": {
+    "llm-api-tutorial.html": "bc7a76e7"
+  },
+  "tutorials/blog_llama2/Examplecases_Llama2.ipynb": {
+    "Examplecases_Llama2.html": "5b7f205a"
+  },
+  "index_ver2.qmd": {
+    "index_ver2.html": "60ce032d"
   }
 }

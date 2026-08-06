@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Practical notes on statistical genetics, machine learning, and computational modeling, from mathematical formulation to reproducible code.">
+
+<title>Nivedita Bhadra, PhD Computational Scientist – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-listing/list.min.js"></script>
+<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-latest-tutorials .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: [],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-latest-tutorials'] = new List('listing-latest-tutorials', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Nivedita Bhadra, PhD<br><span class="title-role" style="display:block; font-size:1.8rem; font-weight:400; margin-top:0.3rem; color:#555;">Computational Scientist</span></h1>
+<p class="subtitle lead">Modeling complex systems, from physics to the genome</p>
+</div>
+
+<div>
+  <div class="description">
+    Practical notes on statistical genetics, machine learning, and computational modeling, from mathematical formulation to reproducible code.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="signal-helix-wrap">
+<svg class="signal-helix" viewbox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated diagram of a signal wave transitioning into a DNA double helix">
+  <path class="strand strand-a" d="M 0,110.0 L 4,117.7 L 8,124.5 L 12,129.4 L 16,131.8 L 20,131.4 L 24,128.4 L 28,122.9 L 32,115.9 L 36,108.0 L 40,100.5 L 44,94.1 L 48,89.8 L 52,88.0 L 56,89.1 L 60,92.8 L 64,98.7 L 68,106.1 L 72,113.9 L 76,121.3 L 80,127.2 L 84,130.9 L 88,132.0 L 92,130.2 L 96,125.9 L 100,119.5 L 104,112.0 L 108,104.1 L 112,97.1 L 116,91.6 L 120,88.6 L 124,88.2 L 128,90.6 L 132,95.5 L 136,102.3 L 140,110.0 L 144,117.7 L 148,124.5 L 152,129.4 L 156,131.8 L 160,131.4 L 164,128.4 L 168,122.9 L 172,115.9 L 176,108.0 L 180,100.5 L 184,94.1 L 188,89.8 L 192,88.0 L 196,89.1 L 200,92.8 L 204,98.7 L 208,106.1 L 212,113.9 L 216,121.3 L 220,127.2 L 224,130.9 L 228,132.0 L 232,130.2 L 236,125.9 L 240,119.5 L 244,112.0 L 248,104.1 L 252,97.1 L 256,91.6 L 260,88.6 L 264,88.2 L 268,90.6 L 272,95.5 L 276,102.3 L 280,110.0 L 284,117.7 L 288,124.5 L 292,129.4 L 296,131.8 L 300,131.4 L 304,128.4 L 308,122.9 L 312,115.9 L 316,108.0 L 320,100.5 L 324,94.1 L 328,89.8 L 332,88.0 L 336,89.1 L 340,92.8 L 344,98.7 L 348,106.1 L 352,113.9 L 356,121.3 L 360,127.2 L 364,130.9 L 368,132.0 L 372,130.2 L 376,125.9 L 380,119.5 L 384,112.0 L 388,104.1 L 392,97.1 L 396,91.6 L 400,88.6 L 404,88.2 L 408,90.6 L 412,95.5 L 416,102.3 L 420,110.0 L 424,121.7 L 428,130.7 L 432,134.0 L 436,130.3 L 440,120.0 L 444,106.1 L 448,92.5 L 452,83.7 L 456,82.9 L 460,90.8 L 464,105.5 L 468,122.5 L 472,136.1 L 476,141.6 L 480,136.5 L 484,121.9 L 488,102.5 L 492,84.8 L 496,75.3 L 500,78.0 L 504,92.5 L 508,114.0 L 512,135.0 L 516,147.5 L 520,146.1 L 524,130.8 L 528,106.8 L 532,83.1 L 536,69.1 L 540,71.1 L 544,88.8 L 548,115.9 L 552,141.5 L 556,154.9 L 560,149.8 L 564,137.0 L 568,119.6 L 572,100.4 L 576,83.0 L 580,70.2 L 584,64.3 L 588,66.3 L 592,75.8 L 596,91.3 L 600,110.0 L 604,128.7 L 608,144.2 L 612,153.7 L 616,155.7 L 620,149.8 L 624,137.0 L 628,119.6 L 632,100.4 L 636,83.0 L 640,70.2 L 644,64.3 L 648,66.3 L 652,75.8 L 656,91.3 L 660,110.0 L 664,128.7 L 668,144.2 L 672,153.7 L 676,155.7 L 680,149.8 L 684,137.0 L 688,119.6 L 692,100.4 L 696,83.0 L 700,70.2 L 704,64.3 L 708,66.3 L 712,75.8 L 716,91.3 L 720,110.0 L 724,128.7 L 728,144.2 L 732,153.7 L 736,155.7 L 740,149.8 L 744,137.0 L 748,119.6 L 752,100.4 L 756,83.0 L 760,70.2 L 764,64.3 L 768,66.3 L 772,75.8 L 776,91.3 L 780,110.0 L 784,128.7 L 788,144.2 L 792,153.7 L 796,155.7 L 800,149.8 L 804,137.0 L 808,119.6 L 812,100.4 L 816,83.0 L 820,70.2 L 824,64.3 L 828,66.3 L 832,75.8 L 836,91.3 L 840,110.0 L 844,128.7 L 848,144.2 L 852,153.7 L 856,155.7 L 860,149.8 L 864,137.0 L 868,119.6 L 872,100.4 L 876,83.0 L 880,70.2 L 884,64.3 L 888,66.3 L 892,75.8 L 896,91.3 L 900,110.0 L 904,128.7 L 908,144.2 L 912,153.7 L 916,155.7 L 920,149.8 L 924,137.0 L 928,119.6 L 932,100.4 L 936,83.0 L 940,70.2 L 944,64.3 L 948,66.3 L 952,75.8 L 956,91.3 L 960,110.0 L 964,128.7 L 968,144.2 L 972,153.7 L 976,155.7 L 980,149.8 L 984,137.0 L 988,119.6 L 992,100.4 L 996,83.0 L 1000,70.2"></path>
+  <path class="strand strand-b" d="M 420,110.0 L 424,98.3 L 428,89.3 L 432,86.0 L 436,89.7 L 440,100.0 L 444,113.9 L 448,127.5 L 452,136.3 L 456,137.1 L 460,129.2 L 464,114.5 L 468,97.5 L 472,83.9 L 476,78.4 L 480,83.5 L 484,98.1 L 488,117.5 L 492,135.2 L 496,144.7 L 500,142.0 L 504,127.5 L 508,106.0 L 512,85.0 L 516,72.5 L 520,73.9 L 524,89.2 L 528,113.2 L 532,136.9 L 536,150.9 L 540,148.9 L 544,131.2 L 548,104.1 L 552,78.5 L 556,65.1 L 560,70.2 L 564,83.0 L 568,100.4 L 572,119.6 L 576,137.0 L 580,149.8 L 584,155.7 L 588,153.7 L 592,144.2 L 596,128.7 L 600,110.0 L 604,91.3 L 608,75.8 L 612,66.3 L 616,64.3 L 620,70.2 L 624,83.0 L 628,100.4 L 632,119.6 L 636,137.0 L 640,149.8 L 644,155.7 L 648,153.7 L 652,144.2 L 656,128.7 L 660,110.0 L 664,91.3 L 668,75.8 L 672,66.3 L 676,64.3 L 680,70.2 L 684,83.0 L 688,100.4 L 692,119.6 L 696,137.0 L 700,149.8 L 704,155.7 L 708,153.7 L 712,144.2 L 716,128.7 L 720,110.0 L 724,91.3 L 728,75.8 L 732,66.3 L 736,64.3 L 740,70.2 L 744,83.0 L 748,100.4 L 752,119.6 L 756,137.0 L 760,149.8 L 764,155.7 L 768,153.7 L 772,144.2 L 776,128.7 L 780,110.0 L 784,91.3 L 788,75.8 L 792,66.3 L 796,64.3 L 800,70.2 L 804,83.0 L 808,100.4 L 812,119.6 L 816,137.0 L 820,149.8 L 824,155.7 L 828,153.7 L 832,144.2 L 836,128.7 L 840,110.0 L 844,91.3 L 848,75.8 L 852,66.3 L 856,64.3 L 860,70.2 L 864,83.0 L 868,100.4 L 872,119.6 L 876,137.0 L 880,149.8 L 884,155.7 L 888,153.7 L 892,144.2 L 896,128.7 L 900,110.0 L 904,91.3 L 908,75.8 L 912,66.3 L 916,64.3 L 920,70.2 L 924,83.0 L 928,100.4 L 932,119.6 L 936,137.0 L 940,149.8 L 944,155.7 L 948,153.7 L 952,144.2 L 956,128.7 L 960,110.0 L 964,91.3 L 968,75.8 L 972,66.3 L 976,64.3 L 980,70.2 L 984,83.0 L 988,100.4 L 992,119.6 L 996,137.0 L 1000,149.8"></path>
+  <line class="helix-rung" style="animation-delay:0.0s" x1="580" y1="70.2" x2="580" y2="149.8"></line>
+  <line class="helix-rung" style="animation-delay:0.15s" x1="610" y1="149.8" x2="610" y2="70.2"></line>
+  <line class="helix-rung" style="animation-delay:0.3s" x1="640" y1="70.2" x2="640" y2="149.8"></line>
+  <line class="helix-rung" style="animation-delay:0.45s" x1="670" y1="149.8" x2="670" y2="70.2"></line>
+  <line class="helix-rung" style="animation-delay:0.6s" x1="700" y1="70.2" x2="700" y2="149.8"></line>
+  <line class="helix-rung" style="animation-delay:0.75s" x1="730" y1="149.8" x2="730" y2="70.2"></line>
+  <line class="helix-rung" style="animation-delay:0.9s" x1="760" y1="70.2" x2="760" y2="149.8"></line>
+  <line class="helix-rung" style="animation-delay:1.05s" x1="790" y1="149.8" x2="790" y2="70.2"></line>
+  <line class="helix-rung" style="animation-delay:1.2s" x1="820" y1="70.2" x2="820" y2="149.8"></line>
+  <line class="helix-rung" style="animation-delay:1.35s" x1="850" y1="149.8" x2="850" y2="70.2"></line>
+  <line class="helix-rung" style="animation-delay:1.5s" x1="880" y1="70.2" x2="880" y2="149.8"></line>
+  <line class="helix-rung" style="animation-delay:1.65s" x1="910" y1="149.8" x2="910" y2="70.2"></line>
+  <line class="helix-rung" style="animation-delay:1.8s" x1="940" y1="70.2" x2="940" y2="149.8"></line>
+  <line class="helix-rung" style="animation-delay:1.95s" x1="970" y1="149.8" x2="970" y2="70.2"></line>
+  <circle class="pulse" r="5">
+    <animatemotion dur="7s" repeatcount="indefinite" path="M 0,110.0 L 4,117.7 L 8,124.5 L 12,129.4 L 16,131.8 L 20,131.4 L 24,128.4 L 28,122.9 L 32,115.9 L 36,108.0 L 40,100.5 L 44,94.1 L 48,89.8 L 52,88.0 L 56,89.1 L 60,92.8 L 64,98.7 L 68,106.1 L 72,113.9 L 76,121.3 L 80,127.2 L 84,130.9 L 88,132.0 L 92,130.2 L 96,125.9 L 100,119.5 L 104,112.0 L 108,104.1 L 112,97.1 L 116,91.6 L 120,88.6 L 124,88.2 L 128,90.6 L 132,95.5 L 136,102.3 L 140,110.0 L 144,117.7 L 148,124.5 L 152,129.4 L 156,131.8 L 160,131.4 L 164,128.4 L 168,122.9 L 172,115.9 L 176,108.0 L 180,100.5 L 184,94.1 L 188,89.8 L 192,88.0 L 196,89.1 L 200,92.8 L 204,98.7 L 208,106.1 L 212,113.9 L 216,121.3 L 220,127.2 L 224,130.9 L 228,132.0 L 232,130.2 L 236,125.9 L 240,119.5 L 244,112.0 L 248,104.1 L 252,97.1 L 256,91.6 L 260,88.6 L 264,88.2 L 268,90.6 L 272,95.5 L 276,102.3 L 280,110.0 L 284,117.7 L 288,124.5 L 292,129.4 L 296,131.8 L 300,131.4 L 304,128.4 L 308,122.9 L 312,115.9 L 316,108.0 L 320,100.5 L 324,94.1 L 328,89.8 L 332,88.0 L 336,89.1 L 340,92.8 L 344,98.7 L 348,106.1 L 352,113.9 L 356,121.3 L 360,127.2 L 364,130.9 L 368,132.0 L 372,130.2 L 376,125.9 L 380,119.5 L 384,112.0 L 388,104.1 L 392,97.1 L 396,91.6 L 400,88.6 L 404,88.2 L 408,90.6 L 412,95.5 L 416,102.3 L 420,110.0 L 424,121.7 L 428,130.7 L 432,134.0 L 436,130.3 L 440,120.0 L 444,106.1 L 448,92.5 L 452,83.7 L 456,82.9 L 460,90.8 L 464,105.5 L 468,122.5 L 472,136.1 L 476,141.6 L 480,136.5 L 484,121.9 L 488,102.5 L 492,84.8 L 496,75.3 L 500,78.0 L 504,92.5 L 508,114.0 L 512,135.0 L 516,147.5 L 520,146.1 L 524,130.8 L 528,106.8 L 532,83.1 L 536,69.1 L 540,71.1 L 544,88.8 L 548,115.9 L 552,141.5 L 556,154.9 L 560,149.8 L 564,137.0 L 568,119.6 L 572,100.4 L 576,83.0 L 580,70.2 L 584,64.3 L 588,66.3 L 592,75.8 L 596,91.3 L 600,110.0 L 604,128.7 L 608,144.2 L 612,153.7 L 616,155.7 L 620,149.8 L 624,137.0 L 628,119.6 L 632,100.4 L 636,83.0 L 640,70.2 L 644,64.3 L 648,66.3 L 652,75.8 L 656,91.3 L 660,110.0 L 664,128.7 L 668,144.2 L 672,153.7 L 676,155.7 L 680,149.8 L 684,137.0 L 688,119.6 L 692,100.4 L 696,83.0 L 700,70.2 L 704,64.3 L 708,66.3 L 712,75.8 L 716,91.3 L 720,110.0 L 724,128.7 L 728,144.2 L 732,153.7 L 736,155.7 L 740,149.8 L 744,137.0 L 748,119.6 L 752,100.4 L 756,83.0 L 760,70.2 L 764,64.3 L 768,66.3 L 772,75.8 L 776,91.3 L 780,110.0 L 784,128.7 L 788,144.2 L 792,153.7 L 796,155.7 L 800,149.8 L 804,137.0 L 808,119.6 L 812,100.4 L 816,83.0 L 820,70.2 L 824,64.3 L 828,66.3 L 832,75.8 L 836,91.3 L 840,110.0 L 844,128.7 L 848,144.2 L 852,153.7 L 856,155.7 L 860,149.8 L 864,137.0 L 868,119.6 L 872,100.4 L 876,83.0 L 880,70.2 L 884,64.3 L 888,66.3 L 892,75.8 L 896,91.3 L 900,110.0 L 904,128.7 L 908,144.2 L 912,153.7 L 916,155.7 L 920,149.8 L 924,137.0 L 928,119.6 L 932,100.4 L 936,83.0 L 940,70.2 L 944,64.3 L 948,66.3 L 952,75.8 L 956,91.3 L 960,110.0 L 964,128.7 L 968,144.2 L 972,153.7 L 976,155.7 L 980,149.8 L 984,137.0 L 988,119.6 L 992,100.4 L 996,83.0 L 1000,70.2"></animatemotion>
+  </circle>
+</svg>
+<p class="signal-helix-caption">
+Signal → sequence: from physical modeling to the genome
+</p>
+</div>
+<div class="hero">
+<div class="equation-bg">
+<p><span class="eq eq1">∇²ψ = 0</span> <span class="eq eq2">P(y | X) = σ(Xβ)</span> <span class="eq eq3">β̂ = (XᵀX)⁻¹Xᵀy</span> <span class="eq eq4">L = Σ (yᵢ − ŷᵢ)²</span> <span class="eq eq5">h² = Vₐ / Vₚ</span> <span class="eq eq6">dx/dt = σ(y − x)</span></p>
+</div>
+<style>
+.hero { position: relative; overflow: hidden; }
+
+.equation-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.equation-bg .eq {
+  position: absolute;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #8a8f98;
+  opacity: 0.16;
+  white-space: nowrap;
+  animation: eq-drift 22s ease-in-out infinite;
+}
+
+.eq1 { top: 6%;  left: 4%;  animation-delay: 0s; }
+.eq2 { top: 18%; left: 78%; animation-delay: 3s; }
+.eq3 { top: 46%; left: 8%;  animation-delay: 6s; }
+.eq4 { top: 62%; left: 74%; animation-delay: 9s; }
+.eq5 { top: 82%; left: 12%; animation-delay: 12s; }
+.eq6 { top: 88%; left: 68%; animation-delay: 15s; }
+
+@keyframes eq-drift {
+  0%   { transform: translateY(0) translateX(0); opacity: 0.10; }
+  50%  { transform: translateY(-10px) translateX(4px); opacity: 0.20; }
+  100% { transform: translateY(0) translateX(0); opacity: 0.10; }
+}
+
+.hero-text, .hero-image { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .equation-bg .eq { animation: none; opacity: 0.14; }
+}
+</style>
+<div class="hero-text">
+<p>Nivedita Bhadra is a computational scientist with a PhD in Physics from IISER Kolkata and an M.Sc. from IIT Delhi. She was trained in the mathematical and numerical modelling of complex systems, including simulation, statistical inference, and large-scale computation. That foundation has shaped her work across disciplines: first at the Translational Genomics Research Institute, where she applied high-dimensional statistical and machine-learning methods to biomedical data, and now at the Institute of Biological Psychiatry in Denmark, where she develops statistical genetics workflows for risk modelling using large-scale cohort data.</p>
+<p>Whether the problem involves physical systems, genomic data, or text, her approach remains consistent: define the question precisely, identify its mathematical structure, build a reproducible computational model, and validate it rigorously against data.</p>
+<p>This blog documents that process in the open. It brings together practical work in statistical genetics, machine learning, natural language processing, high-performance computing, and scientific programming, from models and mathematical derivations to pipelines, debugging, and reproducible implementation.</p>
+<p>Her aim is to make complex computational methods easier to understand through clear explanations, practical examples, readable code, and honest notes from real research.</p>
+<p><a href="tutorials/index.qmd" class="btn btn-primary">Explore Tutorials</a> <a href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/" class="btn btn-secondary">Connect on LinkedIn</a></p>
+</div>
+<div class="hero-image">
+<p><img src="image/nivedita.jpeg" class="img-fluid" width="220"></p>
+<p><em>Computational Scientist</em></p>
+</div>
+</div>
+<hr>
+<section id="areas-i-write-about" class="level2">
+<h2 class="anchored" data-anchor-id="areas-i-write-about">Areas I Write About</h2>
+<div class="grid">
+<section id="statistical-genetics-computational-biology" class="level3 card">
+<h3 class="anchored" data-anchor-id="statistical-genetics-computational-biology">Statistical Genetics &amp; Computational Biology</h3>
+<p>Liability-scale models, GWAS, polygenic scores, heritability, and large-scale cohort modeling.</p>
+</section>
+<section id="computational-modeling-simulation" class="level3 card">
+<h3 class="anchored" data-anchor-id="computational-modeling-simulation">Computational Modeling &amp; Simulation</h3>
+<p>Numerical methods, statistical inference, and simulation techniques carried over from computational physics.</p>
+</section>
+<section id="machine-learning-nlp" class="level3 card">
+<h3 class="anchored" data-anchor-id="machine-learning-nlp">Machine Learning &amp; NLP</h3>
+<p>Model evaluation, transformers, local LLMs, and applied text analytics for scientific data.</p>
+</section>
+<section id="high-performance-reproducible-computing" class="level3 card">
+<h3 class="anchored" data-anchor-id="high-performance-reproducible-computing">High-Performance &amp; Reproducible Computing</h3>
+<p>HPC workflows, Snakemake pipelines, Dask, and reproducible research practices.</p>
+</section>
+</div>
+<hr>
+</section>
+<section id="latest-tutorials" class="level2">
+<h2 class="anchored" data-anchor-id="latest-tutorials">Latest Tutorials</h2>
+<div id="listing-latest-tutorials" class="quarto-listing quarto-listing-container-default">
+<div class="list quarto-listing-default">
+
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<p><a href="tutorials/index.qmd" class="btn btn-secondary">Browse all tutorials →</a></p>
+<hr>
+<p><a href="https://scholar.google.com/citations?hl=en&amp;user=EWoE7sgAAAAJ&amp;view_op=list_works&amp;sortby=pubdate">Google Scholar Profile</a></p>
+<hr>
+</section>
+<section id="subscribe-follow" class="level2">
+<h2 class="anchored" data-anchor-id="subscribe-follow">Subscribe / Follow</h2>
+<p>I’m still setting up a formal subscription option. For now, you can follow or connect here:</p>
+<ul>
+<li>GitHub: <a href="https://github.com/BNTechie">BNTechie</a></li>
+<li>LinkedIn: <a href="https://www.linkedin.com/in/nivedita-bhadra-b5149130">Nivedita Bhadra</a></li>
+<li>Medium: <a href="https://medium.com/@nivedita.home"><span class="citation" data-cites="nivedita.home">@nivedita.home</span></a></li>
+<li>Email: <a href="mailto:nivedita.home@gmail.com">nivedita.home@gmail.com</a></li>
+</ul>
+<p><a href="mailto:nivedita.home@gmail.com" class="btn btn-secondary">Send an Email</a></p>
+<blockquote class="blockquote">
+<p>If something helped you, feel free to share, comment, or connect.</p>
+</blockquote>
+<hr>
+<div class="disclaimer-note" style="font-size: 0.85rem; color: #6b7280; line-height: 1.6;">
+<p>Just a quick heads-up: while I am a tech professional at IBP here in Copenhagen, this blog is my personal playground. The ideas, tutorials, and opinions shared here are 100% mine and have not been reviewed or approved by my employer. Treat the code snippets and guides as educational resources—always test things in a safe sandbox environment before using them in production!</p>
+</div>
+
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -332,6 +332,26 @@ img {
    SIGNAL → HELIX ANIMATED GRAPHIC
    ========================================================= */
 
+.hero-top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+.latest-articles-col h2 {
+  margin-top: 0;
+  padding-bottom: 0.4rem;
+}
+
+@media (max-width: 900px) {
+  .hero-top-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
 .signal-helix-wrap {
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
@@ -560,6 +580,144 @@ img {
 }
 
 /* =========================================================
+   LATEST TUTORIALS FEED (home page, auto-scrolling ticker)
+   ========================================================= */
+
+.tutorials-ticker {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background-color: var(--paper-raised);
+  background-image: radial-gradient(var(--line) 1px, transparent 1px);
+  background-size: 18px 18px;
+  padding: 0.75rem;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+
+.ticker-track {
+  animation: ticker-scroll 26s linear infinite;
+}
+
+.tutorials-ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+#latest-tutorials .quarto-post {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--signal);
+  border-radius: 3px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.7rem;
+  background-color: var(--paper);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+#latest-tutorials .quarto-post:nth-child(3n+2) {
+  border-left-color: var(--amber);
+}
+
+#latest-tutorials .quarto-post:hover {
+  transform: translateX(4px);
+  box-shadow: 0 6px 16px rgba(28, 43, 57, 0.08);
+}
+
+#latest-tutorials .thumbnail {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 3px;
+  overflow: hidden;
+  background-color: var(--paper-raised);
+  border: 1px solid var(--line);
+}
+
+#latest-tutorials .thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#latest-tutorials .body {
+  flex: 1 1 auto;
+  min-width: 0; /* allow title to wrap instead of overflowing the flex row */
+}
+
+#latest-tutorials .metadata {
+  flex: none;
+}
+
+#latest-tutorials .metadata {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+#latest-tutorials .metadata::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background-color: var(--signal);
+}
+
+#latest-tutorials .quarto-post:nth-child(3n+2) .metadata::before {
+  background-color: var(--amber);
+}
+
+#latest-tutorials .listing-date,
+#latest-tutorials .listing-categories {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--signal-dark);
+}
+
+#latest-tutorials .listing-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+#latest-tutorials .listing-title a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: none;
+}
+
+#latest-tutorials .listing-description {
+  display: none; /* keep cards compact — title + eyebrow only */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tutorials-ticker {
+    height: auto;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .ticker-track {
+    animation: none;
+  }
+}
+
+/* =========================================================
    MOBILE
    ========================================================= */
 
@@ -591,7 +749,8 @@ img {
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .btn {
+  .btn,
+  #latest-tutorials .quarto-post {
     transition: none;
   }
 }

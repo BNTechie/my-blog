@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita">
+<meta name="dcterms.date" content="2026-08-06">
+
+<title>Generative AI and Prompt Engineering – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Generative AI and Prompt Engineering</h1>
+<p class="subtitle lead">Concepts, mechanics, and a computational treatment of prompt design</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 6, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Generative AI denotes a class of systems that produce new content — text, images, audio, video, or code — rather than only classifying or scoring existing data. A model learns the statistical structure of a training corpus and then samples new instances consistent with that structure, as opposed to mapping fixed inputs onto a fixed set of output labels.</p>
+<p>This tutorial covers the material in three layers. First, the conceptual layer: what generative models are, how large language models (LLMs) are trained, and how this differs from conventional machine learning. Second, the mechanical layer: how a prompt actually becomes an output, via token-level sampling — treated computationally, in R, using a toy model, so the abstraction is not left as a black box. Third, the applied layer: prompt engineering as a design discipline, common prompting strategies, and a survey of the current tool landscape, closing with practical guidance and known limitations.</p>
+<p>Model and product names change quickly in this field. Where a specific product is named below, the description reflects its status as of mid-2026; several products referenced in earlier training material on this topic (GPT-3, GPT-4, Google Bard, DALL-E, Amazon CodeWhisperer) have since been superseded or renamed, and this is noted explicitly where relevant.</p>
+</section>
+<section id="what-generative-ai-produces" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="what-generative-ai-produces"><span class="header-section-number">2</span> What Generative AI Produces</h2>
+<p>Three domains illustrate the breadth of the category:</p>
+<p><strong>Text.</strong> Current-generation LLMs — OpenAI’s GPT-5 family, Anthropic’s Claude models, Google’s Gemini, and Meta’s open-weight Llama models — generate essays, code, and dialogue conditioned on a prompt.</p>
+<p><strong>Images.</strong> Diffusion and autoregressive image models (Midjourney, Stable Diffusion, OpenAI’s GPT Image line, Adobe Firefly) convert a text description into a corresponding image.</p>
+<p><strong>Audio and video.</strong> Tools such as Suno (music), ElevenLabs (voice), and Runway (video) apply the same generate-from-description paradigm to other modalities.</p>
+<p>The common thread is not the modality but the training objective: the model is optimized to produce plausible continuations or reconstructions of its training distribution, not to output a predetermined answer.</p>
+</section>
+<section id="generative-ai-versus-conventional-machine-learning" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="generative-ai-versus-conventional-machine-learning"><span class="header-section-number">3</span> Generative AI versus Conventional Machine Learning</h2>
+<p>The distinction is best drawn along five axes rather than treated as a single sharp boundary — a fraud-detection classifier and an LLM are both “machine learning” in the broad sense, but they differ systematically in what they are built to do.</p>
+<div id="99b4f197" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.098040Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.070831Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:43.399068Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:43.389901Z&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ml_vs_genai <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">aspect       =</span> <span class="fu">c</span>(<span class="st">"Objective"</span>, <span class="st">"Typical output"</span>, <span class="st">"Typical training data"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Dominant learning paradigm"</span>, <span class="st">"Common architectures"</span>, <span class="st">"Example task"</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">machine_learning =</span> <span class="fu">c</span>(<span class="st">"Predict a label or value from input features"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Class label, score, or continuous value"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Structured / tabular"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Supervised (labeled data)"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Linear/logistic regression, tree ensembles, SVM"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Flagging a fraudulent transaction"</span>),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">generative_ai =</span> <span class="fu">c</span>(<span class="st">"Produce a new instance consistent with a learned distribution"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Text, image, audio, or video"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Large unstructured corpora (text, image, audio)"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Self-supervised pretraining, often followed by fine-tuning"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Transformer-based architectures (decoder-only LLMs, diffusion models)"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Drafting a paragraph explaining a result"</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ml_vs_genai, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     aspect                                machine_learning
+                  Objective    Predict a label or value from input features
+             Typical output         Class label, score, or continuous value
+      Typical training data                            Structured / tabular
+ Dominant learning paradigm                       Supervised (labeled data)
+       Common architectures Linear/logistic regression, tree ensembles, SVM
+               Example task               Flagging a fraudulent transaction
+                                                         generative_ai
+         Produce a new instance consistent with a learned distribution
+                                          Text, image, audio, or video
+                       Large unstructured corpora (text, image, audio)
+            Self-supervised pretraining, often followed by fine-tuning
+ Transformer-based architectures (decoder-only LLMs, diffusion models)
+                              Drafting a paragraph explaining a result</code></pre>
+</div>
+</div>
+</section>
+<section id="large-language-models" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="large-language-models"><span class="header-section-number">4</span> Large Language Models</h2>
+<p>An LLM is trained to predict the next token in a sequence given the tokens that precede it. Applied at scale over a large text corpus, this single objective — next-token prediction — is sufficient to produce a model that captures grammar, factual associations, and long-range discourse structure, without ever being given an explicit label for any of those properties. This is what makes the training self-supervised: the “label” at each position is simply the next token in the existing text, so no separate annotation step is required.</p>
+<p><strong>Pretraining</strong> establishes the model’s general language competence over a broad corpus. <strong>Fine-tuning</strong> (and closely related techniques such as instruction tuning and reinforcement learning from human feedback) subsequently adapts a pretrained model toward following instructions reliably or performing well in a narrower domain — for instance, adapting a general-purpose model toward clinical or legal terminology.</p>
+<blockquote class="blockquote">
+<p><strong>Why does the distinction between pretraining and fine-tuning matter practically?</strong> A pretrained-only model tends to continue text rather than answer a question — asked “What is the capital of Finland?”, it may generate a plausible-looking follow-up question rather than a direct answer. Instruction tuning is what makes a model behave like an assistant that responds directly to a request, which is the behavior most users interact with in products such as ChatGPT or Claude.</p>
+</blockquote>
+<section id="why-llms-matter-in-practice" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="why-llms-matter-in-practice"><span class="header-section-number">4.1</span> Why LLMs matter in practice</h3>
+<ul>
+<li><strong>Communication and translation</strong> — real-time translation and multilingual content generation, without a separately trained model per language pair.</li>
+<li><strong>Scalable content production</strong> — drafting at a volume and speed not practical for manual writing alone, subject to the fact-checking caveat discussed later.</li>
+<li><strong>Personalization</strong> — tailoring phrasing, reading level, or emphasis to a stated audience.</li>
+<li><strong>Routine-task automation</strong> — drafting emails, summarizing long documents, generating boilerplate code.</li>
+<li><strong>Accessibility</strong> — text-to-speech and speech-to-text pipelines that lower barriers for users with visual or motor impairments.</li>
+</ul>
+</section>
+</section>
+<section id="prompt-engineering-as-a-design-problem" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="prompt-engineering-as-a-design-problem"><span class="header-section-number">5</span> Prompt Engineering as a Design Problem</h2>
+<p>A prompt can be decomposed into a small number of largely independent components: a persona (the role the model should adopt), the instruction itself, contextual background, optional worked examples, and an output-format specification. Building these programmatically, rather than writing each prompt by hand, makes explicit what changes between an under-specified request and a well-constructed one — and is closer to a controlled comparison, in the experimental-design sense, than to freeform writing.</p>
+<div id="6a177df6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.611274Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.416047Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:43.762680Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:43.760489Z&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>build_prompt <span class="ot">&lt;-</span> <span class="cf">function</span>(instruction, <span class="at">persona =</span> <span class="cn">NULL</span>, <span class="at">context =</span> <span class="cn">NULL</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">examples =</span> <span class="cn">NULL</span>, <span class="at">output_format =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  parts <span class="ot">&lt;-</span> <span class="fu">character</span>(<span class="dv">0</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(persona))       parts <span class="ot">&lt;-</span> <span class="fu">c</span>(parts, <span class="fu">sprintf</span>(<span class="st">"Act as %s."</span>, persona))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(context))       parts <span class="ot">&lt;-</span> <span class="fu">c</span>(parts, <span class="fu">sprintf</span>(<span class="st">"Context: %s"</span>, context))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(examples))      parts <span class="ot">&lt;-</span> <span class="fu">c</span>(parts, <span class="fu">sprintf</span>(<span class="st">"Examples:</span><span class="sc">\n</span><span class="st">%s"</span>, <span class="fu">paste</span>(examples, <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  parts <span class="ot">&lt;-</span> <span class="fu">c</span>(parts, <span class="fu">sprintf</span>(<span class="st">"Task: %s"</span>, instruction))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(output_format)) parts <span class="ot">&lt;-</span> <span class="fu">c</span>(parts, <span class="fu">sprintf</span>(<span class="st">"Respond as: %s"</span>, output_format))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(parts, <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>weak_prompt <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="st">"Explain what a Manhattan plot shows."</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>engineered_prompt <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="st">"Explain what a Manhattan plot shows."</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">persona =</span> <span class="st">"a statistical genetics instructor addressing first-year PhD students"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">context =</span> <span class="st">"The audience has taken introductory statistics but has not yet covered GWAS."</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_format =</span> <span class="st">"three short paragraphs, ending with one sentence on how a significance threshold is chosen"</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(weak_prompt, <span class="st">"</span><span class="sc">\n\n</span><span class="st">---</span><span class="sc">\n\n</span><span class="st">"</span>, engineered_prompt, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Task: Explain what a Manhattan plot shows.
+
+---
+
+Act as a statistical genetics instructor addressing first-year PhD students.
+
+Context: The audience has taken introductory statistics but has not yet covered GWAS.
+
+Task: Explain what a Manhattan plot shows.
+
+Respond as: three short paragraphs, ending with one sentence on how a significance threshold is chosen</code></pre>
+</div>
+</div>
+</section>
+<section id="from-prompt-to-output-simulating-token-sampling" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="from-prompt-to-output-simulating-token-sampling"><span class="header-section-number">6</span> From Prompt to Output: Simulating Token Sampling</h2>
+<p>Given a fixed prompt, an LLM does not return a single deterministic string. At each position it assigns a score (logit) to every candidate next token, converts these scores into a probability distribution via the softmax function, and samples from that distribution. The <strong>temperature</strong> parameter rescales the logits before this conversion: low temperature sharpens the distribution toward the highest-scoring token (output closer to deterministic), while high temperature flattens it (more variable output). This is exactly why the same prompt, sent twice, can produce two different — but each individually plausible — responses.</p>
+<p>This mechanism can be simulated directly with a toy vocabulary, without calling any external model.</p>
+<div id="6a16b52e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.768351Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.766207Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:43.819786Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:43.817425Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>softmax <span class="ot">&lt;-</span> <span class="cf">function</span>(logits, <span class="at">temperature =</span> <span class="dv">1</span>) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  scaled <span class="ot">&lt;-</span> logits <span class="sc">/</span> temperature</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  exp_scaled <span class="ot">&lt;-</span> <span class="fu">exp</span>(scaled <span class="sc">-</span> <span class="fu">max</span>(scaled))  <span class="co"># numerically stable</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  exp_scaled <span class="sc">/</span> <span class="fu">sum</span>(exp_scaled)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>vocab  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"significant"</span>, <span class="st">"suggestive"</span>, <span class="st">"negligible"</span>, <span class="st">"confounded"</span>, <span class="st">"spurious"</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>logits <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.2</span>, <span class="fl">3.1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>temperatures <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.7</span>, <span class="fl">1.0</span>, <span class="fl">1.5</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>prob_table <span class="ot">&lt;-</span> <span class="fu">sapply</span>(temperatures, <span class="cf">function</span>(t) <span class="fu">softmax</span>(logits, t))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(prob_table) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"T="</span>, temperatures)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(prob_table) <span class="ot">&lt;-</span> vocab</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(prob_table, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">T=0.2</th>
+<th data-quarto-table-cell-role="th" scope="col">T=0.7</th>
+<th data-quarto-table-cell-role="th" scope="col">T=1</th>
+<th data-quarto-table-cell-role="th" scope="col">T=1.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">significant</th>
+<td>0.996</td>
+<td>0.817</td>
+<td>0.710</td>
+<td>0.575</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">suggestive</th>
+<td>0.004</td>
+<td>0.170</td>
+<td>0.236</td>
+<td>0.276</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">negligible</th>
+<td>0.000</td>
+<td>0.006</td>
+<td>0.024</td>
+<td>0.060</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">confounded</th>
+<td>0.000</td>
+<td>0.004</td>
+<td>0.018</td>
+<td>0.049</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">spurious</th>
+<td>0.000</td>
+<td>0.003</td>
+<td>0.013</td>
+<td>0.040</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The entropy of each distribution quantifies this concentration effect directly: low temperature yields low entropy (the model is close to deterministic), and high temperature moves the distribution toward uniform over the vocabulary.</p>
+<div id="c3bc5bb5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.825957Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.823615Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:43.853330Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:43.851672Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>entropy <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">sum</span>(p <span class="sc">*</span> <span class="fu">log</span>(p))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">temperature =</span> temperatures,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">entropy     =</span> <span class="fu">round</span>(<span class="fu">apply</span>(prob_table, <span class="dv">2</span>, entropy), <span class="dv">3</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">top_token   =</span> vocab[<span class="fu">apply</span>(prob_table, <span class="dv">2</span>, which.max)]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 4 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">temperature</th>
+<th data-quarto-table-cell-role="th" scope="col">entropy</th>
+<th data-quarto-table-cell-role="th" scope="col">top_token</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">T=0.2</th>
+<td>0.2</td>
+<td>0.026</td>
+<td>significant</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">T=0.7</th>
+<td>0.7</td>
+<td>0.537</td>
+<td>significant</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">T=1</th>
+<td>1.0</td>
+<td>0.800</td>
+<td>significant</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">T=1.5</th>
+<td>1.5</td>
+<td>1.118</td>
+<td>significant</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="zero-shot-few-shot-and-chain-of-thought-prompting" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="zero-shot-few-shot-and-chain-of-thought-prompting"><span class="header-section-number">7</span> Zero-Shot, Few-Shot, and Chain-of-Thought Prompting</h2>
+<p>The three standard prompting strategies differ in how much structure is supplied before the task itself.</p>
+<blockquote class="blockquote">
+<p><strong>Zero-shot prompting</strong> — the model performs the task with no worked examples, relying entirely on knowledge acquired during training. Well suited to translation, general Q&amp;A, and straightforward classification.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Few-shot prompting</strong> — the prompt includes several input–output examples before the actual task, which anchors the model to a specific desired format or style. Useful when the output must follow a particular structure — consistent-style content generation, pattern-based classification, structured summarization.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Chain-of-thought (CoT) prompting</strong> — the model is guided through explicit intermediate reasoning steps before producing a final answer. This is the most reliable strategy for multi-step arithmetic, logic, and other tasks where an unstructured single-shot answer is prone to skipping a step.</p>
+</blockquote>
+<p>These can be built as three thin wrappers around the same <code>build_prompt()</code> function defined above, which makes the structural difference between the strategies explicit rather than a matter of writing style.</p>
+<div id="316a4cc4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.859526Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.857747Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:43.889330Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:43.886254Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>zero_shot <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="st">"Classify the following variant consequence as high, moderate, or low impact: stop_gained"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>few_shot <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="st">"Classify the following variant consequence as high, moderate, or low impact: stop_gained"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">examples =</span> <span class="fu">c</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"missense_variant -&gt; moderate impact"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"synonymous_variant -&gt; low impact"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"frameshift_variant -&gt; high impact"</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>chain_of_thought <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="st">"Classify the following variant consequence as high, moderate, or low impact: stop_gained"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">context =</span> <span class="fu">paste</span>(</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Reason step by step: (1) identify what the consequence term means at the"</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"protein level, (2) assess whether it truncates or disrupts the reading frame,"</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"(3) map that assessment to an impact category, (4) state the final classification."</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"ZERO-SHOT</span><span class="sc">\n</span><span class="st">"</span>, zero_shot, <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"FEW-SHOT</span><span class="sc">\n</span><span class="st">"</span>, few_shot, <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"CHAIN-OF-THOUGHT</span><span class="sc">\n</span><span class="st">"</span>, chain_of_thought, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ZERO-SHOT
+Task: Classify the following variant consequence as high, moderate, or low impact: stop_gained
+
+FEW-SHOT
+Examples:
+missense_variant -&gt; moderate impact
+synonymous_variant -&gt; low impact
+frameshift_variant -&gt; high impact
+
+Task: Classify the following variant consequence as high, moderate, or low impact: stop_gained
+
+CHAIN-OF-THOUGHT
+Context: Reason step by step: (1) identify what the consequence term means at the protein level, (2) assess whether it truncates or disrupts the reading frame, (3) map that assessment to an impact category, (4) state the final classification.
+
+Task: Classify the following variant consequence as high, moderate, or low impact: stop_gained</code></pre>
+</div>
+</div>
+</section>
+<section id="a-heuristic-for-prompt-specificity" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="a-heuristic-for-prompt-specificity"><span class="header-section-number">8</span> A Heuristic for Prompt Specificity</h2>
+<p>The qualitative distinction between a “weak” and a “well-engineered” prompt can be given a rough quantitative proxy: count the structural elements present — an explicit role, contextual background, at least one worked example, and an explicit output format. This is not a validated metric, but it makes concrete what “well-engineered” is standing in for, and gives a way to compare prompts before sending either to a model.</p>
+<div id="edbf55f1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.896914Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.892978Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:43.947244Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:43.945244Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>specificity_score <span class="ot">&lt;-</span> <span class="cf">function</span>(prompt) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  has_role    <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"^Act as"</span>, prompt)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  has_context <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"Context:|Reason step by step"</span>, prompt)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  has_example <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"Examples:|-&gt;"</span>, prompt)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  has_format  <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"Respond as:"</span>, prompt)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  word_count  <span class="ot">&lt;-</span> <span class="fu">lengths</span>(<span class="fu">strsplit</span>(prompt, <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">role =</span> has_role, <span class="at">context =</span> has_context,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">example =</span> has_example, <span class="at">output_format =</span> has_format,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">word_count =</span> word_count,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">structure_score =</span> has_role <span class="sc">+</span> has_context <span class="sc">+</span> has_example <span class="sc">+</span> has_format</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>prompts <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">weak =</span> weak_prompt, <span class="at">engineered =</span> engineered_prompt,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>                 <span class="at">zero_shot =</span> zero_shot, <span class="at">few_shot =</span> few_shot, <span class="at">cot =</span> chain_of_thought)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(prompts, specificity_score))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 5 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">role</th>
+<th data-quarto-table-cell-role="th" scope="col">context</th>
+<th data-quarto-table-cell-role="th" scope="col">example</th>
+<th data-quarto-table-cell-role="th" scope="col">output_format</th>
+<th data-quarto-table-cell-role="th" scope="col">word_count</th>
+<th data-quarto-table-cell-role="th" scope="col">structure_score</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">weak</th>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>7</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">engineered</th>
+<td>TRUE</td>
+<td>TRUE</td>
+<td>FALSE</td>
+<td>TRUE</td>
+<td>46</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">zero_shot</th>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>13</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">few_shot</th>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>TRUE</td>
+<td>FALSE</td>
+<td>26</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">cot</th>
+<td>FALSE</td>
+<td>TRUE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>52</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The <code>structure_score</code> column separates the five prompts cleanly: the weak prompt scores zero, the engineered version scores three, and the three named strategies each add exactly one structural element beyond a bare instruction — context for chain-of-thought, worked examples for few-shot, nothing beyond the instruction itself for zero-shot.</p>
+</section>
+<section id="applying-llms-to-academic-and-professional-tasks" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="applying-llms-to-academic-and-professional-tasks"><span class="header-section-number">9</span> Applying LLMs to Academic and Professional Tasks</h2>
+<p>Current general-purpose LLMs support four broad capabilities relevant to this kind of work: natural language understanding (following multi-part instructions), text generation (drafting essays, reports, and code), information retrieval across general topics (subject to the currency limitations discussed later), and step-by-step problem solving.</p>
+<p>Applied by subject, three patterns recur:</p>
+<ul>
+<li><strong>Quantitative subjects</strong> (mathematics, statistics) — worked, stepwise solutions and clarification of terminology; chain-of-thought prompting is particularly effective here.</li>
+<li><strong>Conceptual subjects</strong> (natural sciences) — explanation at a specified level of background knowledge, and generation of illustrative examples or experiment ideas.</li>
+<li><strong>Interpretive subjects</strong> (literature, argumentation) — thematic analysis and drafting assistance, where the underlying claims still require the user’s own verification and judgment.</li>
+</ul>
+<p>At the workflow level rather than the subject level, three uses account for most practical value: simplifying research (summarizing long material into key points), generating ideas (structured brainstorming and outlining), and producing explanations calibrated to a stated audience (via analogy or simplification).</p>
+<section id="a-worked-example-reusing-build_prompt-for-a-recurring-task" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="a-worked-example-reusing-build_prompt-for-a-recurring-task"><span class="header-section-number">9.1</span> A worked example: reusing <code>build_prompt()</code> for a recurring task</h3>
+<p>A common pattern in practice is to fix most of a prompt’s structure in advance and defer one piece of task-specific data to a follow-up turn. This reuses the same <code>build_prompt()</code> constructor already defined, applied to a resume-drafting task with an explicit “wait for further input” instruction.</p>
+<div id="d32ef887" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.953223Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.951864Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:43.969879Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:43.967812Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>resume_prompt <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="fu">paste</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Draft a resume for a Data Science role with 4 years of experience across"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"two prior positions. Use standard sections: Contact Information,"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Professional Summary, Work Experience, Education, Skills, Certifications."</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Wait for a job description to be supplied before finalizing content."</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">persona =</span> <span class="st">"a resume writer specializing in data science roles"</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">context =</span> <span class="st">"The candidate has 4 years of experience across 2 companies."</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_format =</span> <span class="st">"a standard resume layout with the sections listed above"</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(resume_prompt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Act as a resume writer specializing in data science roles.
+
+Context: The candidate has 4 years of experience across 2 companies.
+
+Task: Draft a resume for a Data Science role with 4 years of experience across two prior positions. Use standard sections: Contact Information, Professional Summary, Work Experience, Education, Skills, Certifications. Wait for a job description to be supplied before finalizing content.
+
+Respond as: a standard resume layout with the sections listed above</code></pre>
+</div>
+</div>
+<p>This pattern — templating the reusable structure while leaving the variable input (here, the job description) to be supplied afterward — generalizes to any workflow where the same task recurs with different data each time, for example generating a plain-language summary of a <code>coloc.abf</code> result for different gene–trait pairs.</p>
+</section>
+</section>
+<section id="the-generative-ai-tool-landscape" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="the-generative-ai-tool-landscape"><span class="header-section-number">10</span> The Generative AI Tool Landscape</h2>
+<p>The tool landscape in this field moves quickly, so this section is organized by category, with model or product names given as illustrative examples current as of mid-2026 rather than a fixed catalog. A few notable changes relative to material from a year or two prior: <strong>Google’s Bard was renamed Gemini in February 2024</strong>; <strong>Amazon’s CodeWhisperer was rebranded as Amazon Q Developer in April 2024</strong>; <strong>OpenAI retired the DALL-E brand in 2026</strong>, consolidating image generation under the GPT Image line; and video models such as Runway have moved through several major generations (Gen-2 → Gen-4.5) since earlier overviews of this space were written.</p>
+<div id="e88e8113" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.975630Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.973452Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:43.993340Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:43.991697Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tool_landscape <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">category =</span> <span class="fu">c</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Text generation"</span>, <span class="st">"Text generation"</span>, <span class="st">"Text generation"</span>, <span class="st">"Text generation"</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Image generation"</span>, <span class="st">"Image generation"</span>, <span class="st">"Image generation"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Code generation"</span>, <span class="st">"Code generation"</span>, <span class="st">"Code generation"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Audio &amp; music"</span>, <span class="st">"Audio &amp; music"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Video generation"</span>, <span class="st">"Video generation"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Multimodal"</span>, <span class="st">"Multimodal"</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Open-weight / local"</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">example_tool =</span> <span class="fu">c</span>(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ChatGPT (OpenAI)"</span>, <span class="st">"Claude (Anthropic)"</span>, <span class="st">"Gemini (Google)"</span>, <span class="st">"Llama (Meta, open-weight)"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Midjourney"</span>, <span class="st">"Stable Diffusion (Stability AI)"</span>, <span class="st">"GPT Image (OpenAI)"</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GitHub Copilot"</span>, <span class="st">"Amazon Q Developer"</span>, <span class="st">"StarCoder (Hugging Face / BigCode)"</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Suno (music)"</span>, <span class="st">"ElevenLabs (voice)"</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Runway"</span>, <span class="st">"Synthesia"</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Claude / GPT / Gemini (vision-enabled)"</span>, <span class="st">"Multimodal open models (e.g. IDEFICS-style)"</span>,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Ollama / LM Studio for local inference"</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">primary_use =</span> <span class="fu">c</span>(</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"General-purpose conversational assistant"</span>, <span class="st">"General-purpose assistant, long-document handling"</span>,</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Conversational assistant integrated with Google services"</span>, <span class="st">"Open-weight models for self-hosted or fine-tuned use"</span>,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Stylized, artistic image generation"</span>, <span class="st">"Open-source, locally runnable image generation"</span>,</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Native image generation integrated into a chat assistant"</span>,</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"In-editor code completion and generation"</span>, <span class="st">"AWS-integrated coding and cloud-resource assistant"</span>,</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Open-source code-focused language model"</span>,</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Text-to-song generation"</span>, <span class="st">"Realistic voice synthesis and cloning"</span>,</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Text- and image-conditioned video generation"</span>, <span class="st">"Script-to-video with avatar presenters"</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Combined text, image, and document reasoning"</span>, <span class="st">"Open research models combining vision and language"</span>,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Running open-weight LLMs on local hardware"</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tool_landscape, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            category                                example_tool
+     Text generation                            ChatGPT (OpenAI)
+     Text generation                          Claude (Anthropic)
+     Text generation                             Gemini (Google)
+     Text generation                   Llama (Meta, open-weight)
+    Image generation                                  Midjourney
+    Image generation             Stable Diffusion (Stability AI)
+    Image generation                          GPT Image (OpenAI)
+     Code generation                              GitHub Copilot
+     Code generation                          Amazon Q Developer
+     Code generation          StarCoder (Hugging Face / BigCode)
+       Audio &amp; music                                Suno (music)
+       Audio &amp; music                          ElevenLabs (voice)
+    Video generation                                      Runway
+    Video generation                                   Synthesia
+          Multimodal      Claude / GPT / Gemini (vision-enabled)
+          Multimodal Multimodal open models (e.g. IDEFICS-style)
+ Open-weight / local      Ollama / LM Studio for local inference
+                                              primary_use
+                 General-purpose conversational assistant
+        General-purpose assistant, long-document handling
+ Conversational assistant integrated with Google services
+     Open-weight models for self-hosted or fine-tuned use
+                      Stylized, artistic image generation
+           Open-source, locally runnable image generation
+ Native image generation integrated into a chat assistant
+                 In-editor code completion and generation
+       AWS-integrated coding and cloud-resource assistant
+                  Open-source code-focused language model
+                                  Text-to-song generation
+                    Realistic voice synthesis and cloning
+             Text- and image-conditioned video generation
+                   Script-to-video with avatar presenters
+             Combined text, image, and document reasoning
+       Open research models combining vision and language
+               Running open-weight LLMs on local hardware</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>A caution about tool inventories in a fast-moving field.</strong> Any fixed list like the one above is a snapshot, not a durable reference — model names, ownership, and even entire product lines (DALL-E being the clearest recent example) change on a timescale of months. Treat categories as more stable than the specific example filling each row, and verify current status before citing a specific tool in published material.</p>
+</blockquote>
+</section>
+<section id="best-practices" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="best-practices"><span class="header-section-number">11</span> Best Practices</h2>
+<p>The techniques covered above condense into a short set of practical habits:</p>
+<ol type="1">
+<li>State the task precisely rather than open-endedly — specificity is the single largest lever on output quality.</li>
+<li>Assign a persona when the task benefits from a particular voice or expertise framing.</li>
+<li>Supply context the model cannot otherwise infer (audience, constraints, prior decisions).</li>
+<li>Treat the first response as a draft — iterative refinement is standard practice, not a sign of a failed first attempt.</li>
+<li>Verify factual claims in the output against a primary source before relying on them.</li>
+<li>Match the tool to the modality of the task — a text model is not the right tool for an image-generation request, and vice versa.</li>
+<li>Avoid placing sensitive personal or proprietary information into a prompt sent to a third-party service.</li>
+<li>Save prompt templates that work well for recurring tasks, following the reusable-constructor pattern demonstrated above.</li>
+</ol>
+</section>
+<section id="limitations-of-current-generative-ai-systems" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="limitations-of-current-generative-ai-systems"><span class="header-section-number">12</span> Limitations of Current Generative AI Systems</h2>
+<ul>
+<li><strong>Fluency is not the same as correctness.</strong> A model can produce confident, well-formatted, and factually wrong output; the sampling mechanism described above optimizes for plausibility given training data, not for truth.</li>
+<li><strong>No grounded fact-checking by default.</strong> Absent a retrieval or search step, a response reflects patterns learned during training rather than a verified lookup.</li>
+<li><strong>Bias inheritance.</strong> Systematic patterns present in training data can be reproduced in output, including underrepresentation or skewed framing of certain groups or viewpoints.</li>
+<li><strong>Knowledge currency.</strong> A model’s default knowledge is bounded by its training cutoff; anything after that date requires an explicit retrieval or search capability, not the base model alone.</li>
+<li><strong>Miscalibrated confidence.</strong> Language models are not reliably self-aware of their own uncertainty; a wrong answer is often phrased with the same confidence as a correct one.</li>
+<li><strong>Data handling.</strong> Prompts submitted to a hosted service may be logged or used according to that provider’s data policy; sensitive data warrants caution.</li>
+<li><strong>Not a substitute for domain judgment.</strong> These systems are best used as a drafting and exploration aid, with a domain expert retaining responsibility for the final claim or decision.</li>
+</ul>
+</section>
+<section id="summary" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="summary"><span class="header-section-number">13</span> Summary</h2>
+<p>Generative AI is distinguished from conventional machine learning by its objective (producing new content consistent with a learned distribution, rather than predicting a label) and by its typical training regime (self-supervised pretraining on large unstructured corpora, often followed by instruction fine-tuning). LLMs are the text-generation instance of this category, and the process by which a fixed prompt becomes a specific output is governed by token-level sampling — softmax over logits, tuned by temperature — which is directly simulable and was demonstrated above without reference to any specific vendor’s model.</p>
+<p>Prompt engineering is best treated as a compositional design problem: persona, instruction, context, examples, and output format are largely independent factors that can be manipulated and combined programmatically, and zero-shot, few-shot, and chain-of-thought prompting are three points along a single axis of increasing structural scaffolding rather than unrelated techniques. This gives a concrete basis — the <code>build_prompt()</code> constructor and the <code>specificity_score()</code> heuristic developed in this notebook — for evaluating and improving a prompt before sending it to any model, current or future.</p>
+</section>
+<section id="references" class="level2" data-number="14">
+<h2 data-number="14" class="anchored" data-anchor-id="references"><span class="header-section-number">14</span> References</h2>
+<ul>
+<li>Vaswani et al., “Attention Is All You Need” (2017) — <a href="https://arxiv.org/abs/1706.03762">arXiv:1706.03762</a></li>
+<li>Brown et al., “Language Models are Few-Shot Learners” (2020) — <a href="https://arxiv.org/abs/2005.14165">arXiv:2005.14165</a></li>
+<li>Ouyang et al., “Training Language Models to Follow Instructions” (2022) — <a href="https://arxiv.org/abs/2203.02155">arXiv:2203.02155</a></li>
+<li>“A Survey of Prompt Engineering Techniques” (2023) — <a href="https://arxiv.org/abs/2302.11382">arXiv:2302.11382</a></li>
+<li>“An Overview of Large Language Models” (2023) — <a href="https://arxiv.org/abs/2303.18223">arXiv:2303.18223</a></li>
+<li>Wei et al., “Chain-of-Thought Prompting Elicits Reasoning in LLMs” (2022) — <a href="https://arxiv.org/abs/2201.11903">arXiv:2201.11903</a></li>
+</ul>
+</section>
+<section id="try-it-yourself" class="level2" data-number="15">
+<h2 data-number="15" class="anchored" data-anchor-id="try-it-yourself"><span class="header-section-number">15</span> Try It Yourself</h2>
+<ol type="1">
+<li>Extend <code>specificity_score()</code> to also flag prompts that specify a maximum output length, and re-score the five example prompts from earlier in this notebook.</li>
+<li>Modify the toy vocabulary and logits in the sampling section to model a near-tied scenario between two tokens, and compare the resulting entropy curve across temperatures.</li>
+<li>Write a <code>build_prompt()</code> call for a task from your own tutorial pipeline — for example, a plain-language summary of a <code>coloc.abf</code> result for a general audience — and score it before and after adding context and an output format.</li>
+<li>Pick one row of the tool landscape table and verify its current status against the vendor’s own documentation; note anything that has changed since this notebook was written.</li>
+</ol>
+</section>
+<section id="solutions" class="level2" data-number="16">
+<h2 data-number="16" class="anchored" data-anchor-id="solutions"><span class="header-section-number">16</span> Solutions</h2>
+<p>The four exercises above are worked below, reusing the functions and objects already defined earlier in this notebook.</p>
+<section id="solution-1-extending-specificity_score-with-a-length-constraint" class="level3" data-number="16.1">
+<h3 data-number="16.1" class="anchored" data-anchor-id="solution-1-extending-specificity_score-with-a-length-constraint"><span class="header-section-number">16.1</span> Solution 1: Extending <code>specificity_score()</code> with a length constraint</h3>
+<p>The extension follows the same pattern as the existing structural checks: search the prompt text for a marker phrase, here treating any mention of a numeric limit alongside a length-related word (<code>word</code>, <code>sentence</code>, <code>paragraph</code>) as evidence that an output-length constraint was specified.</p>
+<div id="ac132ec8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:43.999619Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:43.997428Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:44.039312Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:44.036922Z&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>specificity_score_v2 <span class="ot">&lt;-</span> <span class="cf">function</span>(prompt) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  has_role    <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"^Act as"</span>, prompt)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  has_context <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"Context:|Reason step by step"</span>, prompt)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  has_example <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"Examples:|-&gt;"</span>, prompt)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  has_format  <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"Respond as:"</span>, prompt)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  has_length  <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">s*(word|sentence|paragraph)"</span>, prompt, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  word_count  <span class="ot">&lt;-</span> <span class="fu">lengths</span>(<span class="fu">strsplit</span>(prompt, <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">role =</span> has_role, <span class="at">context =</span> has_context,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">example =</span> has_example, <span class="at">output_format =</span> has_format,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">length_constraint =</span> has_length,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">word_count =</span> word_count,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">structure_score =</span> has_role <span class="sc">+</span> has_context <span class="sc">+</span> has_example <span class="sc">+</span> has_format <span class="sc">+</span> has_length</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-score the five prompts already defined earlier in the notebook</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(prompts, specificity_score_v2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 5 × 7</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">role</th>
+<th data-quarto-table-cell-role="th" scope="col">context</th>
+<th data-quarto-table-cell-role="th" scope="col">example</th>
+<th data-quarto-table-cell-role="th" scope="col">output_format</th>
+<th data-quarto-table-cell-role="th" scope="col">length_constraint</th>
+<th data-quarto-table-cell-role="th" scope="col">word_count</th>
+<th data-quarto-table-cell-role="th" scope="col">structure_score</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">weak</th>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>7</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">engineered</th>
+<td>TRUE</td>
+<td>TRUE</td>
+<td>FALSE</td>
+<td>TRUE</td>
+<td>FALSE</td>
+<td>46</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">zero_shot</th>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>13</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">few_shot</th>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>TRUE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>26</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">cot</th>
+<td>FALSE</td>
+<td>TRUE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>52</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>None of the five original example prompts specified a numeric output length, so <code>length_constraint</code> is <code>FALSE</code> throughout and the <code>structure_score</code> values are unchanged from the earlier table. Adding a length-constrained prompt confirms the new check actually fires:</p>
+<div id="3246c6c0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:44.044503Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:44.042572Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:44.069162Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:44.067498Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>length_constrained_prompt <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="st">"Explain what a Manhattan plot shows."</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_format =</span> <span class="st">"no more than 3 sentences"</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">specificity_score_v2</span>(length_constrained_prompt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 1 × 7</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">role</th>
+<th data-quarto-table-cell-role="th" scope="col">context</th>
+<th data-quarto-table-cell-role="th" scope="col">example</th>
+<th data-quarto-table-cell-role="th" scope="col">output_format</th>
+<th data-quarto-table-cell-role="th" scope="col">length_constraint</th>
+<th data-quarto-table-cell-role="th" scope="col">word_count</th>
+<th data-quarto-table-cell-role="th" scope="col">structure_score</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>TRUE</td>
+<td>TRUE</td>
+<td>14</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="solution-2-a-near-tied-vocabulary-and-its-entropy-curve" class="level3" data-number="16.2">
+<h3 data-number="16.2" class="anchored" data-anchor-id="solution-2-a-near-tied-vocabulary-and-its-entropy-curve"><span class="header-section-number">16.2</span> Solution 2: A near-tied vocabulary and its entropy curve</h3>
+<p>The original vocabulary had one dominant token (<code>significant</code>, logit 4.2) well ahead of the rest. Here two tokens are given nearly identical logits, which should push entropy higher at every temperature relative to the original, since the distribution can no longer collapse onto a single clear winner even at low temperature.</p>
+<div id="b7094d25" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:44.075007Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:44.073220Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:44.107910Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:44.105484Z&quot;}}" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>vocab_tied  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"significant"</span>, <span class="st">"suggestive"</span>, <span class="st">"negligible"</span>, <span class="st">"confounded"</span>, <span class="st">"spurious"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>logits_tied <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.0</span>, <span class="fl">2.9</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>)  <span class="co"># top two logits nearly tied</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>prob_table_tied <span class="ot">&lt;-</span> <span class="fu">sapply</span>(temperatures, <span class="cf">function</span>(t) <span class="fu">softmax</span>(logits_tied, t))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(prob_table_tied) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"T="</span>, temperatures)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(prob_table_tied) <span class="ot">&lt;-</span> vocab_tied</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(prob_table_tied, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">T=0.2</th>
+<th data-quarto-table-cell-role="th" scope="col">T=0.7</th>
+<th data-quarto-table-cell-role="th" scope="col">T=1</th>
+<th data-quarto-table-cell-role="th" scope="col">T=1.5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">significant</th>
+<td>0.622</td>
+<td>0.511</td>
+<td>0.463</td>
+<td>0.398</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">suggestive</th>
+<td>0.378</td>
+<td>0.443</td>
+<td>0.419</td>
+<td>0.373</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">negligible</th>
+<td>0.000</td>
+<td>0.022</td>
+<td>0.051</td>
+<td>0.092</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">confounded</th>
+<td>0.000</td>
+<td>0.014</td>
+<td>0.038</td>
+<td>0.075</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">spurious</th>
+<td>0.000</td>
+<td>0.009</td>
+<td>0.028</td>
+<td>0.062</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="b03f126d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:44.113075Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:44.111364Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:44.138195Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:44.135816Z&quot;}}" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">temperature       =</span> temperatures,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">entropy_original  =</span> <span class="fu">round</span>(<span class="fu">apply</span>(prob_table, <span class="dv">2</span>, entropy), <span class="dv">3</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">entropy_near_tied =</span> <span class="fu">round</span>(<span class="fu">apply</span>(prob_table_tied, <span class="dv">2</span>, entropy), <span class="dv">3</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>comparison<span class="sc">$</span>entropy_increase <span class="ot">&lt;-</span> <span class="fu">round</span>(comparison<span class="sc">$</span>entropy_near_tied <span class="sc">-</span> comparison<span class="sc">$</span>entropy_original, <span class="dv">3</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 4 × 4</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">temperature</th>
+<th data-quarto-table-cell-role="th" scope="col">entropy_original</th>
+<th data-quarto-table-cell-role="th" scope="col">entropy_near_tied</th>
+<th data-quarto-table-cell-role="th" scope="col">entropy_increase</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">T=0.2</th>
+<td>0.2</td>
+<td>0.026</td>
+<td>0.663</td>
+<td>0.637</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">T=0.7</th>
+<td>0.7</td>
+<td>0.537</td>
+<td>0.893</td>
+<td>0.356</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">T=1</th>
+<td>1.0</td>
+<td>0.800</td>
+<td>1.098</td>
+<td>0.298</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">T=1.5</th>
+<td>1.5</td>
+<td>1.118</td>
+<td>1.320</td>
+<td>0.202</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The near-tied vocabulary has strictly higher entropy than the original at every temperature, and the gap is largest at low temperature (<code>T=0.2</code>): with a single dominant token, low temperature nearly always resolves to that token, but with two tokens close in score, even a sharpening transformation cannot fully separate them. As temperature increases, both distributions approach the same uniform-entropy ceiling, so the two curves converge — the effect of a near-tie is strongest exactly where it is least intuitive, at low temperature, not high.</p>
+</section>
+<section id="solution-3-a-coloc.abf-summary-prompt-before-and-after-engineering" class="level3" data-number="16.3">
+<h3 data-number="16.3" class="anchored" data-anchor-id="solution-3-a-coloc.abf-summary-prompt-before-and-after-engineering"><span class="header-section-number">16.3</span> Solution 3: A <code>coloc.abf</code> summary prompt, before and after engineering</h3>
+<p>A minimal version of this task and an engineered version, scored with <code>specificity_score()</code> for direct comparison.</p>
+<div id="d0ac8662" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-04T01:37:44.143789Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-04T01:37:44.141555Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-04T01:37:44.172234Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-04T01:37:44.169936Z&quot;}}" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>coloc_weak <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="st">"Summarize this coloc.abf result in plain language."</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>coloc_engineered <span class="ot">&lt;-</span> <span class="fu">build_prompt</span>(</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">instruction =</span> <span class="st">"Summarize this coloc.abf result in plain language: PP4 = 0.87, PP3 = 0.09, PP0-PP2 negligible."</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">persona =</span> <span class="st">"a genetic epidemiologist writing for a non-specialist collaborator"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">context =</span> <span class="fu">paste</span>(</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PP4 is the posterior probability that the GWAS and eQTL signals share a"</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"single causal variant; PP3 is the probability of two distinct causal"</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"variants at the same locus."</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_format =</span> <span class="st">"two sentences, avoiding statistical jargon where possible"</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specificity_score</span>(coloc_weak),</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specificity_score</span>(coloc_engineered)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 2 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">role</th>
+<th data-quarto-table-cell-role="th" scope="col">context</th>
+<th data-quarto-table-cell-role="th" scope="col">example</th>
+<th data-quarto-table-cell-role="th" scope="col">output_format</th>
+<th data-quarto-table-cell-role="th" scope="col">word_count</th>
+<th data-quarto-table-cell-role="th" scope="col">structure_score</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;lgl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>FALSE</td>
+<td>8</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>TRUE</td>
+<td>TRUE</td>
+<td>FALSE</td>
+<td>TRUE</td>
+<td>65</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>As with the earlier examples, adding persona, context, and an output-format constraint raises the structure score from 0 to 3; the qualitative difference this makes to an actual model response would be that the weak version leaves both the intended audience and the meaning of PP4/PP3 unstated, while the engineered version fixes both before the request reaches the model.</p>
+</section>
+<section id="solution-4-verifying-one-row-of-the-tool-landscape-table" class="level3" data-number="16.4">
+<h3 data-number="16.4" class="anchored" data-anchor-id="solution-4-verifying-one-row-of-the-tool-landscape-table"><span class="header-section-number">16.4</span> Solution 4: Verifying one row of the tool landscape table</h3>
+<p>Taking the <strong>Runway</strong> row (Video generation) as the example. The table entry describes Runway generically as a “text- and image-conditioned video generation” tool, without pinning a version number — which was a deliberate choice, since version-specific claims are exactly what goes stale fastest in this space. Checking against Runway’s own release material as of mid-2026:</p>
+<ul>
+<li>Runway’s current flagship is <strong>Gen-4.5</strong>, released December 2025, which added native text-to-video generation on top of the image-conditioned workflow introduced in Gen-4 (March 2025).</li>
+<li>Earlier overviews of this space (including the source material this notebook was built from) describe Runway at the <strong>Gen-2</strong> stage, which is now three major generations behind.</li>
+<li>The general category description in the table — “text- and image-conditioned video generation” — still holds without modification; only a specific version number would need updating.</li>
+</ul>
+<p>This illustrates the intended use of the caution note attached to the table: the category-level description was written to survive this kind of check, while any row that had included a specific version number would already need a correction after roughly a year.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

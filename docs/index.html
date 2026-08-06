@@ -34,6 +34,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -71,7 +73,66 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-latest-tutorials .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-date','listing-title','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      page: 25,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
+      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-latest-tutorials'] = new List('listing-latest-tutorials', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="style.css">
 </head>
@@ -165,6 +226,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="hero-top-grid">
 <div class="signal-helix-wrap">
 <svg class="signal-helix" viewbox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated diagram of a signal wave transitioning into a DNA double helix">
   <path class="strand strand-a" d="M 0,110.0 L 4,117.7 L 8,124.5 L 12,129.4 L 16,131.8 L 20,131.4 L 24,128.4 L 28,122.9 L 32,115.9 L 36,108.0 L 40,100.5 L 44,94.1 L 48,89.8 L 52,88.0 L 56,89.1 L 60,92.8 L 64,98.7 L 68,106.1 L 72,113.9 L 76,121.3 L 80,127.2 L 84,130.9 L 88,132.0 L 92,130.2 L 96,125.9 L 100,119.5 L 104,112.0 L 108,104.1 L 112,97.1 L 116,91.6 L 120,88.6 L 124,88.2 L 128,90.6 L 132,95.5 L 136,102.3 L 140,110.0 L 144,117.7 L 148,124.5 L 152,129.4 L 156,131.8 L 160,131.4 L 164,128.4 L 168,122.9 L 172,115.9 L 176,108.0 L 180,100.5 L 184,94.1 L 188,89.8 L 192,88.0 L 196,89.1 L 200,92.8 L 204,98.7 L 208,106.1 L 212,113.9 L 216,121.3 L 220,127.2 L 224,130.9 L 228,132.0 L 232,130.2 L 236,125.9 L 240,119.5 L 244,112.0 L 248,104.1 L 252,97.1 L 256,91.6 L 260,88.6 L 264,88.2 L 268,90.6 L 272,95.5 L 276,102.3 L 280,110.0 L 284,117.7 L 288,124.5 L 292,129.4 L 296,131.8 L 300,131.4 L 304,128.4 L 308,122.9 L 312,115.9 L 316,108.0 L 320,100.5 L 324,94.1 L 328,89.8 L 332,88.0 L 336,89.1 L 340,92.8 L 344,98.7 L 348,106.1 L 352,113.9 L 356,121.3 L 360,127.2 L 364,130.9 L 368,132.0 L 372,130.2 L 376,125.9 L 380,119.5 L 384,112.0 L 388,104.1 L 392,97.1 L 396,91.6 L 400,88.6 L 404,88.2 L 408,90.6 L 412,95.5 L 416,102.3 L 420,110.0 L 424,121.7 L 428,130.7 L 432,134.0 L 436,130.3 L 440,120.0 L 444,106.1 L 448,92.5 L 452,83.7 L 456,82.9 L 460,90.8 L 464,105.5 L 468,122.5 L 472,136.1 L 476,141.6 L 480,136.5 L 484,121.9 L 488,102.5 L 492,84.8 L 496,75.3 L 500,78.0 L 504,92.5 L 508,114.0 L 512,135.0 L 516,147.5 L 520,146.1 L 524,130.8 L 528,106.8 L 532,83.1 L 536,69.1 L 540,71.1 L 544,88.8 L 548,115.9 L 552,141.5 L 556,154.9 L 560,149.8 L 564,137.0 L 568,119.6 L 572,100.4 L 576,83.0 L 580,70.2 L 584,64.3 L 588,66.3 L 592,75.8 L 596,91.3 L 600,110.0 L 604,128.7 L 608,144.2 L 612,153.7 L 616,155.7 L 620,149.8 L 624,137.0 L 628,119.6 L 632,100.4 L 636,83.0 L 640,70.2 L 644,64.3 L 648,66.3 L 652,75.8 L 656,91.3 L 660,110.0 L 664,128.7 L 668,144.2 L 672,153.7 L 676,155.7 L 680,149.8 L 684,137.0 L 688,119.6 L 692,100.4 L 696,83.0 L 700,70.2 L 704,64.3 L 708,66.3 L 712,75.8 L 716,91.3 L 720,110.0 L 724,128.7 L 728,144.2 L 732,153.7 L 736,155.7 L 740,149.8 L 744,137.0 L 748,119.6 L 752,100.4 L 756,83.0 L 760,70.2 L 764,64.3 L 768,66.3 L 772,75.8 L 776,91.3 L 780,110.0 L 784,128.7 L 788,144.2 L 792,153.7 L 796,155.7 L 800,149.8 L 804,137.0 L 808,119.6 L 812,100.4 L 816,83.0 L 820,70.2 L 824,64.3 L 828,66.3 L 832,75.8 L 836,91.3 L 840,110.0 L 844,128.7 L 848,144.2 L 852,153.7 L 856,155.7 L 860,149.8 L 864,137.0 L 868,119.6 L 872,100.4 L 876,83.0 L 880,70.2 L 884,64.3 L 888,66.3 L 892,75.8 L 896,91.3 L 900,110.0 L 904,128.7 L 908,144.2 L 912,153.7 L 916,155.7 L 920,149.8 L 924,137.0 L 928,119.6 L 932,100.4 L 936,83.0 L 940,70.2 L 944,64.3 L 948,66.3 L 952,75.8 L 956,91.3 L 960,110.0 L 964,128.7 L 968,144.2 L 972,153.7 L 976,155.7 L 980,149.8 L 984,137.0 L 988,119.6 L 992,100.4 L 996,83.0 L 1000,70.2"></path>
@@ -190,6 +252,106 @@ ul.task-list li input[type="checkbox"] {
 <p class="signal-helix-caption">
 Signal → sequence: from physical modeling to the genome
 </p>
+</div>
+<section id="latest-articles" class="level2 latest-articles-col">
+<h2 class="anchored" data-anchor-id="latest-articles">Latest Articles</h2>
+<div id="listing-latest-tutorials" class="quarto-listing quarto-listing-container-default">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1785421643377" data-listing-reading-time-sort="1" data-listing-word-count-sort="24">
+<div class="thumbnail"><a href="./tutorials/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' src="tutorials/blog_LLM_API/llm-api-tutorial_files/figure-html/cell-5-output-2.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./tutorials/index.html" class="no-external">Tutorials</a>
+</h3>
+</div>
+<div class="metadata">
+<a href="./tutorials/index.html" class="no-external">
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1785963600000" data-listing-file-modified-sort="1785823359353" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2792">
+<div class="thumbnail"><a href="./tutorials/blog_LLM_API/llm-api-tutorial.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' src="tutorials/blog_LLM_API/llm-api-tutorial_files/figure-html/cell-5-output-2.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./tutorials/blog_LLM_API/llm-api-tutorial.html" class="no-external">Large Language Models and Working with LLM APIs</a>
+</h3>
+</div>
+<div class="metadata">
+<a href="./tutorials/blog_LLM_API/llm-api-tutorial.html" class="no-external">
+<div class="listing-date">
+Aug 6, 2026
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-listing-date-sort="1785963600000" data-listing-file-modified-sort="1785808488673" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2791">
+<div class="thumbnail"><a href="./tutorials/blog_promt_engineering/genai-prompt-engineering-tutorial.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./tutorials/blog_promt_engineering/genai-prompt-engineering-tutorial.html" class="no-external">Generative AI and Prompt Engineering</a>
+</h3>
+</div>
+<div class="metadata">
+<a href="./tutorials/blog_promt_engineering/genai-prompt-engineering-tutorial.html" class="no-external">
+<div class="listing-date">
+Aug 6, 2026
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1785830730000" data-listing-file-modified-sort="1785830730736" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1334">
+<div class="thumbnail"><a href="./tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' src="tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment_files/figure-html/cell-6-output-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment.html" class="no-external">t-test or ANOVA? Choosing the Right Test for Before/After Treatment Across Multiple Groups</a>
+</h3>
+</div>
+<div class="metadata">
+<a href="./tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment.html" class="no-external">
+<div class="listing-date">
+Aug 4, 2026
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var container = document.getElementById("latest-tutorials");
+  if (!container) return;
+  var items = container.querySelectorAll(".quarto-post");
+  if (!items.length) return;
+  var viewport = document.createElement("div");
+  viewport.className = "tutorials-ticker";
+  var track = document.createElement("div");
+  track.className = "ticker-track";
+  items.forEach(function (item) { track.appendChild(item.cloneNode(true)); });
+  items.forEach(function (item) { track.appendChild(item.cloneNode(true)); });
+  viewport.appendChild(track);
+  container.innerHTML = "";
+  container.appendChild(viewport);
+});
+</script>
+<p><a href="./tutorials/index.html" class="btn btn-secondary">Browse all tutorials →</a></p>
+</section>
 </div>
 <div class="hero">
 <div class="equation-bg">
@@ -291,6 +453,7 @@ Signal → sequence: from physical modeling to the genome
 </div>
 
 
+
 </section>
 
 </main> <!-- /main -->
@@ -367,7 +530,7 @@ Signal → sequence: from physical modeling to the genome
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

@@ -6,6 +6,7 @@ project:
 website:
   title: "Nivedita Bhadra"
   description: "Senior Computational Scientist — statistical genetics, computational modeling, and simulation."
+  site-url: "https://bntechie.github.io"
   navbar:
     left:
       - text: "Home"

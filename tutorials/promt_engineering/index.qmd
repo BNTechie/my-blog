@@ -1,0 +1,16 @@
+---
+title: "Tutorials"
+listing:
+  contents: "**/*.{ipynb,qmd}"
+  type: grid
+  sort: "date desc"
+  categories: true
+  fields: [image, title, description, date, categories, reading-time]
+  grid-columns: 2
+  image-height: "180px"
+  feed: true
+---
+
+<p class="hero-text" style="max-width: 640px;">
+I write these while I'm learning the topic myself — something from work, something I picked up for fun, or notes from a talk, conference, or course I want to revisit later. Writing it out in detail, the way I actually worked through it, is how I make sure it sticks. If it ends up useful to you too, that's a bonus. I'm still learning, so cross-check anything before you rely on it — I can get things wrong.
+</p>

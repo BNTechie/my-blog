@@ -1,0 +1,35 @@
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', ui-monospace, monospace">
+  <rect x="0" y="0" width="800" height="380" rx="16" fill="#f5f3ee"/>
+  <text x="400.0" y="36" text-anchor="middle" font-family="'Fraunces', Georgia, serif" font-size="20" fill="#1c2b39" font-weight="600">The ACE Twin Model</text>
+
+  <line x1="300" y1="110" x2="190" y2="300" stroke="#2f6f6b" stroke-width="2"/><text x="231.0" y="211.0" text-anchor="middle" font-size="13" fill="#2f6f6b" font-weight="600">a</text>
+  <line x1="300" y1="110" x2="610" y2="300" stroke="#2f6f6b" stroke-width="2"/><text x="469.0" y="211.0" text-anchor="middle" font-size="13" fill="#2f6f6b" font-weight="600">a</text>
+  <line x1="500" y1="110" x2="190" y2="300" stroke="#b9812c" stroke-width="2"/><text x="359.0" y="211.0" text-anchor="middle" font-size="13" fill="#b9812c" font-weight="600">c</text>
+  <line x1="500" y1="110" x2="610" y2="300" stroke="#b9812c" stroke-width="2"/><text x="541.0" y="211.0" text-anchor="middle" font-size="13" fill="#b9812c" font-weight="600">c</text>
+  <line x1="110" y1="200" x2="190" y2="300" stroke="#4a5a68" stroke-width="2"/><text x="140.0" y="246.0" text-anchor="middle" font-size="13" fill="#4a5a68" font-weight="600">e</text>
+  <line x1="690" y1="200" x2="610" y2="300" stroke="#4a5a68" stroke-width="2"/><text x="660.0" y="246.0" text-anchor="middle" font-size="13" fill="#4a5a68" font-weight="600">e</text>
+
+  <circle cx="300" cy="110" r="34" fill="#fbfaf7" stroke="#2f6f6b" stroke-width="2.4"/>
+  <text x="300" y="116" text-anchor="middle" font-size="20" fill="#1f4d4a" font-weight="700">A</text>
+  <text x="300" y="168" text-anchor="middle" font-size="10.5" fill="#1f4d4a">shared 100% MZ</text>
+  <text x="300" y="182" text-anchor="middle" font-size="10.5" fill="#1f4d4a">50% DZ</text>
+
+  <circle cx="500" cy="110" r="34" fill="#fbfaf7" stroke="#b9812c" stroke-width="2.4"/>
+  <text x="500" y="116" text-anchor="middle" font-size="20" fill="#b9812c" font-weight="700">C</text>
+  <text x="500" y="168" text-anchor="middle" font-size="10.5" fill="#b9812c">shared 100%</text>
+  <text x="500" y="182" text-anchor="middle" font-size="10.5" fill="#b9812c">always</text>
+
+  <circle cx="110" cy="200" r="22" fill="#fbfaf7" stroke="#4a5a68" stroke-width="2"/>
+  <text x="110" y="205" text-anchor="middle" font-size="15" fill="#4a5a68" font-weight="700">E</text>
+
+  <circle cx="690" cy="200" r="22" fill="#fbfaf7" stroke="#4a5a68" stroke-width="2"/>
+  <text x="690" y="205" text-anchor="middle" font-size="15" fill="#4a5a68" font-weight="700">E</text>
+
+  <rect x="125.0" y="273.0" width="130" height="54" rx="10" fill="#fbfaf7" stroke="#ddd8cd" stroke-width="2"/>
+  <text x="190" y="306" text-anchor="middle" font-size="14" fill="#1c2b39" font-weight="600">Twin 1</text>
+
+  <rect x="545.0" y="273.0" width="130" height="54" rx="10" fill="#fbfaf7" stroke="#ddd8cd" stroke-width="2"/>
+  <text x="610" y="306" text-anchor="middle" font-size="14" fill="#1c2b39" font-weight="600">Twin 2</text>
+
+  <text x="400.0" y="362" text-anchor="middle" font-size="11.5" fill="#4a5a68">V_P = A (genetic) + C (shared environment) + E (unique environment)</text>
+</svg>

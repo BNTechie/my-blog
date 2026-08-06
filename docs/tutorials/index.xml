@@ -14,7 +14,7 @@
 <item>
   <title>Large Language Models and Working with LLM APIs</title>
   <dc:creator>Nivedita </dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_LLM_API/llm-api-tutorial.html</link>
+  <link>https://bntechie.github.io/tutorials/LLM_API/llm-api-tutorial.html</link>
   <description><![CDATA[ 
 
 
@@ -368,7 +368,7 @@ Matplotlib is building the font cache; this may take a moment.</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_LLM_API/llm-api-tutorial_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/LLM_API/llm-api-tutorial_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1585,18 +1585,841 @@ Response:    pizza for dinner
 </section>
 
  ]]></description>
-  <guid>https://bntechie.github.io/tutorials/blog_LLM_API/llm-api-tutorial.html</guid>
+  <guid>https://bntechie.github.io/tutorials/LLM_API/llm-api-tutorial.html</guid>
   <pubDate>Wed, 05 Aug 2026 21:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Generative AI and Prompt Engineering</title>
+  <title>t-test or ANOVA? Choosing the Right Test for Before/After Treatment Across Multiple Groups</title>
   <dc:creator>Nivedita </dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_promt_engineering/genai-prompt-engineering-tutorial.html</link>
+  <link>https://bntechie.github.io/tutorials/ttest_ANOVA/t-test-vs-anova-before-after-treatment.html</link>
   <description><![CDATA[ 
 
 
 
 
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>A question that comes up constantly in applied statistics: there are several groups — say, three treatment arms — and each subject is measured before and after treatment. Should the comparison use a t-test or an ANOVA?</p>
+<p>This question, as posed, is missing information. The correct test depends on two things simultaneously: the number of groups, and the number of time points measured within each subject. Misjudging either one produces a test that is underpowered, statistically invalid, or answering a different question than the one intended.</p>
+<p>This tutorial develops the decision logic, demonstrates why naive approaches fail, and works through a complete example using a mixed-design (repeated-measures) ANOVA — the test that fits a multi-group before/after design.</p>
+</section>
+<section id="what-a-t-test-can-and-cannot-test" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="what-a-t-test-can-and-cannot-test"><span class="header-section-number">2</span> What a t-test Can and Cannot Test</h2>
+<p>A t-test compares two means. Two variants are relevant to this design.</p>
+<p>An <strong>independent-samples t-test</strong> compares two separate groups measured once each — for example, a treatment group versus a control group, both assessed after treatment. The two sets of observations arise from different subjects.</p>
+<p>A <strong>paired t-test</strong> compares two measurements taken from the same subjects — for example, a biomarker measured before and after treatment within a single group. Pairing removes between-subject variability from the comparison, which increases statistical power relative to treating the two measurements as independent.</p>
+<blockquote class="blockquote">
+<p><strong>Q: Why can’t a single t-test handle a multi-group before/after design directly?</strong> A: Each t-test variant models exactly one source of variation — either differences between groups or differences between time points — but not both together. A before/after study with three treatment arms contains both sources of variation at once, and neither t-test variant has a mechanism for modeling their combination.</p>
+</blockquote>
+</section>
+<section id="why-not-run-several-t-tests" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="why-not-run-several-t-tests"><span class="header-section-number">3</span> Why Not Run Several t-tests?</h2>
+<p>A common workaround is to run a paired t-test separately within each group, or an independent t-test at each time point, and compare the pattern of results informally. This approach fails for two reasons.</p>
+<p>First, running multiple significance tests on related data inflates the family-wise Type I error rate, since each additional test carries its own probability of a false positive. With three groups tested separately, the effective error rate across the family of tests exceeds the nominal 0.05 threshold intended for a single test.</p>
+<p>Second, and more fundamentally, separate t-tests cannot test the question a multi-group before/after design is built to answer: did the treatment effect — the before-to-after change — differ across groups? A set of individual paired t-tests indicates whether each group changed on its own, but provides no formal test of whether the magnitude of change differed between groups. That comparison is the <strong>group × time interaction</strong>, and testing it requires a model that includes both factors jointly.</p>
+</section>
+<section id="the-mixed-design-anova" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="the-mixed-design-anova"><span class="header-section-number">4</span> The Mixed-Design ANOVA</h2>
+<p>A mixed-design ANOVA (also termed a between-within ANOVA) models two factors simultaneously:</p>
+<ul>
+<li><strong>Time</strong> (or condition) is a within-subjects factor: before and after values come from the same subjects and are therefore correlated.</li>
+<li><strong>Group</strong> is a between-subjects factor: treatment arms consist of different, independent subjects.</li>
+</ul>
+<p>The model partitions variance into three components: a main effect of time (whether values changed overall), a main effect of group (whether groups differ overall), and a <strong>group × time interaction</strong> (whether the magnitude of change depended on group membership).</p>
+<blockquote class="blockquote">
+<p><strong>Q: Which of these three effects answers the original research question?</strong> A: In a treatment-comparison study, the interaction term is typically the effect of interest. A significant interaction indicates that groups did not all change by the same amount, which is the statistical signature of a treatment effect that differs from whatever change occurred in the comparison arms.</p>
+</blockquote>
+</section>
+<section id="decision-guide" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="decision-guide"><span class="header-section-number">5</span> Decision Guide</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Design</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Two groups, one time point</td>
+<td>Independent-samples t-test</td>
+</tr>
+<tr class="even">
+<td>One group, two time points</td>
+<td>Paired t-test</td>
+</tr>
+<tr class="odd">
+<td>Two groups, two time points (before/after)</td>
+<td>Mixed ANOVA, or a t-test on change scores</td>
+</tr>
+<tr class="even">
+<td>More than two groups, two time points</td>
+<td>Mixed ANOVA</td>
+</tr>
+<tr class="odd">
+<td>More than two time points, with or without multiple groups</td>
+<td>Repeated-measures or mixed ANOVA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="worked-example-a-biomarker-across-three-groups" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="worked-example-a-biomarker-across-three-groups"><span class="header-section-number">6</span> Worked Example: A Biomarker Across Three Groups</h2>
+<p>Consider three groups — A, B, and C — with a biomarker recorded for each subject under two conditions: control and treatment. This is a 3 × 2 mixed design: group is between-subjects, condition is within-subjects, since each subject contributes both a control and a treatment value.</p>
+<p>The simulation below generates 15 subjects per group, with the treatment effect itself set to differ by group: group A shows a minimal response, group B a moderate response, and group C a strong response. This is the pattern a mixed ANOVA is designed to detect via the group × condition interaction.</p>
+<div id="0e91d3a0" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">42</span>)</span>
+<span id="cb1-2">n_per_group <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># subjects per group</span></span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Simulate a biomarker with a group-specific baseline and a group-specific</span></span>
+<span id="cb1-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># treatment response (this is what creates a group x condition interaction)</span></span>
+<span id="cb1-6">simulate_group <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(group_id, baseline, effect) {</span>
+<span id="cb1-7">  subject   <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste0</span>(group_id, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"_"</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq_len</span>(n_per_group))</span>
+<span id="cb1-8">  control   <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n_per_group, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mean =</span> baseline, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span>
+<span id="cb1-9">  treatment <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> control <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n_per_group, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mean =</span> effect, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb1-10">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb1-11">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">subject   =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(subject, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),</span>
+<span id="cb1-12">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">group     =</span> group_id,</span>
+<span id="cb1-13">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">condition =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"control"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"treatment"</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">each =</span> n_per_group),</span>
+<span id="cb1-14">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">biomarker =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(control, treatment)</span>
+<span id="cb1-15">  )</span>
+<span id="cb1-16">}</span>
+<span id="cb1-17"></span>
+<span id="cb1-18">df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rbind</span>(</span>
+<span id="cb1-19">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">simulate_group</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"A"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">baseline =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">effect =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># minimal response</span></span>
+<span id="cb1-20">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">simulate_group</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"B"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">baseline =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">effect =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>),   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># moderate response</span></span>
+<span id="cb1-21">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">simulate_group</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"C"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">baseline =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">effect =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># strong response</span></span>
+<span id="cb1-22">)</span>
+<span id="cb1-23"></span>
+<span id="cb1-24">df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>group     <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">factor</span>(df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>group)</span>
+<span id="cb1-25">df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>condition <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">factor</span>(df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>condition, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">levels =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"control"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"treatment"</span>))</span>
+<span id="cb1-26">df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>subject   <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">factor</span>(df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>subject)</span>
+<span id="cb1-27"></span>
+<span id="cb1-28"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 6 × 4</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">subject</th>
+<th data-quarto-table-cell-role="th" scope="col">group</th>
+<th data-quarto-table-cell-role="th" scope="col">condition</th>
+<th data-quarto-table-cell-role="th" scope="col">biomarker</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">1</th>
+<td>A_1</td>
+<td>A</td>
+<td>control</td>
+<td>56.85479</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">2</th>
+<td>A_2</td>
+<td>A</td>
+<td>control</td>
+<td>47.17651</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">3</th>
+<td>A_3</td>
+<td>A</td>
+<td>control</td>
+<td>51.81564</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">4</th>
+<td>A_4</td>
+<td>A</td>
+<td>control</td>
+<td>53.16431</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">5</th>
+<td>A_5</td>
+<td>A</td>
+<td>control</td>
+<td>52.02134</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">6</th>
+<td>A_6</td>
+<td>A</td>
+<td>control</td>
+<td>49.46938</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="fa44556d" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aggregate</span>(biomarker <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> group <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> condition, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> df, mean)</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 6 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">group</th>
+<th data-quarto-table-cell-role="th" scope="col">condition</th>
+<th data-quarto-table-cell-role="th" scope="col">biomarker</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>control</td>
+<td>52.42117</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>control</td>
+<td>48.28969</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>control</td>
+<td>51.12821</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>treatment</td>
+<td>53.37999</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>treatment</td>
+<td>56.58443</td>
+</tr>
+<tr class="even">
+<td>C</td>
+<td>treatment</td>
+<td>66.59590</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Group A moves from approximately 52.4 to 53.4 (a minimal shift), group B moves from approximately 48.3 to 56.6, and group C moves from approximately 51.1 to 66.6. The response grows across groups, as specified in the simulation.</p>
+<div id="352147a0" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Mixed ANOVA: condition is within-subjects (each subject has a control AND</span></span>
+<span id="cb3-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># a treatment value), group is between-subjects. Error(subject/condition)</span></span>
+<span id="cb3-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># tells R that condition is nested within subject.</span></span>
+<span id="cb3-4">model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aov</span>(biomarker <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> group <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> condition <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Error</span>(subject <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> condition), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> df)</span>
+<span id="cb3-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(model)</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Error: subject
+          Df Sum Sq Mean Sq F value  Pr(&gt;F)   
+group      2  770.3   385.2   7.431 0.00173 **
+Residuals 42 2177.0    51.8                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Error: subject:condition
+                Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+condition        1 1527.8  1527.8  279.79  &lt; 2e-16 ***
+group:condition  2  789.4   394.7   72.28 2.52e-14 ***
+Residuals       42  229.4     5.5                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<p>The output contains two error strata, corresponding to the between-subjects and within-subjects portions of the design.</p>
+<p>The <strong><code>subject</code> stratum</strong> tests the main effect of group (<img src="https://latex.codecogs.com/png.latex?p%20=%200.00173">): the three groups differ overall, averaging control and treatment together.</p>
+<p>The <strong><code>subject:condition</code> stratum</strong> tests the main effect of condition (<img src="https://latex.codecogs.com/png.latex?p%20%3C%202%5Cmathrm%7Be%7D%7B-16%7D">) and, critically, the <strong>group × condition interaction</strong> (<img src="https://latex.codecogs.com/png.latex?p%20=%202.52%5Cmathrm%7Be%7D%7B-14%7D">).</p>
+<blockquote class="blockquote">
+<p><strong>Q: Which result answers the original question — did treatment work differently by group?</strong> A: The interaction term. Its significance indicates that the magnitude of the control-to-treatment change is not the same across groups A, B, and C. A significant main effect of condition alone would only indicate that biomarker levels changed on average; the interaction indicates that the treatment effect itself depends on group membership. Three separate paired t-tests, one per group, would indicate whether each group changed individually, but would provide no formal test of whether those three changes differed from one another — which is ordinarily the scientific question of interest in a treatment-comparison study.</p>
+</blockquote>
+<p>The table of F-statistics makes the interaction’s significance clear, but doesn’t show what that interaction actually looks like. The plot below does: each line traces one group’s mean biomarker level from control to treatment, with error bars showing the standard error of the mean. A mixed ANOVA with no interaction would produce three roughly parallel lines — all groups shifting by about the same amount. What the simulation shows instead is divergence: group C’s line rises steeply, group B’s rises more modestly, and group A’s is nearly flat.</p>
+<div id="a322800e" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Group means and standard errors by condition, for the interaction plot</span></span>
+<span id="cb5-2">summary_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aggregate</span>(biomarker <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> group <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> condition, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> df,</span>
+<span id="cb5-3">                         <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">FUN =</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(x) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mean =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(x), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">se =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sd</span>(x) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(x))))</span>
+<span id="cb5-4">summary_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">do.call</span>(data.frame, summary_df)</span>
+<span id="cb5-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(summary_df) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"group"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"condition"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mean"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"se"</span>)</span>
+<span id="cb5-6">summary_df</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 6 × 4</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">group</th>
+<th data-quarto-table-cell-role="th" scope="col">condition</th>
+<th data-quarto-table-cell-role="th" scope="col">mean</th>
+<th data-quarto-table-cell-role="th" scope="col">se</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>control</td>
+<td>52.42117</td>
+<td>1.323583</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>control</td>
+<td>48.28969</td>
+<td>1.286907</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>control</td>
+<td>51.12821</td>
+<td>1.045192</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>treatment</td>
+<td>53.37999</td>
+<td>1.793629</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>treatment</td>
+<td>56.58443</td>
+<td>1.587070</td>
+</tr>
+<tr class="even">
+<td>C</td>
+<td>treatment</td>
+<td>66.59590</td>
+<td>1.105771</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="666f24eb" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">group_colors <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">A =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#4C72B0"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">B =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#DD8452"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">C =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#55A868"</span>)</span>
+<span id="cb6-2"></span>
+<span id="cb6-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xlim =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.8</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2.2</span>),</span>
+<span id="cb6-4">     <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ylim =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">range</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(summary_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mean <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> summary_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>se, summary_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mean <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> summary_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>se)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),</span>
+<span id="cb6-5">     <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xaxt =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"n"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xlab =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ylab =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Biomarker level (mean \u00B1 SE)"</span>,</span>
+<span id="cb6-6">     <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Treatment effect by group: a group x condition interaction"</span>)</span>
+<span id="cb6-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">axis</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">at =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">labels =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Control"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Treatment"</span>))</span>
+<span id="cb6-8"></span>
+<span id="cb6-9"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> (g <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">levels</span>(summary_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>group)) {</span>
+<span id="cb6-10">  sub <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> summary_df[summary_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>group <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> g, ]</span>
+<span id="cb6-11">  sub <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sub[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">order</span>(sub<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>condition), ]</span>
+<span id="cb6-12">  x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb6-13">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lines</span>(x, sub<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mean, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> group_colors[g], <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lwd =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2.5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">type =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"b"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">19</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cex =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.3</span>)</span>
+<span id="cb6-14">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrows</span>(x, sub<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mean <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> sub<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>se, x, sub<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mean <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> sub<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>se, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">angle =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">90</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">code =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb6-15">         <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.05</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> group_colors[g])</span>
+<span id="cb6-16">}</span>
+<span id="cb6-17"></span>
+<span id="cb6-18"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">legend</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"topleft"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">legend =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">levels</span>(summary_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>group), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> group_colors, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lwd =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2.5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">19</span>,</span>
+<span id="cb6-19">       <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">title =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Group"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bty =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"n"</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://bntechie.github.io/tutorials/ttest_ANOVA/t-test-vs-anova-before-after-treatment_files/figure-html/cell-6-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Non-parallel lines are the visual signature of an interaction — and the degree of non-parallelism here (group C pulling sharply away from A and B) is exactly what produced the very small p-value on the <code>group:condition</code> term above. This plot and the ANOVA table are two views of the same result: one gives the formal test, the other shows what the tested pattern actually looks like in the data, which is often the more persuasive figure for a paper or presentation.</p>
+</section>
+<section id="assumptions-and-alternatives" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="assumptions-and-alternatives"><span class="header-section-number">7</span> Assumptions and Alternatives</h2>
+<p>The mixed-design ANOVA carries the standard ANOVA assumptions of normally distributed residuals and homogeneity of variance across groups, together with sphericity for the within-subjects factor when more than two time points are present. Sphericity is automatically satisfied with only two levels, as in a single before/after comparison.</p>
+<p>Where these assumptions are doubtful, two alternatives are available. A linear mixed-effects model, fit with <code>lme4</code> or <code>nlme</code>, accommodates unbalanced data and missing observations more gracefully than classical ANOVA while producing an equivalent interaction test. For small samples or markedly non-normal outcomes, a nonparametric alternative such as the Friedman test, combined with rank-based group comparisons, can be used, though these approaches test somewhat different hypotheses and offer less flexibility for interaction effects.</p>
+</section>
+<section id="conclusion" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">8</span> Conclusion</h2>
+<p>“t-test or ANOVA” is not, by itself, a well-posed question. The determining factor is the number of independent sources of variation present in the design. A before/after comparison within a single group constitutes one factor; a comparison across multiple groups introduces a second. When both are present together, as in a multi-group treatment study, the appropriate test is one built to model two factors and their interaction jointly — the mixed-design ANOVA. Substituting a t-test in this setting does not merely reduce statistical power; it silently discards the interaction test that the design was intended to answer.</p>
+
+
+</section>
+
+ ]]></description>
+  <guid>https://bntechie.github.io/tutorials/ttest_ANOVA/t-test-vs-anova-before-after-treatment.html</guid>
+  <pubDate>Tue, 04 Aug 2026 08:05:30 GMT</pubDate>
+</item>
+<item>
+  <title>Generative AI and Prompt Engineering</title>
+  <dc:creator>Nivedita </dc:creator>
+  <link>https://bntechie.github.io/tutorials/promt_engineering/genai-prompt-engineering-tutorial.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="thesis-hero-wrap">
+<div class="thesis-hero-art">
+<svg viewbox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+<rect x="0" y="0" width="700" height="260" fill="#fbfaf7"></rect><rect x="20" y="95" width="130" height="70" rx="6" fill="#f5f3ee" stroke="#d8d3c7" stroke-width="1.2"></rect><text x="85" y="122" text-anchor="middle" font-size="10.5" fill="#5b6b78">“Summarize</text><text x="85" y="136" text-anchor="middle" font-size="10.5" fill="#5b6b78">this result</text><text x="85" y="150" text-anchor="middle" font-size="10.5" fill="#5b6b78">in plain</text><text x="85" y="164" text-anchor="middle" font-size="10.5" fill="#5b6b78">language”</text><text x="85" y="85" text-anchor="middle" font-size="10" fill="#b9812c" letter-spacing="0.5">BARE PROMPT</text><g stroke="#2f6f6b" stroke-width="1.4" fill="none"><path d="M170 108 C 230 100, 260 110, 300 128" marker-end="url(#arrowFun)"></path><path d="M170 130 C 230 128, 260 128, 300 130" marker-end="url(#arrowFun)"></path><path d="M170 152 C 230 148, 260 138, 300 133" marker-end="url(#arrowFun)"></path><path d="M170 174 C 230 168, 260 145, 300 135" marker-end="url(#arrowFun)"></path></g><text x="172" y="103" font-size="9.5" fill="#1c2b39">+ persona</text><text x="172" y="188" font-size="9.5" fill="#1c2b39">+ context</text><text x="330" y="98" font-size="9.5" fill="#1c2b39">+ example</text><text x="330" y="200" font-size="9.5" fill="#1c2b39">+ format</text><rect x="300" y="105" width="90" height="55" rx="6" fill="#2f6f6b" opacity="0.12" stroke="#2f6f6b" stroke-width="1.4"></rect><text x="345" y="128" text-anchor="middle" font-size="10.5" fill="#1f4d4a" font-weight="600">LLM</text><text x="345" y="143" text-anchor="middle" font-size="8.5" fill="#5b6b78">token by</text><text x="345" y="154" text-anchor="middle" font-size="8.5" fill="#5b6b78">token</text><path d="M392 132 L 430 132" stroke="#1c2b39" stroke-width="1.4" marker-end="url(#arrowFun)"></path><g><line x1="450" y1="180" x2="450" y2="90" stroke="#d8d3c7" stroke-width="1"></line><line x1="450" y1="180" x2="600" y2="180" stroke="#d8d3c7" stroke-width="1"></line><rect x="462" y="165" width="14" height="15" fill="#5b6b78" opacity="0.35"></rect><rect x="484" y="150" width="14" height="30" fill="#5b6b78" opacity="0.45"></rect><rect x="506" y="100" width="14" height="80" fill="#b9812c"></rect><rect x="528" y="158" width="14" height="22" fill="#5b6b78" opacity="0.4"></rect><rect x="550" y="170" width="14" height="10" fill="#5b6b78" opacity="0.3"></rect></g><text x="513" y="90" text-anchor="middle" font-size="9" fill="#b9812c" font-weight="600">p = 0.87</text><text x="525" y="200" text-anchor="middle" font-size="10" fill="#5b6b78">sharper output</text><text x="525" y="213" text-anchor="middle" font-size="10" fill="#5b6b78">distribution</text><defs><marker id="arrowFun" markerwidth="9" markerheight="9" refx="7" refy="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#2f6f6b"></path></marker></defs>
+</svg>
+</div>
+<div class="thesis-hero-caption">
+A weak instruction and an engineered one reach the same model, but persona, context, example, and output format push the engineered version toward a single high-probability answer instead of a diffuse guess.
+</div>
+</div>
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>Generative AI denotes a class of systems that produce new content — text, images, audio, video, or code — rather than only classifying or scoring existing data. A model learns the statistical structure of a training corpus and then samples new instances consistent with that structure, as opposed to mapping fixed inputs onto a fixed set of output labels.</p>
@@ -3434,826 +4257,14 @@ font-style: inherit;">specificity_score</span>(coloc_engineered)</span>
 </section>
 
  ]]></description>
-  <guid>https://bntechie.github.io/tutorials/blog_promt_engineering/genai-prompt-engineering-tutorial.html</guid>
-  <pubDate>Wed, 05 Aug 2026 21:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>t-test or ANOVA? Choosing the Right Test for Before/After Treatment Across Multiple Groups</title>
-  <dc:creator>Nivedita </dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<section id="introduction" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>A question that comes up constantly in applied statistics: there are several groups — say, three treatment arms — and each subject is measured before and after treatment. Should the comparison use a t-test or an ANOVA?</p>
-<p>This question, as posed, is missing information. The correct test depends on two things simultaneously: the number of groups, and the number of time points measured within each subject. Misjudging either one produces a test that is underpowered, statistically invalid, or answering a different question than the one intended.</p>
-<p>This tutorial develops the decision logic, demonstrates why naive approaches fail, and works through a complete example using a mixed-design (repeated-measures) ANOVA — the test that fits a multi-group before/after design.</p>
-</section>
-<section id="what-a-t-test-can-and-cannot-test" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="what-a-t-test-can-and-cannot-test"><span class="header-section-number">2</span> What a t-test Can and Cannot Test</h2>
-<p>A t-test compares two means. Two variants are relevant to this design.</p>
-<p>An <strong>independent-samples t-test</strong> compares two separate groups measured once each — for example, a treatment group versus a control group, both assessed after treatment. The two sets of observations arise from different subjects.</p>
-<p>A <strong>paired t-test</strong> compares two measurements taken from the same subjects — for example, a biomarker measured before and after treatment within a single group. Pairing removes between-subject variability from the comparison, which increases statistical power relative to treating the two measurements as independent.</p>
-<blockquote class="blockquote">
-<p><strong>Q: Why can’t a single t-test handle a multi-group before/after design directly?</strong> A: Each t-test variant models exactly one source of variation — either differences between groups or differences between time points — but not both together. A before/after study with three treatment arms contains both sources of variation at once, and neither t-test variant has a mechanism for modeling their combination.</p>
-</blockquote>
-</section>
-<section id="why-not-run-several-t-tests" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="why-not-run-several-t-tests"><span class="header-section-number">3</span> Why Not Run Several t-tests?</h2>
-<p>A common workaround is to run a paired t-test separately within each group, or an independent t-test at each time point, and compare the pattern of results informally. This approach fails for two reasons.</p>
-<p>First, running multiple significance tests on related data inflates the family-wise Type I error rate, since each additional test carries its own probability of a false positive. With three groups tested separately, the effective error rate across the family of tests exceeds the nominal 0.05 threshold intended for a single test.</p>
-<p>Second, and more fundamentally, separate t-tests cannot test the question a multi-group before/after design is built to answer: did the treatment effect — the before-to-after change — differ across groups? A set of individual paired t-tests indicates whether each group changed on its own, but provides no formal test of whether the magnitude of change differed between groups. That comparison is the <strong>group × time interaction</strong>, and testing it requires a model that includes both factors jointly.</p>
-</section>
-<section id="the-mixed-design-anova" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="the-mixed-design-anova"><span class="header-section-number">4</span> The Mixed-Design ANOVA</h2>
-<p>A mixed-design ANOVA (also termed a between-within ANOVA) models two factors simultaneously:</p>
-<ul>
-<li><strong>Time</strong> (or condition) is a within-subjects factor: before and after values come from the same subjects and are therefore correlated.</li>
-<li><strong>Group</strong> is a between-subjects factor: treatment arms consist of different, independent subjects.</li>
-</ul>
-<p>The model partitions variance into three components: a main effect of time (whether values changed overall), a main effect of group (whether groups differ overall), and a <strong>group × time interaction</strong> (whether the magnitude of change depended on group membership).</p>
-<blockquote class="blockquote">
-<p><strong>Q: Which of these three effects answers the original research question?</strong> A: In a treatment-comparison study, the interaction term is typically the effect of interest. A significant interaction indicates that groups did not all change by the same amount, which is the statistical signature of a treatment effect that differs from whatever change occurred in the comparison arms.</p>
-</blockquote>
-</section>
-<section id="decision-guide" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="decision-guide"><span class="header-section-number">5</span> Decision Guide</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Design</th>
-<th>Test</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Two groups, one time point</td>
-<td>Independent-samples t-test</td>
-</tr>
-<tr class="even">
-<td>One group, two time points</td>
-<td>Paired t-test</td>
-</tr>
-<tr class="odd">
-<td>Two groups, two time points (before/after)</td>
-<td>Mixed ANOVA, or a t-test on change scores</td>
-</tr>
-<tr class="even">
-<td>More than two groups, two time points</td>
-<td>Mixed ANOVA</td>
-</tr>
-<tr class="odd">
-<td>More than two time points, with or without multiple groups</td>
-<td>Repeated-measures or mixed ANOVA</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="worked-example-a-biomarker-across-three-groups" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="worked-example-a-biomarker-across-three-groups"><span class="header-section-number">6</span> Worked Example: A Biomarker Across Three Groups</h2>
-<p>Consider three groups — A, B, and C — with a biomarker recorded for each subject under two conditions: control and treatment. This is a 3 × 2 mixed design: group is between-subjects, condition is within-subjects, since each subject contributes both a control and a treatment value.</p>
-<p>The simulation below generates 15 subjects per group, with the treatment effect itself set to differ by group: group A shows a minimal response, group B a moderate response, and group C a strong response. This is the pattern a mixed ANOVA is designed to detect via the group × condition interaction.</p>
-<div id="0e91d3a0" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span>)</span>
-<span id="cb1-2">n_per_group <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">15</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># subjects per group</span></span>
-<span id="cb1-3"></span>
-<span id="cb1-4"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Simulate a biomarker with a group-specific baseline and a group-specific</span></span>
-<span id="cb1-5"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># treatment response (this is what creates a group x condition interaction)</span></span>
-<span id="cb1-6">simulate_group <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span>(group_id, baseline, effect) {</span>
-<span id="cb1-7">  subject   <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(group_id, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"_"</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">seq_len</span>(n_per_group))</span>
-<span id="cb1-8">  control   <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rnorm</span>(n_per_group, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">mean =</span> baseline, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">sd =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>)</span>
-<span id="cb1-9">  treatment <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> control <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rnorm</span>(n_per_group, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">mean =</span> effect, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">sd =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>)</span>
-<span id="cb1-10">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data.frame</span>(</span>
-<span id="cb1-11">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">subject   =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(subject, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>),</span>
-<span id="cb1-12">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">group     =</span> group_id,</span>
-<span id="cb1-13">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">condition =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"control"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"treatment"</span>), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">each =</span> n_per_group),</span>
-<span id="cb1-14">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">biomarker =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(control, treatment)</span>
-<span id="cb1-15">  )</span>
-<span id="cb1-16">}</span>
-<span id="cb1-17"></span>
-<span id="cb1-18">df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rbind</span>(</span>
-<span id="cb1-19">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">simulate_group</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"A"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">baseline =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">50</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">effect =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>),   <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># minimal response</span></span>
-<span id="cb1-20">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">simulate_group</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"B"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">baseline =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">50</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">effect =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">8</span>),   <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># moderate response</span></span>
-<span id="cb1-21">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">simulate_group</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"C"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">baseline =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">50</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">effect =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">15</span>)   <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># strong response</span></span>
-<span id="cb1-22">)</span>
-<span id="cb1-23"></span>
-<span id="cb1-24">df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>group     <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">factor</span>(df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>group)</span>
-<span id="cb1-25">df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>condition <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">factor</span>(df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>condition, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">levels =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"control"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"treatment"</span>))</span>
-<span id="cb1-26">df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>subject   <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">factor</span>(df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>subject)</span>
-<span id="cb1-27"></span>
-<span id="cb1-28"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">head</span>(df, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small">
-<caption>A data.frame: 6 × 4</caption>
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th" scope="col">subject</th>
-<th data-quarto-table-cell-role="th" scope="col">group</th>
-<th data-quarto-table-cell-role="th" scope="col">condition</th>
-<th data-quarto-table-cell-role="th" scope="col">biomarker</th>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th" scope="row">1</th>
-<td>A_1</td>
-<td>A</td>
-<td>control</td>
-<td>56.85479</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th" scope="row">2</th>
-<td>A_2</td>
-<td>A</td>
-<td>control</td>
-<td>47.17651</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th" scope="row">3</th>
-<td>A_3</td>
-<td>A</td>
-<td>control</td>
-<td>51.81564</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th" scope="row">4</th>
-<td>A_4</td>
-<td>A</td>
-<td>control</td>
-<td>53.16431</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th" scope="row">5</th>
-<td>A_5</td>
-<td>A</td>
-<td>control</td>
-<td>52.02134</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th" scope="row">6</th>
-<td>A_6</td>
-<td>A</td>
-<td>control</td>
-<td>49.46938</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="fa44556d" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aggregate</span>(biomarker <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span> group <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> condition, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> df, mean)</span></code></pre></div></div>
-<div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small">
-<caption>A data.frame: 6 × 3</caption>
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th" scope="col">group</th>
-<th data-quarto-table-cell-role="th" scope="col">condition</th>
-<th data-quarto-table-cell-role="th" scope="col">biomarker</th>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A</td>
-<td>control</td>
-<td>52.42117</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>control</td>
-<td>48.28969</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>control</td>
-<td>51.12821</td>
-</tr>
-<tr class="even">
-<td>A</td>
-<td>treatment</td>
-<td>53.37999</td>
-</tr>
-<tr class="odd">
-<td>B</td>
-<td>treatment</td>
-<td>56.58443</td>
-</tr>
-<tr class="even">
-<td>C</td>
-<td>treatment</td>
-<td>66.59590</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Group A moves from approximately 52.4 to 53.4 (a minimal shift), group B moves from approximately 48.3 to 56.6, and group C moves from approximately 51.1 to 66.6. The response grows across groups, as specified in the simulation.</p>
-<div id="352147a0" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Mixed ANOVA: condition is within-subjects (each subject has a control AND</span></span>
-<span id="cb3-2"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># a treatment value), group is between-subjects. Error(subject/condition)</span></span>
-<span id="cb3-3"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># tells R that condition is nested within subject.</span></span>
-<span id="cb3-4">model <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aov</span>(biomarker <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span> group <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> condition <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">Error</span>(subject <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> condition), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> df)</span>
-<span id="cb3-5"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">summary</span>(model)</span></code></pre></div></div>
-<div class="cell-output cell-output-display">
-<pre><code>
-Error: subject
-          Df Sum Sq Mean Sq F value  Pr(&gt;F)   
-group      2  770.3   385.2   7.431 0.00173 **
-Residuals 42 2177.0    51.8                   
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Error: subject:condition
-                Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-condition        1 1527.8  1527.8  279.79  &lt; 2e-16 ***
-group:condition  2  789.4   394.7   72.28 2.52e-14 ***
-Residuals       42  229.4     5.5                     
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
-</div>
-</div>
-<p>The output contains two error strata, corresponding to the between-subjects and within-subjects portions of the design.</p>
-<p>The <strong><code>subject</code> stratum</strong> tests the main effect of group (<img src="https://latex.codecogs.com/png.latex?p%20=%200.00173">): the three groups differ overall, averaging control and treatment together.</p>
-<p>The <strong><code>subject:condition</code> stratum</strong> tests the main effect of condition (<img src="https://latex.codecogs.com/png.latex?p%20%3C%202%5Cmathrm%7Be%7D%7B-16%7D">) and, critically, the <strong>group × condition interaction</strong> (<img src="https://latex.codecogs.com/png.latex?p%20=%202.52%5Cmathrm%7Be%7D%7B-14%7D">).</p>
-<blockquote class="blockquote">
-<p><strong>Q: Which result answers the original question — did treatment work differently by group?</strong> A: The interaction term. Its significance indicates that the magnitude of the control-to-treatment change is not the same across groups A, B, and C. A significant main effect of condition alone would only indicate that biomarker levels changed on average; the interaction indicates that the treatment effect itself depends on group membership. Three separate paired t-tests, one per group, would indicate whether each group changed individually, but would provide no formal test of whether those three changes differed from one another — which is ordinarily the scientific question of interest in a treatment-comparison study.</p>
-</blockquote>
-<p>The table of F-statistics makes the interaction’s significance clear, but doesn’t show what that interaction actually looks like. The plot below does: each line traces one group’s mean biomarker level from control to treatment, with error bars showing the standard error of the mean. A mixed ANOVA with no interaction would produce three roughly parallel lines — all groups shifting by about the same amount. What the simulation shows instead is divergence: group C’s line rises steeply, group B’s rises more modestly, and group A’s is nearly flat.</p>
-<div id="a322800e" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Group means and standard errors by condition, for the interaction plot</span></span>
-<span id="cb5-2">summary_df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aggregate</span>(biomarker <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span> group <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> condition, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> df,</span>
-<span id="cb5-3">                         <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">FUN =</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span>(x) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">mean =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mean</span>(x), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">se =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sd</span>(x) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sqrt</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(x))))</span>
-<span id="cb5-4">summary_df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">do.call</span>(data.frame, summary_df)</span>
-<span id="cb5-5"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(summary_df) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"group"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"condition"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mean"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"se"</span>)</span>
-<span id="cb5-6">summary_df</span></code></pre></div></div>
-<div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small">
-<caption>A data.frame: 6 × 4</caption>
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th" scope="col">group</th>
-<th data-quarto-table-cell-role="th" scope="col">condition</th>
-<th data-quarto-table-cell-role="th" scope="col">mean</th>
-<th data-quarto-table-cell-role="th" scope="col">se</th>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
-<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A</td>
-<td>control</td>
-<td>52.42117</td>
-<td>1.323583</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>control</td>
-<td>48.28969</td>
-<td>1.286907</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>control</td>
-<td>51.12821</td>
-<td>1.045192</td>
-</tr>
-<tr class="even">
-<td>A</td>
-<td>treatment</td>
-<td>53.37999</td>
-<td>1.793629</td>
-</tr>
-<tr class="odd">
-<td>B</td>
-<td>treatment</td>
-<td>56.58443</td>
-<td>1.587070</td>
-</tr>
-<tr class="even">
-<td>C</td>
-<td>treatment</td>
-<td>66.59590</td>
-<td>1.105771</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="666f24eb" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">group_colors <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">A =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#4C72B0"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">B =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#DD8452"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">C =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#55A868"</span>)</span>
-<span id="cb6-2"></span>
-<span id="cb6-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plot</span>(<span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NULL</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">xlim =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.8</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.2</span>),</span>
-<span id="cb6-4">     <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">ylim =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">range</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(summary_df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>mean <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> summary_df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>se, summary_df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>mean <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> summary_df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>se)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>),</span>
-<span id="cb6-5">     <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">xaxt =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"n"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">xlab =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">ylab =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Biomarker level (mean \u00B1 SE)"</span>,</span>
-<span id="cb6-6">     <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Treatment effect by group: a group x condition interaction"</span>)</span>
-<span id="cb6-7"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">axis</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">at =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">labels =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Control"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Treatment"</span>))</span>
-<span id="cb6-8"></span>
-<span id="cb6-9"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> (g <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">levels</span>(summary_df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>group)) {</span>
-<span id="cb6-10">  sub <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> summary_df[summary_df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>group <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> g, ]</span>
-<span id="cb6-11">  sub <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> sub[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">order</span>(sub<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>condition), ]</span>
-<span id="cb6-12">  x <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span>
-<span id="cb6-13">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lines</span>(x, sub<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>mean, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> group_colors[g], <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">lwd =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.5</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">type =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"b"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">19</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">cex =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.3</span>)</span>
-<span id="cb6-14">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">arrows</span>(x, sub<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>mean <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> sub<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>se, x, sub<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>mean <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> sub<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>se, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">angle =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">90</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">code =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>,</span>
-<span id="cb6-15">         <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">length =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.05</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> group_colors[g])</span>
-<span id="cb6-16">}</span>
-<span id="cb6-17"></span>
-<span id="cb6-18"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">legend</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"topleft"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">levels</span>(summary_df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>group), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> group_colors, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">lwd =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.5</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">19</span>,</span>
-<span id="cb6-19">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">title =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Group"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">bty =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"n"</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment_files/figure-html/cell-6-output-1.png" width="420" height="420" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Non-parallel lines are the visual signature of an interaction — and the degree of non-parallelism here (group C pulling sharply away from A and B) is exactly what produced the very small p-value on the <code>group:condition</code> term above. This plot and the ANOVA table are two views of the same result: one gives the formal test, the other shows what the tested pattern actually looks like in the data, which is often the more persuasive figure for a paper or presentation.</p>
-</section>
-<section id="assumptions-and-alternatives" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="assumptions-and-alternatives"><span class="header-section-number">7</span> Assumptions and Alternatives</h2>
-<p>The mixed-design ANOVA carries the standard ANOVA assumptions of normally distributed residuals and homogeneity of variance across groups, together with sphericity for the within-subjects factor when more than two time points are present. Sphericity is automatically satisfied with only two levels, as in a single before/after comparison.</p>
-<p>Where these assumptions are doubtful, two alternatives are available. A linear mixed-effects model, fit with <code>lme4</code> or <code>nlme</code>, accommodates unbalanced data and missing observations more gracefully than classical ANOVA while producing an equivalent interaction test. For small samples or markedly non-normal outcomes, a nonparametric alternative such as the Friedman test, combined with rank-based group comparisons, can be used, though these approaches test somewhat different hypotheses and offer less flexibility for interaction effects.</p>
-</section>
-<section id="conclusion" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">8</span> Conclusion</h2>
-<p>“t-test or ANOVA” is not, by itself, a well-posed question. The determining factor is the number of independent sources of variation present in the design. A before/after comparison within a single group constitutes one factor; a comparison across multiple groups introduces a second. When both are present together, as in a multi-group treatment study, the appropriate test is one built to model two factors and their interaction jointly — the mixed-design ANOVA. Substituting a t-test in this setting does not merely reduce statistical power; it silently discards the interaction test that the design was intended to answer.</p>
-
-
-</section>
-
- ]]></description>
-  <guid>https://bntechie.github.io/tutorials/blog_ttest_ANOVA/t-test-vs-anova-before-after-treatment.html</guid>
-  <pubDate>Tue, 04 Aug 2026 08:05:30 GMT</pubDate>
+  <guid>https://bntechie.github.io/tutorials/promt_engineering/genai-prompt-engineering-tutorial.html</guid>
+  <pubDate>Mon, 03 Aug 2026 21:00:00 GMT</pubDate>
+  <media:content url="https://bntechie.github.io/tutorials/promt_engineering/images/prompt-engineering-funnel.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>The barbeque question: will AI’s data center problem end like the genome did?</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_AI_humanGenome/the-barbeque-question.html</link>
+  <link>https://bntechie.github.io/tutorials/AI_humanGenome/the-barbeque-question.html</link>
   <description><![CDATA[ 
 
 
@@ -4264,7 +4275,7 @@ font-style: inherit;">"n"</span>)</span></code></pre></div></div>
 <p>Forks paused. It was a good question, the kind that sounds simple until you actually try to answer it.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_AI_humanGenome/illustration.png" class="img-fluid figure-img" style="width:90.0%" alt="Illustration of a grill with smoke rising into a DNA helix and server racks, symbolizing the genome sequencing and AI compute comparison"></p>
+<p><img src="https://bntechie.github.io/tutorials/AI_humanGenome/illustration.png" class="img-fluid figure-img" style="width:90.0%" alt="Illustration of a grill with smoke rising into a DNA helix and server racks, symbolizing the genome sequencing and AI compute comparison"></p>
 <figcaption>Smoke from a barbeque grill splitting into a DNA double helix on one side and a stack of data center server racks on the other</figcaption>
 </figure>
 </div>
@@ -4308,20 +4319,20 @@ font-style: inherit;">"n"</span>)</span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <guid>https://bntechie.github.io/tutorials/blog_AI_humanGenome/the-barbeque-question.html</guid>
+  <guid>https://bntechie.github.io/tutorials/AI_humanGenome/the-barbeque-question.html</guid>
   <pubDate>Mon, 27 Jul 2026 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Multivariate Concepts in Statistical Genetics: From LD Score Regression to Genomic SEM</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_multivariate_concepts/genomicSEM.html</link>
+  <link>https://bntechie.github.io/tutorials/multivariate_concepts/genomicSEM.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_multivariate_concepts/images/genomic-sem-factor.svg" alt="Path diagram of a Genomic SEM common factor model: a latent factor F1 with arrows loading onto four observed traits (MDD, PTSD, ALCH, ANX), each with its own residual variance" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/multivariate_concepts/images/genomic-sem-factor.svg" alt="Path diagram of a Genomic SEM common factor model: a latent factor F1 with arrows loading onto four observed traits (MDD, PTSD, ALCH, ANX), each with its own residual variance" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The model this tutorial builds up to fitting: a single shared genetic factor F1, estimated not from individual-level data but from a genetic covariance matrix built out of GWAS summary statistics alone.</p>
 </div>
@@ -8922,21 +8933,21 @@ font-style: inherit;">$</span>modelfit</span></code></pre></div></div>
   <category>GWAS</category>
   <category>Genomic SEM</category>
   <category>Multivariate Analysis</category>
-  <guid>https://bntechie.github.io/tutorials/blog_multivariate_concepts/genomicSEM.html</guid>
+  <guid>https://bntechie.github.io/tutorials/multivariate_concepts/genomicSEM.html</guid>
   <pubDate>Mon, 27 Jul 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_multivariate_concepts/images/genomic-sem-factor.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/multivariate_concepts/images/genomic-sem-factor.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Heritability and Genetic Correlation: From First Principles to Summary Statistics</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_Heritability_genetic_correlation/Heritability_and_Genetic_Correlation.html</link>
+  <link>https://bntechie.github.io/tutorials/Heritability_genetic_correlation/Heritability_and_Genetic_Correlation.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_Heritability_genetic_correlation/images/heritability-duality.svg" alt="Two scatter plots with fitted regression lines: HE regression plotting phenotype cross-products against relatedness, and LDSC plotting chi-squared statistics against LD score -- both recovering heritability as the slope" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/Heritability_genetic_correlation/images/heritability-duality.svg" alt="Two scatter plots with fitted regression lines: HE regression plotting phenotype cross-products against relatedness, and LDSC plotting chi-squared statistics against LD score -- both recovering heritability as the slope" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The core duality this tutorial builds toward: HE regression works in the space of individuals (relatedness), LDSC works in the space of markers (LD score) – but in both, heritability is just a regression slope. These panels are plotted from the tutorial’s own simulated data.</p>
 </div>
@@ -9964,21 +9975,21 @@ F-statistic: 5.718e+06 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
   <category>Genetic Correlation</category>
   <category>LDSC</category>
   <category>Tutorial</category>
-  <guid>https://bntechie.github.io/tutorials/blog_Heritability_genetic_correlation/Heritability_and_Genetic_Correlation.html</guid>
+  <guid>https://bntechie.github.io/tutorials/Heritability_genetic_correlation/Heritability_and_Genetic_Correlation.html</guid>
   <pubDate>Sun, 26 Jul 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_Heritability_genetic_correlation/images/heritability-duality.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/Heritability_genetic_correlation/images/heritability-duality.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Survival Analysis: Deriving the Kaplan-Meier Estimator and the Cox Model From Scratch</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_survival_analysis/survival-analysis-tutorial.html</link>
+  <link>https://bntechie.github.io/tutorials/survival_analysis/survival-analysis-tutorial.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_survival_analysis/images/survival-curves.svg" alt="Two step-function Kaplan-Meier survival curves for two groups, showing survival probability declining over time with a widening confidence band" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/survival_analysis/images/survival-curves.svg" alt="Two step-function Kaplan-Meier survival curves for two groups, showing survival probability declining over time with a widening confidence band" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The shape every method in this tutorial is built to explain: a survival curve that steps down at each event, with uncertainty that widens as fewer people remain at risk.</p>
 </div>
@@ -10649,7 +10660,7 @@ font-style: inherit;">2</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_survival_analysis/survival-analysis-tutorial_files/figure-html/cell-3-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/survival_analysis/survival-analysis-tutorial_files/figure-html/cell-3-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -12137,7 +12148,7 @@ font-style: inherit;">"n"</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_survival_analysis/survival-analysis-tutorial_files/figure-html/cell-20-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/survival_analysis/survival-analysis-tutorial_files/figure-html/cell-20-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -12705,7 +12716,7 @@ font-style: inherit;">"grey40"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_survival_analysis/survival-analysis-tutorial_files/figure-html/cell-24-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/survival_analysis/survival-analysis-tutorial_files/figure-html/cell-24-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -12793,7 +12804,7 @@ font-style: inherit;">2</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_survival_analysis/survival-analysis-tutorial_files/figure-html/cell-25-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/survival_analysis/survival-analysis-tutorial_files/figure-html/cell-25-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -12839,7 +12850,7 @@ font-style: inherit;">plot</span>(zph_fit)</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_survival_analysis/survival-analysis-tutorial_files/figure-html/cell-27-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/survival_analysis/survival-analysis-tutorial_files/figure-html/cell-27-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -12887,14 +12898,14 @@ font-style: inherit;">plot</span>(zph_fit)</span></code></pre></div></div>
   <category>Survival Analysis</category>
   <category>Biostatistics</category>
   <category>R</category>
-  <guid>https://bntechie.github.io/tutorials/blog_survival_analysis/survival-analysis-tutorial.html</guid>
+  <guid>https://bntechie.github.io/tutorials/survival_analysis/survival-analysis-tutorial.html</guid>
   <pubDate>Sat, 25 Jul 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_survival_analysis/images/survival-curves.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/survival_analysis/images/survival-curves.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Phylogenetic Generalized Least Squares (PGLS)</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_pgls/pgls_tutorial.html</link>
+  <link>https://bntechie.github.io/tutorials/pgls/pgls_tutorial.html</link>
   <description><![CDATA[ 
 
 
@@ -13133,7 +13144,7 @@ font-style: inherit;">"Simulated 40-tip phylogeny"</span>)</span></code></pre></
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_pgls/pgls_tutorial_files/figure-html/cell-4-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/pgls/pgls_tutorial_files/figure-html/cell-4-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -13426,20 +13437,20 @@ font-style: inherit;">AIC</span>(m_ols, m_bm, m_lambda)</span></code></pre></div
   <category>Statistics</category>
   <category>Phylogenetics</category>
   <category>Tutorial</category>
-  <guid>https://bntechie.github.io/tutorials/blog_pgls/pgls_tutorial.html</guid>
+  <guid>https://bntechie.github.io/tutorials/pgls/pgls_tutorial.html</guid>
   <pubDate>Tue, 21 Jul 2026 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>From Raw Reads to GWAS-Ready Data</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_NGS_pipeline_raw_data_to_GWAS/ngs-to-gwas-pipeline.html</link>
+  <link>https://bntechie.github.io/tutorials/NGS_pipeline_raw_data_to_GWAS/ngs-to-gwas-pipeline.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_NGS_pipeline_raw_data_to_GWAS/images/ngs-to-gwas-pipeline.svg" alt="Five-stage pipeline diagram: FASTQ to BAM/CRAM to VCF to Phased and Imputed data to a GWAS-ready matrix, spanning Parts 1 through 3 of the tutorial" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/NGS_pipeline_raw_data_to_GWAS/images/ngs-to-gwas-pipeline.svg" alt="Five-stage pipeline diagram: FASTQ to BAM/CRAM to VCF to Phased and Imputed data to a GWAS-ready matrix, spanning Parts 1 through 3 of the tutorial" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The full path this tutorial walks, end to end: every stage below is a real, copy-pasteable command, from a sequencer’s raw output to a matrix ready for association testing.</p>
 </div>
@@ -15248,14 +15259,14 @@ font-style: inherit;">--out</span> gwas_results</span></code></pre></div></div>
   <category>GWAS</category>
   <category>tutorial</category>
   <category>HPC</category>
-  <guid>https://bntechie.github.io/tutorials/blog_NGS_pipeline_raw_data_to_GWAS/ngs-to-gwas-pipeline.html</guid>
+  <guid>https://bntechie.github.io/tutorials/NGS_pipeline_raw_data_to_GWAS/ngs-to-gwas-pipeline.html</guid>
   <pubDate>Thu, 09 Jul 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_NGS_pipeline_raw_data_to_GWAS/images/ngs-to-gwas-pipeline.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/NGS_pipeline_raw_data_to_GWAS/images/ngs-to-gwas-pipeline.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>LangChain and Retrieval-Augmented Generation</title>
   <dc:creator>Nivedita </dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_Langchain/langchain-rag-tutorial.html</link>
+  <link>https://bntechie.github.io/tutorials/Langchain/langchain-rag-tutorial.html</link>
   <description><![CDATA[ 
 
 
@@ -17522,21 +17533,21 @@ font-style: inherit;">"</span>)</span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <guid>https://bntechie.github.io/tutorials/blog_Langchain/langchain-rag-tutorial.html</guid>
+  <guid>https://bntechie.github.io/tutorials/Langchain/langchain-rag-tutorial.html</guid>
   <pubDate>Sat, 04 Jul 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_Langchain/images/langchain-rag-pipeline.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/Langchain/images/langchain-rag-pipeline.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Twins, Variance, and the Logic of Heritability</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_twin_heritability/twin_heritability_tutorial.html</link>
+  <link>https://bntechie.github.io/tutorials/twin_heritability/twin_heritability_tutorial.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_twin_heritability/images/ace-twin-model.svg" alt="Path diagram of the ACE twin model: latent factors A (genetic), C (shared environment), and E (unique environment) connecting to Twin 1 and Twin 2, with A shared 100% in MZ twins and 50% in DZ twins" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/twin_heritability/images/ace-twin-model.svg" alt="Path diagram of the ACE twin model: latent factors A (genetic), C (shared environment), and E (unique environment) connecting to Twin 1 and Twin 2, with A shared 100% in MZ twins and 50% in DZ twins" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The one fact this whole tutorial runs on: MZ and DZ twins share C and E equally, but differ in exactly how much of A they share – which is enough, on its own, to separate genetic from environmental variance.</p>
 </div>
@@ -18870,21 +18881,21 @@ font-style: inherit;">4</span>)</span></code></pre></div></div>
   <category>Quantitative Genetics</category>
   <category>Twin Studies</category>
   <category>Heritability</category>
-  <guid>https://bntechie.github.io/tutorials/blog_twin_heritability/twin_heritability_tutorial.html</guid>
+  <guid>https://bntechie.github.io/tutorials/twin_heritability/twin_heritability_tutorial.html</guid>
   <pubDate>Sun, 21 Jun 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_twin_heritability/images/ace-twin-model.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/twin_heritability/images/ace-twin-model.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Genetic Association Testing for Rare Variants</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_rare_variants/rare_variant_tutorial.html</link>
+  <link>https://bntechie.github.io/tutorials/rare_variants/rare_variant_tutorial.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_rare_variants/images/rare-variant-tests.svg" alt="A 12-variant gene track, colored by true effect direction, branching into a burden test that cancels the mixed effects out (p = 0.46) and a SKAT test that recovers the signal (p = 0.011)" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/rare_variants/images/rare-variant-tests.svg" alt="A 12-variant gene track, colored by true effect direction, branching into a burden test that cancels the mixed effects out (p = 0.46) and a SKAT test that recovers the signal (p = 0.011)" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The tutorial’s central result in one picture: the same 12-variant gene, with the same causal architecture, gives two completely different answers depending on whether the test sums effects (burden) or sums their squares (SKAT).</p>
 </div>
@@ -21900,21 +21911,21 @@ Monte Carlo p-value      : 0.01394 ( 2e+06 draws )</code></pre>
   <category>Rare Variants</category>
   <category>SKAT</category>
   <category>R</category>
-  <guid>https://bntechie.github.io/tutorials/blog_rare_variants/rare_variant_tutorial.html</guid>
+  <guid>https://bntechie.github.io/tutorials/rare_variants/rare_variant_tutorial.html</guid>
   <pubDate>Fri, 19 Jun 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_rare_variants/images/rare-variant-tests.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/rare_variants/images/rare-variant-tests.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Statistical Fine-Mapping: From GWAS Signals to Causal Variants</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_Finemapping/Statistical_Fine_Mapping.html</link>
+  <link>https://bntechie.github.io/tutorials/Finemapping/Statistical_Fine_Mapping.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_Finemapping/images/fine-mapping.svg" alt="Two panels comparing ABF and SuSiE fine-mapping on the same simulated GWAS region: ABF finds only 1 of 3 true causal SNPs, SuSiE finds all 3" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/Finemapping/images/fine-mapping.svg" alt="Two panels comparing ABF and SuSiE fine-mapping on the same simulated GWAS region: ABF finds only 1 of 3 true causal SNPs, SuSiE finds all 3" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The result this tutorial builds up to, from real simulated data: with three true causal variants hiding in one correlated region, ABF collapses onto a single dominant signal while SuSiE separates out all three.</p>
 </div>
@@ -23817,14 +23828,14 @@ font-style: inherit;">1e-5</span>)</span></code></pre></div></div>
   <category>Fine-Mapping</category>
   <category>GWAS</category>
   <category>Statistical Genetics</category>
-  <guid>https://bntechie.github.io/tutorials/blog_Finemapping/Statistical_Fine_Mapping.html</guid>
+  <guid>https://bntechie.github.io/tutorials/Finemapping/Statistical_Fine_Mapping.html</guid>
   <pubDate>Mon, 15 Jun 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_Finemapping/images/fine-mapping.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/Finemapping/images/fine-mapping.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Mendelian Randomization</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_mendelianR/Mendelian_Randomization.html</link>
+  <link>https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization.html</link>
   <description><![CDATA[ 
 
 
@@ -26343,7 +26354,7 @@ font-style: inherit;">mr_leaveoneout_plot</span>(loo_results)</span></code></pre
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_mendelianR/Mendelian_Randomization_files/figure-html/cell-15-output-3.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization_files/figure-html/cell-15-output-3.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -26365,7 +26376,7 @@ font-style: inherit;">mr_scatter_plot</span>(mr_results, harmonised_dat)</span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_mendelianR/Mendelian_Randomization_files/figure-html/cell-16-output-2.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization_files/figure-html/cell-16-output-2.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -26397,7 +26408,7 @@ font-style: inherit;">mr_forest_plot</span>(single_snp_results)</span></code></p
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_mendelianR/Mendelian_Randomization_files/figure-html/cell-17-output-3.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization_files/figure-html/cell-17-output-3.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -26416,7 +26427,7 @@ font-style: inherit;">mr_funnel_plot</span>(single_snp_results)</span></code></p
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_mendelianR/Mendelian_Randomization_files/figure-html/cell-18-output-2.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization_files/figure-html/cell-18-output-2.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -26637,14 +26648,14 @@ Analysing 'ieu-a-2' on 'ieu-a-7'
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_mendelianR/Mendelian_Randomization_files/figure-html/cell-19-output-7.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization_files/figure-html/cell-19-output-7.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_mendelianR/Mendelian_Randomization_files/figure-html/cell-19-output-8.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization_files/figure-html/cell-19-output-8.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -26698,20 +26709,20 @@ Analysing 'ieu-a-2' on 'ieu-a-7'
   <category>Epidemiology</category>
   <category>Mendelian Randomization</category>
   <category>Tutorial</category>
-  <guid>https://bntechie.github.io/tutorials/blog_mendelianR/Mendelian_Randomization.html</guid>
+  <guid>https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization.html</guid>
   <pubDate>Mon, 15 Jun 2026 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>The Covariance Matrix in Association Testing</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_covariance_matrix/Covariance_matrix.html</link>
+  <link>https://bntechie.github.io/tutorials/covariance_matrix/Covariance_matrix.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_covariance_matrix/images/covariance-matrix.svg" alt="A 3x3 covariance matrix heatmap with the diagonal (variances) highlighted in amber and off-diagonal covariances shaded by strength" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/covariance_matrix/images/covariance-matrix.svg" alt="A 3x3 covariance matrix heatmap with the diagonal (variances) highlighted in amber and off-diagonal covariances shaded by strength" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The object at the center of every case in this tutorial: a covariance matrix’s diagonal describes each observation’s own variance, but it’s the off-diagonal terms – the part “independence” assumes away – that decide whether a p-value can be trusted.</p>
 </div>
@@ -27489,14 +27500,14 @@ font-style: inherit;">FALSE</span>)</span></code></pre></div></div>
   <category>GWAS</category>
   <category>Mixed Models</category>
   <category>R</category>
-  <guid>https://bntechie.github.io/tutorials/blog_covariance_matrix/Covariance_matrix.html</guid>
+  <guid>https://bntechie.github.io/tutorials/covariance_matrix/Covariance_matrix.html</guid>
   <pubDate>Sun, 14 Jun 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_covariance_matrix/images/covariance-matrix.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/covariance_matrix/images/covariance-matrix.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Ridge and Lasso Regression</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_ridge_lasso/ridge_lasso_tutorial.html</link>
+  <link>https://bntechie.github.io/tutorials/ridge_lasso/ridge_lasso_tutorial.html</link>
   <description><![CDATA[ 
 
 
@@ -28125,7 +28136,7 @@ font-style: inherit;">0.7</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_ridge_lasso/ridge_lasso_tutorial_files/figure-html/cell-5-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/ridge_lasso/ridge_lasso_tutorial_files/figure-html/cell-5-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -28561,7 +28572,7 @@ font-style: inherit;">0.7</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_ridge_lasso/ridge_lasso_tutorial_files/figure-html/cell-7-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/ridge_lasso/ridge_lasso_tutorial_files/figure-html/cell-7-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -29585,20 +29596,20 @@ Lasso (CV) 2.55  0.00 0.20 0.10 -1.18  0.00 -0.71 0.00 1.77 0.23</code></pre>
 </section>
 
  ]]></description>
-  <guid>https://bntechie.github.io/tutorials/blog_ridge_lasso/ridge_lasso_tutorial.html</guid>
+  <guid>https://bntechie.github.io/tutorials/ridge_lasso/ridge_lasso_tutorial.html</guid>
   <pubDate>Tue, 09 Jun 2026 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Polygenic Risk Scores (PRS): From GWAS to Genetic Prediction</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_PRS/Polygenic_Risk_Scores.html</link>
+  <link>https://bntechie.github.io/tutorials/PRS/Polygenic_Risk_Scores.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_PRS/images/prs-pipeline.svg" alt="Pipeline diagram showing GWAS summary statistics flowing through a PRS method (C+PT, SBayesR, or SBayesRC) into an individual polygenic risk score, visualized as a distribution split into low, average, and high risk groups" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/PRS/images/prs-pipeline.svg" alt="Pipeline diagram showing GWAS summary statistics flowing through a PRS method (C+PT, SBayesR, or SBayesRC) into an individual polygenic risk score, visualized as a distribution split into low, average, and high risk groups" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>The whole tutorial in one picture: millions of small GWAS effects, combined by a PRS method, collapse into a single number per person – which is only useful once you can place that person in a risk distribution.</p>
 </div>
@@ -30612,21 +30623,21 @@ font-style: inherit;">-</span> r2_null</span></code></pre></div></div>
   <category>Statistical Genetics</category>
   <category>GWAS</category>
   <category>PRS</category>
-  <guid>https://bntechie.github.io/tutorials/blog_PRS/Polygenic_Risk_Scores.html</guid>
+  <guid>https://bntechie.github.io/tutorials/PRS/Polygenic_Risk_Scores.html</guid>
   <pubDate>Mon, 08 Jun 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_PRS/images/prs-pipeline.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/PRS/images/prs-pipeline.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>A Complete GWAS Practical Tutorial Using PLINK, GCTA, R, and METAL</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_GWAS/GWAS.html</link>
+  <link>https://bntechie.github.io/tutorials/GWAS/GWAS.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="thesis-hero-wrap">
-<p><img src="https://bntechie.github.io/tutorials/blog_GWAS/images/gwas-manhattan.svg" alt="Stylized Manhattan plot illustrating genome-wide association results across chromosomes, with one simulated significant locus" class="thesis-hero-art"></p>
+<p><img src="https://bntechie.github.io/tutorials/GWAS/images/gwas-manhattan.svg" alt="Stylized Manhattan plot illustrating genome-wide association results across chromosomes, with one simulated significant locus" class="thesis-hero-art"></p>
 <div class="thesis-hero-caption">
 <p>A Manhattan plot: each point is a SNP, plotted by genomic position (x-axis) and significance (y-axis). Towers that cross the genome-wide threshold are the signals a GWAS is built to find.</p>
 </div>
@@ -32086,7 +32097,7 @@ font-style: inherit;"> individuals"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_GWAS/GWAS_files/figure-html/cell-2-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/GWAS/GWAS_files/figure-html/cell-2-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -32465,7 +32476,7 @@ font-style: inherit;">False</span>)</span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_GWAS/GWAS_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/GWAS/GWAS_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -34362,7 +34373,7 @@ font-style: inherit;">1.02</span>)</span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_GWAS/GWAS_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/GWAS/GWAS_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -34824,7 +34835,7 @@ font-style: inherit;">9</span>)</span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_GWAS/GWAS_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/GWAS/GWAS_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -36457,7 +36468,7 @@ font-style: inherit;">"Detected close-relative pairs (GRM &gt; 0.05):"</span>, c
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_GWAS/GWAS_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/GWAS/GWAS_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -36816,14 +36827,14 @@ Biological Interpretation</code></pre>
   <category>GWAS</category>
   <category>Statistical Genetics</category>
   <category>Tutorial</category>
-  <guid>https://bntechie.github.io/tutorials/blog_GWAS/GWAS.html</guid>
+  <guid>https://bntechie.github.io/tutorials/GWAS/GWAS.html</guid>
   <pubDate>Sun, 07 Jun 2026 21:00:00 GMT</pubDate>
-  <media:content url="https://bntechie.github.io/tutorials/blog_GWAS/images/gwas-manhattan.svg" medium="image" type="image/svg+xml"/>
+  <media:content url="https://bntechie.github.io/tutorials/GWAS/images/gwas-manhattan.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Genetic Drift and Fixation: Understanding Evolution Through Randomness</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift.html</link>
+  <link>https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift.html</link>
   <description><![CDATA[ 
 
 
@@ -37412,7 +37423,7 @@ font-style: inherit;">1.05</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -37567,7 +37578,7 @@ font-style: inherit;">1.05</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -37743,7 +37754,7 @@ font-style: inherit;">1.05</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -37883,7 +37894,7 @@ font-style: inherit;">"Drift Variance Decreases With Population Size"</span></sp
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -37984,7 +37995,7 @@ font-style: inherit;">"Effect of Initial Allele Frequency"</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -38186,7 +38197,7 @@ font-style: inherit;">"Experimental Verification of the Fixation Theorem"</span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -38335,7 +38346,7 @@ font-style: inherit;">"Genetic Drift Reshapes the Frequency Spectrum"</span></sp
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -38481,7 +38492,7 @@ Fixed SNPs: 285</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -38680,7 +38691,7 @@ font-style: inherit;">"Genome-Wide Consequences of Drift"</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -38821,7 +38832,7 @@ font-style: inherit;">"Sampling Error Decreases With Sample Size"</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -38946,7 +38957,7 @@ font-style: inherit;">"Sampling Distribution of Allele Frequency Estimates"</spa
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -39175,7 +39186,7 @@ font-style: inherit;">"Loss of Genetic Diversity Through Drift"</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -39406,7 +39417,7 @@ font-style: inherit;">"Population Bottleneck"</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -39524,7 +39535,7 @@ font-style: inherit;">"Founder Effect"</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -39696,7 +39707,7 @@ Segregating: 812</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-20-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-20-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -39842,7 +39853,7 @@ font-style: inherit;">"Population Divergence Through Drift"</span></span>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -39961,13 +39972,13 @@ font-style: inherit;">"Population Divergence Through Drift"</span></span>
 
  ]]></description>
   <category>Tutorial</category>
-  <guid>https://bntechie.github.io/tutorials/blog_genetic_drift/Genetic_Drift.html</guid>
+  <guid>https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift.html</guid>
   <pubDate>Mon, 01 Jun 2026 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Colocalization Analysis in Statistical Genetics: Theory and Practical Example in R</title>
   <dc:creator>Nivedita Bhadra</dc:creator>
-  <link>https://bntechie.github.io/tutorials/blog_Colocalizatiom/Colocalization.html</link>
+  <link>https://bntechie.github.io/tutorials/Colocalizatiom/Colocalization.html</link>
   <description><![CDATA[ 
 
 
@@ -40459,7 +40470,7 @@ font-style: inherit;">theme_minimal</span>()</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_Colocalizatiom/Colocalization_files/figure-html/cell-4-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/Colocalizatiom/Colocalization_files/figure-html/cell-4-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -40726,7 +40737,7 @@ font-style: inherit;">theme_minimal</span>()</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_Colocalizatiom/Colocalization_files/figure-html/cell-7-output-2.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/Colocalizatiom/Colocalization_files/figure-html/cell-7-output-2.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -40950,7 +40961,7 @@ font-style: inherit;">theme_minimal</span>()</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://bntechie.github.io/tutorials/blog_Colocalizatiom/Colocalization_files/figure-html/cell-8-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="https://bntechie.github.io/tutorials/Colocalizatiom/Colocalization_files/figure-html/cell-8-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -41164,7 +41175,7 @@ Multiple causal variants</code></pre>
   <category>Colocalization</category>
   <category>TWAS</category>
   <category>Mendelian Randomization</category>
-  <guid>https://bntechie.github.io/tutorials/blog_Colocalizatiom/Colocalization.html</guid>
+  <guid>https://bntechie.github.io/tutorials/Colocalizatiom/Colocalization.html</guid>
   <pubDate>Thu, 28 May 2026 21:00:00 GMT</pubDate>
 </item>
 </channel>

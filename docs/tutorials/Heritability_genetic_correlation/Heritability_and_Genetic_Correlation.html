@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-07-27">
+<meta name="description" content="HE regression, GREML, and LDSC as the same underlying idea in two different spaces – individuals vs.&nbsp;markers – extended to LD score regression for genetic correlation between traits.">
+
+<title>Heritability and Genetic Correlation: From First Principles to Summary Statistics – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Heritability and Genetic Correlation: From First Principles to Summary Statistics</h1>
+<p class="subtitle lead">How we estimate how much of a trait is genetic, and whether two traits share genetic architecture</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Statistical Genetics</div>
+    <div class="quarto-category">Heritability</div>
+    <div class="quarto-category">Genetic Correlation</div>
+    <div class="quarto-category">LDSC</div>
+    <div class="quarto-category">Tutorial</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    HE regression, GREML, and LDSC as the same underlying idea in two different spaces – individuals vs.&nbsp;markers – extended to LD score regression for genetic correlation between traits.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 27, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="thesis-hero-wrap">
+<p><img src="images/heritability-duality.svg" alt="Two scatter plots with fitted regression lines: HE regression plotting phenotype cross-products against relatedness, and LDSC plotting chi-squared statistics against LD score -- both recovering heritability as the slope" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The core duality this tutorial builds toward: HE regression works in the space of individuals (relatedness), LDSC works in the space of markers (LD score) – but in both, heritability is just a regression slope. These panels are plotted from the tutorial’s own simulated data.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">Heritability</span> <span class="tag">LDSC</span> <span class="tag">GREML</span> <span class="tag">R</span></p>
+</div>
+<p>Every quantitative genetics question eventually runs into the same two words: <strong>heritability</strong> and <strong>genetic correlation</strong>. How much of height is genetic? Do depression and obesity share genetic causes? Is a GWAS signal confounded by population structure?</p>
+<p>Answering any of these requires estimating variance and covariance — not of the phenotype itself, but of its <em>genetic component</em>. This tutorial builds that machinery from the ground up: starting with individual-level methods you could run by hand on a handful of relatives, and ending with the summary-statistics methods (LD Score Regression) that power essentially every modern GWAS consortium paper.</p>
+<blockquote class="blockquote">
+<p><strong>What you’ll learn</strong></p>
+<ul>
+<li>What “heritability” actually means — and why there are three different definitions</li>
+<li>How to estimate heritability from relatives, using Haseman-Elston regression</li>
+<li>Why binary disease traits need special handling (the liability threshold model)</li>
+<li>How LD Score Regression estimates heritability from GWAS summary statistics alone</li>
+<li>What genetic correlation is, and the four different reasons two traits can share genetic architecture</li>
+<li>The practical pitfalls that make genetic correlation estimates misleading if you’re not careful</li>
+</ul>
+</blockquote>
+<section id="why-do-we-need-a-formal-definition-of-heritability-at-all" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="why-do-we-need-a-formal-definition-of-heritability-at-all"><span class="header-section-number">0.1</span> Why Do We Need a Formal Definition of Heritability at All?</h2>
+<p>Francis Galton noticed over a century ago that relatives resemble each other more than random pairs of people, and that identical twins resemble each other more than fraternal twins. A large meta-analysis of fifty years of twin studies later put a number on this: an average heritability estimate of 49% across thousands of traits, with 69% of studies supporting a purely additive genetic model (Polderman et al., 2015).</p>
+<p>But “heritability” turns out to be a slippery word. Before we can estimate it, we need to agree on exactly what quantity we’re estimating.</p>
+</section>
+<section id="part-1-three-definitions-of-heritability" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Part 1 — Three Definitions of Heritability</h1>
+<p>An <strong>estimand</strong> is the true underlying population parameter we’re actually trying to estimate. It sounds like a pedantic distinction, but different heritability methods target genuinely different estimands — and comparing numbers across methods without realizing this is a common source of confusion.</p>
+<section id="fixed-effect-realised-variance" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="fixed-effect-realised-variance"><span class="header-section-number">1.1</span> Fixed-Effect Realised Variance</h2>
+<p><span class="math display">\[y = X\beta + \varepsilon, \qquad h^2 := \frac{\text{Var}(X\beta)}{\text{Var}(y)}\]</span></p>
+<p>This asks: of the phenotypic variance in <em>this specific sample</em>, how much is explained by the genotypes we actually observed? It’s a property of the realized data, not an abstract population parameter.</p>
+</section>
+<section id="random-individual-expected-variance" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="random-individual-expected-variance"><span class="header-section-number">1.2</span> Random-Individual Expected Variance</h2>
+<p><span class="math display">\[\text{Cov}(y) = \sigma_g^2 K + \sigma_e^2 I \quad (K = \text{GRM}), \qquad h^2 := \frac{\sigma_g^2}{\sigma_g^2 + \sigma_e^2}\]</span></p>
+<p>Here, genetic effects are treated as random draws from a distribution, and <span class="math inline">\(K\)</span> — the <strong>Genetic Relationship Matrix (GRM)</strong> — captures how genetically similar each pair of individuals is. This is the estimand targeted by methods like <strong>GREML/GCTA</strong> (Part 3).</p>
+</section>
+<section id="random-marker-expected-variance" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="random-marker-expected-variance"><span class="header-section-number">1.3</span> Random-Marker Expected Variance</h2>
+<p><span class="math display">\[y = X\beta + \varepsilon, \qquad \beta \sim \left[0, \frac{\sigma_g^2}{M}\right], \quad \varepsilon \sim [0, 1-\sigma_g^2]\]</span></p>
+<p>Here it’s the SNP <em>effects</em> that are random, each drawn with variance <span class="math inline">\(\sigma_g^2/M\)</span> (spread evenly across <span class="math inline">\(M\)</span> SNPs). The estimand is <span class="math inline">\(\sigma_g^2\)</span> directly. This is the estimand targeted by <strong>LD Score Regression</strong> (Part 5).</p>
+</section>
+<section id="why-this-distinction-matters-in-practice" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="why-this-distinction-matters-in-practice"><span class="header-section-number">1.4</span> Why This Distinction Matters in Practice</h2>
+<p>GREML and LDSC are both routinely described as estimating “SNP heritability,” but they’re formally targeting different estimands under different assumptions about what’s random (individuals vs.&nbsp;markers). In practice they tend to agree well for polygenic traits with good data — but when they disagree, the difference isn’t necessarily a bug in one of the methods; it can reflect which estimand each one is actually built to target.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li>“Heritability” has at least three distinct formal definitions, differing in what’s treated as random (nothing, individuals, or markers).</li>
+<li>GREML targets the random-individual estimand; LD Score Regression targets the random-marker estimand.</li>
+<li>Keep this in mind before treating heritability estimates from different methods as directly interchangeable.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="part-2-haseman-elston-regression-heritability-from-first-principles" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Part 2 — Haseman-Elston Regression: Heritability from First Principles</h1>
+<p>Before GWAS existed, before genome-wide SNP arrays existed, geneticists were already estimating heritability — from relatives. <strong>Haseman-Elston (HE) regression</strong>, developed by J.K. Haseman and R.C. Elston in 1972, is the conceptual ancestor of nearly every method in this tutorial, including LD Score Regression itself.</p>
+<section id="the-core-premise" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="the-core-premise"><span class="header-section-number">2.1</span> The Core Premise</h2>
+<blockquote class="blockquote">
+<p>If a trait is influenced by genetics, relatives who are more genetically similar should have more similar phenotypes.</p>
+</blockquote>
+<p>HE regression turns this intuition into a simple <strong>ordinary least squares (OLS)</strong> regression — no maximum likelihood, no iterative optimization, just a linear regression of phenotypic similarity on genetic similarity.</p>
+</section>
+<section id="setting-up-the-model" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="setting-up-the-model"><span class="header-section-number">2.2</span> Setting Up the Model</h2>
+<p>Let <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span> be the (mean-centered) phenotypes of individuals <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, so <span class="math inline">\(E[y]=0\)</span>. The basic additive model is <span class="math inline">\(y_i = g_i + e_i\)</span>, giving:</p>
+<p><span class="math display">\[\text{Var}(y_i) = \sigma_g^2 + \sigma_e^2\]</span></p>
+<p>Assuming no shared environment, phenotypic covariance between two relatives is driven entirely by the proportion of genome they share identical by descent, <span class="math inline">\(\pi_{i,j}\)</span>:</p>
+<p><span class="math display">\[\text{Cov}(y_i, y_j) = \pi_{i,j}\,\sigma_g^2\]</span></p>
+</section>
+<section id="version-1-1972-squared-differences" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="version-1-1972-squared-differences"><span class="header-section-number">2.3</span> Version 1 (1972): Squared Differences</h2>
+<p>Haseman and Elston’s original approach measured phenotypic similarity using the squared difference <span class="math inline">\(D_{i,j} = (y_i - y_j)^2\)</span>. Expanding and substituting the variance/covariance definitions above:</p>
+<p><span class="math display">\[E[D_{i,j}] = \text{Var}(y_i) + \text{Var}(y_j) - 2\,\text{Cov}(y_i,y_j) = 2(\sigma_g^2+\sigma_e^2) - 2\pi_{i,j}\sigma_g^2\]</span></p>
+<p>This gives a linear regression <span class="math inline">\(D_{i,j} = a + b\,\pi_{i,j} + \varepsilon\)</span>, where the intercept <span class="math inline">\(a\)</span> estimates <span class="math inline">\(2(\sigma_g^2+\sigma_e^2)\)</span> (twice total phenotypic variance) and the slope <span class="math inline">\(b\)</span> estimates <span class="math inline">\(-2\sigma_g^2\)</span>. So: regress squared phenotypic differences on genetic relatedness, then divide the slope by <span class="math inline">\(-2\)</span> to recover <span class="math inline">\(\sigma_g^2\)</span>.</p>
+</section>
+<section id="version-2-2000-cross-products-simpler-and-more-powerful" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="version-2-2000-cross-products-simpler-and-more-powerful"><span class="header-section-number">2.4</span> Version 2 (2000): Cross-Products — Simpler and More Powerful</h2>
+<p>Elston and colleagues later proposed a cleaner alternative: use the <strong>cross-product</strong> of mean-centered phenotypes, <span class="math inline">\(C_{i,j} = y_i y_j\)</span>, instead of the squared difference.</p>
+<p><strong>Why is this better?</strong> Squared differences mix together the covariance (the genetic signal we actually want) with each individual’s own variance (which includes environmental noise). Cross-products isolate the covariance directly. Since <span class="math inline">\(E[y_i]=E[y_j]=0\)</span>:</p>
+<p><span class="math display">\[\text{Cov}(y_i,y_j) = E[y_iy_j] - E[y_i]E[y_j] = E[y_iy_j]\]</span></p>
+<p>so <span class="math inline">\(E[C_{i,j}] = \text{Cov}(y_i,y_j) = \pi_{i,j}\sigma_g^2\)</span> directly. This gives an even simpler regression:</p>
+<p><span class="math display">\[C_{i,j} = a + b\,\pi_{i,j} + \varepsilon\]</span></p>
+<p>Now the intercept is expected to be exactly zero (assuming no shared environment), and <strong>the slope <span class="math inline">\(b\)</span> estimates <span class="math inline">\(\sigma_g^2\)</span> directly</strong> — no dividing by <span class="math inline">\(-2\)</span> required.</p>
+</section>
+<section id="a-simulated-illustration" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="a-simulated-illustration"><span class="header-section-number">2.5</span> A Simulated Illustration</h2>
+<div id="e6911a37" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T19:08:05.684062Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T19:08:05.672081Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T19:08:05.899182Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T19:08:05.891631Z&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate a simple additive-genetic scenario across pairs of relatives</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n_pairs <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Relatedness (pi_ij): 0.5 for siblings, 0.25 for half-sibs/grandparent, etc.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>pi_ij <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">0.125</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>), n_pairs, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>sigma_g2 <span class="ot">&lt;-</span> <span class="fl">0.4</span>   <span class="co"># true additive genetic variance</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>sigma_e2 <span class="ot">&lt;-</span> <span class="fl">0.6</span>   <span class="co"># true environmental variance</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate mean-centered phenotype pairs consistent with this relatedness structure</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>y_i <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_pairs, <span class="dv">0</span>, <span class="fu">sqrt</span>(sigma_g2 <span class="sc">+</span> sigma_e2))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>noise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_pairs, <span class="dv">0</span>, <span class="fu">sqrt</span>((<span class="dv">1</span> <span class="sc">-</span> pi_ij) <span class="sc">*</span> sigma_g2 <span class="sc">+</span> sigma_e2))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>y_j <span class="ot">&lt;-</span> pi_ij <span class="sc">*</span> y_i <span class="sc">+</span> noise   <span class="co"># illustrative construction, not a full pedigree simulator</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Cross-product HE regression</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>C_ij <span class="ot">&lt;-</span> y_i <span class="sc">*</span> y_j</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>he_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(C_ij <span class="sc">~</span> pi_ij)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(he_fit)   <span class="co"># slope should recover something in the neighborhood of sigma_g2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = C_ij ~ pi_ij)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.7523 -0.5138 -0.1174  0.3520 10.3084 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.02636    0.03741  -0.705    0.481    
+pi_ij        1.09987    0.13514   8.139 6.93e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.089 on 1998 degrees of freedom
+Multiple R-squared:  0.03209,   Adjusted R-squared:  0.03161 
+F-statistic: 66.24 on 1 and 1998 DF,  p-value: 6.93e-16</code></pre>
+</div>
+</div>
+<p>This is a simplified illustration of the logic, not a full quantitative-genetics simulator (real HE regression is normally run on GRM values estimated from genome-wide SNP data, not a handful of discrete relatedness categories) — but it captures the essential mechanic: <strong>regress phenotype cross-products on genetic relatedness, and the slope is your heritability estimate.</strong></p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li>HE regression turns “genetically-similar relatives resemble each other phenotypically” into a simple linear regression.</li>
+<li>The original (1972) squared-difference version requires dividing the slope by <span class="math inline">\(-2\)</span>.</li>
+<li>The revised (2000) cross-product version is both simpler and more statistically powerful, because it isolates covariance without mixing in individual-level variance.</li>
+<li>HE regression is the conceptual foundation for LD Score Regression, covered in Part 5.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="part-3-greml-gcta-and-the-genetic-relationship-matrix" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Part 3 — GREML, GCTA, and the Genetic Relationship Matrix</h1>
+<p>HE regression works well conceptually, but modern genome-wide SNP data calls for a slightly different formalization: <strong>GREML</strong> (Genomic REstricted Maximum Likelihood), implemented in the widely-used <strong>GCTA</strong> software (Yang et al.).</p>
+<section id="from-ols-to-a-mixed-model" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="from-ols-to-a-mixed-model"><span class="header-section-number">3.1</span> From OLS to a Mixed Model</h2>
+<p>Instead of a simple linear regression, GREML fits a random-effects mixed model:</p>
+<p><span class="math display">\[\text{Cov}(y) = \sigma_g^2 K + \sigma_e^2 I\]</span></p>
+<p>where <span class="math inline">\(K\)</span> is the <strong>Genetic Relationship Matrix (GRM)</strong> — the genome-wide analog of the pairwise relatedness <span class="math inline">\(\pi_{i,j}\)</span> from HE regression, but estimated directly from SNP genotypes rather than known pedigree relationships. This targets the <em>random-individual expected variance</em> estimand from Part 1: <span class="math inline">\(h^2 := \sigma_g^2/(\sigma_g^2+\sigma_e^2)\)</span>.</p>
+</section>
+<section id="building-the-grm" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="building-the-grm"><span class="header-section-number">3.2</span> Building the GRM</h2>
+<p>The GRM quantifies genetic similarity between every pair of individuals in a sample, estimated from genome-wide genotype data rather than known family relationships — which is what makes it applicable to unrelated individuals in large cohorts like biobanks, not just close relatives.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Person A</th>
+<th>Person B</th>
+<th>Person C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A</strong></td>
+<td>1.00</td>
+<td>0.10</td>
+<td>0.02</td>
+</tr>
+<tr class="even">
+<td><strong>B</strong></td>
+<td>0.10</td>
+<td>1.00</td>
+<td>0.08</td>
+</tr>
+<tr class="odd">
+<td><strong>C</strong></td>
+<td>0.02</td>
+<td>0.08</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+<p>The diagonal (self-relatedness) is close to 1; off-diagonal entries reflect how much genome-wide genetic material each pair shares. The core logic is the same intuition as HE regression: if genetics influences the trait, individuals who are more genetically similar (higher GRM entries) should be more phenotypically similar too — GREML just estimates this via restricted maximum likelihood rather than OLS, over a full genome-wide GRM rather than a handful of relatedness categories.</p>
+</section>
+<section id="why-greml-matters" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="why-greml-matters"><span class="header-section-number">3.3</span> Why GREML Matters</h2>
+<p>GREML/GCTA was one of the methods that first demonstrated <strong>“missing heritability”</strong> could be recovered using genome-wide SNP data on unrelated individuals — showing that much of the heritability twin studies had estimated really was captured by common SNPs, just not by the small number of genome-wide-significant hits any single GWAS had found. This distinction between “heritability captured by genome-wide-significant SNPs” and “heritability captured by all measured SNPs” (the latter usually much larger) remains one of the central themes of statistical genetics.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li>GREML uses a genome-wide Genetic Relationship Matrix (GRM) in a random-effects mixed model, estimated via restricted maximum likelihood.</li>
+<li>It targets the random-individual expected variance estimand: <span class="math inline">\(h^2 = \sigma_g^2/(\sigma_g^2+\sigma_e^2)\)</span>.</li>
+<li>GREML requires individual-level genotype data, unlike the summary-statistics methods covered later in this tutorial.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="part-4-binary-traits-the-liability-threshold-model-and-pcgc" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Part 4 — Binary Traits: The Liability Threshold Model and PCGC</h1>
+<p>Everything in Parts 2–3 assumed a continuous, normally-distributed phenotype. Most disease traits, though, are binary: case or control. This creates a real problem for naive heritability estimation.</p>
+<section id="the-ascertainment-problem" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="the-ascertainment-problem"><span class="header-section-number">4.1</span> The Ascertainment Problem</h2>
+<p>Case-control GWAS deliberately <strong>oversample cases</strong>. A disease might have a true population prevalence <span class="math inline">\(K\)</span> of 1%, but researchers typically recruit a sample that’s 50% cases — otherwise there wouldn’t be enough cases to have any statistical power at all.</p>
+<p>If you plug 0/1 case-control status directly into HE regression, you get a heritability estimate on the <strong>observed scale</strong> (<span class="math inline">\(h^2_{obs}\)</span>). Because of the deliberate oversampling, this number is heavily biased and not biologically meaningful — it reflects your sampling design as much as the underlying genetics.</p>
+</section>
+<section id="the-liability-threshold-model" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="the-liability-threshold-model"><span class="header-section-number">4.2</span> The Liability Threshold Model</h2>
+<p>The standard fix: assume the binary trait is driven by an unobserved, continuous, normally-distributed <strong>liability</strong>.</p>
+<ul>
+<li>Everyone has a liability score, whether or not they’re a case.</li>
+<li>If your liability crosses a threshold <span class="math inline">\(t\)</span>, you become a case (<span class="math inline">\(y=1\)</span>).</li>
+<li>The threshold <span class="math inline">\(t\)</span> is set by the population prevalence <span class="math inline">\(K\)</span> — rarer diseases have a higher threshold.</li>
+</ul>
+<p>The quantity we actually want isn’t the heritability of the observed 0/1 scale — it’s the heritability of the underlying continuous <strong>liability scale</strong>, <span class="math inline">\(h^2_{liability}\)</span>.</p>
+</section>
+<section id="pcgc-fixing-the-regression-directly" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="pcgc-fixing-the-regression-directly"><span class="header-section-number">4.3</span> PCGC: Fixing the Regression Directly</h2>
+<p>Golan et al.&nbsp;(2014) developed <strong>PCGC</strong> (“Phenotype Correlation–Genotype Correlation”) to solve this within the HE cross-product framework directly, rather than computing <span class="math inline">\(h^2_{obs}\)</span> and applying an after-the-fact correction (which turns out to be mathematically unreliable under severe ascertainment).</p>
+<p>Let <span class="math inline">\(z\)</span> be the height of the standard normal density at the liability threshold <span class="math inline">\(t\)</span>, <span class="math inline">\(P\)</span> the case proportion in the ascertained sample, and <span class="math inline">\(K\)</span> the true population prevalence. PCGC shows that the expected phenotypic covariance in an ascertained sample is:</p>
+<p><span class="math display">\[E[y_iy_j] \approx \frac{z^2\,P(1-P)}{K^2(1-K)^2}\,\pi_{i,j}\,\sigma^2_{g,\text{liability}}\]</span></p>
+<p>The fix is elegant: scale the observed cross-products <span class="math inline">\(y_iy_j\)</span> by this prevalence-derived constant <em>before</em> regressing on the GRM (<span class="math inline">\(\pi_{i,j}\)</span>), exactly as in ordinary HE regression. The result is a clean, directly-interpretable estimate of liability-scale heritability.</p>
+</section>
+<section id="why-this-matters-in-practice" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="why-this-matters-in-practice"><span class="header-section-number">4.4</span> Why This Matters in Practice</h2>
+<p>Comparing raw observed-scale <span class="math inline">\(h^2\)</span> estimates across two case-control studies of the same disease — say, one with 30% cases and one with 50% cases — is comparing apples to oranges, since the observed-scale number depends on the ascertainment ratio, not just the underlying biology. <strong>Always convert to the liability scale before comparing heritability estimates across binary-trait studies</strong>, especially ones with different sampling designs or disease prevalence assumptions.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li>Case-control ascertainment biases naive (observed-scale) heritability estimates for binary traits.</li>
+<li>The liability threshold model reframes disease as an unobserved continuous trait crossing a threshold set by population prevalence.</li>
+<li>PCGC folds the correction directly into the HE cross-product regression, using a prevalence-based scaling factor, rather than a flawed post-hoc transformation.</li>
+<li>Liability-scale <span class="math inline">\(h^2\)</span>, not observed-scale <span class="math inline">\(h^2\)</span>, is the number that’s comparable across studies with different ascertainment.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="part-5-ld-score-regression-heritability-from-summary-statistics-alone" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Part 5 — LD Score Regression: Heritability from Summary Statistics Alone</h1>
+<p>Everything so far — HE regression, GREML, PCGC — requires <strong>individual-level genotype data</strong>: actual genotypes for actual people. But most large GWAS consortia only release <strong>summary statistics</strong>: one effect size, standard error, and p-value per SNP, with no individual-level data at all (for privacy and logistical reasons). <strong>LD Score Regression (LDSC)</strong>, introduced by Bulik-Sullivan, Finucane, and colleagues in 2015, estimates heritability from summary statistics alone — no individual genotypes required.</p>
+<section id="the-intuition-ld-amplifies-detectable-association" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="the-intuition-ld-amplifies-detectable-association"><span class="header-section-number">5.1</span> The Intuition: LD Amplifies Detectable Association</h2>
+<p>Recall that SNPs correlated with a causal variant through linkage disequilibrium pick up some of that variant’s association signal — this is the same LD logic that underlies GWAS itself and PRS construction. The LDSC insight extends this one step further:</p>
+<blockquote class="blockquote">
+<p>A SNP that tags (is correlated with) <em>more</em> of the genome should show a <em>larger</em> marginal association signal on average — simply because it’s more likely to be picking up signal from a nearby causal variant.</p>
+</blockquote>
+</section>
+<section id="from-fishers-polygenic-model-to-an-estimating-equation" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="from-fishers-polygenic-model-to-an-estimating-equation"><span class="header-section-number">5.2</span> From Fisher’s Polygenic Model to an Estimating Equation</h2>
+<p>Assume a polygenic model (Fisher, 1918): <span class="math inline">\(y_i = \sum_j \beta_j X_{ij} + \varepsilon_i\)</span>, with <span class="math inline">\(\beta_j \sim [0,\ h^2/M]\)</span> — effect sizes drawn with variance spread evenly across <span class="math inline">\(M\)</span> SNPs. From GWAS, we observe marginal effect estimates <span class="math inline">\(\hat\beta_j = \frac{1}{N}\sum_i X_{ij}y_i\)</span>. Taking the expectation of <span class="math inline">\(N\hat\beta_j^2\)</span> and working through the algebra:</p>
+<p><span class="math display">\[E[\chi_j^2] = \frac{Nh^2}{M}\,\ell_j + Na + 1\]</span></p>
+<p>where <span class="math inline">\(\ell_j = \sum_k r_{j,k}^2\)</span> is the <strong>LD score</strong> of SNP <span class="math inline">\(j\)</span> — the sum of its squared correlations with every other SNP in the reference panel. This is a simple linear regression: regress each SNP’s GWAS <span class="math inline">\(\chi^2\)</span> statistic against its LD score.</p>
+<ul>
+<li><strong>Slope</strong> <span class="math inline">\(\propto Nh^2/M\)</span> → estimates SNP heritability <span class="math inline">\(h^2\)</span>.</li>
+<li><strong>Intercept</strong> <span class="math inline">\(\propto Na + 1\)</span> → captures confounding, including population stratification. This is exactly what LD score regression was originally designed to detect: true polygenic signal should scale with LD, but confounding inflation (like population stratification) inflates test statistics roughly uniformly <em>regardless</em> of LD — so it shows up in the intercept, not the slope.</li>
+</ul>
+<p><strong>Worked example from the original literature:</strong> a schizophrenia GWAS (Psychiatric Genomics Consortium) showed <span class="math inline">\(\lambda_{GC} = 1.48\)</span> (substantial genomic inflation) but an LDSC intercept of only 1.06 — meaning the overwhelming majority of that inflation was consistent with genuine polygenic architecture, not confounding. This kind of decomposition is one of LDSC’s most valuable practical contributions: separating “real polygenicity” from “something’s wrong with your GWAS.”</p>
+</section>
+<section id="a-simulated-illustration-1" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="a-simulated-illustration-1"><span class="header-section-number">5.3</span> A Simulated Illustration</h2>
+<div id="086179a9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T19:08:06.034862Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T19:08:05.911447Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T19:08:06.109889Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T19:08:06.107873Z&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Illustrative LDSC-style simulation</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">5000</span>          <span class="co"># number of SNPs</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">50000</span>         <span class="co"># GWAS sample size</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>h2_true <span class="ot">&lt;-</span> <span class="fl">0.3</span>     <span class="co"># true heritability</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>a_true  <span class="ot">&lt;-</span> <span class="fl">0.01</span>    <span class="co"># confounding/stratification inflation</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate LD scores (in reality, computed from a reference panel like 1000 Genomes)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>ld_score <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(M, <span class="at">shape =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="dv">20</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate chi-squared statistics under the LDSC expectation, plus noise</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>expected_chisq <span class="ot">&lt;-</span> (N <span class="sc">*</span> h2_true <span class="sc">/</span> M) <span class="sc">*</span> ld_score <span class="sc">+</span> N <span class="sc">*</span> a_true <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>chisq_obs <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(M, <span class="at">shape =</span> <span class="dv">2</span>, <span class="at">rate =</span> <span class="dv">2</span> <span class="sc">/</span> expected_chisq)  <span class="co"># noisy draws around expectation</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>ldsc_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(chisq_obs <span class="sc">~</span> ld_score)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ldsc_fit)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Recovering h2 and the intercept from the fitted slope/intercept</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>slope_hat     <span class="ot">&lt;-</span> <span class="fu">coef</span>(ldsc_fit)[[<span class="st">"ld_score"</span>]]</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>intercept_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(ldsc_fit)[[<span class="st">"(Intercept)"</span>]]</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>h2_hat <span class="ot">&lt;-</span> slope_hat <span class="sc">*</span> M <span class="sc">/</span> N</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimated h2:"</span>, <span class="fu">round</span>(h2_hat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimated intercept (stratification proxy):"</span>, <span class="fu">round</span>(intercept_hat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = chisq_obs ~ ld_score)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-907.6 -318.0  -97.4  198.9 4064.4 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 486.5597    11.0465   44.05   &lt;2e-16 ***
+ld_score      3.4683     0.2255   15.38   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 452.4 on 4998 degrees of freedom
+Multiple R-squared:  0.04519,   Adjusted R-squared:  0.045 
+F-statistic: 236.6 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Estimated h2: 0.347 
+Estimated intercept (stratification proxy): 486.56 </code></pre>
+</div>
+</div>
+<p>The point of this simulation isn’t the exact numbers — it’s the mechanic: <strong>regress <span class="math inline">\(\chi^2\)</span> statistics on LD scores, and the slope (rescaled by <span class="math inline">\(M/N\)</span>) is your heritability estimate.</strong></p>
+</section>
+<section id="the-duality-between-he-regression-and-ldsc" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="the-duality-between-he-regression-and-ldsc"><span class="header-section-number">5.4</span> The Duality Between HE Regression and LDSC</h2>
+<p>These two methods are more closely related than they might look:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>HE regression (sample space)</th>
+<th>LDSC (marker space)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Matrix</td>
+<td><span class="math inline">\(XX^T\)</span> → <span class="math inline">\(N\times N\)</span> (GRM: relatedness between <em>people</em>)</td>
+<td><span class="math inline">\(X^TX\)</span> → <span class="math inline">\(M\times M\)</span> (LD matrix: correlation between <em>SNPs</em>)</td>
+</tr>
+<tr class="even">
+<td>Regress</td>
+<td>phenotype cross-products on the GRM</td>
+<td>GWAS <span class="math inline">\(\chi^2\)</span> statistics on LD scores</td>
+</tr>
+<tr class="odd">
+<td>Underlying question</td>
+<td>Do genetically-similar people have similar phenotypes?</td>
+<td>Do SNPs that tag more of the genome show bigger effects?</td>
+</tr>
+</tbody>
+</table>
+<p>By the rules of linear algebra, these two spaces contain the same total information about genetic variance — they’re dual views of the same underlying question. But summarizing the full <span class="math inline">\(M\times M\)</span> LD matrix down to one number per SNP (<span class="math inline">\(\ell_j\)</span>) throws away the specific <em>shape</em> of how SNPs correlate with each other — information the full GRM in HE regression preserves. <strong>This is exactly why HE regression, using individual-level data, is statistically more powerful than LDSC using summary statistics alone.</strong> LDSC trades some statistical power for the enormous practical advantage of not needing individual-level genotypes.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li>LDSC estimates heritability from GWAS summary statistics alone, by regressing each SNP’s <span class="math inline">\(\chi^2\)</span> statistic on its LD score.</li>
+<li>The slope of this regression estimates heritability; the intercept estimates confounding/stratification inflation — letting you decompose genomic inflation into “real polygenicity” vs.&nbsp;“something’s wrong.”</li>
+<li>LDSC and HE regression are dual views of the same underlying variance information — marker-space vs.&nbsp;sample-space — with HE regression retaining more statistical power at the cost of requiring individual-level data.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="part-6-relaxing-ldscs-assumptions" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Part 6 — Relaxing LDSC’s Assumptions</h1>
+<p>Standard LDSC is a <strong>method-of-moments</strong> estimator — it needs only <span class="math inline">\(E[\beta_j]=0\)</span> and <span class="math inline">\(\text{Var}(\beta_j)=\sigma_g^2/M\)</span>, with no strict distributional (Gaussian) assumption on effect sizes. But it does assume something stronger than it first appears: a <strong>uniform genetic architecture</strong>, where every SNP is expected to explain exactly the same amount of phenotypic variance, regardless of its LD, minor allele frequency, or biological function.</p>
+<section id="where-the-uniformity-assumption-actually-hides" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="where-the-uniformity-assumption-actually-hides"><span class="header-section-number">6.1</span> Where the Uniformity Assumption Actually Hides</h2>
+<p>It’s not just the <span class="math inline">\(\sigma_g^2/M\)</span> term — it’s baked into how the genotype matrix <span class="math inline">\(X\)</span> is defined. LDSC standardizes genotypes:</p>
+<p><span class="math display">\[X_{i,j} = \frac{g_{i,j} - 2p_j}{\sqrt{2p_j(1-p_j)}}\]</span></p>
+<p>where <span class="math inline">\(g_{i,j}\)</span> is the raw allele count and <span class="math inline">\(p_j\)</span> is the minor allele frequency. Standardizing forces every SNP’s column to have variance exactly 1, so <span class="math inline">\(\text{Var}(X_j\beta_j) = \sigma_g^2/M\)</span> for <em>every</em> SNP regardless of its frequency. The consequence: dividing by <span class="math inline">\(\sqrt{2p_j(1-p_j)}\)</span> inflates the allelic-scale effect-size variance of rare variants specifically.</p>
+<p>This wasn’t an oversight — the LDSC authors were fully aware of it, and chose it deliberately for two reasons: (1) it makes <span class="math inline">\(X^TX\)</span> a clean correlation matrix, simplifying the algebra considerably; (2) it’s empirically defensible, since effect-size variance genuinely does tend to increase as allele frequency decreases, consistent with negative selection acting more strongly against common large-effect variants.</p>
+</section>
+<section id="relaxing-the-frequency-assumption-the-α-parameter" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="relaxing-the-frequency-assumption-the-α-parameter"><span class="header-section-number">6.2</span> Relaxing the Frequency Assumption: The α Parameter</h2>
+<p>Is the standard uniformity assumption the right fit for every trait? Not necessarily. We can generalize it with a parameter <span class="math inline">\(\alpha\)</span>:</p>
+<p><span class="math display">\[\text{Var}(\beta_j) \propto [p_j(1-p_j)]^{1+\alpha}\]</span></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>α</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(-1\)</span> (LDSC default)</td>
+<td>Variance independent of MAF — common and rare variants explain equal expected variance</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(0\)</span></td>
+<td>Effect size (not variance) independent of MAF — common variants explain more overall variance</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(&lt; -1\)</span></td>
+<td>Strong negative selection — rare variants dominate the variance</td>
+</tr>
+</tbody>
+</table>
+<p>Introducing <span class="math inline">\(\alpha\)</span> changes the LD score itself into a weighted version, <span class="math inline">\(\ell_j(\alpha) = \sum_k r_{j,k}^2\,[p_k(1-p_k)]^{1+\alpha}\)</span>, which then plugs into the same regression machinery as before.</p>
+<p><strong>How is α estimated?</strong> Via profile likelihood: define a grid of candidate <span class="math inline">\(\alpha\)</span> values, compute the expected GWAS <span class="math inline">\(\chi^2\)</span> statistics under each, compare to the actual observed statistics, and pick the <span class="math inline">\(\alpha\)</span> that maximizes model likelihood. Empirically, across many complex traits the true <span class="math inline">\(\alpha\)</span> tends to fall between <span class="math inline">\(-0.25\)</span> and <span class="math inline">\(-0.5\)</span> — suggesting the default <span class="math inline">\(\alpha=-1\)</span> may somewhat overestimate the contribution of rare variants for many traits.</p>
+</section>
+<section id="relaxing-the-ld-assumption-ldak-and-sumher" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="relaxing-the-ld-assumption-ldak-and-sumher"><span class="header-section-number">6.3</span> Relaxing the LD Assumption: LDAK and SumHer</h2>
+<p>A different critique: if ten SNPs sit in near-perfect LD, they likely all tag the same underlying causal variant — but standard LDSC gives each of them full weight, effectively inflating that region’s apparent contribution. <strong>LDAK</strong> (Speed &amp; Balding) introduces an LD-based weight <span class="math inline">\(w_j\)</span> per SNP — SNPs in dense LD regions get <em>down-weighted</em>, SNPs in low-LD regions (more independent signal) get <em>up-weighted</em>: <span class="math inline">\(\text{Var}(\beta_j) \propto w_j\)</span>.</p>
+</section>
+<section id="relaxing-the-functional-assumption-stratified-ldsc-s-ldsc" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="relaxing-the-functional-assumption-stratified-ldsc-s-ldsc"><span class="header-section-number">6.4</span> Relaxing the Functional Assumption: Stratified LDSC (s-LDSC)</h2>
+<p>A third critique: a SNP sitting inside an active promoter or coding region is plausibly more likely to be causal than one in an intergenic “desert” — biology isn’t uniform across the genome. <strong>Stratified LD Score Regression</strong> (Finucane et al., 2015) partitions the variance across <span class="math inline">\(C\)</span> overlapping functional annotation categories instead of assuming one genome-wide <span class="math inline">\(\sigma_g^2\)</span>:</p>
+<p><span class="math display">\[\text{Var}(\beta_j) = \sum_{c=1}^{C} a_{jc}\,\tau_c\]</span></p>
+<p>where <span class="math inline">\(a_{jc}=1\)</span> if SNP <span class="math inline">\(j\)</span> belongs to annotation category <span class="math inline">\(c\)</span> (0 otherwise), and <span class="math inline">\(\tau_c\)</span> is the per-SNP heritability contribution of category <span class="math inline">\(c\)</span>. The regression itself generalizes to a multiple regression: <span class="math inline">\(E[N\hat\beta_j^2] = N\sum_C \tau_C\,\ell(j,C) + Na + 1\)</span>, where <span class="math inline">\(\ell(j,C) = \sum_{k\in C} r_{j,k}^2\)</span> measures how much of category <span class="math inline">\(C\)</span> is tagged by SNP <span class="math inline">\(j\)</span>.</p>
+<p>The widely-used <strong>“baseline model”</strong> is simply a specific choice of about 24 core functional annotations (plus flanking windows around them) used as the default category set.</p>
+<p><strong>What can you do with this?</strong> Two useful quantities fall out directly: the heritability of category <span class="math inline">\(C\)</span> itself, <span class="math inline">\(h^2(C) = \sum_{j\in C}\beta_j^2\)</span>, and whether category <span class="math inline">\(C\)</span> is “punching above its weight” — comparing <span class="math inline">\(h^2(C)/h^2\)</span> to <span class="math inline">\(|C|\)</span> (the category’s share of the genome). If a category explains disproportionately more heritability than its size would predict, that’s <strong>heritability enrichment</strong> — a signal that the category is biologically important, and a concept that carries forward directly into methods like SBayesRC (Part 8).</p>
+</section>
+<section id="all-four-approaches-side-by-side" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="all-four-approaches-side-by-side"><span class="header-section-number">6.5</span> All Four Approaches, Side by Side</h2>
+<p>Every method below is really the same method-of-moments regression machinery, applied under a different assumption about <span class="math inline">\(\text{Var}(\beta_j)\)</span>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Variance assumption</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Standard LDSC</td>
+<td>Uniform: <span class="math inline">\(\sigma_g^2/M\)</span></td>
+</tr>
+<tr class="even">
+<td>SumHer / LDAK</td>
+<td>Scaled by LD weights <span class="math inline">\(w_j\)</span> (and optionally MAF via α)</td>
+</tr>
+<tr class="odd">
+<td>α-modeled LDSC</td>
+<td>Scaled by MAF: <span class="math inline">\([p_j(1-p_j)]^{1+\alpha}\)</span></td>
+</tr>
+<tr class="even">
+<td>s-LDSC</td>
+<td>Sum of functional-annotation contributions: <span class="math inline">\(\sum_c a_{jc}\tau_c\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The statistical framework stays fixed; what changes is the biological model of genetic architecture baked into the variance assumption.</p>
+</section>
+<section id="a-brief-aside-non-additive-dominance-heritability" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="a-brief-aside-non-additive-dominance-heritability"><span class="header-section-number">6.6</span> A Brief Aside: Non-Additive (Dominance) Heritability</h2>
+<p>Everything so far assumes purely additive genetic effects. <strong>Dominance variance</strong> (<span class="math inline">\(\sigma_d^2\)</span>) captures whether the heterozygote genotype deviates from the exact midpoint of the two homozygotes. Modeling this requires an orthogonal encoding of additive and dominance genotype codes (achievable under Hardy-Weinberg equilibrium), which then permits two independent LD score regressions — one additive, one dominance — since dominance LD decays at the <em>square</em> of additive LD (much faster with physical distance).</p>
+<p>Applied across roughly 1,100 traits in UK Biobank, dominance heritability turned out to be small — typically under 5% of total genetic variance, and often statistically indistinguishable from zero. This doesn’t mean dominance never matters biologically at individual loci — but at the population-variance level, additive effects absorb most of what a two-degree-of-freedom model can explain. <strong>The standard additive-only GWAS assumption holds up well for most complex traits.</strong></p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li>Standard LDSC’s “uniform architecture” assumption is baked into genotype standardization, and can be relaxed in several directions.</li>
+<li>The α parameter relaxes the MAF assumption; LDAK/SumHer relax the LD-density assumption; stratified LDSC (s-LDSC) relaxes the functional/annotation assumption.</li>
+<li>All of these remain method-of-moments regressions — only the assumed variance structure of SNP effects changes.</li>
+<li>Non-additive (dominance) heritability is generally small for complex traits, validating the standard additive GWAS model.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="part-7-genetic-correlation-do-two-traits-share-genetic-architecture" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Part 7 — Genetic Correlation: Do Two Traits Share Genetic Architecture?</h1>
+<p>Everything so far has focused on a single trait. But one of the most common questions in statistical genetics involves <em>two</em> traits: do depression and obesity share genetic causes? Are psychiatric disorders genetically related to each other? Does elevated cholesterol share genetic architecture with heart disease? Answering these requires <strong>genetic correlation</strong>.</p>
+<section id="motivation" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="motivation"><span class="header-section-number">7.1</span> Motivation</h2>
+<p>The goal is to determine the shared genetics of two traits — schematically, whether the genetic effects underlying Trait A and Trait B overlap. This matters for two main reasons: uncovering <strong>causal pathways</strong> (e.g.&nbsp;cholesterol → heart disease) and informing <strong>categorization</strong> of related conditions (e.g.&nbsp;clustering psychiatric disorders by shared genetic architecture rather than by symptom overlap alone).</p>
+</section>
+<section id="four-reasons-two-traits-can-be-genetically-correlated" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="four-reasons-two-traits-can-be-genetically-correlated"><span class="header-section-number">7.2</span> Four Reasons Two Traits Can Be Genetically Correlated</h2>
+<p>A single variant or gene influencing multiple traits is called <strong>pleiotropy</strong>, and it comes in several distinct flavors — each with a different biological and causal interpretation:</p>
+<p><strong>Vertical pleiotropy</strong> (<span class="math inline">\(G \to x \to y\)</span>): the variant affects trait <span class="math inline">\(x\)</span>, which in turn causally affects trait <span class="math inline">\(y\)</span>. The genetic correlation here reflects a genuine causal chain.</p>
+<p><strong>Horizontal pleiotropy</strong> (<span class="math inline">\(G \to x\)</span> and <span class="math inline">\(G \to y\)</span>, independently): the same variant affects both traits through separate biological pathways, with no causal link between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> themselves.</p>
+<p><strong>Pleiotropy via an intermediate phenotype</strong> (<span class="math inline">\(G \to z \to x\)</span> and <span class="math inline">\(z \to y\)</span>): an “endophenotype” <span class="math inline">\(z\)</span> mediates the shared effect — for example, latent factors underlying clusters of psychiatric disorders (Grotzinger et al., 2025).</p>
+<p><strong>Spurious pleiotropy (via LD)</strong>: two distinct causal variants, <span class="math inline">\(G_1 \to x\)</span> and <span class="math inline">\(G_2 \to y\)</span>, happen to sit in LD with each other (or with a shared marker). This <em>looks</em> like pleiotropy in the data but reflects two independent causal mechanisms that are simply co-inherited — an artifact of genome structure, not shared biology.</p>
+<blockquote class="blockquote">
+<p><strong>Mendelian Randomization can distinguish vertical from horizontal pleiotropy</strong> — this is exactly the tool genetic correlation itself cannot provide, since <span class="math inline">\(r_g\)</span> only tells you <em>whether</em> shared genetic architecture exists, not its direction or mechanism.</p>
+</blockquote>
+</section>
+<section id="from-variancecovariancecorrelation-to-heritabilitygenetic-covariancegenetic-correlation" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="from-variancecovariancecorrelation-to-heritabilitygenetic-covariancegenetic-correlation"><span class="header-section-number">7.3</span> From Variance/Covariance/Correlation to Heritability/Genetic Covariance/Genetic Correlation</h2>
+<p>The mathematical structure of genetic correlation is a direct analogy to ordinary variance and covariance:</p>
+<p><span class="math display">\[\text{Var}(X) = \text{Cov}(X,X), \qquad \text{Corr}(X,Y) = \frac{\text{Cov}(X,Y)}{\sigma_x\sigma_y}\]</span></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>General statistical concept</th>
+<th>Genetics equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\text{Var}(X)\)</span></td>
+<td><span class="math inline">\(h^2\)</span> — heritability</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\text{Cov}(X,Y)\)</span></td>
+<td><span class="math inline">\(\rho_g\)</span> — genetic covariance</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\text{Corr}(X,Y)\)</span></td>
+<td><span class="math inline">\(r_g\)</span> — genetic correlation</td>
+</tr>
+</tbody>
+</table>
+<p>So the whole problem of estimating genetic correlation reduces to estimating heritability (variance) and genetic covariance (covariance) — as the saying goes, all you really need is covariance.</p>
+</section>
+<section id="cross-trait-ld-score-regression" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="cross-trait-ld-score-regression"><span class="header-section-number">7.4</span> Cross-Trait LD Score Regression</h2>
+<p>Cross-trait LDSC extends the single-trait <span class="math inline">\(\chi^2\)</span>-on-LD-score regression from Part 5 to a <strong>product of Z-scores</strong> across two GWAS:</p>
+<p><span class="math display">\[E[z_{1j}z_{2j}] = \frac{\sqrt{N_1N_2}\,\rho_g}{M}\,\ell_j + \frac{\rho\,N_s}{\sqrt{N_1N_2}}\]</span></p>
+<p>where <span class="math inline">\(z_{1j}, z_{2j}\)</span> are Z-scores for the two traits at SNP <span class="math inline">\(j\)</span>; <span class="math inline">\(N_1, N_2\)</span> are the two GWAS sample sizes; <span class="math inline">\(\rho_g\)</span> is genetic covariance; <span class="math inline">\(M\)</span> is the number of reference SNPs; <span class="math inline">\(\ell_j\)</span> is the LD score; <span class="math inline">\(\rho\)</span> is the phenotypic correlation between the traits; and <span class="math inline">\(N_s\)</span> is the number of individuals overlapping between the two studies.</p>
+<p>The <strong>slope</strong> of this regression estimates genetic covariance <span class="math inline">\(\rho_g\)</span> (which is then rescaled into the correlation <span class="math inline">\(r_g\)</span>); the <strong>intercept</strong> absorbs any phenotypic correlation induced by sample overlap between the two GWAS.</p>
+<p><strong>Single-trait LDSC is a special case of this equation.</strong> Set trait 1 = trait 2 (so <span class="math inline">\(N_1=N_2=N\)</span>, <span class="math inline">\(\rho=1\)</span>, complete overlap), and the cross-trait equation reduces exactly to the standard single-trait form from Part 5, <span class="math inline">\(E[\chi_j^2] = \frac{Nh^2}{M}\ell_j + 1\)</span>. Genetic correlation and heritability estimation are, mathematically, the same regression viewed from two different angles.</p>
+<p><strong>Robustness to sample overlap.</strong> A reassuring property: cross-trait LDSC remains fairly robust even when the two GWAS share participants (<span class="math inline">\(N_s &gt; 0\)</span>). Overlap tends to inflate the <em>intercept</em> roughly uniformly across variants, rather than biasing the <em>slope</em> — meaning the <span class="math inline">\(r_g\)</span> estimate itself stays comparatively reliable even in the presence of sample overlap, unlike many other cross-trait methods.</p>
+</section>
+<section id="a-simulated-illustration-2" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="a-simulated-illustration-2"><span class="header-section-number">7.5</span> A Simulated Illustration</h2>
+<div id="5f19c6eb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T19:08:06.114574Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T19:08:06.112867Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T19:08:06.177065Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T19:08:06.175026Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Illustrative cross-trait LDSC simulation</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>M  <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>N1 <span class="ot">&lt;-</span> <span class="dv">40000</span>; N2 <span class="ot">&lt;-</span> <span class="dv">40000</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>rho_g_true <span class="ot">&lt;-</span> <span class="fl">0.3</span>   <span class="co"># true genetic covariance</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>rho_true   <span class="ot">&lt;-</span> <span class="fl">0.0</span>   <span class="co"># phenotypic correlation from any sample overlap</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>Ns_true    <span class="ot">&lt;-</span> <span class="dv">0</span>      <span class="co"># no overlapping samples in this illustration</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>ld_score <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(M, <span class="at">shape =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="dv">20</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>expected_z1z2 <span class="ot">&lt;-</span> (<span class="fu">sqrt</span>(N1 <span class="sc">*</span> N2) <span class="sc">*</span> rho_g_true <span class="sc">/</span> M) <span class="sc">*</span> ld_score <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                 (rho_true <span class="sc">*</span> Ns_true) <span class="sc">/</span> <span class="fu">sqrt</span>(N1 <span class="sc">*</span> N2)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>z1z2_obs <span class="ot">&lt;-</span> expected_z1z2 <span class="sc">+</span> <span class="fu">rnorm</span>(M, <span class="at">sd =</span> <span class="dv">2</span>)   <span class="co"># add regression noise</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>cross_ldsc_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(z1z2_obs <span class="sc">~</span> ld_score)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cross_ldsc_fit)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>rho_g_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(cross_ldsc_fit)[[<span class="st">"ld_score"</span>]] <span class="sc">*</span> M <span class="sc">/</span> <span class="fu">sqrt</span>(N1 <span class="sc">*</span> N2)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimated genetic covariance:"</span>, <span class="fu">round</span>(rho_g_hat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = z1z2_obs ~ ld_score)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.4236 -1.3460 -0.0022  1.3030  6.7866 
+
+Coefficients:
+            Estimate Std. Error  t value Pr(&gt;|t|)    
+(Intercept) 0.052421   0.049026    1.069    0.285    
+ld_score    2.398684   0.001003 2391.175   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.984 on 4998 degrees of freedom
+Multiple R-squared:  0.9991,    Adjusted R-squared:  0.9991 
+F-statistic: 5.718e+06 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Estimated genetic covariance: 0.3 </code></pre>
+</div>
+</div>
+<p>Exactly as with single-trait LDSC, the mechanic is what matters: <strong>regress the product of Z-scores across two traits on LD score, and the slope gives genetic covariance.</strong></p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li>Genetic correlation asks whether two traits share genetic architecture — quantified as <span class="math inline">\(r_g\)</span>, the correlation of their genetic components.</li>
+<li>Pleiotropy underlying genetic correlation comes in several distinct flavors: vertical, horizontal, mediated by an intermediate phenotype, or spurious (via LD) — each implies a different biological story.</li>
+<li>Cross-trait LDSC extends single-trait LDSC to a product-of-Z-scores regression; single-trait LDSC is the special case where a trait is compared against itself.</li>
+<li>Genetic correlation, unlike Mendelian Randomization, cannot on its own distinguish <em>why</em> two traits are correlated — only <em>whether</em> they are.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="part-8-interpreting-genetic-correlation-and-its-limitations" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Part 8 — Interpreting Genetic Correlation, and Its Limitations</h1>
+<p>Having a formula for <span class="math inline">\(r_g\)</span> is only half the job — interpreting it correctly, and knowing when to distrust it, matters just as much.</p>
+<section id="reading-the-sign-and-magnitude" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="reading-the-sign-and-magnitude"><span class="header-section-number">8.1</span> Reading the Sign and Magnitude</h2>
+<p><span class="math inline">\(r_g\)</span> ranges conceptually from <span class="math inline">\(-1\)</span> to <span class="math inline">\(+1\)</span>:</p>
+<ul>
+<li><strong>Positive</strong> <span class="math inline">\(r_g\)</span>: genetic effects on the two traits point in the same direction.</li>
+<li><strong>Negative</strong> <span class="math inline">\(r_g\)</span>: genetic effects point in opposite directions.</li>
+<li><strong>Zero</strong> <span class="math inline">\(r_g\)</span>: either the genetic effects are essentially uncorrelated genome-wide, <em>or</em> positive and negative local genetic correlations are canceling out across the genome. This second possibility is worth remembering — a genome-wide <span class="math inline">\(r_g\)</span> near zero doesn’t rule out strong correlation concentrated in specific regions (this is what dedicated <em>local</em> genetic correlation methods, like LAVA or SUPERGNOVA, are built to detect).</li>
+</ul>
+<p><strong>Real examples from the literature</strong> (Bulik-Sullivan, Finucane et al., 2015): positive genetic correlations cluster among metabolic disorders, lipid/heart-disease traits, growth-related traits, and psychiatric disorders; negative correlations appear between HDL cholesterol and other metabolic/cardiovascular traits, and between years of education and risk factors like smoking, BMI, and LDL cholesterol.</p>
+<p>One more practical note: cross-trait LDSC generally has <strong>wider standard errors</strong> than either individual-level methods or single-trait LDSC’s own heritability estimates — a noisy-looking <span class="math inline">\(r_g\)</span> estimate isn’t necessarily a red flag on its own, it may just reflect the inherently lower precision of the cross-trait regression.</p>
+</section>
+<section id="four-limitations-to-keep-in-mind" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="four-limitations-to-keep-in-mind"><span class="header-section-number">8.2</span> Four Limitations to Keep in Mind</h2>
+<p><strong>1. Traits must be sufficiently heritable.</strong> If a trait’s own heritability is too low, the genetic correlation regression can mechanically produce <span class="math inline">\(|r_g| &gt; 1\)</span> — a nonsensical value that nonetheless falls directly out of the math when the underlying signal-to-noise ratio is too poor. As a practical rule of thumb, treat <span class="math inline">\(\rho_g\)</span> estimates involving any trait whose heritability Z-score is below 4 as too noisy to trust.</p>
+<p><strong>2. The method assumes polygenicity.</strong> LDSC-based genetic correlation works best for traits with many small-effect causal variants spread across the genome. It’s less reliable for traits dominated by a handful of large-effect loci, since the underlying regression logic depends on polygenic averaging across many SNPs.</p>
+<p><strong>3. Reverse causation can masquerade as genetic correlation.</strong> A positive genetic correlation between obesity and depression, for instance, is equally consistent with obesity causally influencing depression risk, or depression causally influencing obesity risk (Speed et al., 2019). Genetic correlation is symmetric and directionless by construction — it cannot tell you which way, if either, causality runs. That question requires Mendelian Randomization, not <span class="math inline">\(r_g\)</span>.</p>
+<p><strong>4. Assortative mating can inflate estimates.</strong> If people non-randomly choose partners who resemble them on a given trait (assortative mating, with correlation <span class="math inline">\(\rho_m &gt; 0\)</span> between mates), the equilibrium genetic correlation exceeds the “true” underlying genetic correlation: <span class="math inline">\(\rho_{g,\text{eq}} &gt; \rho_g\)</span> whenever <span class="math inline">\(\rho_m &gt; 0\)</span> (and <span class="math inline">\(\rho_{g,\text{eq}} = \rho_g\)</span> only when there’s no assortative mating, <span class="math inline">\(\rho_m = 0\)</span>). This is a subtle confound worth remembering specifically for traits known to be assortatively mated on — height and educational attainment are classic examples.</p>
+</section>
+<section id="extension-genomic-sem" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="extension-genomic-sem"><span class="header-section-number">8.3</span> Extension: Genomic SEM</h2>
+<p>Once you can estimate genetic correlations pairwise between many traits, a natural next step is to model the <em>structure</em> of that correlation across all of them simultaneously. <strong>Genomic SEM</strong> (Grotzinger et al., 2019) is exactly this — a two-step framework:</p>
+<ol type="1">
+<li>Estimate the full genetic covariance matrix <span class="math inline">\(S\)</span> across many traits, using pairwise cross-trait LDSC.</li>
+<li>Decompose that covariance matrix into latent genetic factors — structural equation modeling (see our companion SEM tutorial) applied to a <em>genetic</em> covariance matrix, rather than a raw phenotypic one.</li>
+</ol>
+<p>This is precisely how researchers have identified shared latent genetic factors underlying clusters of psychiatric disorders (Grotzinger et al., 2025) — the same <code>factor =~ indicator</code> measurement-model logic from classical SEM, just with the genetic covariance matrix standing in for the raw phenotypic covariance matrix.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li>Interpret <span class="math inline">\(r_g\)</span>’s sign as the direction of shared genetic effects, but remember a near-zero genome-wide estimate can still mask strong local correlation.</li>
+<li>Genetic correlation requires reasonably heritable, polygenic traits to be reliable, and is symmetric — it cannot establish which trait causes the other (that’s Mendelian Randomization’s job).</li>
+<li>Assortative mating is a distinct, easy-to-overlook confound that can inflate <span class="math inline">\(r_g\)</span> estimates above their “true” value.</li>
+<li>Genomic SEM extends pairwise genetic correlation into a full structural model across many traits at once, using the same measurement-model logic as ordinary SEM.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="part-9-practical-checklist-and-where-this-leads-next" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Part 9 — Practical Checklist, and Where This Leads Next</h1>
+<section id="before-you-trust-an-ldsc-heritability-or-genetic-correlation-estimate" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="before-you-trust-an-ldsc-heritability-or-genetic-correlation-estimate"><span class="header-section-number">9.1</span> Before You Trust an LDSC Heritability or Genetic Correlation Estimate</h2>
+<p>A short, practical checklist worth running through before reporting or relying on any LDSC-based result:</p>
+<ul>
+<li><strong>Ancestry-matched LD reference.</strong> LD scores must come from a reference panel matching the GWAS population’s genetic ancestry — the same ancestry-matching concern that recurs throughout fine-mapping and PRS.</li>
+<li><strong>Sufficient sample size.</strong> LDSC gets noisy at low <span class="math inline">\(N\)</span> — a common rule of thumb is <span class="math inline">\(N &gt; 3{,}000\)</span> for standard LDSC and <span class="math inline">\(N &gt; 5{,}000\)</span> for stratified LDSC.</li>
+<li><strong>Sufficient polygenicity.</strong> The method works poorly if very few SNPs actually affect the trait; watch out for a small number of unusually large-effect variants distorting the regression.</li>
+<li><strong>Liability-scale conversion for binary traits.</strong> Never compare raw observed-scale <span class="math inline">\(h^2\)</span> estimates across studies with different case-control ascertainment — convert to the liability scale first (Part 4).</li>
+<li><strong>Custom annotations in s-LDSC</strong> need to actually work correctly under block-jackknife resampling if you’re building your own annotation categories.</li>
+<li><strong>Genomic control caution.</strong> If genomic control has already been applied to input summary statistics, <span class="math inline">\(h^2\)</span> estimates can be distorted — but <span class="math inline">\(r_g\)</span> estimates are comparatively robust to this.</li>
+<li><strong>Low-heritability trait pairs.</strong> Treat <span class="math inline">\(\rho_g\)</span>/<span class="math inline">\(r_g\)</span> estimates involving any trait with an <span class="math inline">\(h^2\)</span> Z-score below 4 as too noisy to trust, regardless of how the point estimate looks.</li>
+</ul>
+</section>
+<section id="the-common-thread" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="the-common-thread"><span class="header-section-number">9.2</span> The Common Thread</h2>
+<p>Looking back across this whole tutorial, there’s really one continuous story: <strong>relaxing the assumption that every SNP matters equally.</strong></p>
+<p><span class="math display">\[\text{HE regression} \rightarrow \text{GREML} \rightarrow \text{Standard LDSC} \rightarrow \text{s-LDSC / LDAK / }\alpha\text{-LDSC}\]</span></p>
+<p>Each step in this progression adds a more realistic piece of biology — first genome-wide relatedness instead of pedigree-based relatedness, then allowing MAF-dependence, then LD-density weighting, then functional-annotation-dependence. But every one of these methods shares a structural limitation: they’re all <strong>method-of-moments</strong> estimators, working “in expectation” over aggregate variance components. They can tell you the <em>total</em> (or category-partitioned) heritability very well — but they cannot tell you the posterior probability that any <em>individual</em> SNP is causal. If the true underlying architecture is spike-and-slab, LDSC-family methods simply can’t distinguish the spikes (null SNPs) from the slabs (causal SNPs).</p>
+</section>
+<section id="the-bridge-to-bayesian-methods" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="the-bridge-to-bayesian-methods"><span class="header-section-number">9.3</span> The Bridge to Bayesian Methods</h2>
+<p>This is exactly the motivation for moving to a fully Bayesian framework — methods like <strong>SBayesRC</strong> (covered in depth in our companion PRS tutorial), which estimate a posterior effect size for <em>every individual SNP</em>, using:</p>
+<ul>
+<li><strong>Eigendecomposition</strong> of the LD matrix within pseudo-independent LD blocks, to make the computation tractable at genome scale — a direct computational descendant of the LD-score-based tricks used throughout this tutorial.</li>
+<li>A <strong>four-component mixture prior</strong> (one zero-effect “spike,” three non-zero-variance “slabs”), extending the uniform-variance assumption of standard LDSC into an explicit, estimable distribution of effect sizes.</li>
+<li><strong>Functional annotations</strong> modifying each SNP’s prior probability of a non-zero effect — the same heritability-enrichment logic from stratified LDSC (Part 6), now feeding directly into a Bayesian prior rather than just partitioning aggregate variance after the fact.</li>
+</ul>
+<p>In other words: everything in this tutorial builds toward being able to ask, and eventually answer, one final question — not just “how much of this trait is genetic?”, but “which specific variants are responsible?”</p>
+<blockquote class="blockquote">
+<p><strong>Final key takeaways</strong></p>
+<ul>
+<li>Heritability estimation methods form a continuous progression: individual-level (HE regression, GREML) → summary-statistics-based (LDSC and its many extensions) → fully Bayesian, variant-level (SBayesRC).</li>
+<li>Genetic correlation is the natural two-trait extension of the same LD Score Regression machinery used for single-trait heritability.</li>
+<li>Every method here — including cross-trait LDSC — comes with real, well-documented failure modes; checking sample size, ancestry matching, polygenicity, and liability-scale conversion before trusting a result is not optional.</li>
+<li>LDSC-family methods excel at aggregate (genome-wide or per-category) variance estimation, but structurally cannot resolve individual-variant causality — which is precisely the gap that Bayesian polygenic methods were built to fill.</li>
+</ul>
+</blockquote>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

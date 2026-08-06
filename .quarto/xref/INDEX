@@ -310,5 +310,116 @@
   },
   "index_ver2.qmd": {
     "index_ver2.html": "60ce032d"
+  },
+  "tutorials/blog_promt_engineering/index.qmd": {
+    "index.html": "6947ab5f"
+  },
+  "tutorials/pValues/p_Values.ipynb": {
+    "p_Values.html": "78d32aaa"
+  },
+  "tutorials/PRS/Polygenic_Risk_Scores.ipynb": {
+    "Polygenic_Risk_Scores.html": "50163a54"
+  },
+  "tutorials/correlation_covariance/Correlation_covariance.ipynb": {
+    "Correlation_covariance.html": "da4ec229"
+  },
+  "tutorials/survival_analysis/survival-analysis-tutorial.ipynb": {
+    "survival-analysis-tutorial.html": "633ed9e9"
+  },
+  "tutorials/ttest_ANOVA/t-test-vs-anova-before-after-treatment.ipynb": {
+    "t-test-vs-anova-before-after-treatment.html": "d0d65ea8"
+  },
+  "tutorials/Langchain/langchain-rag-tutorial.ipynb": {
+    "langchain-rag-tutorial.html": "20320a8a"
+  },
+  "tutorials/covariance_matrix/Covariance_matrix.ipynb": {
+    "Covariance_matrix.html": "520ccf26"
+  },
+  "tutorials/awk/awk_tutorial.ipynb": {
+    "awk_tutorial.html": "e610af80"
+  },
+  "tutorials/twin_heritability/twin_heritability_tutorial.ipynb": {
+    "twin_heritability_tutorial.html": "4b800b68"
+  },
+  "tutorials/SEM/Structural_Equation_Modeling.ipynb": {
+    "Structural_Equation_Modeling.html": "b44f7d1a"
+  },
+  "tutorials/Finemapping/Statistical_Fine_Mapping.ipynb": {
+    "Statistical_Fine_Mapping.html": "c8b9ae44"
+  },
+  "tutorials/promt_engineering/index.qmd": {
+    "index.html": "420259ff"
+  },
+  "tutorials/promt_engineering/genai-prompt-engineering-tutorial.ipynb": {
+    "genai-prompt-engineering-tutorial.html": "892f019d"
+  },
+  "tutorials/GWAS/GWAS.ipynb": {
+    "GWAS.html": "fe07931d"
+  },
+  "tutorials/ridge_lasso/ridge_lasso_tutorial.ipynb": {
+    "ridge_lasso_tutorial.html": "0cac0189"
+  },
+  "tutorials/Bayesian_regression/bayesian_regression_tutorial.ipynb": {
+    "bayesian_regression_tutorial.html": "69dece35"
+  },
+  "tutorials/working_with_HPC/working_with_HPC.ipynb": {
+    "working_with_HPC.html": "940b4244"
+  },
+  "tutorials/Execution_time_R/Execution_time_in_R.ipynb": {
+    "Execution_time_in_R.html": "39f21bf0"
+  },
+  "tutorials/SVD/SVD.ipynb": {
+    "SVD.html": "c72e33aa"
+  },
+  "tutorials/Heritability_genetic_correlation/Heritability_and_Genetic_Correlation.ipynb": {
+    "Heritability_and_Genetic_Correlation.html": "cd48d360"
+  },
+  "tutorials/github/github_tutorial.qmd": {
+    "github_tutorial.html": "5882350a"
+  },
+  "tutorials/imputation/Imputation_in_Python.ipynb": {
+    "Imputation_in_Python.html": "b04abfbb"
+  },
+  "tutorials/lama2/Examplecases_Llama2.ipynb": {
+    "Examplecases_Llama2.html": "a879602b"
+  },
+  "tutorials/Colocalizatiom/Colocalization.ipynb": {
+    "Colocalization.html": "babf2739"
+  },
+  "tutorials/genetic_drift/Genetic_Drift.ipynb": {
+    "Genetic_Drift.html": "8fac9325"
+  },
+  "tutorials/REML/REML.ipynb": {
+    "REML.html": "0206c1d5"
+  },
+  "tutorials/hypothesis_genetics/hyothesis_driven.ipynb": {
+    "hyothesis_driven.html": "ed903399"
+  },
+  "tutorials/mendelianR/Mendelian_Randomization.ipynb": {
+    "Mendelian_Randomization.html": "9e635d48"
+  },
+  "tutorials/LLM_API/llm-api-tutorial.ipynb": {
+    "llm-api-tutorial.html": "647a9eba"
+  },
+  "tutorials/NGS_pipeline_raw_data_to_GWAS/ngs-to-gwas-pipeline.qmd": {
+    "ngs-to-gwas-pipeline.html": "7ca41eeb"
+  },
+  "tutorials/multivariate_concepts/genomicSEM.ipynb": {
+    "genomicSEM.html": "c4d1c716"
+  },
+  "tutorials/AI_humanGenome/the-barbeque-question.ipynb": {
+    "the-barbeque-question.html": "514887d0"
+  },
+  "tutorials/probit_logic/logit_probit_tutorial.ipynb": {
+    "logit_probit_tutorial.html": "c01cec3e"
+  },
+  "tutorials/rare_variants/rare_variant_tutorial.ipynb": {
+    "rare_variant_tutorial.html": "e201e3c5"
+  },
+  "tutorials/mood_track/notebook /01_moodtrack_data_generation.ipynb": {
+    "01_moodtrack_data_generation.html": "78c67f3a"
+  },
+  "tutorials/pgls/pgls_tutorial.ipynb": {
+    "pgls_tutorial.html": "6e08a50c"
   }
 }

@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-05-07">
+
+<title>Hypothesis-Free vs Hypothesis-Driven Analysis in Genetics – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-does-this-matter-in-genetics" id="toc-why-does-this-matter-in-genetics" class="nav-link active" data-scroll-target="#why-does-this-matter-in-genetics"><span class="header-section-number">0.1</span> Why Does This Matter in Genetics?</a></li>
+  <li><a href="#two-major-paradigms" id="toc-two-major-paradigms" class="nav-link" data-scroll-target="#two-major-paradigms"><span class="header-section-number">0.2</span> Two Major Paradigms</a></li>
+  <li><a href="#part-1-hypothesis-free-analysis" id="toc-part-1-hypothesis-free-analysis" class="nav-link" data-scroll-target="#part-1-hypothesis-free-analysis"><span class="header-section-number">1</span> Part 1 — Hypothesis-Free Analysis</a></li>
+  <li><a href="#what-is-hypothesis-free-analysis" id="toc-what-is-hypothesis-free-analysis" class="nav-link" data-scroll-target="#what-is-hypothesis-free-analysis"><span class="header-section-number">2</span> What is Hypothesis-Free Analysis?</a></li>
+  <li><a href="#characteristics-of-hypothesis-free-methods" id="toc-characteristics-of-hypothesis-free-methods" class="nav-link" data-scroll-target="#characteristics-of-hypothesis-free-methods"><span class="header-section-number">3</span> Characteristics of Hypothesis-Free Methods</a></li>
+  <li><a href="#common-hypothesis-free-methods" id="toc-common-hypothesis-free-methods" class="nav-link" data-scroll-target="#common-hypothesis-free-methods"><span class="header-section-number">4</span> Common Hypothesis-Free Methods</a>
+  <ul class="collapse">
+  <li><a href="#correlation-structure" id="toc-correlation-structure" class="nav-link" data-scroll-target="#correlation-structure"><span class="header-section-number">4.1</span> Correlation Structure</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">4.2</span> Interpretation</a></li>
+  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering"><span class="header-section-number">4.3</span> K-Means Clustering</a></li>
+  <li><a href="#k-means-example" id="toc-k-means-example" class="nav-link" data-scroll-target="#k-means-example"><span class="header-section-number">4.4</span> K-Means Example</a></li>
+  <li><a href="#why-clustering-matters-in-genetics" id="toc-why-clustering-matters-in-genetics" class="nav-link" data-scroll-target="#why-clustering-matters-in-genetics"><span class="header-section-number">4.5</span> Why Clustering Matters in Genetics</a></li>
+  <li><a href="#principal-component-analysis-pca" id="toc-principal-component-analysis-pca" class="nav-link" data-scroll-target="#principal-component-analysis-pca"><span class="header-section-number">4.6</span> Principal Component Analysis (PCA)</a></li>
+  <li><a href="#interpretation-of-pca" id="toc-interpretation-of-pca" class="nav-link" data-scroll-target="#interpretation-of-pca"><span class="header-section-number">4.7</span> Interpretation of PCA</a></li>
+  <li><a href="#advantages-and-limitations-of-hypothesis-free-methods" id="toc-advantages-and-limitations-of-hypothesis-free-methods" class="nav-link" data-scroll-target="#advantages-and-limitations-of-hypothesis-free-methods"><span class="header-section-number">4.8</span> Advantages and Limitations of Hypothesis-Free Methods</a></li>
+  </ul></li>
+  <li><a href="#part-2-hypothesis-driven-analysis" id="toc-part-2-hypothesis-driven-analysis" class="nav-link" data-scroll-target="#part-2-hypothesis-driven-analysis"><span class="header-section-number">5</span> Part 2 — Hypothesis-Driven Analysis</a>
+  <ul class="collapse">
+  <li><a href="#what-is-hypothesis-driven-analysis" id="toc-what-is-hypothesis-driven-analysis" class="nav-link" data-scroll-target="#what-is-hypothesis-driven-analysis"><span class="header-section-number">5.1</span> What is Hypothesis-Driven Analysis?</a></li>
+  <li><a href="#structural-equation-modeling-sem" id="toc-structural-equation-modeling-sem" class="nav-link" data-scroll-target="#structural-equation-modeling-sem"><span class="header-section-number">5.2</span> Structural Equation Modeling (SEM)</a></li>
+  <li><a href="#comparison" id="toc-comparison" class="nav-link" data-scroll-target="#comparison"><span class="header-section-number">5.3</span> Comparison</a></li>
+  <li><a href="#typical-workflow" id="toc-typical-workflow" class="nav-link" data-scroll-target="#typical-workflow"><span class="header-section-number">5.4</span> Typical workflow:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Hypothesis-Free vs Hypothesis-Driven Analysis in Genetics</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Tutorial</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 7, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Modern genomics has entered the era of <strong>high-dimensional biology</strong>. Large-scale datasets from genome-wide association studies (GWAS), transcriptomics, proteomics, metabolomics, and imaging genetics contain thousands of variables and traits measured simultaneously.</p>
+<p>One major challenge in statistical genetics is understanding:</p>
+<ul>
+<li>Which traits share common genetic architecture?</li>
+<li>Which genetic variants influence multiple diseases?</li>
+<li>How can we identify hidden biological pathways?</li>
+</ul>
+<p>To answer these questions, researchers typically use two broad analytical paradigms:</p>
+<ol type="1">
+<li><strong>Hypothesis-Free (Exploratory) Analysis</strong></li>
+<li><strong>Hypothesis-Driven (Explanatory) Analysis</strong></li>
+</ol>
+<p>In this tutorial, we will explore both approaches conceptually and practically using Python examples.</p>
+<hr>
+<section id="learning-objectives" class="level4" data-number="0.0.1">
+<h4 data-number="0.0.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">0.0.1</span> Learning Objectives</h4>
+<p>By the end of this tutorial, you will understand:</p>
+<ul>
+<li>The difference between exploratory and confirmatory analysis</li>
+<li>When to use hypothesis-free approaches</li>
+<li>When hypothesis-driven models are more appropriate</li>
+<li>Common methods used in statistical genetics</li>
+<li>How clustering and regression methods work</li>
+<li>How to analyze synthetic GWAS-like datasets in Python</li>
+</ul>
+<hr>
+</section>
+<section id="why-does-this-matter-in-genetics" class="level3" data-number="0.1">
+<h3 data-number="0.1" class="anchored" data-anchor-id="why-does-this-matter-in-genetics"><span class="header-section-number">0.1</span> Why Does This Matter in Genetics?</h3>
+<p>:contentReference<span data-index="0">oaicite:0</span> is common in complex diseases.</p>
+<p>For example:</p>
+<ul>
+<li>One genetic variant may influence:
+<ul>
+<li>schizophrenia</li>
+<li>bipolar disorder</li>
+<li>depression</li>
+<li>anxiety</li>
+</ul></li>
+</ul>
+<p>This creates highly interconnected biological systems.</p>
+<p>Traditional single-trait analysis often fails to capture these relationships.</p>
+<p>Modern statistical genetics therefore relies heavily on:</p>
+<ul>
+<li>unsupervised learning</li>
+<li>latent variable models</li>
+<li>covariance analysis</li>
+<li>multivariate statistics</li>
+</ul>
+<hr>
+</section>
+<section id="two-major-paradigms" class="level3" data-number="0.2">
+<h3 data-number="0.2" class="anchored" data-anchor-id="two-major-paradigms"><span class="header-section-number">0.2</span> Two Major Paradigms</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Approach</th>
+<th>Goal</th>
+<th>Assumptions</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hypothesis-Free</td>
+<td>Discover hidden patterns</td>
+<td>Minimal assumptions</td>
+<td>Clustering, PCA, VAE</td>
+</tr>
+<tr class="even">
+<td>Hypothesis-Driven</td>
+<td>Test predefined relationships</td>
+<td>Strong statistical assumptions</td>
+<td>Regression, SEM</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="part-1-hypothesis-free-analysis" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="part-1-hypothesis-free-analysis"><span class="header-section-number">1</span> Part 1 — Hypothesis-Free Analysis</h2>
+</section>
+<section id="what-is-hypothesis-free-analysis" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="what-is-hypothesis-free-analysis"><span class="header-section-number">2</span> What is Hypothesis-Free Analysis?</h2>
+<p>Hypothesis-free methods are also called:</p>
+<ul>
+<li>exploratory analysis</li>
+<li>data-driven analysis</li>
+<li>unsupervised learning</li>
+</ul>
+<p>These methods attempt to identify hidden structure in data <strong>without imposing strong prior assumptions</strong>.</p>
+<p>Instead of asking:</p>
+<blockquote class="blockquote">
+<p>“Does gene X influence trait Y?”</p>
+</blockquote>
+<p>we ask:</p>
+<blockquote class="blockquote">
+<p>“What hidden structure exists in the data?”</p>
+</blockquote>
+<hr>
+</section>
+<section id="characteristics-of-hypothesis-free-methods" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="characteristics-of-hypothesis-free-methods"><span class="header-section-number">3</span> Characteristics of Hypothesis-Free Methods</h2>
+<ul>
+<li>Minimal assumptions</li>
+<li>Often unsupervised</li>
+<li>Useful for large-scale datasets</li>
+<li>Can reveal unexpected biological patterns</li>
+<li>Ideal for discovery science</li>
+</ul>
+<hr>
+</section>
+<section id="common-hypothesis-free-methods" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="common-hypothesis-free-methods"><span class="header-section-number">4</span> Common Hypothesis-Free Methods</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>K-Means Clustering</td>
+<td>Group similar traits</td>
+</tr>
+<tr class="even">
+<td>Hierarchical Clustering</td>
+<td>Build trait similarity trees</td>
+</tr>
+<tr class="odd">
+<td>PCA/SVD</td>
+<td>Reduce dimensionality</td>
+</tr>
+<tr class="even">
+<td>t-SNE/UMAP</td>
+<td>Visualization</td>
+</tr>
+<tr class="odd">
+<td>VAE</td>
+<td>Learn latent representations</td>
+</tr>
+<tr class="even">
+<td>NMF</td>
+<td>Discover hidden biological modules</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<section id="example-dataset" class="level4" data-number="4.0.1">
+<h4 data-number="4.0.1" class="anchored" data-anchor-id="example-dataset"><span class="header-section-number">4.0.1</span> Example Dataset</h4>
+<p>We will generate a synthetic GWAS-style dataset.</p>
+<div id="2f08eeea-cb71-4da7-a5ad-307f7455befd" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>trait1 <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n_samples)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>trait2 <span class="op">=</span> trait1 <span class="op">*</span> <span class="fl">0.8</span> <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.3</span>, n_samples)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>trait3 <span class="op">=</span> trait1 <span class="op">*</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.5</span>, n_samples)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>trait4 <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n_samples)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>trait5 <span class="op">=</span> trait4 <span class="op">*</span> <span class="fl">0.7</span> <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.4</span>, n_samples)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Trait_1"</span>: trait1,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Trait_2"</span>: trait2,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Trait_3"</span>: trait3,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Trait_4"</span>: trait4,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Trait_5"</span>: trait5</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Trait_1</th>
+<th data-quarto-table-cell-role="th">Trait_2</th>
+<th data-quarto-table-cell-role="th">Trait_3</th>
+<th data-quarto-table-cell-role="th">Trait_4</th>
+<th data-quarto-table-cell-role="th">Trait_5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>0.496714</td>
+<td>0.675225</td>
+<td>0.451321</td>
+<td>0.778361</td>
+<td>0.274781</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>-0.138264</td>
+<td>0.462214</td>
+<td>0.531449</td>
+<td>-0.551186</td>
+<td>-0.443637</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>0.647689</td>
+<td>0.098581</td>
+<td>-0.294029</td>
+<td>-0.818199</td>
+<td>-0.889707</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>1.523030</td>
+<td>1.387315</td>
+<td>-1.084983</td>
+<td>-0.003374</td>
+<td>-0.125547</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>-0.234153</td>
+<td>-0.382515</td>
+<td>0.466188</td>
+<td>-0.170185</td>
+<td>-0.876575</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="correlation-structure" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="correlation-structure"><span class="header-section-number">4.1</span> Correlation Structure</h3>
+<div id="93977fc6-88f8-4b58-8272-a8a25a3b71c5" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> df.corr()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.imshow(corr, cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>plt.colorbar()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="bu">len</span>(corr)), corr.columns, rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>plt.yticks(<span class="bu">range</span>(<span class="bu">len</span>(corr)), corr.columns)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Trait Correlation Matrix"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hyothesis_driven_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">4.2</span> Interpretation</h3>
+<p>We observe:</p>
+<p>Trait 1 and Trait 2 are strongly correlated</p>
+<p>Trait 3 is negatively correlated</p>
+<p>Trait 4 and Trait 5 form another cluster</p>
+<p>This hidden structure emerges automatically.</p>
+<p>No prior hypothesis was imposed.</p>
+</section>
+<section id="k-means-clustering" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">4.3</span> K-Means Clustering</h3>
+<section id="concept" class="level4" data-number="4.3.1">
+<h4 data-number="4.3.1" class="anchored" data-anchor-id="concept"><span class="header-section-number">4.3.1</span> Concept</h4>
+<p>K-means clustering partitions data into clusters based on similarity.</p>
+<p>The algorithm:</p>
+<p>Chooses cluster centers</p>
+<p>Assigns samples to nearest center</p>
+<p>Updates centers iteratively</p>
+</section>
+</section>
+<section id="k-means-example" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="k-means-example"><span class="header-section-number">4.4</span> K-Means Example</h3>
+<div id="4d9a510a-b469-421b-ad97-2c007c479820" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>X_scaled <span class="op">=</span> scaler.fit_transform(df)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>clusters <span class="op">=</span> kmeans.fit_predict(X_scaled)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"Cluster"</span>] <span class="op">=</span> clusters</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>df.head()</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>plt.scatter(</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"Trait_1"</span>],</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"Trait_2"</span>],</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    c<span class="op">=</span>df[<span class="st">"Cluster"</span>]</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Trait 1"</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Trait 2"</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"K-Means Clustering"</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hyothesis_driven_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="why-clustering-matters-in-genetics" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="why-clustering-matters-in-genetics"><span class="header-section-number">4.5</span> Why Clustering Matters in Genetics</h3>
+<p>Clustering can help identify:</p>
+<ul>
+<li>disease subtypes</li>
+<li>shared genetic pathways</li>
+<li>pleiotropic mechanisms</li>
+<li>hidden biological modules</li>
+</ul>
+<section id="applications-include" class="level4" data-number="4.5.1">
+<h4 data-number="4.5.1" class="anchored" data-anchor-id="applications-include"><span class="header-section-number">4.5.1</span> Applications include:</h4>
+<ul>
+<li>psychiatric genetics</li>
+<li>cancer genomics</li>
+<li>transcriptomics</li>
+<li>population genetics</li>
+</ul>
+</section>
+</section>
+<section id="principal-component-analysis-pca" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="principal-component-analysis-pca"><span class="header-section-number">4.6</span> Principal Component Analysis (PCA)</h3>
+<section id="concept-1" class="level4" data-number="4.6.1">
+<h4 data-number="4.6.1" class="anchored" data-anchor-id="concept-1"><span class="header-section-number">4.6.1</span> Concept</h4>
+<p>PCA reduces high-dimensional data into a smaller number of latent variables.</p>
+<p>It identifies directions of maximum variance.</p>
+<p>Mathematically, PCA relies on:</p>
+<p><span class="math display">\[
+X = U \Sigma V^T
+\]</span></p>
+<p>This is closely related to Singular Value Decomposition(SVD).</p>
+<div id="3c4ebd3a-9d73-4c3d-b853-113f3d5249b8" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>X_pca <span class="op">=</span> pca.fit_transform(X_scaled)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>pca_df <span class="op">=</span> pd.DataFrame(X_pca, columns<span class="op">=</span>[<span class="st">"PC1"</span>, <span class="st">"PC2"</span>])</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>pca_df.head()</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>plt.scatter(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    pca_df[<span class="st">"PC1"</span>],</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    pca_df[<span class="st">"PC2"</span>]</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Principal Component 1"</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Principal Component 2"</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"PCA of Traits"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hyothesis_driven_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="interpretation-of-pca" class="level3" data-number="4.7">
+<h3 data-number="4.7" class="anchored" data-anchor-id="interpretation-of-pca"><span class="header-section-number">4.7</span> Interpretation of PCA</h3>
+<section id="pca-can-reveal" class="level4" data-number="4.7.1">
+<h4 data-number="4.7.1" class="anchored" data-anchor-id="pca-can-reveal"><span class="header-section-number">4.7.1</span> PCA can reveal:</h4>
+<ul>
+<li>latent genetic structure</li>
+<li>ancestry effects</li>
+<li>hidden disease subtypes</li>
+<li>shared molecular mechanisms</li>
+</ul>
+<p>It is widely used in:</p>
+<ul>
+<li>GWAS quality control</li>
+<li>population stratification correction</li>
+<li>transcriptomics</li>
+<li>imaging genetics</li>
+</ul>
+</section>
+</section>
+<section id="advantages-and-limitations-of-hypothesis-free-methods" class="level3" data-number="4.8">
+<h3 data-number="4.8" class="anchored" data-anchor-id="advantages-and-limitations-of-hypothesis-free-methods"><span class="header-section-number">4.8</span> Advantages and Limitations of Hypothesis-Free Methods</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Advantage</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Discovery-oriented</td>
+<td>Finds unexpected patterns</td>
+</tr>
+<tr class="even">
+<td>Flexible</td>
+<td>Minimal assumptions</td>
+</tr>
+<tr class="odd">
+<td>Scalable</td>
+<td>Handles many traits</td>
+</tr>
+<tr class="even">
+<td>Useful for complex biology</td>
+<td>Captures hidden structure</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Limitation</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Harder interpretation</td>
+<td>Clusters may lack biological meaning</td>
+</tr>
+<tr class="even">
+<td>Sensitive to preprocessing</td>
+<td>Scaling matters</td>
+</tr>
+<tr class="odd">
+<td>Hyperparameter tuning</td>
+<td>Number of clusters matters</td>
+</tr>
+<tr class="even">
+<td>Potential overfitting</td>
+<td>Spurious patterns possible</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="part-2-hypothesis-driven-analysis" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="part-2-hypothesis-driven-analysis"><span class="header-section-number">5</span> Part 2 — Hypothesis-Driven Analysis</h2>
+<section id="what-is-hypothesis-driven-analysis" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="what-is-hypothesis-driven-analysis"><span class="header-section-number">5.1</span> What is Hypothesis-Driven Analysis?</h3>
+<p>Hypothesis-driven approaches impose predefined statistical relationships.</p>
+<p>Instead of discovering patterns automatically, we test explicit hypotheses.</p>
+<p>For example:</p>
+<blockquote class="blockquote">
+<p>Does polygenic risk score predict depression severity?</p>
+</blockquote>
+<p>or</p>
+<blockquote class="blockquote">
+<p>Does BMI causally influence diabetes risk?</p>
+</blockquote>
+<section id="characteristics" class="level4" data-number="5.1.1">
+<h4 data-number="5.1.1" class="anchored" data-anchor-id="characteristics"><span class="header-section-number">5.1.1</span> Characteristics</h4>
+<ul>
+<li>Strong assumptions</li>
+<li>Confirmatory</li>
+<li>Statistically interpretable</li>
+<li>Often theory-driven</li>
+<li>Suitable for curated trait sets</li>
+</ul>
+</section>
+<section id="common-methods" class="level4" data-number="5.1.2">
+<h4 data-number="5.1.2" class="anchored" data-anchor-id="common-methods"><span class="header-section-number">5.1.2</span> Common methods</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Linear Regression</td>
+<td>Association testing</td>
+</tr>
+<tr class="even">
+<td>Logistic Regression</td>
+<td>Disease prediction</td>
+</tr>
+<tr class="odd">
+<td>SEM</td>
+<td>Causal pathways</td>
+</tr>
+<tr class="even">
+<td>Mixed Models</td>
+<td>Genetic relatedness</td>
+</tr>
+<tr class="odd">
+<td>Mendelian Randomization</td>
+<td>Causal inference</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="linear-regression-example" class="level4" data-number="5.1.3">
+<h4 data-number="5.1.3" class="anchored" data-anchor-id="linear-regression-example"><span class="header-section-number">5.1.3</span> Linear Regression Example</h4>
+<section id="question" class="level5" data-number="5.1.3.1">
+<h5 data-number="5.1.3.1" class="anchored" data-anchor-id="question"><span class="header-section-number">5.1.3.1</span> Question</h5>
+<blockquote class="blockquote">
+<p>Can Trait 1 predict Trait 2?</p>
+</blockquote>
+</section>
+</section>
+<section id="regression-example" class="level4" data-number="5.1.4">
+<h4 data-number="5.1.4" class="anchored" data-anchor-id="regression-example"><span class="header-section-number">5.1.4</span> Regression Example</h4>
+<div id="7ca3ba3e-f407-45f4-b9c2-abb11284399d" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[<span class="st">"Trait_1"</span>]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">"Trait_2"</span>]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(X)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(y, X).fit()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                Trait_2   R-squared:                       0.872
+Model:                            OLS   Adj. R-squared:                  0.872
+Method:                 Least Squares   F-statistic:                     3386.
+Date:                Thu, 07 May 2026   Prob (F-statistic):          2.99e-224
+Time:                        10:32:04   Log-Likelihood:                -94.422
+No. Observations:                 500   AIC:                             192.8
+Df Residuals:                     498   BIC:                             201.3
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0097      0.013      0.741      0.459      -0.016       0.035
+Trait_1        0.7774      0.013     58.185      0.000       0.751       0.804
+==============================================================================
+Omnibus:                        0.328   Durbin-Watson:                   2.021
+Prob(Omnibus):                  0.849   Jarque-Bera (JB):                0.425
+Skew:                           0.049   Prob(JB):                        0.809
+Kurtosis:                       2.895   Cond. No.                         1.02
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
+</section>
+<section id="interpretation-1" class="level4" data-number="5.1.5">
+<h4 data-number="5.1.5" class="anchored" data-anchor-id="interpretation-1"><span class="header-section-number">5.1.5</span> Interpretation</h4>
+<p>We now explicitly estimate:</p>
+<ul>
+<li>effect size</li>
+<li>confidence intervals</li>
+<li>statistical significance</li>
+<li>explained variance</li>
+</ul>
+<p>This is fundamentally different from exploratory analysis.</p>
+</section>
+</section>
+<section id="structural-equation-modeling-sem" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="structural-equation-modeling-sem"><span class="header-section-number">5.2</span> Structural Equation Modeling (SEM)</h3>
+<section id="concept-2" class="level4" data-number="5.2.1">
+<h4 data-number="5.2.1" class="anchored" data-anchor-id="concept-2"><span class="header-section-number">5.2.1</span> Concept</h4>
+<p>Structural Equation Modeling combines:</p>
+<ul>
+<li>regression</li>
+<li>covariance analysis</li>
+<li>latent variables</li>
+</ul>
+<p>SEM allows researchers to model:</p>
+<ul>
+<li>direct effects</li>
+<li>indirect effects</li>
+<li>latent constructs</li>
+<li>mediation</li>
+</ul>
+</section>
+</section>
+<section id="comparison" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="comparison"><span class="header-section-number">5.3</span> Comparison</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Hypothesis-Free</th>
+<th>Hypothesis-Driven</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Goal</td>
+<td>Discover patterns</td>
+<td>Test hypotheses</td>
+</tr>
+<tr class="even">
+<td>Assumptions</td>
+<td>Minimal</td>
+<td>Strong</td>
+</tr>
+<tr class="odd">
+<td>Interpretation</td>
+<td>Harder</td>
+<td>Easier</td>
+</tr>
+<tr class="even">
+<td>Scalability</td>
+<td>High</td>
+<td>Moderate</td>
+</tr>
+<tr class="odd">
+<td>Biological insight</td>
+<td>Exploratory</td>
+<td>Confirmatory</td>
+</tr>
+</tbody>
+</table>
+<section id="when-should-you-use-each" class="level4" data-number="5.3.1">
+<h4 data-number="5.3.1" class="anchored" data-anchor-id="when-should-you-use-each"><span class="header-section-number">5.3.1</span> When Should You Use Each?</h4>
+<p>Use Hypothesis-Free Methods When</p>
+<ul>
+<li>exploring new datasets</li>
+<li>analyzing many traits</li>
+<li>discovering subtypes</li>
+<li>searching for hidden patterns</li>
+</ul>
+<p>Use Hypothesis-Driven Methods When - testing biological theories - validating findings - estimating effect sizes - performing causal inference</p>
+<p>In Practice: Both Are Often Combined</p>
+<p>Modern genomics pipelines frequently use both strategies.</p>
+</section>
+</section>
+<section id="typical-workflow" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="typical-workflow"><span class="header-section-number">5.4</span> Typical workflow:</h3>
+<ul>
+<li>Exploratory clustering/PCA</li>
+<li>Identify candidate structures</li>
+<li>Validate using regression/SEM</li>
+<li>Replicate findings in external cohorts</li>
+</ul>
+<p>This hybrid strategy is extremely powerful.</p>
+<p>Large-scale genomic studies generate enormous amounts of high-dimensional data, often involving thousands to millions of genetic variants across numerous traits and individuals. Analyzing such datasets presents several important computational and statistical challenges. One major issue is high dimensionality, where the number of variables greatly exceeds the number of samples, making statistical modeling more difficult and increasing the risk of overfitting. Memory usage also becomes a critical concern, especially when handling genotype matrices, covariance structures, and linkage disequilibrium (LD) information for large cohorts.</p>
+<p>Another important challenge is covariance estimation across traits. As the number of traits increases, estimating stable and biologically meaningful covariance matrices becomes computationally intensive. In addition, genomic data are strongly influenced by Linkage disequilibrium, where nearby genetic variants are correlated with one another. Ignoring LD structure can lead to biased or misleading results. Population ancestry further complicates analyses because differences in ancestral background may introduce confounding patterns that mimic genuine biological associations. As a result, efficient algorithms, scalable statistical frameworks, and robust correction strategies are essential for modern genomic research.</p>
+<p>The key distinction between the two analytical paradigms discussed in this tutorial lies in their objectives and assumptions. Hypothesis-free methods aim to discover hidden patterns, latent structures, and relationships directly from the data with minimal prior assumptions. These approaches are particularly useful for exploratory analyses of complex biological systems involving many correlated traits. In contrast, hypothesis-driven methods are designed to test predefined statistical or biological relationships and are generally more interpretable and theory-oriented.</p>
+<p>Both approaches play essential roles in modern Statistical Genetics. Exploratory techniques such as clustering and dimensionality reduction are widely used to uncover hidden subgroups, latent biological pathways, and shared genetic architectures. Meanwhile, explanatory approaches such as regression models and Structural Equation Modeling are commonly applied to validate hypotheses, estimate effect sizes, and investigate causal relationships.</p>
+<p>In practice, the strongest biological insights often emerge from combining both strategies. Researchers may first apply exploratory methods to identify hidden patterns in the data and then use hypothesis-driven models to validate and interpret these findings in a biologically meaningful framework.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

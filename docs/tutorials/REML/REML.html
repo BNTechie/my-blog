@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-05-20">
+
+<title>Understanding REML: Restricted Maximum Likelihood – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-do-we-need-reml" id="toc-why-do-we-need-reml" class="nav-link active" data-scroll-target="#why-do-we-need-reml"><span class="header-section-number">1</span> Why Do We Need REML?</a>
+  <ul class="collapse">
+  <li><a href="#maximum-likelihood" id="toc-maximum-likelihood" class="nav-link" data-scroll-target="#maximum-likelihood"><span class="header-section-number">1.1</span> Maximum Likelihood</a></li>
+  <li><a href="#the-problem-with-ordinary-maximum-likelihood" id="toc-the-problem-with-ordinary-maximum-likelihood" class="nav-link" data-scroll-target="#the-problem-with-ordinary-maximum-likelihood"><span class="header-section-number">1.2</span> The Problem with Ordinary Maximum Likelihood</a></li>
+  <li><a href="#what-reml-does" id="toc-what-reml-does" class="nav-link" data-scroll-target="#what-reml-does"><span class="header-section-number">1.3</span> What REML Does</a></li>
+  <li><a href="#reml-meaning" id="toc-reml-meaning" class="nav-link" data-scroll-target="#reml-meaning"><span class="header-section-number">1.4</span> REML Meaning</a></li>
+  <li><a href="#simple-example-variance-estimation" id="toc-simple-example-variance-estimation" class="nav-link" data-scroll-target="#simple-example-variance-estimation"><span class="header-section-number">1.5</span> Simple Example: Variance Estimation</a></li>
+  <li><a href="#important-practical-rule" id="toc-important-practical-rule" class="nav-link" data-scroll-target="#important-practical-rule"><span class="header-section-number">1.6</span> Important Practical Rule</a></li>
+  <li><a href="#reml-in-linear-mixed-models" id="toc-reml-in-linear-mixed-models" class="nav-link" data-scroll-target="#reml-in-linear-mixed-models"><span class="header-section-number">1.7</span> REML in Linear Mixed Models</a></li>
+  <li><a href="#reml-in-statistical-genetics" id="toc-reml-in-statistical-genetics" class="nav-link" data-scroll-target="#reml-in-statistical-genetics"><span class="header-section-number">1.8</span> REML in Statistical Genetics</a></li>
+  <li><a href="#intuition-for-reml-heritability-estimation" id="toc-intuition-for-reml-heritability-estimation" class="nav-link" data-scroll-target="#intuition-for-reml-heritability-estimation"><span class="header-section-number">1.9</span> Intuition for REML Heritability Estimation</a></li>
+  <li><a href="#why-reml-is-used-in-gcta-greml" id="toc-why-reml-is-used-in-gcta-greml" class="nav-link" data-scroll-target="#why-reml-is-used-in-gcta-greml"><span class="header-section-number">1.10</span> Why REML Is Used in GCTA-GREML</a></li>
+  <li><a href="#reml-and-the-covariance-matrix" id="toc-reml-and-the-covariance-matrix" class="nav-link" data-scroll-target="#reml-and-the-covariance-matrix"><span class="header-section-number">1.11</span> REML and the Covariance Matrix</a></li>
+  <li><a href="#step-by-step-conceptual-view" id="toc-step-by-step-conceptual-view" class="nav-link" data-scroll-target="#step-by-step-conceptual-view"><span class="header-section-number">1.12</span> Step-by-Step Conceptual View</a></li>
+  <li><a href="#example-simulating-a-simple-mixed-model-in-python" id="toc-example-simulating-a-simple-mixed-model-in-python" class="nav-link" data-scroll-target="#example-simulating-a-simple-mixed-model-in-python"><span class="header-section-number">1.13</span> Example: Simulating a Simple Mixed Model in Python</a></li>
+  </ul></li>
+  <li><a href="#fit-a-mixed-model-using-reml" id="toc-fit-a-mixed-model-using-reml" class="nav-link" data-scroll-target="#fit-a-mixed-model-using-reml"><span class="header-section-number">2</span> Fit a Mixed Model Using REML</a>
+  <ul class="collapse">
+  <li><a href="#example-reml-like-heritability-intuition" id="toc-example-reml-like-heritability-intuition" class="nav-link" data-scroll-target="#example-reml-like-heritability-intuition"><span class="header-section-number">2.1</span> Example: REML-Like Heritability Intuition</a></li>
+  <li><a href="#heritability-in-this-simulation" id="toc-heritability-in-this-simulation" class="nav-link" data-scroll-target="#heritability-in-this-simulation"><span class="header-section-number">2.2</span> Heritability in This Simulation</a></li>
+  <li><a href="#reml-vs-fixed-effect-regression" id="toc-reml-vs-fixed-effect-regression" class="nav-link" data-scroll-target="#reml-vs-fixed-effect-regression"><span class="header-section-number">2.3</span> REML vs Fixed-Effect Regression</a></li>
+  <li><a href="#when-should-you-use-reml" id="toc-when-should-you-use-reml" class="nav-link" data-scroll-target="#when-should-you-use-reml"><span class="header-section-number">2.4</span> When Should You Use REML?</a></li>
+  <li><a href="#common-misunderstanding" id="toc-common-misunderstanding" class="nav-link" data-scroll-target="#common-misunderstanding"><span class="header-section-number">2.5</span> Common Misunderstanding</a></li>
+  <li><a href="#reml-in-one-sentence" id="toc-reml-in-one-sentence" class="nav-link" data-scroll-target="#reml-in-one-sentence"><span class="header-section-number">2.6</span> REML in One Sentence</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">3</span> Summary</a>
+  <ul class="collapse">
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">3.1</span> References</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Understanding REML: Restricted Maximum Likelihood</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Statistics</div>
+    <div class="quarto-category">REML</div>
+    <div class="quarto-category">Mixed Models</div>
+    <div class="quarto-category">Statistical Genetics</div>
+    <div class="quarto-category">Variance Components</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 20, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>REML stands for <strong>Restricted Maximum Likelihood</strong>.</p>
+<p>It is a method used to estimate <strong>variance components</strong> in statistical models, especially in <strong>linear mixed models</strong>.</p>
+<p>REML is very common in:</p>
+<ul>
+<li>statistical genetics,</li>
+<li>animal breeding,</li>
+<li>GWAS mixed models,</li>
+<li>heritability estimation,</li>
+<li>longitudinal data analysis,</li>
+<li>repeated-measures analysis,</li>
+<li>multi-level modeling.</li>
+</ul>
+<p>In statistical genetics, REML appears frequently in methods such as:</p>
+<ul>
+<li>GCTA-GREML,</li>
+<li>genomic relationship matrix models,</li>
+<li>SNP heritability estimation,</li>
+<li>variance component models.</li>
+</ul>
+<p>The main purpose of REML is to estimate variance parameters more accurately than ordinary maximum likelihood, especially when fixed effects are present.</p>
+<section id="why-do-we-need-reml" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="why-do-we-need-reml"><span class="header-section-number">1</span> Why Do We Need REML?</h2>
+<p>In many statistical models, we estimate two types of parameters:</p>
+<ol type="1">
+<li>fixed effects,</li>
+<li>variance components.</li>
+</ol>
+<p>Fixed effects describe average effects.</p>
+<p>For example:</p>
+<ul>
+<li>age effect,</li>
+<li>sex effect,</li>
+<li>SNP effect,</li>
+<li>treatment effect,</li>
+<li>batch effect.</li>
+</ul>
+<p>Variance components describe sources of variability.</p>
+<p>For example:</p>
+<ul>
+<li>genetic variance,</li>
+<li>residual variance,</li>
+<li>family-level variance,</li>
+<li>individual-level random effects,</li>
+<li>environmental variance.</li>
+</ul>
+<p>A mixed model may look like this:</p>
+<p>$ y = X+ Zu + $</p>
+<p>where:</p>
+<ul>
+<li>( y ) is the phenotype,</li>
+<li>( <span class="math inline">\(X\beta\)</span> ) represents fixed effects,</li>
+<li>( Zu ) represents random effects,</li>
+<li>( <span class="math inline">\(\epsilon\)</span> ) is residual error.</li>
+</ul>
+<p>The random effects are usually assumed to follow:</p>
+<p>$ u N(0, _u^2 I) $</p>
+<p>and the residual errors are:</p>
+<p>$ N(0, _e^2 I) $</p>
+<p>The goal is often to estimate:</p>
+<p>$ _u^2 $</p>
+<p>and:</p>
+<p>$ _e^2 $</p>
+<p>These are variance components.</p>
+<section id="maximum-likelihood" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="maximum-likelihood"><span class="header-section-number">1.1</span> Maximum Likelihood</h3>
+<p>Maximum likelihood estimation, often abbreviated as ML, estimates parameters by finding values that make the observed data most likely.</p>
+<p>In simple terms, ML asks:</p>
+<blockquote class="blockquote">
+<p>Given this model, what parameter values make my observed data most probable?</p>
+</blockquote>
+<p>For a linear model:</p>
+<p>$ y = X+ $</p>
+<p>ML estimates both:</p>
+<ul>
+<li>fixed effects,</li>
+<li>variance parameters</li>
+</ul>
+<p>using the same likelihood.</p>
+<p>However, this creates a problem.</p>
+</section>
+<section id="the-problem-with-ordinary-maximum-likelihood" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="the-problem-with-ordinary-maximum-likelihood"><span class="header-section-number">1.2</span> The Problem with Ordinary Maximum Likelihood</h3>
+<p>Ordinary maximum likelihood tends to underestimate variance components.</p>
+<p>This happens because ML does not fully account for the fact that fixed effects were estimated from the data.</p>
+<p>When we estimate fixed effects, we use some information from the data.</p>
+<p>That reduces the remaining independent information available for estimating variance.</p>
+<p>In simple linear regression, this is why we estimate residual variance using:</p>
+<p>$ $</p>
+<p>instead of:</p>
+<p>$ $</p>
+<p>where:</p>
+<ul>
+<li>( n ) is the number of observations,</li>
+<li>( p ) is the number of estimated fixed-effect parameters.</li>
+</ul>
+<p>The term ( n-p ) accounts for the degrees of freedom lost by estimating fixed effects.</p>
+<p>REML is based on a similar idea.</p>
+</section>
+<section id="what-reml-does" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="what-reml-does"><span class="header-section-number">1.3</span> What REML Does</h3>
+<p>REML estimates variance components after accounting for the fixed effects.</p>
+<p>Instead of using the likelihood of the raw data ( y ), REML uses the likelihood of transformed data that no longer depends on the fixed effects.</p>
+<p>Conceptually, REML removes the part of the data explained by fixed effects and estimates variance components from the remaining residual variation.</p>
+<p>This gives less biased variance estimates.</p>
+</section>
+<section id="reml-meaning" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="reml-meaning"><span class="header-section-number">1.4</span> REML Meaning</h3>
+<p>REML is called <strong>Restricted Maximum Likelihood</strong> because the likelihood is constructed from a restricted part of the data.</p>
+<p>It is also sometimes called:</p>
+<ul>
+<li>residual maximum likelihood,</li>
+<li>restricted likelihood,</li>
+<li>marginal likelihood of error contrasts.</li>
+</ul>
+<p>The key idea is:</p>
+<blockquote class="blockquote">
+<p>Estimate variance components using only the part of the data that is independent of fixed-effect estimates.</p>
+</blockquote>
+</section>
+<section id="simple-example-variance-estimation" class="level3" data-number="1.5">
+<h3 data-number="1.5" class="anchored" data-anchor-id="simple-example-variance-estimation"><span class="header-section-number">1.5</span> Simple Example: Variance Estimation</h3>
+<p>Suppose we have a simple linear regression:</p>
+<p>$ y_i = _0 + _i $</p>
+<p>Here, the only fixed effect is the intercept.</p>
+<p>If we estimate variance using ML:</p>
+<p>$ ^2_{ML} = _{i=1}^{n}(y_i - {y})^2 $</p>
+<p>But the usual unbiased estimate is:</p>
+<p>$ ^2 = _{i=1}^{n}(y_i - {y})^2 $</p>
+<p>Why ( n-1 )?</p>
+<p>Because one parameter, the mean, was estimated.</p>
+<p>REML generalizes this correction to more complex mixed models.</p>
+<section id="ml-vs-reml" class="level4" data-number="1.5.1">
+<h4 data-number="1.5.1" class="anchored" data-anchor-id="ml-vs-reml"><span class="header-section-number">1.5.1</span> ML vs REML</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>ML</th>
+<th>REML</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Estimates fixed effects</td>
+<td>Yes</td>
+<td>Indirectly</td>
+</tr>
+<tr class="even">
+<td>Estimates variance components</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Accounts for loss of fixed-effect degrees of freedom</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Variance estimates</td>
+<td>Often downward biased</td>
+<td>Less biased</td>
+</tr>
+<tr class="odd">
+<td>Good for comparing fixed effects</td>
+<td>Yes</td>
+<td>No, if fixed effects differ</td>
+</tr>
+<tr class="even">
+<td>Good for estimating variance components</td>
+<td>Less preferred</td>
+<td>Preferred</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="important-practical-rule" class="level3" data-number="1.6">
+<h3 data-number="1.6" class="anchored" data-anchor-id="important-practical-rule"><span class="header-section-number">1.6</span> Important Practical Rule</h3>
+<p>Use <strong>ML</strong> when comparing models with different fixed effects.</p>
+<p>Use <strong>REML</strong> when comparing models with the same fixed effects but different random effects or when the main goal is estimating variance components.</p>
+<p>Why?</p>
+<p>Because REML likelihood depends on the fixed-effect design matrix.</p>
+<p>Therefore, REML likelihoods are not directly comparable across models with different fixed effects.</p>
+</section>
+<section id="reml-in-linear-mixed-models" class="level3" data-number="1.7">
+<h3 data-number="1.7" class="anchored" data-anchor-id="reml-in-linear-mixed-models"><span class="header-section-number">1.7</span> REML in Linear Mixed Models</h3>
+<p>A linear mixed model can be written as:</p>
+<p>$ y = X+ Zu + $</p>
+<p>where:</p>
+<p>$ u N(0, G) $</p>
+<p>and:</p>
+<p>$ N(0, R) $</p>
+<p>Then:</p>
+<p>$ y N(X, V) $</p>
+<p>where:</p>
+<p>$ V = ZGZ^T + R $</p>
+<p>The matrix ( V ) is the covariance matrix of the phenotype.</p>
+<p>REML estimates the variance components inside ( V ).</p>
+</section>
+<section id="reml-in-statistical-genetics" class="level3" data-number="1.8">
+<h3 data-number="1.8" class="anchored" data-anchor-id="reml-in-statistical-genetics"><span class="header-section-number">1.8</span> REML in Statistical Genetics</h3>
+<p>In statistical genetics, REML is especially important because we often want to estimate how much trait variation is explained by genetic similarity.</p>
+<p>A common model is:</p>
+<p>$ y = X+ g + $</p>
+<p>where:</p>
+<p>$ g N(0, G_g^2) $</p>
+<p>and:</p>
+<p>$ N(0, I_e^2) $</p>
+<p>Here:</p>
+<ul>
+<li>( G ) is the genetic relationship matrix,</li>
+<li>( _g^2 ) is genetic variance,</li>
+<li>( _e^2 ) is residual variance.</li>
+</ul>
+<p>The total phenotypic variance is:</p>
+<p>$ _p^2 = _g^2 + _e^2 $</p>
+<p>SNP heritability is estimated as:</p>
+<p>$ h^2_{SNP} = {_g^2 + _e^2} $</p>
+<p>REML is used to estimate ( <span class="math inline">\(\sigma_g^2\)</span> ) and ( <span class="math inline">\(\sigma_e^2\)</span> ).</p>
+</section>
+<section id="intuition-for-reml-heritability-estimation" class="level3" data-number="1.9">
+<h3 data-number="1.9" class="anchored" data-anchor-id="intuition-for-reml-heritability-estimation"><span class="header-section-number">1.9</span> Intuition for REML Heritability Estimation</h3>
+<p>The idea is simple:</p>
+<p>If genetically similar individuals also have similar phenotypes, then genetic variance is large.</p>
+<p>If genetic similarity does not predict phenotype similarity, then genetic variance is small.</p>
+<p>REML helps estimate how much phenotype covariance can be explained by the GRM.</p>
+</section>
+<section id="why-reml-is-used-in-gcta-greml" class="level3" data-number="1.10">
+<h3 data-number="1.10" class="anchored" data-anchor-id="why-reml-is-used-in-gcta-greml"><span class="header-section-number">1.10</span> Why REML Is Used in GCTA-GREML</h3>
+<p>GCTA-GREML uses REML to estimate SNP heritability.</p>
+<p>The model is:</p>
+<p>$ y = X+ g + $</p>
+<p>with:</p>
+<p>$ g N(0, G_g^2) $</p>
+<p>REML estimates:</p>
+<ul>
+<li>genetic variance,</li>
+<li>residual variance,</li>
+<li>SNP heritability.</li>
+</ul>
+<p>The GRM defines expected genetic covariance between individuals.</p>
+<p>REML estimates how strongly this covariance structure explains the observed phenotype.</p>
+</section>
+<section id="reml-and-the-covariance-matrix" class="level3" data-number="1.11">
+<h3 data-number="1.11" class="anchored" data-anchor-id="reml-and-the-covariance-matrix"><span class="header-section-number">1.11</span> REML and the Covariance Matrix</h3>
+<p>In REML, the covariance matrix is central.</p>
+<p>The phenotype covariance matrix is:</p>
+<p>$ V = G_g^2 + I_e^2 $</p>
+<p>where:</p>
+<ul>
+<li>( <span class="math inline">\(G\sigma_g^2\)</span> ) captures genetic similarity,</li>
+<li>( <span class="math inline">\(I\sigma_e^2\)</span> ) captures individual-specific residual variation.</li>
+</ul>
+<p>REML searches for variance values that make the observed phenotype data most consistent with this covariance structure.</p>
+</section>
+<section id="step-by-step-conceptual-view" class="level3" data-number="1.12">
+<h3 data-number="1.12" class="anchored" data-anchor-id="step-by-step-conceptual-view"><span class="header-section-number">1.12</span> Step-by-Step Conceptual View</h3>
+<p>REML works roughly as follows:</p>
+<ol type="1">
+<li>Start with phenotype data and covariates.</li>
+<li>Remove variation explained by fixed effects.</li>
+<li>Use the remaining residual variation.</li>
+<li>Compare residual phenotype similarity to genetic similarity.</li>
+<li>Estimate genetic and residual variance components.</li>
+<li>Compute heritability if needed.</li>
+</ol>
+</section>
+<section id="example-simulating-a-simple-mixed-model-in-python" class="level3" data-number="1.13">
+<h3 data-number="1.13" class="anchored" data-anchor-id="example-simulating-a-simple-mixed-model-in-python"><span class="header-section-number">1.13</span> Example: Simulating a Simple Mixed Model in Python</h3>
+<p>In this example, we simulate grouped data.</p>
+<p>Each group has its own random effect.</p>
+<p>This is similar in spirit to genetic models where individuals share some background similarity.</p>
+<div id="c158fc16-9121-4480-9eb7-ab23deeb2740" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of groups</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>n_groups <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Individuals per group</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>n_per_group <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Total sample size</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> n_groups <span class="op">*</span> n_per_group</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Group IDs</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>groups <span class="op">=</span> np.repeat(np.arange(n_groups), n_per_group)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixed-effect predictor</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># True fixed effects</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>beta_0 <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="op">=</span> <span class="fl">1.5</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># True variance components</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>sigma_group <span class="op">=</span> <span class="fl">1.2</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>sigma_residual <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Random group effects</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>group_effects <span class="op">=</span> np.random.normal(<span class="dv">0</span>, sigma_group, n_groups)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Outcome</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> beta_0 <span class="op">+</span> beta_1 <span class="op">*</span> x <span class="op">+</span> group_effects[groups] <span class="op">+</span> np.random.normal(<span class="dv">0</span>, sigma_residual, n)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataframe</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"y"</span>: y,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x"</span>: x,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"group"</span>: groups</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>df.head()</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">y</th>
+<th data-quarto-table-cell-role="th">x</th>
+<th data-quarto-table-cell-role="th">group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>5.489075</td>
+<td>0.496714</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>0.354683</td>
+<td>-0.138264</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>4.087138</td>
+<td>0.647689</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>3.101174</td>
+<td>1.523030</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>1.606183</td>
+<td>-0.234153</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="fit-a-mixed-model-using-reml" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="fit-a-mixed-model-using-reml"><span class="header-section-number">2</span> Fit a Mixed Model Using REML</h2>
+<p>We can fit a mixed model using <code>statsmodels</code>.</p>
+<div id="e99fa56f-44d2-4c1c-990b-d618f1a75616" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit mixed model using REML</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>model_reml <span class="op">=</span> smf.mixedlm(<span class="st">"y ~ x"</span>, data<span class="op">=</span>df, groups<span class="op">=</span>df[<span class="st">"group"</span>])</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>result_reml <span class="op">=</span> model_reml.fit(reml<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result_reml.summary())</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the Same Model Using ML</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit mixed model using ML</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>model_ml <span class="op">=</span> smf.mixedlm(<span class="st">"y ~ x"</span>, data<span class="op">=</span>df, groups<span class="op">=</span>df[<span class="st">"group"</span>])</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>result_ml <span class="op">=</span> model_ml.fit(reml<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result_ml.summary())</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare Variance Estimates</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>comparison <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Method"</span>: [<span class="st">"REML"</span>, <span class="st">"ML"</span>],</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Group variance"</span>: [</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        result_reml.cov_re.iloc[<span class="dv">0</span>, <span class="dv">0</span>],</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        result_ml.cov_re.iloc[<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Residual variance"</span>: [</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        result_reml.scale,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        result_ml.scale</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>comparison</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the Simulated Data</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">5</span>))</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">"x"</span>], df[<span class="st">"y"</span>], alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Fixed-effect predictor x"</span>)</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Outcome y"</span>)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Simulated Mixed Model Data"</span>)</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize Group-Level Means</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>group_means <span class="op">=</span> df.groupby(<span class="st">"group"</span>)[<span class="st">"y"</span>].mean().reset_index()</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>plt.scatter(group_means[<span class="st">"group"</span>], group_means[<span class="st">"y"</span>])</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Group"</span>)</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Mean outcome"</span>)</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Group-Level Variation"</span>)</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Mixed Linear Model Regression Results
+=======================================================
+Model:            MixedLM Dependent Variable: y        
+No. Observations: 200     Method:             REML     
+No. Groups:       20      Scale:              0.9292   
+Min. group size:  10      Log-Likelihood:     -308.6862
+Max. group size:  10      Converged:          Yes      
+Mean group size:  10.0                                 
+-------------------------------------------------------
+              Coef. Std.Err.   z    P&gt;|z| [0.025 0.975]
+-------------------------------------------------------
+Intercept     2.548    0.328  7.779 0.000  1.906  3.190
+x             1.479    0.077 19.269 0.000  1.329  1.629
+Group Var     2.052    0.759                           
+=======================================================
+
+         Mixed Linear Model Regression Results
+=======================================================
+Model:            MixedLM Dependent Variable: y        
+No. Observations: 200     Method:             ML       
+No. Groups:       20      Scale:              0.9241   
+Min. group size:  10      Log-Likelihood:     -306.8262
+Max. group size:  10      Converged:          Yes      
+Mean group size:  10.0                                 
+-------------------------------------------------------
+              Coef. Std.Err.   z    P&gt;|z| [0.025 0.975]
+-------------------------------------------------------
+Intercept     2.548    0.319  7.982 0.000  1.922  3.173
+x             1.479    0.077 19.322 0.000  1.329  1.629
+Group Var     1.945    0.706                           
+=======================================================
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="REML_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="REML_files/figure-html/cell-3-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="example-reml-like-heritability-intuition" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="example-reml-like-heritability-intuition"><span class="header-section-number">2.1</span> Example: REML-Like Heritability Intuition</h3>
+<p>Now let us simulate a simple genetic-style example.</p>
+<p>We create:</p>
+<ul>
+<li>a genetic relationship matrix,</li>
+<li>a genetic random effect,</li>
+<li>residual noise,</li>
+<li>and a phenotype.</li>
+</ul>
+<p>This is a simplified educational example, not a full GCTA implementation.</p>
+<div id="3005810a-d2c3-4bbd-a256-84866fd9cbd8" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate genotype matrix: 0, 1, 2</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>genotypes <span class="op">=</span> np.random.binomial(<span class="dv">2</span>, <span class="fl">0.3</span>, size<span class="op">=</span>(n, m))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate allele frequency</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> genotypes.mean(axis<span class="op">=</span><span class="dv">0</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize genotypes</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> (genotypes <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> p) <span class="op">/</span> np.sqrt(<span class="dv">2</span> <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p) <span class="op">+</span> <span class="fl">1e-8</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic relationship matrix</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>GRM <span class="op">=</span> (Z <span class="op">@</span> Z.T) <span class="op">/</span> m</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co"># True variance components</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>sigma_g2 <span class="op">=</span> <span class="fl">0.6</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>sigma_e2 <span class="op">=</span> <span class="fl">0.4</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate genetic effect using GRM covariance</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>genetic_effect <span class="op">=</span> np.random.multivariate_normal(</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span>np.zeros(n),</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    cov<span class="op">=</span>GRM <span class="op">*</span> sigma_g2</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate residual effect</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>residual <span class="op">=</span> np.random.normal(<span class="dv">0</span>, np.sqrt(sigma_e2), n)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Phenotype</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>phenotype <span class="op">=</span> genetic_effect <span class="op">+</span> residual</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Put into dataframe</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>pheno_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">"individual"</span>: [<span class="ss">f"ID</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n)],</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"phenotype"</span>: phenotype</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>pheno_df.head()</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the GRM</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">5</span>))</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>plt.imshow(GRM)</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>plt.colorbar(label<span class="op">=</span><span class="st">"Genetic relationship"</span>)</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Simulated Genetic Relationship Matrix"</span>)</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Individual"</span>)</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Individual"</span>)</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize Phenotype Distribution</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">5</span>))</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>plt.hist(phenotype, bins<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Phenotype"</span>)</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Simulated Phenotype Distribution"</span>)</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="REML_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="REML_files/figure-html/cell-4-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="heritability-in-this-simulation" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="heritability-in-this-simulation"><span class="header-section-number">2.2</span> Heritability in This Simulation</h3>
+<p>The true SNP heritability in this simulation is:</p>
+<p>$ h^2 = {_g^2 + _e^2} $</p>
+<div id="46c4088b-e867-4afe-9409-c852a594ef59" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>true_h2 <span class="op">=</span> sigma_g2 <span class="op">/</span> (sigma_g2 <span class="op">+</span> sigma_e2)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>true_h2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>0.6</code></pre>
+</div>
+</div>
+<p>In this simulation, we set:</p>
+<ul>
+<li>genetic variance = 0.6,</li>
+<li>residual variance = 0.4.</li>
+</ul>
+<p>Therefore:</p>
+<p>$ h^2 = 0.6 $</p>
+<p>A real REML algorithm would estimate these variance components from the phenotype and GRM.</p>
+</section>
+<section id="reml-vs-fixed-effect-regression" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="reml-vs-fixed-effect-regression"><span class="header-section-number">2.3</span> REML vs Fixed-Effect Regression</h3>
+<p>Fixed-effect regression estimates mean effects.</p>
+<p>For example:</p>
+<p>$ y = X+ $</p>
+<p>This answers:</p>
+<blockquote class="blockquote">
+<p>What is the average effect of X on y?</p>
+</blockquote>
+<p>REML in mixed models estimates variance components.</p>
+<p>This answers:</p>
+<blockquote class="blockquote">
+<p>How much variation is explained by a random source such as genetics, family, group, or individual?</p>
+</blockquote>
+<p>This distinction is important.</p>
+</section>
+<section id="when-should-you-use-reml" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="when-should-you-use-reml"><span class="header-section-number">2.4</span> When Should You Use REML?</h3>
+<p>Use REML when:</p>
+<ul>
+<li>estimating variance components,</li>
+<li>estimating heritability,</li>
+<li>fitting mixed models,</li>
+<li>analyzing random effects,</li>
+<li>modeling repeated measurements,</li>
+<li>accounting for relatedness,</li>
+<li>using GRM-based models.</li>
+</ul>
+<p>Use ML instead when:</p>
+<ul>
+<li>comparing models with different fixed effects,</li>
+<li>performing likelihood ratio tests for fixed effects,</li>
+<li>selecting among fixed-effect structures.</li>
+</ul>
+</section>
+<section id="common-misunderstanding" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="common-misunderstanding"><span class="header-section-number">2.5</span> Common Misunderstanding</h3>
+<p>REML does not mean the model has no fixed effects.</p>
+<p>A REML model can include fixed effects.</p>
+<p>The difference is that REML estimates variance components after accounting for the uncertainty introduced by estimating fixed effects.</p>
+</section>
+<section id="reml-in-one-sentence" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="reml-in-one-sentence"><span class="header-section-number">2.6</span> REML in One Sentence</h3>
+<p>REML estimates variance components from the part of the data that remains after fixed effects are accounted for.</p>
+</section>
+</section>
+<section id="summary" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="summary"><span class="header-section-number">3</span> Summary</h2>
+<p>REML stands for Restricted Maximum Likelihood.</p>
+<p>It is mainly used to estimate variance components in mixed models.</p>
+<p>Ordinary ML often underestimates variance components because it does not fully account for fixed effects estimated from the data.</p>
+<p>REML corrects this by estimating variance components from residual information independent of fixed effects.</p>
+<p>In statistical genetics, REML is central because it allows us to estimate genetic variance and SNP heritability using the Genetic Relationship Matrix.</p>
+<p>The core idea behind REML-based heritability estimation is:</p>
+<blockquote class="blockquote">
+<p>genetically similar individuals should have more similar phenotypes if genetics contributes to the trait.</p>
+</blockquote>
+<section id="references" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="references"><span class="header-section-number">3.1</span> References</h3>
+<ol type="1">
+<li>Patterson HD and Thompson R. (1971). Recovery of inter-block information when block sizes are unequal.</li>
+<li>Henderson CR. (1984). Applications of Linear Models in Animal Breeding.</li>
+<li>Yang J et al.&nbsp;(2011). GCTA: A Tool for Genome-wide Complex Trait Analysis.</li>
+<li>Lee SH et al.&nbsp;(2011). Estimating missing heritability for disease from genome-wide association studies.</li>
+<li>Lynch M and Walsh B. Genetics and Analysis of Quantitative Traits.</li>
+<li>Visscher PM et al.&nbsp;(2008). Heritability in the genomics era.</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

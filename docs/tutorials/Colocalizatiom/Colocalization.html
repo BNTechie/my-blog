@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-05-29">
+
+<title>Colocalization Analysis in Statistical Genetics: Theory and Practical Example in R – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Colocalization Analysis in Statistical Genetics: Theory and Practical Example in R</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Statistical Genetics</div>
+    <div class="quarto-category">GWAS</div>
+    <div class="quarto-category">eQTL</div>
+    <div class="quarto-category">Colocalization</div>
+    <div class="quarto-category">TWAS</div>
+    <div class="quarto-category">Mendelian Randomization</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 29, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Genome-wide association studies, or GWAS, have identified many genetic variants associated with complex traits and diseases. However, after identifying a GWAS locus, one important question remains:</p>
+<blockquote class="blockquote">
+<p>Which gene or biological mechanism is responsible for the association?</p>
+</blockquote>
+<p>Many GWAS variants are located in non-coding regions of the genome. They may not directly change protein sequence, but they may influence disease by changing gene regulation. This is where eQTL data becomes useful.</p>
+<p>An eQTL is a genetic variant associated with gene expression. If a GWAS variant for a disease is also an eQTL for a nearby gene, it may suggest that the disease association works through altered gene expression.</p>
+<p>However, this interpretation is not always safe.</p>
+<p>The GWAS signal and the eQTL signal may appear to overlap simply because nearby SNPs are correlated through linkage disequilibrium, or LD. Therefore, visual overlap between GWAS and eQTL signals does not automatically mean that the same causal variant is responsible for both traits.</p>
+<p>Colocalization analysis tries to answer this specific question:</p>
+<blockquote class="blockquote">
+<p>Are the GWAS and eQTL signals driven by the same causal variant?</p>
+</blockquote>
+</section>
+<section id="why-colocalization-is-important" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="why-colocalization-is-important"><span class="header-section-number">2</span> Why Colocalization is Important</h2>
+<p>Suppose a GWAS identifies a region associated with depression. In the same region, an eQTL study shows that a nearby SNP is associated with expression of Gene X.</p>
+<p>A simple interpretation might be:</p>
+<p>Gene X is involved in depression.</p>
+<p>But this may be wrong.</p>
+<p>There are at least two possible explanations.</p>
+<p>First, the same causal variant may influence both Gene X expression and depression risk. This would support a shared biological mechanism.</p>
+<p>Second, two different causal variants may exist in the same region. One variant may affect depression risk, while another nearby variant may affect Gene X expression. Because the variants are in LD, the signals may look similar even though they are biologically separate.</p>
+<p>Colocalization is designed to distinguish between these two possibilities.</p>
+</section>
+<section id="relationship-between-gwas-eqtl-and-colocalization" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="relationship-between-gwas-eqtl-and-colocalization"><span class="header-section-number">3</span> Relationship Between GWAS, eQTL, and Colocalization</h2>
+<p>GWAS asks:</p>
+<p>Which variants are associated with disease or trait risk?</p>
+<p>eQTL analysis asks:</p>
+<p>Which variants are associated with gene expression?</p>
+<p>Colocalization asks:</p>
+<p>Are the GWAS and eQTL associations likely to share the same causal variant?</p>
+<p>A simple post-GWAS workflow is:</p>
+<pre class="text"><code>GWAS signal
+    ↓
+Check eQTL signal
+    ↓
+Run colocalization
+    ↓
+Prioritize candidate gene</code></pre>
+<p>This is why colocalization is now widely used in post-GWAS interpretation, TWAS analysis, Mendelian Randomization, and drug target prioritization.</p>
+</section>
+<section id="the-five-colocalization-hypotheses" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="the-five-colocalization-hypotheses"><span class="header-section-number">4</span> The Five Colocalization Hypotheses</h2>
+<p>The classical Bayesian colocalization framework evaluates five hypotheses.</p>
+<section id="h0-no-association-with-either-trait" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="h0-no-association-with-either-trait"><span class="header-section-number">4.1</span> H0: No Association With Either Trait</h3>
+<p>There is no evidence that variants in the region are associated with either trait.</p>
+<pre class="text"><code>Trait 1: no association
+Trait 2: no association</code></pre>
+</section>
+<section id="h1-association-with-trait-1-only" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="h1-association-with-trait-1-only"><span class="header-section-number">4.2</span> H1: Association With Trait 1 Only</h3>
+<p>Only the first trait is associated in the region.</p>
+<p>In many applications, trait 1 is the GWAS trait.</p>
+<pre class="text"><code>GWAS trait: associated
+eQTL trait: not associated</code></pre>
+</section>
+<section id="h2-association-with-trait-2-only" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="h2-association-with-trait-2-only"><span class="header-section-number">4.3</span> H2: Association With Trait 2 Only</h3>
+<p>Only the second trait is associated in the region.</p>
+<p>In many applications, trait 2 is gene expression.</p>
+<pre class="text"><code>GWAS trait: not associated
+eQTL trait: associated</code></pre>
+</section>
+<section id="h3-both-traits-associated-but-different-causal-variants" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="h3-both-traits-associated-but-different-causal-variants"><span class="header-section-number">4.4</span> H3: Both Traits Associated, But Different Causal Variants</h3>
+<p>Both traits show association in the region, but the evidence suggests that they are driven by different causal variants.</p>
+<pre class="text"><code>Variant A ──► Disease
+
+Variant B ──► Gene Expression</code></pre>
+<p>This means there is no strong evidence for a shared biological mechanism.</p>
+</section>
+<section id="h4-both-traits-associated-and-share-one-causal-variant" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="h4-both-traits-associated-and-share-one-causal-variant"><span class="header-section-number">4.5</span> H4: Both Traits Associated and Share One Causal Variant</h3>
+<p>Both traits are associated, and the evidence suggests that the same causal variant drives both signals.</p>
+<pre class="text"><code>Variant ──► Gene Expression
+       └──► Disease Risk</code></pre>
+<p>This is the main colocalization scenario researchers usually hope to find.</p>
+</section>
+</section>
+<section id="the-most-important-quantity-pp.h4" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="the-most-important-quantity-pp.h4"><span class="header-section-number">5</span> The Most Important Quantity: PP.H4</h2>
+<p>The coloc package reports posterior probabilities for each hypothesis.</p>
+<p>The most important quantity is usually:</p>
+<pre class="text"><code>PP.H4.abf</code></pre>
+<p>This means the posterior probability that both traits share the same causal variant.</p>
+<p>A rough interpretation is:</p>
+<pre class="text"><code>PP.H4 &lt; 0.50       weak evidence for colocalization
+PP.H4 0.50–0.80    moderate evidence
+PP.H4 &gt; 0.80       strong evidence
+PP.H4 &gt; 0.90       very strong evidence</code></pre>
+<p>These are not universal rules. The threshold depends on the study design, sample size, prior assumptions, and biological context.</p>
+<div id="6ba33c6e-098a-433a-be7c-98ca8740f442" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Install and Load Required Packages</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages if needed</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a> <span class="co">#install.packages("coloc")</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ggplot2")</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("dplyr")</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coloc)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="simulated-example-using-the-coloc-package" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="simulated-example-using-the-coloc-package"><span class="header-section-number">6</span> Simulated Example Using the coloc Package</h2>
+<p>In this example, we simulate 100 SNPs from one genomic region. We create one GWAS signal and one eQTL signal. Both are given a strong effect at SNP 50, representing a simplified shared causal variant.</p>
+<p>This is a toy example, but it helps us understand what the <code>coloc.abf()</code> function needs as input.</p>
+<div id="1e7c5450-5c1e-4122-a1eb-e0dd4f1a16e7" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of SNPs in the region</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>n_snps <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># SNP IDs and positions</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>snp_ids <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"rs"</span>, <span class="dv">1</span><span class="sc">:</span>n_snps)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>position <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n_snps</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Minor allele frequencies</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_snps, <span class="at">min =</span> <span class="fl">0.05</span>, <span class="at">max =</span> <span class="fl">0.50</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard errors</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>gwas_se <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.05</span>, n_snps)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>eqtl_se <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.05</span>, n_snps)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate small background effects</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>gwas_beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_snps, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.05</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>eqtl_beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_snps, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.05</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add one shared causal signal at SNP 50</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>gwas_beta[<span class="dv">50</span>] <span class="ot">&lt;-</span> <span class="fl">0.50</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>eqtl_beta[<span class="dv">50</span>] <span class="ot">&lt;-</span> <span class="fl">0.60</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for visualization</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>sim_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">SNP =</span> snp_ids,</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">Position =</span> position,</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAF =</span> maf,</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">GWAS_Beta =</span> gwas_beta,</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">eQTL_Beta =</span> eqtl_beta,</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">GWAS_SE =</span> gwas_se,</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">eQTL_SE =</span> eqtl_se</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 6 × 7</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">SNP</th>
+<th data-quarto-table-cell-role="th" scope="col">Position</th>
+<th data-quarto-table-cell-role="th" scope="col">MAF</th>
+<th data-quarto-table-cell-role="th" scope="col">GWAS_Beta</th>
+<th data-quarto-table-cell-role="th" scope="col">eQTL_Beta</th>
+<th data-quarto-table-cell-role="th" scope="col">GWAS_SE</th>
+<th data-quarto-table-cell-role="th" scope="col">eQTL_SE</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">1</th>
+<td>rs1</td>
+<td>1</td>
+<td>0.4616627</td>
+<td>0.016096263</td>
+<td>-0.002034924</td>
+<td>0.05</td>
+<td>0.05</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">2</th>
+<td>rs2</td>
+<td>2</td>
+<td>0.4716839</td>
+<td>-0.039191947</td>
+<td>-0.077577241</td>
+<td>0.05</td>
+<td>0.05</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">3</th>
+<td>rs3</td>
+<td>3</td>
+<td>0.1787628</td>
+<td>0.078786376</td>
+<td>0.058358477</td>
+<td>0.05</td>
+<td>0.05</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">4</th>
+<td>rs4</td>
+<td>4</td>
+<td>0.4237014</td>
+<td>0.032144965</td>
+<td>-0.013682285</td>
+<td>0.05</td>
+<td>0.05</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">5</th>
+<td>rs5</td>
+<td>5</td>
+<td>0.3387855</td>
+<td>0.004488032</td>
+<td>-0.023392266</td>
+<td>0.05</td>
+<td>0.05</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">6</th>
+<td>rs6</td>
+<td>6</td>
+<td>0.2835932</td>
+<td>0.013827537</td>
+<td>-0.061912616</td>
+<td>0.05</td>
+<td>0.05</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="67cbb944-4606-4df3-9acc-62dc6b0b10b2" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize the Simulated Signals</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sim_data, <span class="fu">aes</span>(<span class="at">x =</span> Position)) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">abs</span>(GWAS_Beta), <span class="at">color =</span> <span class="st">"GWAS"</span>), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">abs</span>(eQTL_Beta), <span class="at">color =</span> <span class="st">"eQTL"</span>), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">50</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Simulated GWAS and eQTL Signals"</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Both traits have a strong signal at SNP 50"</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"SNP Position"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Absolute Effect Size"</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Dataset"</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Colocalization_files/figure-html/cell-4-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="prepare-data-for-coloc" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="prepare-data-for-coloc"><span class="header-section-number">7</span> Prepare Data for coloc</h2>
+<p>The <code>coloc.abf()</code> function needs the GWAS and eQTL data as lists.</p>
+<p>For the GWAS dataset, we use:</p>
+<pre class="text"><code>type = "cc"</code></pre>
+<p>because the GWAS trait is treated as a case-control disease outcome.</p>
+<p>For the eQTL dataset, we use:</p>
+<pre class="text"><code>type = "quant"</code></pre>
+<p>because gene expression is a quantitative trait.</p>
+<p>For quantitative traits, <code>coloc</code> needs either <code>sdY</code>, or enough information to estimate it. Here we set:</p>
+<pre class="text"><code>sdY = 1</code></pre>
+<p>because this is a simulated example.</p>
+<div id="77bfbf90-c11d-4cb1-85b0-9c0f13955b47" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>gwas_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta =</span> gwas_beta,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">varbeta =</span> gwas_se<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">snp =</span> snp_ids,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAF =</span> maf,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"cc"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">s =</span> <span class="fl">0.30</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="dv">50000</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>eqtl_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta =</span> eqtl_beta,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">varbeta =</span> eqtl_se<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">snp =</span> snp_ids,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAF =</span> maf,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"quant"</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="dv">1000</span>,</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sdY =</span> <span class="dv">1</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="881bfb17-e29b-4d45-b182-eda0bea36889" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Run Colocalization Analysis</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>coloc_result <span class="ot">&lt;-</span> <span class="fu">coloc.abf</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataset1 =</span> gwas_data,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataset2 =</span> eqtl_data</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>coloc_result<span class="sc">$</span>summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>PP.H0.abf PP.H1.abf PP.H2.abf PP.H3.abf PP.H4.abf 
+ 3.43e-43  2.28e-27  1.51e-19  0.00e+00  1.00e+00 
+[1] "PP abf for shared variant: 100%"</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>nsnps</dt><dd>100</dd><dt>PP.H0.abf</dt><dd>3.43205824565904e-43</dd><dt>PP.H1.abf</dt><dd>2.27885961807598e-27</dd><dt>PP.H2.abf</dt><dd>1.50604197750307e-19</dd><dt>PP.H3.abf</dt><dd>0</dd><dt>PP.H4.abf</dt><dd>1</dd></dl>
+</div>
+</div>
+</section>
+<section id="examine-results" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="examine-results"><span class="header-section-number">8</span> Examine Results</h2>
+<p>The output contains posterior probabilities for the five hypotheses considered by the coloc model.</p>
+<pre class="text"><code>H0: Neither trait is associated in the region
+H1: Only trait 1 is associated
+H2: Only trait 2 is associated
+H3: Both traits are associated, but with different causal variants
+H4: Both traits are associated and share the same causal variant</code></pre>
+<p>The most important quantity is:</p>
+<pre class="text"><code>PP.H4.abf</code></pre>
+<p>This tells us the posterior probability that the GWAS and eQTL signals are driven by the same causal variant.</p>
+<p>For example, if the output shows:</p>
+<pre class="text"><code>PP.H4.abf = 0.90</code></pre>
+<p>we would interpret this as strong evidence that the GWAS and eQTL signals colocalize.</p>
+<div id="68a8991f-d7a9-4c84-9e87-c10198e54164" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Extract the Posterior Probabilities</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>posterior_probs <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(coloc_result<span class="sc">$</span>summary))</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>posterior_probs</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize Posterior Probabilities</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>posterior_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Hypothesis =</span> <span class="fu">names</span>(coloc_result<span class="sc">$</span>summary),</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Posterior_Probability =</span> <span class="fu">as.numeric</span>(coloc_result<span class="sc">$</span>summary)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(posterior_df, <span class="fu">aes</span>(<span class="at">x =</span> Hypothesis, <span class="at">y =</span> Posterior_Probability)) <span class="sc">+</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Posterior Probabilities from Colocalization Analysis"</span>,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Hypothesis"</span>,</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Posterior Probability"</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 1 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">nsnps</th>
+<th data-quarto-table-cell-role="th" scope="col">PP.H0.abf</th>
+<th data-quarto-table-cell-role="th" scope="col">PP.H1.abf</th>
+<th data-quarto-table-cell-role="th" scope="col">PP.H2.abf</th>
+<th data-quarto-table-cell-role="th" scope="col">PP.H3.abf</th>
+<th data-quarto-table-cell-role="th" scope="col">PP.H4.abf</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>100</td>
+<td>3.432058e-43</td>
+<td>2.27886e-27</td>
+<td>1.506042e-19</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Colocalization_files/figure-html/cell-7-output-2.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="understanding-h3-vs-h4" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="understanding-h3-vs-h4"><span class="header-section-number">9</span> Understanding H3 vs H4</h2>
+<p>The distinction between H3 and H4 is one of the most important concepts in colocalization analysis.</p>
+<p>A common misconception is that overlapping GWAS and eQTL association peaks automatically imply that the same variant is responsible for both signals. Because nearby variants are often correlated through LD, this assumption can be incorrect.</p>
+<section id="h3-different-causal-variants" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="h3-different-causal-variants"><span class="header-section-number">9.1</span> H3: Different Causal Variants</h3>
+<p>A high posterior probability for H3 means that both traits are associated in the region, but they are probably driven by different causal variants.</p>
+<p>Conceptually:</p>
+<pre class="text"><code>Variant A ──► Disease
+
+Variant B ──► Gene Expression</code></pre>
+<p>In this case, the region contains both a GWAS signal and an eQTL signal, but there is little evidence that the gene expression change explains the disease association.</p>
+</section>
+<section id="h4-shared-causal-variant" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="h4-shared-causal-variant"><span class="header-section-number">9.2</span> H4: Shared Causal Variant</h3>
+<p>A high posterior probability for H4 means that the same variant is likely responsible for both the GWAS and eQTL associations.</p>
+<p>Conceptually:</p>
+<pre class="text"><code>Variant
+    │
+    ├──► Gene Expression
+    │
+    └──► Disease Risk</code></pre>
+<p>This is often interpreted as evidence that altered gene expression may be involved in disease biology.</p>
+</section>
+</section>
+<section id="simulating-a-different-causal-variant-scenario" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="simulating-a-different-causal-variant-scenario"><span class="header-section-number">10</span> Simulating a Different-Causal-Variant Scenario</h2>
+<p>Now we simulate a second example where the GWAS signal is strongest at SNP 40 and the eQTL signal is strongest at SNP 70.</p>
+<p>This represents a situation where both traits are associated in the region, but likely through different causal variants.</p>
+<div id="28584889-9aa4-4f65-a533-adf49d729af8" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>gwas_beta_diff <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_snps, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.05</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>eqtl_beta_diff <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_snps, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.05</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Different causal SNPs</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>gwas_beta_diff[<span class="dv">40</span>] <span class="ot">&lt;-</span> <span class="fl">0.50</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>eqtl_beta_diff[<span class="dv">70</span>] <span class="ot">&lt;-</span> <span class="fl">0.60</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>diff_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">SNP =</span> snp_ids,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Position =</span> position,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">GWAS_Beta =</span> gwas_beta_diff,</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">eQTL_Beta =</span> eqtl_beta_diff</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(diff_data, <span class="fu">aes</span>(<span class="at">x =</span> Position)) <span class="sc">+</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">abs</span>(GWAS_Beta), <span class="at">color =</span> <span class="st">"GWAS"</span>), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">abs</span>(eQTL_Beta), <span class="at">color =</span> <span class="st">"eQTL"</span>), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">40</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">70</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Different Causal Variant Scenario"</span>,</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"GWAS peak and eQTL peak occur at different SNPs"</span>,</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"SNP Position"</span>,</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Absolute Effect Size"</span>,</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Dataset"</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Colocalization_files/figure-html/cell-8-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="a394d420-eb4b-4479-a0b8-a1c45a23ec9d" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>gwas_data_diff <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta =</span> gwas_beta_diff,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">varbeta =</span> gwas_se<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">snp =</span> snp_ids,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAF =</span> maf,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"cc"</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">s =</span> <span class="fl">0.30</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="dv">50000</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>eqtl_data_diff <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta =</span> eqtl_beta_diff,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">varbeta =</span> eqtl_se<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">snp =</span> snp_ids,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAF =</span> maf,</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"quant"</span>,</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="dv">1000</span>,</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sdY =</span> <span class="dv">1</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>coloc_result_diff <span class="ot">&lt;-</span> <span class="fu">coloc.abf</span>(</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataset1 =</span> gwas_data_diff,</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataset2 =</span> eqtl_data_diff</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>coloc_result_diff<span class="sc">$</span>summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>PP.H0.abf PP.H1.abf PP.H2.abf PP.H3.abf PP.H4.abf 
+ 3.43e-40  2.28e-24  1.51e-16  1.00e+00  2.64e-17 
+[1] "PP abf for shared variant: 2.64e-15%"</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>nsnps</dt><dd>100</dd><dt>PP.H0.abf</dt><dd>3.43205824565904e-40</dd><dt>PP.H1.abf</dt><dd>2.27885961807598e-24</dd><dt>PP.H2.abf</dt><dd>1.50604197750307e-16</dd><dt>PP.H3.abf</dt><dd>1</dd><dt>PP.H4.abf</dt><dd>2.63976208317766e-17</dd></dl>
+</div>
+</div>
+<p>In this second example, we expect less support for H4 compared with the shared-causal-variant example. Depending on the simulated values and priors, H3 may become more prominent because both traits have signals but not at the same SNP.</p>
+</section>
+<section id="why-visual-overlap-is-not-enough" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="why-visual-overlap-is-not-enough"><span class="header-section-number">11</span> Why Visual Overlap Is Not Enough</h2>
+<p>It is tempting to look at two regional plots and decide whether the peaks overlap. However, nearby SNPs are often correlated because of LD.</p>
+<p>This means two different causal variants can produce similar association patterns.</p>
+<p>Therefore, colocalization is stronger than visual inspection because it formally compares hypotheses about shared and distinct causal variants.</p>
+</section>
+<section id="colocalization-and-twas" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="colocalization-and-twas"><span class="header-section-number">12</span> Colocalization and TWAS</h2>
+<p>Transcriptome-wide association studies, or TWAS, test whether genetically predicted gene expression is associated with a trait.</p>
+<p>A simplified TWAS idea is:</p>
+<pre class="text"><code>Genetic variants ──► Predicted gene expression ──► Disease trait</code></pre>
+<p>However, TWAS signals can arise because of LD or multiple nearby genes with correlated expression. Therefore, a significant TWAS result does not automatically prove that the gene is causal.</p>
+<p>Colocalization is often used alongside TWAS.</p>
+<p>A stronger interpretation is possible when:</p>
+<pre class="text"><code>Gene is significant in TWAS
++
+GWAS and eQTL signals colocalize</code></pre>
+<p>This combination gives more confidence that the gene may be biologically relevant.</p>
+</section>
+<section id="colocalization-and-mendelian-randomization" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="colocalization-and-mendelian-randomization"><span class="header-section-number">13</span> Colocalization and Mendelian Randomization</h2>
+<p>Mendelian Randomization, or MR, can be used to test whether genetically predicted exposure affects an outcome.</p>
+<p>For gene expression studies, the exposure may be expression of a gene and the outcome may be disease risk.</p>
+<p>MR asks:</p>
+<p>Does gene expression causally affect disease?</p>
+<p>Colocalization asks:</p>
+<p>Do gene expression and disease share the same causal variant?</p>
+<p>These are related but different questions.</p>
+<p>If MR suggests a causal effect but colocalization is weak, the MR result may be driven by LD or pleiotropy. Therefore, colocalization is often an important sensitivity analysis for expression-based MR.</p>
+</section>
+<section id="limitations-of-classical-colocalization" class="level2" data-number="14">
+<h2 data-number="14" class="anchored" data-anchor-id="limitations-of-classical-colocalization"><span class="header-section-number">14</span> Limitations of Classical Colocalization</h2>
+<p>The classical coloc method assumes one causal variant per region for each trait. This assumption may not always hold.</p>
+<p>Real genetic loci can contain multiple independent signals.</p>
+<p>Other limitations include:</p>
+<pre class="text"><code>Incorrect LD structure
+Poor variant coverage
+Allele harmonization errors
+Different ancestry between datasets
+Weak eQTL sample size
+Tissue mismatch
+Multiple causal variants</code></pre>
+<p>Because of these limitations, colocalization should not be interpreted mechanically. A high PP.H4 is useful evidence, but it should be considered together with biology, tissue relevance, fine-mapping, and replication.</p>
+</section>
+<section id="modern-extensions" class="level2" data-number="15">
+<h2 data-number="15" class="anchored" data-anchor-id="modern-extensions"><span class="header-section-number">15</span> Modern Extensions</h2>
+<p>Several newer methods extend classical colocalization.</p>
+<section id="susie-coloc" class="level3" data-number="15.1">
+<h3 data-number="15.1" class="anchored" data-anchor-id="susie-coloc"><span class="header-section-number">15.1</span> SuSiE-Coloc</h3>
+<p>SuSiE-coloc combines colocalization with fine-mapping and can handle multiple causal signals in a region.</p>
+</section>
+<section id="ecaviar" class="level3" data-number="15.2">
+<h3 data-number="15.2" class="anchored" data-anchor-id="ecaviar"><span class="header-section-number">15.2</span> eCAVIAR</h3>
+<p>eCAVIAR jointly models colocalization and fine-mapping while accounting for LD.</p>
+</section>
+<section id="fastenloc" class="level3" data-number="15.3">
+<h3 data-number="15.3" class="anchored" data-anchor-id="fastenloc"><span class="header-section-number">15.3</span> fastENLOC</h3>
+<p>fastENLOC is designed for large-scale enrichment and colocalization analyses across many loci and molecular traits.</p>
+<p>These methods are useful when the simple one-causal-variant assumption is unrealistic.</p>
+</section>
+</section>
+<section id="practical-interpretation-checklist" class="level2" data-number="16">
+<h2 data-number="16" class="anchored" data-anchor-id="practical-interpretation-checklist"><span class="header-section-number">16</span> Practical Interpretation Checklist</h2>
+<p>When interpreting colocalization results, I would check the following:</p>
+<pre class="text"><code>1. Is there a strong GWAS signal in the region?
+2. Is there a strong eQTL signal in the same tissue?
+3. Are the alleles harmonized correctly?
+4. Are the GWAS and eQTL datasets ancestry-matched?
+5. Is PP.H4 high?
+6. Is PP.H3 also high?
+7. Is the tissue biologically relevant?
+8. Does the result agree with TWAS, MR, or functional evidence?</code></pre>
+<p>A high PP.H4 is helpful, but it is not the final proof of causality.</p>
+</section>
+<section id="summary" class="level2" data-number="17">
+<h2 data-number="17" class="anchored" data-anchor-id="summary"><span class="header-section-number">17</span> Summary</h2>
+<p>Colocalization analysis is a key method in post-GWAS interpretation. It helps determine whether two association signals, such as a disease GWAS signal and an eQTL signal, are likely to share the same causal variant.</p>
+<p>The main idea is simple but important:</p>
+<pre class="text"><code>Overlapping association signals do not automatically mean shared causality.</code></pre>
+<p>The coloc framework evaluates five hypotheses: H0, H1, H2, H3, and H4. Among these, H4 is usually the most important because it represents evidence that both traits share one causal variant.</p>
+<p>In practical genetic studies, colocalization is often used together with eQTL analysis, TWAS, MR, and fine-mapping to prioritize genes and biological mechanisms.</p>
+<p>For researchers working with GWAS, FinnGen, UK Biobank, GTEx, PsychENCODE, or other molecular QTL resources, colocalization is one of the most useful tools for moving from statistical association toward biological interpretation.</p>
+</section>
+<section id="references" class="level2" data-number="18">
+<h2 data-number="18" class="anchored" data-anchor-id="references"><span class="header-section-number">18</span> References</h2>
+<p>Giambartolomei, C. et al.&nbsp;Bayesian test for colocalisation between pairs of genetic association studies using summary statistics. PLoS Genetics, 2014.</p>
+<p>Wallace, C. A more accurate method for colocalisation analysis allowing for multiple causal variants. PLoS Genetics, 2021.</p>
+<p>GTEx Consortium. The GTEx Consortium atlas of genetic regulatory effects across human tissues. Science, 2020.</p>
+<p>Hormozdiari, F. et al.&nbsp;Colocalization of GWAS and eQTL signals detects target genes. American Journal of Human Genetics, 2016.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

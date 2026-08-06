@@ -90,7 +90,7 @@
   </url>
   <url>
     <loc>https://bntechie.github.io/index.html</loc>
-    <lastmod>2026-08-06T05:39:43.787Z</lastmod>
+    <lastmod>2026-08-06T13:08:33.677Z</lastmod>
   </url>
   <url>
     <loc>https://bntechie.github.io/index_ver2.html</loc>
@@ -162,7 +162,7 @@
   </url>
   <url>
     <loc>https://bntechie.github.io/tutorials/index.html</loc>
-    <lastmod>2026-07-30T14:27:23.377Z</lastmod>
+    <lastmod>2026-08-06T13:55:44.296Z</lastmod>
   </url>
   <url>
     <loc>https://bntechie.github.io/tutorials/blog_Colocalizatiom/Colocalization.html</loc>
@@ -190,7 +190,7 @@
   </url>
   <url>
     <loc>https://bntechie.github.io/tutorials/blog_promt_engineering/genai-prompt-engineering-tutorial.html</loc>
-    <lastmod>2026-08-04T01:54:48.673Z</lastmod>
+    <lastmod>2026-08-06T12:55:53.462Z</lastmod>
   </url>
   <url>
     <loc>https://bntechie.github.io/tutorials/blog_pgls/pgls_tutorial.html</loc>
@@ -199,5 +199,157 @@
   <url>
     <loc>https://bntechie.github.io/tutorials/blog_twin_heritability/twin_heritability_tutorial.html</loc>
     <lastmod>2026-07-30T15:37:48.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/blog_promt_engineering/index.html</loc>
+    <lastmod>2026-08-06T13:01:01.709Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/index_old.html</loc>
+    <lastmod>2026-07-30T14:27:23.377Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/mood_track/notebook /01_moodtrack_data_generation.html</loc>
+    <lastmod>2026-07-02T14:56:11.097Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/probit_logic/logit_probit_tutorial.html</loc>
+    <lastmod>2026-07-02T14:56:11.101Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/multivariate_concepts/genomicSEM.html</loc>
+    <lastmod>2026-08-01T06:41:02.818Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/LLM_API/llm-api-tutorial.html</loc>
+    <lastmod>2026-08-04T06:02:39.353Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/REML/REML.html</loc>
+    <lastmod>2026-07-02T14:56:11.076Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/Colocalizatiom/Colocalization.html</loc>
+    <lastmod>2026-07-27T07:31:42.048Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/github/github_tutorial.html</loc>
+    <lastmod>2026-07-30T11:34:44.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/SVD/SVD.html</loc>
+    <lastmod>2026-07-02T14:56:11.079Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/Bayesian_regression/bayesian_regression_tutorial.html</loc>
+    <lastmod>2026-08-06T06:06:00.710Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/GWAS/GWAS.html</loc>
+    <lastmod>2026-07-30T17:24:10.903Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/promt_engineering/index.html</loc>
+    <lastmod>2026-08-06T13:01:01.709Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/SEM/Structural_Equation_Modeling.html</loc>
+    <lastmod>2026-07-27T06:30:22.515Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/awk/awk_tutorial.html</loc>
+    <lastmod>2026-07-30T12:17:16.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/Langchain/langchain-rag-tutorial.html</loc>
+    <lastmod>2026-08-06T03:20:04.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/survival_analysis/survival-analysis-tutorial.html</loc>
+    <lastmod>2026-07-30T16:02:06.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/PRS/Polygenic_Risk_Scores.html</loc>
+    <lastmod>2026-07-30T14:54:20.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/pValues/p_Values.html</loc>
+    <lastmod>2026-07-02T14:56:11.099Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/correlation_covariance/Correlation_covariance.html</loc>
+    <lastmod>2026-07-02T14:56:11.079Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/ttest_ANOVA/t-test-vs-anova-before-after-treatment.html</loc>
+    <lastmod>2026-08-04T08:05:30.736Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/covariance_matrix/Covariance_matrix.html</loc>
+    <lastmod>2026-07-30T15:02:10.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/twin_heritability/twin_heritability_tutorial.html</loc>
+    <lastmod>2026-07-30T15:37:48.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/Finemapping/Statistical_Fine_Mapping.html</loc>
+    <lastmod>2026-07-30T15:29:08.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/promt_engineering/genai-prompt-engineering-tutorial.html</loc>
+    <lastmod>2026-08-06T12:55:53.462Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/ridge_lasso/ridge_lasso_tutorial.html</loc>
+    <lastmod>2026-08-06T05:52:19.217Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/working_with_HPC/working_with_HPC.html</loc>
+    <lastmod>2026-07-30T14:48:38.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/Execution_time_R/Execution_time_in_R.html</loc>
+    <lastmod>2026-07-30T14:42:38.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/Heritability_genetic_correlation/Heritability_and_Genetic_Correlation.html</loc>
+    <lastmod>2026-07-30T16:09:22.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/imputation/Imputation_in_Python.html</loc>
+    <lastmod>2026-07-02T14:56:11.096Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/lama2/Examplecases_Llama2.html</loc>
+    <lastmod>2026-08-04T06:48:07.698Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/genetic_drift/Genetic_Drift.html</loc>
+    <lastmod>2026-07-27T06:07:39.897Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/hypothesis_genetics/hyothesis_driven.html</loc>
+    <lastmod>2026-07-22T11:04:29.938Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/mendelianR/Mendelian_Randomization.html</loc>
+    <lastmod>2026-07-27T06:11:19.895Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/NGS_pipeline_raw_data_to_GWAS/ngs-to-gwas-pipeline.html</loc>
+    <lastmod>2026-07-30T15:50:48.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/AI_humanGenome/the-barbeque-question.html</loc>
+    <lastmod>2026-08-06T06:03:04.677Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/rare_variants/rare_variant_tutorial.html</loc>
+    <lastmod>2026-07-30T15:19:52.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bntechie.github.io/tutorials/pgls/pgls_tutorial.html</loc>
+    <lastmod>2026-07-22T10:01:55.367Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-06-16">
+<meta name="description" content="Why a GWAS hit is a neighborhood, not an address – and how ABF and SuSiE narrow a correlated LD block down to the actual causal variants, worked end to end on simulated data.">
+
+<title>Statistical Fine-Mapping: From GWAS Signals to Causal Variants – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Statistical Fine-Mapping: From GWAS Signals to Causal Variants</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Tutorial</div>
+    <div class="quarto-category">Genetics</div>
+    <div class="quarto-category">Fine-Mapping</div>
+    <div class="quarto-category">GWAS</div>
+    <div class="quarto-category">Statistical Genetics</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Why a GWAS hit is a neighborhood, not an address – and how ABF and SuSiE narrow a correlated LD block down to the actual causal variants, worked end to end on simulated data.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 16, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="thesis-hero-wrap">
+<p><img src="images/fine-mapping.svg" alt="Two panels comparing ABF and SuSiE fine-mapping on the same simulated GWAS region: ABF finds only 1 of 3 true causal SNPs, SuSiE finds all 3" class="thesis-hero-art"></p>
+<div class="thesis-hero-caption">
+<p>The result this tutorial builds up to, from real simulated data: with three true causal variants hiding in one correlated region, ABF collapses onto a single dominant signal while SuSiE separates out all three.</p>
+</div>
+</div>
+<div class="tag-row">
+<p><span class="tag">Fine-Mapping</span> <span class="tag">SuSiE</span> <span class="tag">GWAS</span> <span class="tag">R</span></p>
+</div>
+<section id="what-is-fine-mapping" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="what-is-fine-mapping"><span class="header-section-number">0.1</span> What Is Fine-Mapping?</h2>
+<p>GWAS has identified thousands of genomic regions associated with disease, but it typically doesn’t pinpoint the <em>causal</em> variant. Instead, GWAS flags a region containing many correlated variants, because of <strong>Linkage Disequilibrium (LD)</strong> — the non-random correlation between nearby genetic variants:</p>
+<pre><code>SNP A ---- SNP B ---- SNP C
+              ^
+           causal</code></pre>
+<p>If SNP B is causal, A and C often look significant too, simply because they’re inherited together.</p>
+<blockquote class="blockquote">
+<p><strong>GWAS asks:</strong> Which region is associated with the trait? <strong>Fine-mapping asks:</strong> Which specific variant is most likely causing it?</p>
+</blockquote>
+<p>A locus flagged by GWAS might contain 10, 100, or 1,000 SNPs with nearly identical p-values — GWAS alone cannot separate them.</p>
+</section>
+<section id="the-goal-posterior-inclusion-probabilities" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="the-goal-posterior-inclusion-probabilities"><span class="header-section-number">0.2</span> The Goal: Posterior Inclusion Probabilities</h2>
+<p>Fine-mapping estimates <span class="math inline">\(P(\text{SNP is causal} \mid \text{data})\)</span> for every variant in a region — a <strong>Posterior Inclusion Probability (PIP)</strong> — rather than just a p-value.</p>
+<div id="44699ac8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:45.958879Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:45.950848Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:46.033032Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:46.028336Z&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">SNP =</span> <span class="fu">c</span>(<span class="st">"rs1"</span>,<span class="st">"rs2"</span>,<span class="st">"rs3"</span>,<span class="st">"rs4"</span>,<span class="st">"rs5"</span>),</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">PIP =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.04</span>, <span class="fl">0.88</span>, <span class="fl">0.05</span>, <span class="fl">0.02</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>rs1  0.01   rs2  0.04   rs3  0.88   rs4  0.05   rs5  0.02</code></pre>
+<p>rs3, with an 88% posterior probability, is the strongest causal candidate.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>GWAS</th>
+<th>Fine-mapping</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Focus</td>
+<td>p-values, association testing, genome-wide discovery</td>
+<td>posterior probabilities, causal inference, variant prioritization</td>
+</tr>
+<tr class="even">
+<td>Role</td>
+<td>first step</td>
+<td>second step</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="why-it-matters" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="why-it-matters"><span class="header-section-number">0.3</span> Why It Matters</h2>
+<p>A schizophrenia GWAS locus with 200 SNPs is too expensive to validate experimentally in full. Fine-mapping can shrink the candidate list to 3 variants, or even 1 — dramatically cutting the cost of functional genomics, drug target discovery, eQTL interpretation, colocalization, and precision medicine.</p>
+</section>
+<section id="the-modern-statistical-genetics-pipeline" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="the-modern-statistical-genetics-pipeline"><span class="header-section-number">0.4</span> The Modern Statistical Genetics Pipeline</h2>
+<p><span class="math display">\[\text{Genotypes} \rightarrow \text{GWAS} \rightarrow \text{Significant Locus} \rightarrow \text{LD Matrix} \rightarrow \text{Fine-Mapping} \rightarrow \text{PIPs} \rightarrow \text{Credible Sets} \rightarrow \text{eQTL Analysis} \rightarrow \text{Colocalization} \rightarrow \text{Candidate Gene}\]</span></p>
+<p>This backbone underlies large-scale projects like UK Biobank, FinnGen, the Psychiatric Genomics Consortium, and GTEx.</p>
+</section>
+<section id="what-data-do-you-need" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="what-data-do-you-need"><span class="header-section-number">0.5</span> What Data Do You Need?</h2>
+<p>Three common scenarios determine what’s possible:</p>
+<ol type="1">
+<li><strong>Individual-level data</strong> — genotypes and phenotypes for every participant. Ideal: LD can be computed directly from the sample.</li>
+<li><strong>Single-cohort GWAS summary statistics</strong> — only beta, SE, p-value. Requires an external LD reference panel (1000 Genomes, UK Biobank, TOPMed).</li>
+<li><strong>Meta-analysis summary statistics</strong> — combined across cohorts with different LD structures; the hardest case, often requiring specialized methods (FastMap, CARMA, SLALOM).</li>
+</ol>
+</section>
+<section id="the-central-role-of-ld" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="the-central-role-of-ld"><span class="header-section-number">0.6</span> The Central Role of LD</h2>
+<p>Two SNPs with <span class="math inline">\(r^2 = 0.95\)</span> are almost perfectly correlated — statistically indistinguishable. High LD → large credible sets, low resolution. Low LD → small credible sets, high resolution. This is why ancestry-matched LD reference panels matter so much.</p>
+<p><strong>Foundational concepts for the rest of this tutorial:</strong> Linkage Disequilibrium, Causal Variants, Posterior Inclusion Probability, Credible Sets, LD Reference Panels, Summary Statistics, Individual-Level Data.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> Fine-mapping identifies likely causal variants within a GWAS locus. Because neighboring SNPs are correlated through LD, GWAS alone can’t determine which variant is responsible. Fine-mapping combines GWAS statistics with LD and Bayesian inference to assign causality probabilities, producing PIPs and credible sets — the bridge between GWAS discovery and downstream eQTL mapping, colocalization, functional validation, and drug target identification.</p>
+</blockquote>
+</section>
+<section id="linkage-disequilibrium-pips-and-credible-sets" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Linkage Disequilibrium, PIPs, and Credible Sets</h1>
+<p>Three concepts form the mathematical backbone of every fine-mapping method: <strong>Linkage Disequilibrium (LD)</strong>, <strong>Posterior Inclusion Probabilities (PIPs)</strong>, and <strong>Credible Sets</strong>.</p>
+<section id="linkage-disequilibrium" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="linkage-disequilibrium"><span class="header-section-number">1.1</span> Linkage Disequilibrium</h2>
+<p>LD measures the correlation between genetic variants — when two SNPs are inherited together more often than chance predicts, they’re in LD. If <span class="math inline">\(r^2(\text{SNP1}, \text{SNP2}) = 0.95\)</span>, knowing one variant almost perfectly predicts the other.</p>
+<p><strong>Why LD exists:</strong> during recombination, nearby variants are less likely to be separated, so physical proximity → co-inheritance → correlation → LD. The closer two SNPs sit, the stronger their LD tends to be.</p>
+<p><strong>Two common measures:</strong> <span class="math inline">\(D'\)</span> (0–1, measures historical recombination) and <span class="math inline">\(r^2\)</span> (0–1, measures correlation; <span class="math inline">\(r^2=0\)</span> means no correlation, <span class="math inline">\(r^2=1\)</span> means perfect correlation). Fine-mapping primarily uses <span class="math inline">\(r^2\)</span>.</p>
+<p>Example 4×4 LD matrix, where SNP1–SNP2 and SNP3–SNP4 form two separate, tightly-correlated blocks:</p>
+<div id="43d9178e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:46.129471Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:46.042048Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:46.159820Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:46.153312Z&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ld <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">rbind</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fl">1.00</span>, <span class="fl">0.92</span>, <span class="fl">0.15</span>, <span class="fl">0.05</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fl">0.92</span>, <span class="fl">1.00</span>, <span class="fl">0.18</span>, <span class="fl">0.07</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fl">0.15</span>, <span class="fl">0.18</span>, <span class="fl">1.00</span>, <span class="fl">0.85</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.07</span>, <span class="fl">0.85</span>, <span class="fl">1.00</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="posterior-inclusion-probability-pip" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="posterior-inclusion-probability-pip"><span class="header-section-number">1.2</span> Posterior Inclusion Probability (PIP)</h2>
+<div id="b5d91117" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:46.172529Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:46.167692Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:46.199000Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:46.194739Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pip <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">SNP =</span> <span class="fu">c</span>(<span class="st">"rs1"</span>,<span class="st">"rs2"</span>,<span class="st">"rs3"</span>,<span class="st">"rs4"</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">PIP =</span> <span class="fu">c</span>(<span class="fl">0.03</span>, <span class="fl">0.07</span>, <span class="fl">0.82</span>, <span class="fl">0.08</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>rs3 has an 82% probability of being causal.</p>
+<p><strong>PIPs are not p-values.</strong> A p-value measures evidence against the null hypothesis; a PIP measures probability of causality. <span class="math inline">\(p = 1\times10^{-20}\)</span> does <strong>not</strong> mean “99.999999999999999% chance causal” — that’s a common and incorrect conflation.</p>
+<p><strong>Multiple causal variants are common.</strong> Many loci contain more than one causal SNP (e.g., variants 20, 39, and 68 all influencing the same trait) — exactly the scenario that motivated methods like SuSiE.</p>
+</section>
+<section id="credible-sets" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="credible-sets"><span class="header-section-number">1.3</span> Credible Sets</h2>
+<p>A <strong>credible set</strong> is a group of variants that collectively contain the causal SNP with high probability — most commonly a <strong>95% credible set</strong>: a 95% probability the causal SNP lies <em>somewhere in the set</em>, not a 95% probability for each individual member.</p>
+<p><strong>Constructing one:</strong> sort by PIP, then accumulate until crossing the threshold.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>SNP</th>
+<th>PIP</th>
+<th>Cumulative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rs1</td>
+<td>0.60</td>
+<td>0.60</td>
+</tr>
+<tr class="even">
+<td>rs2</td>
+<td>0.25</td>
+<td>0.85</td>
+</tr>
+<tr class="odd">
+<td>rs3</td>
+<td>0.08</td>
+<td>0.93</td>
+</tr>
+<tr class="even">
+<td>rs4</td>
+<td>0.04</td>
+<td>0.97</td>
+</tr>
+<tr class="odd">
+<td>rs5</td>
+<td>0.03</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+<p>The 95% credible set is {rs1, rs2, rs3, rs4} — the smallest prefix exceeding 95%.</p>
+<p><strong>Interpreting size:</strong> a single-SNP set (e.g.&nbsp;{rs25}) means excellent resolution; a 3-SNP set is reasonable; a 50-SNP set means poor resolution.</p>
+</section>
+<section id="what-determines-credible-set-size" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="what-determines-credible-set-size"><span class="header-section-number">1.4</span> What Determines Credible Set Size?</h2>
+<ul>
+<li><strong>Sample size</strong> — larger N → higher power → smaller credible sets.</li>
+<li><strong>LD structure</strong> — high LD → large credible sets (SNPs statistically indistinguishable); low LD → small credible sets.</li>
+<li><strong>Effect size</strong> — larger effects → higher PIPs; smaller effects → lower PIPs.</li>
+</ul>
+<p><strong>Ideal:</strong> one SNP at PIP = 0.98, credible set = {that SNP}. <strong>Difficult:</strong> five SNPs each around PIP 0.16–0.20, credible set = all five, reflecting genuine uncertainty rather than method failure.</p>
+</section>
+<section id="why-fine-mapping-is-bayesian" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="why-fine-mapping-is-bayesian"><span class="header-section-number">1.5</span> Why Fine-Mapping Is Bayesian</h2>
+<p>Bayesian methods directly answer “how likely is each SNP to be causal?” — exactly the question fine-mapping needs. This is why nearly every modern method (ABF, SuSiE, FINEMAP, CARMA, CAVIAR) is Bayesian.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> LD is the correlation structure among nearby variants and the primary reason GWAS can’t identify causal variants directly. Fine-mapping combines LD with GWAS statistics to estimate PIPs. Because uncertainty remains, methods report credible sets — groups of variants that jointly contain the causal SNP with high probability. Sample size, effect size, and LD structure strongly influence both PIPs and credible set size.</p>
+</blockquote>
+</section>
+</section>
+<section id="bayesian-fine-mapping-and-approximate-bayes-factors-abf" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Bayesian Fine-Mapping and Approximate Bayes Factors (ABF)</h1>
+<p>GWAS cannot tell us which of several significant SNPs is causal — it only tells us how unlikely the data would be under no association. Fine-mapping needs something different: <span class="math inline">\(P(\text{causal} \mid \text{data})\)</span>. This is where Bayesian statistics comes in, and <strong>Approximate Bayes Factors (ABF)</strong> — Jon Wakefield’s method — is one of the earliest and still most widely used solutions.</p>
+<section id="frequentist-vs.-bayesian-thinking" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="frequentist-vs.-bayesian-thinking"><span class="header-section-number">2.1</span> Frequentist vs.&nbsp;Bayesian Thinking</h2>
+<p>The frequentist approach tests <span class="math inline">\(H_0: \beta = 0\)</span> and computes <span class="math inline">\(P(\text{data} \mid \text{null})\)</span> — a p-value. The Bayesian approach compares “SNP is causal” against “SNP is not causal” and computes <span class="math inline">\(P(\text{causal} \mid \text{data})\)</span> directly — exactly the quantity we want.</p>
+</section>
+<section id="bayes-factors" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="bayes-factors"><span class="header-section-number">2.2</span> Bayes Factors</h2>
+<p>A <strong>Bayes Factor</strong> compares two models: <span class="math inline">\(\text{BF} = P(\text{data} \mid \text{causal}) / P(\text{data} \mid \text{null})\)</span>. BF = 1 means no preference; BF = 10 means the data are 10× more likely under the causal model; BF = 100 is strong evidence for causality.</p>
+<p><strong>“Approximate”</strong> because exact Bayes Factors are expensive to compute. Wakefield’s approximation needs only the effect estimate (<span class="math inline">\(\beta\)</span>) and its standard error (SE) — both routinely available in GWAS summary statistics, with no individual-level data required.</p>
+</section>
+<section id="wakefields-abf-formula" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="wakefields-abf-formula"><span class="header-section-number">2.3</span> Wakefield’s ABF Formula</h2>
+<p>For each SNP, compute <span class="math inline">\(Z = \beta/\text{SE}\)</span> and <span class="math inline">\(V = \text{SE}^2\)</span>. Choose a prior variance <span class="math inline">\(W\)</span> (commonly 0.01–0.04, representing your prior belief about plausible effect sizes — smaller <span class="math inline">\(W\)</span> expects smaller effects). Then:</p>
+<p><span class="math display">\[r = \frac{W}{W+V}, \qquad \log\text{BF} = \frac{\log(1-r) + rZ^2}{2}\]</span></p>
+</section>
+<section id="from-bayes-factors-to-pips" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="from-bayes-factors-to-pips"><span class="header-section-number">2.4</span> From Bayes Factors to PIPs</h2>
+<p>Normalize the BFs across all SNPs in the region: <span class="math inline">\(\text{PIP}_i = \text{BF}_i / \sum_j \text{BF}_j\)</span>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> np.array([<span class="fl">0.05</span>, <span class="fl">0.15</span>, <span class="fl">0.09</span>])</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>se   <span class="op">=</span> np.array([<span class="fl">0.03</span>, <span class="fl">0.03</span>, <span class="fl">0.03</span>])</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> <span class="fl">0.04</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> beta <span class="op">/</span> se</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>V <span class="op">=</span> se<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> W <span class="op">/</span> (W <span class="op">+</span> V)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>lbf <span class="op">=</span> (np.log(<span class="dv">1</span><span class="op">-</span>r) <span class="op">+</span> r<span class="op">*</span>(z<span class="op">**</span><span class="dv">2</span>)) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>bf <span class="op">=</span> np.exp(lbf)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>pip <span class="op">=</span> bf <span class="op">/</span> bf.<span class="bu">sum</span>()</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame({<span class="st">"Beta"</span>: beta, <span class="st">"SE"</span>: se, <span class="st">"Z"</span>: z, <span class="st">"BF"</span>: bf, <span class="st">"PIP"</span>: pip})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For example, three SNPs with BFs 3, 50, and 10 (total 63) give PIPs of 0.048, 0.794, and 0.159 — SNP2 is the strongest candidate.</p>
+</section>
+<section id="the-single-causal-variant-assumption" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="the-single-causal-variant-assumption"><span class="header-section-number">2.5</span> The Single-Causal-Variant Assumption</h2>
+<p>ABF assumes exactly <strong>one causal variant per locus</strong> — a simplification that breaks down whenever a locus actually has 2, 3, 5, or more independent causal signals (variants 20, 39, and 68, say). ABF then splits and dilutes the true signals across correlated SNPs, since it can only ever “explain” the locus with one variant. This limitation directly motivated SuSiE, FINEMAP, CAVIAR, and CARMA.</p>
+</section>
+<section id="strengths-and-limitations" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="strengths-and-limitations"><span class="header-section-number">2.6</span> Strengths and Limitations</h2>
+<p><strong>Strengths:</strong> fast, simple, requires only summary statistics, no LD matrix needed, computationally efficient for large GWAS. <strong>Limitations:</strong> single-causal-variant assumption, cannot separate multiple signals, can be confused by strong LD, lower resolution in complex regions.</p>
+<p>ABF also underlies <code>coloc.abf</code>, used for testing whether GWAS and eQTL signals share a causal variant (Part 12) — carrying the same single-variant assumption into colocalization.</p>
+<p><span class="math display">\[\text{GWAS Summary Statistics} \rightarrow Z \rightarrow \text{ABF} \rightarrow \text{Bayes Factors} \rightarrow \text{Normalize} \rightarrow \text{PIPs} \rightarrow \text{Credible Sets}\]</span></p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> ABF was among the first practical Bayesian fine-mapping methods, converting GWAS summary statistics into PIPs by normalizing Bayes Factors across SNPs. It’s fast and requires only summary statistics, but its core limitation — assuming a single causal variant per locus — motivated the development of multi-signal methods like SuSiE.</p>
+</blockquote>
+</section>
+</section>
+<section id="susie-sum-of-single-effects" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> SuSiE: Sum of Single Effects</h1>
+<p>ABF assumes one causal variant per locus, but real GWAS regions routinely contain 2, 3, 5+ independent causal variants. <strong>SuSiE</strong> — one of the most widely used fine-mapping methods today — was built to handle exactly this.</p>
+<section id="the-core-idea" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="the-core-idea"><span class="header-section-number">3.1</span> The Core Idea</h2>
+<p>Instead of fitting one signal, SuSiE models the phenotype as a <strong>sum of single effects</strong>:</p>
+<p><span class="math display">\[\text{Phenotype} = \text{Effect}_1 + \text{Effect}_2 + \text{Effect}_3 + \dots, \qquad y = Xb + e\]</span></p>
+<p>where <span class="math inline">\(y\)</span> is the phenotype, <span class="math inline">\(X\)</span> the genotype matrix, <span class="math inline">\(b\)</span> the SNP effects, and <span class="math inline">\(e\)</span> noise. Rather than fitting all SNP effects simultaneously, SuSiE decomposes the model into separate single-effect components — each one identifying one potential causal signal (e.g.&nbsp;Signal 1 → variant 39, Signal 2 → variant 20, Signal 3 → variant 68) — then combines them.</p>
+<p>The key parameter <strong>L</strong> sets the maximum number of causal signals to search for (e.g.&nbsp;<code>L = 4</code> allows up to 4 independent signals).</p>
+</section>
+<section id="what-susie-produces" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="what-susie-produces"><span class="header-section-number">3.2</span> What SuSiE Produces</h2>
+<p>For every SNP, a <strong>PIP</strong> (e.g.&nbsp;rs20 = 0.95, rs39 = 0.98, rs68 = 0.92 — all three likely causal, unlike a single p-value). And for each independent signal, a <strong>credible set</strong> — sometimes tight ({rs20} alone, excellent resolution), sometimes broader ({rs20, rs21, rs22}, meaning one of these is probably causal but the data can’t distinguish which).</p>
+</section>
+<section id="running-susie-in-r" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="running-susie-in-r"><span class="header-section-number">3.3</span> Running SuSiE in R</h2>
+<p><em>Illustrative syntax – the objects below (<code>GWAS_df</code>, <code>N</code>, <code>in_sample_LD</code>, <code>y</code>) are built from scratch in the worked example later in this tutorial.</em></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(susieR)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>susie_results <span class="ot">&lt;-</span> <span class="fu">susie_rss</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">bhat =</span> GWAS_df<span class="sc">$</span>beta_marginal,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">shat =</span> GWAS_df<span class="sc">$</span>se_marginal,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> N,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">R =</span> in_sample_LD,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">var_y =</span> <span class="fu">var</span>(y),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">L =</span> <span class="dv">4</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate_residual_variance =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Unlike ABF, SuSiE <strong>requires an LD matrix</strong> — it has to know which SNPs are correlated in order to separate distinct signals.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">susie_plot</span>(susie_results, <span class="at">y =</span> <span class="st">"PIP"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="when-susie-works-best" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="when-susie-works-best"><span class="header-section-number">3.4</span> When SuSiE Works Best</h2>
+<p>Large sample size (more information), lower LD (better separation between causal variants), strong effects (higher PIPs), and an accurate, ancestry-matched LD matrix.</p>
+<p><strong>Common beginner mistake:</strong> assuming the lead SNP (smallest p-value) is automatically the causal SNP. SuSiE often shows lead SNP ≠ causal SNP, because the association signal can be distributed across correlated variants.</p>
+</section>
+<section id="susie-vs.-abf" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="susie-vs.-abf"><span class="header-section-number">3.5</span> SuSiE vs.&nbsp;ABF</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>ABF</th>
+<th>SuSiE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayesian</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Uses summary statistics</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Uses LD matrix</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Multiple signals</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Credible sets</td>
+<td>Limited</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Modern standard</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>SuSiE became popular for combining accurate PIPs, multiple-signal detection, credible sets, computational efficiency, summary-statistics compatibility, and natural integration with colocalization.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> SuSiE (Sum of Single Effects) is a Bayesian method that models several independent causal signals simultaneously, rather than assuming a single causal SNP. It needs GWAS summary statistics plus an LD matrix, and produces PIPs and credible sets per signal — now one of the most widely used fine-mapping methods because it handles the complexity of real genetic loci.</p>
+</blockquote>
+</section>
+</section>
+<section id="running-a-complete-fine-mapping-analysis-step-by-step" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Running a Complete Fine-Mapping Analysis Step-by-Step</h1>
+<p>With the concepts and methods in hand, here’s a complete, self-contained workflow — simulate a locus with known causal variants, run GWAS, then compare ABF against SuSiE.</p>
+<p><span class="math display">\[\text{Simulate Genotypes} \rightarrow \text{Simulate Phenotype} \rightarrow \text{GWAS} \rightarrow \text{ABF} \rightarrow \text{SuSiE} \rightarrow \text{Interpret PIPs \&amp; Credible Sets}\]</span></p>
+<div id="5cfb5c9b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:46.211056Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:46.206511Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.893724Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.891378Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)     <span class="co"># data simulation</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(susieR)   <span class="co"># fine-mapping</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)  <span class="co"># visualization</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Simulate a genomic region of <code>p &lt;- 100</code> SNPs with moderate LD (off-diagonal 0.3, diagonal 1):</strong></p>
+<div id="ce5cf556" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.899659Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.897603Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.916506Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.914561Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>LD <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.3</span>, <span class="at">nrow =</span> p, <span class="at">ncol =</span> p)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(LD) <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Simulate genotypes for <code>N &lt;- 1000</code> individuals</strong> using the LD matrix as the covariance structure:</p>
+<div id="131ad5e6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.921169Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.919589Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.948124Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.946268Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> N, <span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>, p), <span class="at">Sigma =</span> LD)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># dim(X) -&gt; 1000 x 100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Define <code>L &lt;- 3</code> true causal SNPs, chosen at random</strong> (e.g.&nbsp;variants 68, 39, 1 — the workshop’s exact setup):</p>
+<div id="863fbfba" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.952580Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.950828Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.964328Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.962510Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>causal_ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>p, L, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Assign effect sizes for a target heritability, e.g.&nbsp;<code>h2g &lt;- 0.1</code>:</strong></p>
+<div id="0085ce1f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.968853Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.967037Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:47.984982Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:47.982888Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>h2g <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>per_snp_h2g <span class="ot">&lt;-</span> h2g <span class="sc">/</span> L</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>effect_sizes <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(L, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(per_snp_h2g))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, p)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>beta[causal_ind] <span class="ot">&lt;-</span> effect_sizes</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>genetic_effect <span class="ot">&lt;-</span> X <span class="sc">%*%</span> beta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Simulate the phenotype by adding environmental noise:</strong></p>
+<div id="daa08136" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:47.988976Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:47.987919Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.002841Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.001039Z&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>var_g <span class="ot">&lt;-</span> <span class="fu">var</span>(genetic_effect)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sigma_squared <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="dv">1</span> <span class="sc">-</span> var_g <span class="sc">&gt;</span> <span class="fl">0.05</span>, <span class="dv">1</span> <span class="sc">-</span> var_g, <span class="fl">0.1</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">105</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma_squared))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(genetic_effect <span class="sc">+</span> epsilon)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Run GWAS</strong> — one univariate regression per SNP, producing a full summary-statistics table:</p>
+<div id="467ebc29" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.008073Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.006475Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.141066Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.138637Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>GWAS_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">beta =</span> <span class="fu">numeric</span>(p), <span class="at">se =</span> <span class="fu">numeric</span>(p), <span class="at">z =</span> <span class="fu">numeric</span>(p), <span class="at">pval =</span> <span class="fu">numeric</span>(p))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p) {</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(y <span class="sc">~</span> X[,i] <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  beta_hat <span class="ot">&lt;-</span> fit<span class="sc">$</span>coefficients[<span class="dv">1</span>, <span class="st">"Estimate"</span>]</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  se_hat   <span class="ot">&lt;-</span> fit<span class="sc">$</span>coefficients[<span class="dv">1</span>, <span class="st">"Std. Error"</span>]</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> beta_hat <span class="sc">/</span> se_hat</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  p_val <span class="ot">&lt;-</span> <span class="fu">pchisq</span>(z<span class="sc">^</span><span class="dv">2</span>, <span class="at">df =</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  GWAS_df[i, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(beta_hat, se_hat, z, p_val)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Plotting <code>-log10(pval)</code> against SNP position gives a regional Manhattan plot; the tallest peaks are candidate causal variants.</p>
+<p><strong>Apply ABF fine-mapping</strong> using the Wakefield formula from Part 3, implemented as a reusable function:</p>
+<div id="feeccf62" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.145871Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.144393Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.171895Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.170056Z&quot;}}" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>run_abf <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, stderr, <span class="at">W =</span> <span class="fl">0.04</span>) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> beta <span class="sc">/</span> stderr</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  V <span class="ot">&lt;-</span> stderr<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> W <span class="sc">/</span> (W <span class="sc">+</span> V)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  lbf <span class="ot">&lt;-</span> (<span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>r) <span class="sc">+</span> r<span class="sc">*</span>(z<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  lbf_max <span class="ot">&lt;-</span> <span class="fu">max</span>(lbf)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  denom <span class="ot">&lt;-</span> lbf_max <span class="sc">+</span> <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(lbf <span class="sc">-</span> lbf_max)))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(lbf <span class="sc">-</span> denom)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>GWAS_df<span class="sc">$</span>PIP_ABF <span class="ot">&lt;-</span> <span class="fu">run_abf</span>(GWAS_df<span class="sc">$</span>beta, GWAS_df<span class="sc">$</span>se)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>ABF will often strongly prioritize just one signal, even when several causal variants exist.</p>
+<p><strong>Run SuSiE</strong>, using an in-sample LD matrix computed directly from the simulated genotypes:</p>
+<div id="57eb231f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.181309Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.180126Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.249492Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.247581Z&quot;}}" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">scale</span>(X))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>susie_results <span class="ot">&lt;-</span> <span class="fu">susie_rss</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">bhat =</span> GWAS_df<span class="sc">$</span>beta, <span class="at">shat =</span> GWAS_df<span class="sc">$</span>se, <span class="at">n =</span> N, <span class="at">R =</span> R,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">var_y =</span> <span class="fu">var</span>(y), <span class="at">L =</span> <span class="dv">4</span>, <span class="at">estimate_residual_variance =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>GWAS_df<span class="sc">$</span>PIP_SuSiE <span class="ot">&lt;-</span> susie_results<span class="sc">$</span>pip</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(GWAS_df[<span class="fu">order</span>(<span class="sc">-</span>GWAS_df<span class="sc">$</span>PIP_SuSiE), ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span style="font-weight:bold;text-decoration:underline" class="ansi-magenta-fg">HINT:</span> For estimate_residual_variance = TRUE, please check that R is the "in-sample" LD matrix; that is, the correlation matrix obtained using the exact same data matrix X that was used for the other summary statistics. Also note, when covariates are included in the univariate regressions that produced the summary statistics, also consider removing these effects from X before computing R.
+
+
+</pre>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 6 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">beta</th>
+<th data-quarto-table-cell-role="th" scope="col">se</th>
+<th data-quarto-table-cell-role="th" scope="col">z</th>
+<th data-quarto-table-cell-role="th" scope="col">pval</th>
+<th data-quarto-table-cell-role="th" scope="col">PIP_ABF</th>
+<th data-quarto-table-cell-role="th" scope="col">PIP_SuSiE</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">1</th>
+<td>-0.23391752</td>
+<td>0.02955646</td>
+<td>-7.914261</td>
+<td>2.487253e-15</td>
+<td>9.999993e-01</td>
+<td>1.000000e+00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">39</th>
+<td>0.11271078</td>
+<td>0.03016101</td>
+<td>3.736970</td>
+<td>1.862512e-04</td>
+<td>4.604485e-11</td>
+<td>1.000000e+00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">68</th>
+<td>-0.17209840</td>
+<td>0.02969970</td>
+<td>-5.794617</td>
+<td>6.847711e-09</td>
+<td>6.692374e-07</td>
+<td>9.999861e-01</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">51</th>
+<td>-0.11439249</td>
+<td>0.03180954</td>
+<td>-3.596169</td>
+<td>3.229380e-04</td>
+<td>2.881971e-11</td>
+<td>2.692740e-06</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="row">48</th>
+<td>-0.10034456</td>
+<td>0.03015366</td>
+<td>-3.327774</td>
+<td>8.754293e-04</td>
+<td>1.120259e-11</td>
+<td>2.578888e-06</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="row">32</th>
+<td>-0.08948059</td>
+<td>0.03040323</td>
+<td>-2.943127</td>
+<td>3.249148e-03</td>
+<td>3.467398e-12</td>
+<td>1.484153e-06</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>A <code>PIP_SuSiE</code> plot typically shows several distinct peaks, corresponding to the multiple simulated causal variants — unlike ABF’s single dominant peak.</p>
+<p><strong>Examine credible sets</strong>, the most important SuSiE output:</p>
+<div id="f3e2778e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.254009Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.252406Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.268480Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.267054Z&quot;}}" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>susie_results<span class="sc">$</span>sets<span class="sc">$</span>cs</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># $L1: 1    $L2: 39   $L3: 68</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$L1</dt>
+        <dd>1</dd>
+    <dt>$L2</dt>
+        <dd>39</dd>
+    <dt>$L3</dt>
+        <dd>68</dd>
+</dl>
+</div>
+</div>
+<p>Three independent signals, correctly located at variants 39, 20, and 68.</p>
+<section id="abf-vs.-susie-head-to-head" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="abf-vs.-susie-head-to-head"><span class="header-section-number">4.1</span> ABF vs.&nbsp;SuSiE, Head to Head</h2>
+<p>Where ABF may identify only variant 1, SuSiE correctly recovers variants 1, 39, <em>and</em> 68 — because it allows multiple causal variants. This is precisely why SuSiE has become the preferred modern approach.</p>
+<p><span class="math display">\[\text{Simulate} \rightarrow \text{GWAS} \rightarrow \text{ABF} \rightarrow \text{PIP Estimates} \rightarrow \text{SuSiE} \rightarrow \text{Multiple Signals} \rightarrow \text{Credible Sets} \rightarrow \text{Candidate Causal Variants}\]</span></p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> A complete fine-mapping analysis starts from GWAS summary statistics and an LD matrix. ABF converts these into posterior probabilities under a single-causal-variant assumption; SuSiE extends this to multiple independent signals in the same locus. The outputs — PIPs and credible sets — feed directly into downstream eQTL and colocalization analyses.</p>
+</blockquote>
+</section>
+</section>
+<section id="understanding-credible-sets-in-practice" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Understanding Credible Sets in Practice</h1>
+<p>After running SuSiE, researchers often jump straight to PIPs — but the most informative output is usually the <strong>credible set</strong> itself, since most real GWAS loci don’t resolve to a single variant.</p>
+<section id="why-we-need-them" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="why-we-need-them"><span class="header-section-number">5.1</span> Why We Need Them</h2>
+<p>A single SNP at PIP = 0.98 makes life easy. But most loci look more like:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>SNP</th>
+<th>PIP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rs39</td>
+<td>0.32</td>
+</tr>
+<tr class="even">
+<td>rs40</td>
+<td>0.28</td>
+</tr>
+<tr class="odd">
+<td>rs41</td>
+<td>0.22</td>
+</tr>
+<tr class="even">
+<td>rs42</td>
+<td>0.10</td>
+</tr>
+<tr class="odd">
+<td>rs43</td>
+<td>0.08</td>
+</tr>
+</tbody>
+</table>
+<p>Now which SNP is truly causal is genuinely unclear — rather than pretending to know, Bayesian fine-mapping represents that uncertainty explicitly via the credible set.</p>
+<p>A <strong>95% credible set</strong> means there’s a 95% probability the causal SNP lies <em>somewhere in the set</em> — not a 95% probability attached to each member individually.</p>
+</section>
+<section id="worked-construction" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="worked-construction"><span class="header-section-number">5.2</span> Worked Construction</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Add</th>
+<th>Cumulative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>rs39 (0.45)</td>
+<td>0.45</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>rs40 (0.25)</td>
+<td>0.70</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>rs41 (0.15)</td>
+<td>0.85</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>rs42 (0.08)</td>
+<td>0.93</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>rs43 (0.04)</td>
+<td>0.97</td>
+</tr>
+</tbody>
+</table>
+<p>The 95% credible set = {rs39, rs40, rs41, rs42, rs43}. This does <strong>not</strong> mean all five are causal — it means one (or more) of them likely is, but the data can’t distinguish which.</p>
+<p><strong>Resolution spectrum:</strong> ideal = {rs39} alone (excellent, near-certain localization); moderate = {rs39, rs40, rs41} (still useful — 3 variants to validate instead of 500); poor = 50–100 SNPs (data can’t isolate the causal variant at all).</p>
+</section>
+<section id="why-large-credible-sets-occur" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="why-large-credible-sets-occur"><span class="header-section-number">5.3</span> Why Large Credible Sets Occur</h2>
+<ol type="1">
+<li><strong>High LD</strong> — SNPs with <span class="math inline">\(r^2 &gt; 0.95\)</span> are statistically indistinguishable.</li>
+<li><strong>Small sample size</strong> — less information, more diffuse PIPs, larger sets. (N=500 vs N=50,000 makes a dramatic difference.)</li>
+<li><strong>Weak genetic effects</strong> — small <span class="math inline">\(\beta\)</span> is harder to localize than large <span class="math inline">\(\beta\)</span>.</li>
+</ol>
+<p><strong>Excellent fine-mapping:</strong> rs39 = 0.97, everything else ≈ 0.01 → credible set = {rs39}, near-perfect localization. <strong>Difficult fine-mapping:</strong> five SNPs each around 0.13–0.25 → credible set = all five, strong genuine uncertainty.</p>
+</section>
+<section id="multiple-credible-sets" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="multiple-credible-sets"><span class="header-section-number">5.4</span> Multiple Credible Sets</h2>
+<p>Modern loci often contain multiple signals — Signal 1: CS1={rs20}, Signal 2: CS2={rs39, rs40}, Signal 3: CS3={rs68} — exactly what SuSiE was designed to discover. Each credible set corresponds to a separate causal signal:</p>
+<div id="cc910417" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.273102Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.271400Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.286551Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.284787Z&quot;}}" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>susie_results<span class="sc">$</span>sets<span class="sc">$</span>cs</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># $L1: 1    $L2: 39   $L3: 68</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$L1</dt>
+        <dd>1</dd>
+    <dt>$L2</dt>
+        <dd>39</dd>
+    <dt>$L3</dt>
+        <dd>68</dd>
+</dl>
+</div>
+</div>
+</section>
+<section id="coverage-trade-off" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="coverage-trade-off"><span class="header-section-number">5.5</span> Coverage Trade-Off</h2>
+<p>Most studies use 95% coverage, but 80%, 90%, and 99% are all used. Higher coverage (99%) gives more certainty but larger sets; lower coverage (80%) gives smaller sets but greater risk of missing the true causal SNP entirely.</p>
+</section>
+<section id="credible-sets-lead-snps" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="credible-sets-lead-snps"><span class="header-section-number">5.6</span> Credible Sets ≠ Lead SNPs</h2>
+<p>A “lead SNP” (smallest p-value, or highest PIP) is a single point estimate; the credible set captures the uncertainty around it. These are not interchangeable, and conflating them is a common mistake.</p>
+<p><strong>What a fine-mapping study should report:</strong> lead SNP, PIP, credible set, credible set size, method used, LD reference panel. Example:</p>
+<blockquote class="blockquote">
+<p>Lead variant rs39, PIP 0.94, 95% credible set {rs39, rs40}, size 2.</p>
+</blockquote>
+</section>
+<section id="biological-interpretation" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="biological-interpretation"><span class="header-section-number">5.7</span> Biological Interpretation</h2>
+<p>Credible set size = 1 → strong candidate for CRISPR/reporter/functional validation. Credible set size = 50 → needs more data (larger GWAS, better LD panel, eQTL analysis, colocalization, functional annotations) before it can be refined further.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> Credible sets quantify uncertainty by reporting a group of variants that jointly contain the causal SNP with a specified probability (typically 95%), rather than pretending to identify a single answer. Small sets mean strong resolution; large sets reflect high LD, limited sample size, or weak effects. Credible sets are often more informative than lead SNPs precisely because they represent uncertainty explicitly.</p>
+</blockquote>
+</section>
+</section>
+<section id="the-impact-of-sample-size-effect-size-and-ld-on-resolution" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> The Impact of Sample Size, Effect Size, and LD on Resolution</h1>
+<p>“Why is my credible set so large? Why are my PIPs so low? Why can’t I identify the causal SNP?” The answer almost always comes down to three factors: <strong>sample size</strong>, <strong>linkage disequilibrium</strong>, and <strong>effect size</strong>.</p>
+<p><strong>Resolution</strong> refers to how precisely a causal variant can be localized. Excellent: 95% credible set = 1 SNP. Poor: 95% credible set = 50 SNPs. The goal is always small credible sets with high PIPs.</p>
+<section id="factor-1-sample-size" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="factor-1-sample-size"><span class="header-section-number">6.1</span> Factor 1: Sample Size</h2>
+<p>The single most important factor. Standard error scales as <span class="math inline">\(\text{SE} \propto 1/\sqrt{N}\)</span>, so larger <span class="math inline">\(N\)</span> → smaller SE → larger Z-scores → higher PIPs.</p>
+<p><strong>Example:</strong> true <span class="math inline">\(\beta = 0.10\)</span>. At <span class="math inline">\(N=500\)</span>: SE ≈ 0.08, Z ≈ 1.25 (weak evidence). At <span class="math inline">\(N=50{,}000\)</span>: SE ≈ 0.01, Z ≈ 10 (very strong evidence). Increasing sample size 10× often improves fine-mapping resolution dramatically — sharper, less noisy signal, smaller credible sets.</p>
+</section>
+<section id="factor-2-linkage-disequilibrium" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="factor-2-linkage-disequilibrium"><span class="header-section-number">6.2</span> Factor 2: Linkage Disequilibrium</h2>
+<p>Fine-mapping is easiest when SNPs are weakly correlated. At <span class="math inline">\(r^2 = 0.05\)</span>, each SNP behaves independently and a causal signal is easy to pinpoint. At <span class="math inline">\(r^2 = 0.99\)</span>, neighboring SNPs look almost statistically identical (e.g.&nbsp;rs39 at <span class="math inline">\(p=1\times10^{-12}\)</span> and rs40 at <span class="math inline">\(p=2\times10^{-12}\)</span>) — the model simply cannot tell them apart, producing large credible sets.</p>
+<p><strong>Resolution spectrum by LD:</strong> low LD → {rs39} (excellent); moderate LD → {rs39, rs40, rs41} (acceptable); very high LD → 25 SNPs (poor). Even a huge sample size (<span class="math inline">\(N=100{,}000\)</span>) can’t fully overcome severe LD in a locus — more data helps, but doesn’t eliminate the fundamental statistical limitation.</p>
+<p><strong>Ancestry matters here:</strong> European-ancestry LD blocks tend to be long (harder to resolve); African-ancestry LD blocks tend to be shorter (often better resolution) — one reason multi-ancestry fine-mapping has become popular.</p>
+</section>
+<section id="factor-3-effect-size" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="factor-3-effect-size"><span class="header-section-number">6.3</span> Factor 3: Effect Size</h2>
+<p>Large effects (<span class="math inline">\(\beta = 0.25\)</span>) → large Z-score → high PIP → often a single-SNP credible set. Small effects (<span class="math inline">\(\beta = 0.01\)</span>) → small Z-score → diffuse PIPs → large credible set. Traits differ in genetic architecture: LDL cholesterol often has large-effect variants; educational attainment is dominated by tiny effects — so some traits are inherently easier to fine-map than others. Lower heritability (<span class="math inline">\(h^2 = 0.01\)</span> vs.&nbsp;<span class="math inline">\(0.10\)</span>) weakens signals the same way.</p>
+</section>
+<section id="interaction-between-factors" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="interaction-between-factors"><span class="header-section-number">6.4</span> Interaction Between Factors</h2>
+<p><strong>Best case:</strong> large sample size + low LD + large effects → tiny credible sets, high PIPs. <strong>Worst case:</strong> small sample size + high LD + tiny effects → huge credible sets, low PIPs.</p>
+</section>
+<section id="diagnosing-poor-fine-mapping" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="diagnosing-poor-fine-mapping"><span class="header-section-number">6.5</span> Diagnosing Poor Fine-Mapping</h2>
+<p>When results look weak, check: Is sample size large enough? Is LD too high? Are effect sizes too small? Is the LD reference panel the right ancestry?</p>
+<p><strong>Common beginner mistake:</strong> interpreting a 50-SNP credible set as “fine-mapping failed.” Usually the method is working correctly — the data simply doesn’t contain enough information to distinguish the variants. Fine-mapping <em>quantifies</em> uncertainty; it doesn’t eliminate it.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> Fine-mapping resolution is driven primarily by sample size, LD, and effect size. Larger samples and stronger effects sharpen PIPs; high LD makes neighboring variants statistically indistinguishable and enlarges credible sets. No method can fully overcome severe LD or limited information — understanding these limits is essential for realistic interpretation and avoiding overconfidence in causal variant claims.</p>
+</blockquote>
+</section>
+</section>
+<section id="fine-mapping-with-individual-level-data-vs.-summary-statistics" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Fine-Mapping with Individual-Level Data vs.&nbsp;Summary Statistics</h1>
+<p>The first question in any fine-mapping project is: what data do I actually have? The answer determines which methods you can use, how accurate your results will be, how LD gets estimated, and whether colocalization is even possible.</p>
+<section id="two-main-types-of-data" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="two-main-types-of-data"><span class="header-section-number">7.1</span> Two Main Types of Data</h2>
+<p><strong>Individual-level data</strong> — genotypes, phenotypes, and covariates per person:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Person</th>
+<th>SNP1</th>
+<th>SNP2</th>
+<th>SNP3</th>
+<th>Phenotype</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3.2</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1.7</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>4.5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Summary statistics only</strong> — no individual genotypes:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>SNP</th>
+<th>Beta</th>
+<th>SE</th>
+<th>P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rs1</td>
+<td>0.12</td>
+<td>0.03</td>
+<td>1e-8</td>
+</tr>
+<tr class="even">
+<td>rs2</td>
+<td>0.10</td>
+<td>0.03</td>
+<td>5e-7</td>
+</tr>
+<tr class="odd">
+<td>rs3</td>
+<td>0.02</td>
+<td>0.04</td>
+<td>0.40</td>
+</tr>
+</tbody>
+</table>
+<p>Large biobanks (UK Biobank, FinnGen, deCODE, iPSYCH) usually release only summary statistics — raw genotype sharing raises privacy, storage, and regulatory concerns.</p>
+</section>
+<section id="individual-level-data-workflow-gold-standard" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="individual-level-data-workflow-gold-standard"><span class="header-section-number">7.2</span> Individual-Level Data Workflow (Gold Standard)</h2>
+<p><span class="math display">\[\text{Raw Genotypes} \rightarrow \text{QC} \rightarrow \text{GWAS} \rightarrow \text{Compute In-Sample LD} \rightarrow \text{Fine-Mapping}\]</span></p>
+<div id="34ea61d6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-30T18:27:48.291026Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-30T18:27:48.289421Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-30T18:27:48.331758Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-30T18:27:48.329293Z&quot;}}" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">scale</span>(X))   <span class="co"># X = genotype matrix from your own samples</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This produces <strong>in-sample LD</strong> — LD computed from exactly the individuals in your GWAS — the most accurate LD possible, and considered the gold standard.</p>
+</section>
+<section id="summary-statistics-workflow" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="summary-statistics-workflow"><span class="header-section-number">7.3</span> Summary Statistics Workflow</h2>
+<p><span class="math display">\[\text{Summary Statistics} \rightarrow \text{External LD Panel} \rightarrow \text{Fine-Mapping}\]</span></p>
+<p>Common reference panels: 1000 Genomes, UK Biobank, TOPMed, HRC. You must match the reference panel’s ancestry to your GWAS cohort — e.g.&nbsp;European-ancestry GWAS → 1000 Genomes Europeans.</p>
+</section>
+<section id="why-ld-matching-is-critical" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="why-ld-matching-is-critical"><span class="header-section-number">7.4</span> Why LD Matching Is Critical</h2>
+<p>If your GWAS is Finnish but you estimate LD from an African-ancestry panel, the LD structure will genuinely differ — e.g.&nbsp;true GWAS LD between rs39/rs40 might be <span class="math inline">\(r^2=0.95\)</span> while the mismatched reference shows <span class="math inline">\(r^2=0.30\)</span>. That mismatch can cause false signals, incorrect PIPs, wrong credible sets, and failed colocalization — one of the most common causes of unreliable fine-mapping. SuSiE in particular needs good LD, since it relies on knowing exactly which SNPs are correlated to separate multiple signals.</p>
+<p><strong>Methods requiring LD:</strong> SuSiE, FINEMAP, CAVIAR, CARMA. <strong>Methods that don’t:</strong> ABF (needs only beta and SE) — one reason it remains useful as a fallback.</p>
+</section>
+<section id="single-cohort-vs.-meta-analysis" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="single-cohort-vs.-meta-analysis"><span class="header-section-number">7.5</span> Single-Cohort vs.&nbsp;Meta-Analysis</h2>
+<p><strong>Single-cohort</strong> (e.g.&nbsp;FinnGen or UK Biobank alone): ancestry-matched LD → fine-mapping is generally straightforward.</p>
+<p><strong>Meta-analysis</strong> (European + Finnish + Japanese + African cohorts combined): each cohort has different LD, so a single LD matrix no longer represents the pooled data accurately. This motivated specialized meta-analysis methods. Common strategies: fine-map each cohort separately then compare/integrate results, or use methods purpose-built for heterogeneous LD (FastMap and related approaches).</p>
+</section>
+<section id="multi-ancestry-fine-mapping" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="multi-ancestry-fine-mapping"><span class="header-section-number">7.6</span> Multi-Ancestry Fine-Mapping</h2>
+<p>Different populations have different LD block lengths — combining ancestries can dramatically improve resolution, since a variant tightly linked to several others in a European LD block might sit alone in an African LD block. Example: a European-only GWAS gives a credible set of 40 SNPs, but adding African-ancestry data narrows it to 5.</p>
+</section>
+<section id="data-type-ranking" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="data-type-ranking"><span class="header-section-number">7.7</span> Data-Type Ranking</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Tier</th>
+<th>Data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Best</td>
+<td>Individual-level data + in-sample LD</td>
+</tr>
+<tr class="even">
+<td>Good</td>
+<td>Summary statistics + matched LD panel</td>
+</tr>
+<tr class="odd">
+<td>Risky</td>
+<td>Summary statistics + poorly matched LD</td>
+</tr>
+<tr class="even">
+<td>Worst</td>
+<td>Summary statistics + no LD information</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Practical advice:</strong> use in-sample LD whenever possible; always match ancestry between GWAS and LD panel; avoid mixing populations unless using methods explicitly designed for multi-ancestry analysis.</p>
+<p>This all matters even more for colocalization later: <code>coloc.susie</code> depends on accurate fine-mapping, and poor LD estimation can cause both false and missed colocalization. <strong>Good LD = good fine-mapping = good colocalization.</strong></p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> Data availability determines your entire fine-mapping strategy. Individual-level data gives the best results because LD is computed directly from the study sample. Summary-statistics-only analyses require an external, ancestry-matched LD reference panel — mismatch here is one of the most common sources of unreliable results in modern fine-mapping.</p>
+</blockquote>
+</section>
+</section>
+<section id="major-fine-mapping-methods-abf-caviar-finemap-susie-carma-fastmap" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Major Fine-Mapping Methods — ABF, CAVIAR, FINEMAP, SuSiE, CARMA, FastMap</h1>
+<p>The core concepts (LD, PIPs, credible sets, Bayesian inference, multiple causal variants) are now in place — the natural next question is which method to actually use. Choice depends on available data, LD information, study design, and computational resources.</p>
+<p><strong>Historical evolution:</strong> <span class="math inline">\(\text{ABF} \rightarrow \text{CAVIAR} \rightarrow \text{FINEMAP} \rightarrow \text{SuSiE} \rightarrow \text{CARMA} \rightarrow \text{FastMap}\)</span> — each generation addressed limitations of the last.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Main idea</th>
+<th>Inputs</th>
+<th>Multiple signals?</th>
+<th>Needs LD?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ABF</strong></td>
+<td>Assume one causal variant; compute Bayes Factors per SNP, normalize to posteriors</td>
+<td>Beta, SE</td>
+<td>No</td>
+<td>No</td>
+<td>Fast, simple, minimal inputs; can’t separate multiple signals; best when no trustworthy LD exists or for quick exploratory passes. Basis of <code>coloc.abf</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>CAVIAR</strong></td>
+<td>Models several causal SNPs simultaneously via Z-scores + LD</td>
+<td>Z-scores, LD matrix</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>One of the first methods beyond ABF; accounts for LD and multiple variants, but computationally expensive in large regions. Historically important — inspired later methods.</td>
+</tr>
+<tr class="odd">
+<td><strong>FINEMAP</strong></td>
+<td>Bayesian model selection: searches causal-variant <em>configurations</em> (e.g.&nbsp;{rs39}, {rs20+rs39}, {rs20+rs39+rs68}) and finds which best explains the data</td>
+<td>Summary statistics, LD matrix</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Fast, accurate, scalable for large GWAS/biobank studies; widely used; needs good LD or performance degrades.</td>
+</tr>
+<tr class="even">
+<td><strong>SuSiE</strong></td>
+<td>Sum of single effects — models phenotype as several independent signals rather than one</td>
+<td>Summary statistics + LD, or individual-level data</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Excellent multiple-signal handling, interpretable credible sets, computationally efficient, integrates naturally with colocalization. Sensitive to LD mismatch. The current default for most researchers.</td>
+</tr>
+<tr class="odd">
+<td><strong>CARMA</strong></td>
+<td><em>CAusal variant identification with Allelic heterogeneity and outliers</em> — explicitly models outlier/artifact SNPs (genotyping errors, imputation artifacts)</td>
+<td>Summary statistics, LD matrix</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Robust to problematic data; more computationally intensive and harder to interpret. Best for uncertain data quality or large meta-analyses prone to artifacts.</td>
+</tr>
+<tr class="even">
+<td><strong>FastMap</strong></td>
+<td>Efficient approximations built for biobank-scale data (millions of individuals, thousands of loci)</td>
+<td>Summary statistics, LD</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Very fast, highly scalable; newer and less extensively validated than SuSiE/FINEMAP. Best for massive biobank or meta-analysis fine-mapping.</td>
+</tr>
+</tbody>
+</table>
+<section id="choosing-a-method" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="choosing-a-method"><span class="header-section-number">8.1</span> Choosing a Method</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Your situation</th>
+<th>Recommended method</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Only beta/SE, no LD matrix</td>
+<td>ABF</td>
+</tr>
+<tr class="even">
+<td>Summary statistics + good LD</td>
+<td>SuSiE or FINEMAP</td>
+</tr>
+<tr class="odd">
+<td>Suspected outliers/artifacts</td>
+<td>CARMA</td>
+</tr>
+<tr class="even">
+<td>Very large-scale (biobank) analysis</td>
+<td>FastMap</td>
+</tr>
+<tr class="odd">
+<td>Planning colocalization afterward</td>
+<td>SuSiE (integrates with <code>coloc.susie</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Current consensus:</strong> ask most statistical geneticists for the default fine-mapping method today and the answer is <strong>SuSiE</strong> — it offers multi-signal modeling, credible sets, PIPs, strong theoretical grounding, and mature software support. FINEMAP remains extremely popular too, often run alongside SuSiE.</p>
+<p><strong>Practical recommendation summary:</strong> individual-level data → SuSiE; summary statistics + good LD → SuSiE or FINEMAP; no LD available → ABF; suspected data artifacts → CARMA; massive biobank analyses → FastMap.</p>
+<p>All these methods answer the same underlying question — “which variants are most likely causal?” — differing mainly in their assumptions, computational strategy, treatment of multiple signals, and robustness to imperfect data. The shared output vocabulary — PIPs and credible sets — is the common language of modern fine-mapping.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> ABF is simple and useful without LD but assumes a single causal variant. CAVIAR pioneered multi-variant modeling. FINEMAP and SuSiE are the current workhorses for multi-signal fine-mapping with credible sets. CARMA adds robustness to outliers; FastMap trades some validation maturity for speed at biobank scale. In practice, SuSiE and FINEMAP dominate when reliable LD is available.</p>
+</blockquote>
+</section>
+</section>
+<section id="the-fine-mapping-decision-tree-choosing-the-correct-pipeline" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> The Fine-Mapping Decision Tree — Choosing the Correct Pipeline</h1>
+<p>For beginners, the hard part isn’t running fine-mapping software — it’s choosing the right workflow before you even start. Rather than picking a method first, start by asking: <strong>what data do we actually have?</strong></p>
+<p><span class="math display">\[\text{Available Data} \rightarrow \text{Appropriate LD} \rightarrow \text{Fine-Mapping Method} \rightarrow \text{Credible Sets} \rightarrow \text{Biological Interpretation}\]</span></p>
+<section id="step-1-do-you-have-individual-level-data" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="step-1-do-you-have-individual-level-data"><span class="header-section-number">9.1</span> Step 1: Do You Have Individual-Level Data?</h2>
+<p>That means genotypes and phenotypes for each participant — PLINK files (<code>.bed</code>/<code>.bim</code>/<code>.fam</code>) or VCF + phenotype files. If yes, follow <strong>Branch A</strong>; if no, follow <strong>Branch B</strong>.</p>
+</section>
+<section id="branch-a-individual-level-data" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="branch-a-individual-level-data"><span class="header-section-number">9.2</span> Branch A: Individual-Level Data</h2>
+<p>The ideal case (UK Biobank, FinnGen, iPSYCH, All of Us, when individual-level access is granted) — you can compute <strong>in-sample LD</strong> directly:</p>
+<p><span class="math display">\[\text{Individual-Level Data} \rightarrow \text{QC} \rightarrow \text{GWAS} \rightarrow \text{Compute In-Sample LD} \rightarrow \text{SuSiE} \rightarrow \text{Credible Sets}\]</span></p>
+<p><strong>Single cohort:</strong> straightforward — in-sample LD, then SuSiE. <strong>Multiple cohorts</strong> (European + African + Asian, each with full genotypes): either (1) fine-map each cohort separately then compare — often recommended — or (2) run multi-ancestry fine-mapping, since differing LD structures across ancestries can improve resolution.</p>
+</section>
+<section id="branch-b-summary-statistics-only" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="branch-b-summary-statistics-only"><span class="header-section-number">9.3</span> Branch B: Summary Statistics Only</h2>
+<p>Most researchers land here. The critical follow-up question: <strong>is a reliable, ancestry-matched LD panel available?</strong></p>
+<ul>
+<li><strong>B1 — good LD available:</strong> match ancestry between GWAS and reference panel (mismatch distorts PIPs and credible sets) → use SuSiE or FINEMAP.</li>
+<li><strong>B2 — no reliable LD:</strong> SuSiE/FINEMAP aren’t appropriate without LD → fall back to <strong>ABF</strong>, accepting its single-causal-variant assumption as a compromise: <span class="math inline">\(\text{Summary Statistics} \rightarrow \text{ABF} \rightarrow \text{Posterior Probabilities}\)</span>.</li>
+<li><strong>B3 — suspected data problems</strong> (imputation errors, outliers, meta-analysis artifacts): <span class="math inline">\(\text{Summary Statistics} \rightarrow \text{LD Panel} \rightarrow \text{CARMA}\)</span>, built specifically for robustness to problematic variants.</li>
+</ul>
+</section>
+<section id="the-meta-analysis-branch" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="the-meta-analysis-branch"><span class="header-section-number">9.4</span> The Meta-Analysis Branch</h2>
+<p>Combining cohorts (UK Biobank + FinnGen + deCODE + Biobank Japan) into one meta-analysis means multiple LD structures exist simultaneously — but fine-mapping methods assume <em>one</em> LD matrix, creating a mismatch. Two strategies: (1) cohort-specific fine-mapping — fine-map FinnGen, UK Biobank, and deCODE separately, then integrate; often preferred — or (2) specialized meta-analysis methods like FastMap, designed to account for heterogeneous LD.</p>
+</section>
+<section id="the-colocalization-branch" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="the-colocalization-branch"><span class="header-section-number">9.5</span> The Colocalization Branch</h2>
+<p>Once you have a GWAS credible set and an eQTL credible set in the same region, the next question is whether they share a causal variant. If you used ABF → <code>coloc.abf</code> (<span class="math inline">\(\text{GWAS} + \text{eQTL summary stats} \rightarrow \text{coloc.abf}\)</span>, single-variant assumption). If you used SuSiE → <code>coloc.susie</code> (<span class="math inline">\(\text{GWAS fine-mapping} + \text{eQTL fine-mapping} \rightarrow \text{coloc.susie}\)</span>), generally preferred since it allows multiple causal variants and aligns naturally with modern fine-mapping.</p>
+</section>
+<section id="the-complete-decision-tree" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="the-complete-decision-tree"><span class="header-section-number">9.6</span> The Complete Decision Tree</h2>
+<pre><code>Individual-level data?
+ ├─ Yes → Compute in-sample LD → SuSiE
+ └─ No  → Summary statistics → Good LD available?
+              ├─ Yes → SuSiE / FINEMAP
+              └─ No  → ABF
+                          ↓
+                   Credible Sets → Colocalization
+                                      ├─ coloc.abf
+                                      └─ coloc.susie</code></pre>
+</section>
+<section id="worked-examples" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="worked-examples"><span class="header-section-number">9.7</span> Worked Examples</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Data</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FinnGen study</td>
+<td>Summary stats + FinnGen LD panel</td>
+<td>SuSiE</td>
+</tr>
+<tr class="even">
+<td>Public GWAS Catalog result</td>
+<td>Beta + SE only, no LD</td>
+<td>ABF</td>
+</tr>
+<tr class="odd">
+<td>UK Biobank genotypes</td>
+<td>Individual-level data</td>
+<td>In-sample LD → SuSiE</td>
+</tr>
+<tr class="even">
+<td>Psychiatric Genomics Consortium meta-analysis</td>
+<td>Multi-cohort meta-analysis</td>
+<td>Cohort-specific fine-mapping, or FastMap</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Common beginner mistake:</strong> picking a method (SuSiE, say) before checking whether the required inputs (a trustworthy LD matrix) actually exist. Always start from the data you have, not the method you’ve heard of.</p>
+<p><strong>Recommended default workflow:</strong> check for individual-level data first; if unavailable, check for a matched LD panel; if that’s also unavailable, use ABF as a fallback; treat CARMA and FastMap as targeted solutions for artifact-prone or biobank-scale data respectively.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> The correct fine-mapping pipeline is determined by data type, not by method popularity. Individual-level data → in-sample LD → SuSiE is the gold-standard path. Summary-statistics-only analyses hinge on whether a well-matched LD reference panel exists; without one, ABF is the fallback. Meta-analyses and suspected data-quality issues call for specialized approaches (FastMap, CARMA respectively). This decision tree should be the first step of any fine-mapping project, before any software is run.</p>
+</blockquote>
+</section>
+</section>
+<section id="integrating-fine-mapping-with-eqtl-data-identifying-candidate-genes" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Integrating Fine-Mapping with eQTL Data — Identifying Candidate Genes</h1>
+<p>Fine-mapping narrows a locus down to a small set of candidate causal SNPs — but it doesn’t tell us <em>which gene</em> is affected. Most GWAS hits are non-coding, often sitting 50–100 kb from the nearest gene, so proximity alone doesn’t reveal the mechanism. This is where <strong>eQTL</strong> (expression quantitative trait locus) analysis comes in.</p>
+<section id="what-is-an-eqtl" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="what-is-an-eqtl"><span class="header-section-number">10.1</span> What Is an eQTL?</h2>
+<p>A genetic variant that influences gene expression: <span class="math inline">\(\text{Genotype} \rightarrow \text{Gene Expression} \rightarrow \text{Disease Risk}\)</span>. For example, rs12345 might increase expression of Gene A while decreasing expression of Gene B — creating a biological mechanism linking DNA variation to disease.</p>
+<p><strong>Why this matters:</strong> suppose a schizophrenia GWAS finds rs12345 with PIP = 0.95 — excellent fine-mapping, but we still don’t know which gene is responsible. If rs12345 also turns out to be an eQTL for <em>CACNA1C</em>, we now have a concrete hypothesis: <span class="math inline">\(\text{Variant} \rightarrow \textit{CACNA1C} \text{ Expression} \rightarrow \text{Disease Risk}\)</span>.</p>
+<p><strong>Data sources:</strong> GTEx, the eQTL Catalogue, PsychENCODE, CommonMind Consortium, eQTLGen.</p>
+<p><strong>Cis- vs.&nbsp;trans-eQTLs:</strong> most studies focus on <em>cis</em>-eQTLs (variant within ~1 Mb of the gene it regulates); <em>trans</em>-eQTLs (a chromosome 1 SNP affecting a chromosome 12 gene, say) are generally harder to detect.</p>
+</section>
+<section id="the-fine-mapping-eqtl-workflow" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="the-fine-mapping-eqtl-workflow"><span class="header-section-number">10.2</span> The Fine-Mapping + eQTL Workflow</h2>
+<p><span class="math display">\[\text{GWAS} \rightarrow \text{Fine-Mapping} \rightarrow \text{Candidate SNPs} \rightarrow \text{eQTL Database} \rightarrow \text{Candidate Genes}\]</span></p>
+<p>Suppose fine-mapping gives a 95% credible set of {rs39, rs40, rs41}. Checking an eQTL database might show rs39 → Gene A, rs40 → no eQTL, rs41 → Gene B — immediately turning two SNPs into two strong gene candidates. Fine-mapping first is essential: starting from 1,000 raw GWAS SNPs and checking eQTLs for all of them would produce an unmanageable number of candidate genes; narrowing to 5 SNPs first makes the eQTL lookup tractable.</p>
+<p><strong>The “nearest gene” trap:</strong> a common beginner mistake is assuming the nearest gene is the causal gene. It often isn’t — a GWAS SNP may sit near Gene A but actually regulate Gene B much farther away. eQTL data resolve this ambiguity.</p>
+</section>
+<section id="fine-mapping-the-eqtl-itself" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="fine-mapping-the-eqtl-itself"><span class="header-section-number">10.3</span> Fine-Mapping the eQTL Itself</h2>
+<p>eQTL studies can (and should) be fine-mapped the same way GWAS is: <span class="math inline">\(\text{Expression Trait} \rightarrow \text{eQTL Mapping} \rightarrow \text{Fine-Mapping} \rightarrow \text{eQTL Credible Sets}\)</span>. If GWAS fine-mapping gives CS = {rs39} <em>and</em> eQTL fine-mapping independently gives CS = {rs39}, that’s highly suggestive — both analyses point at the same variant, though it’s not yet proof (that requires formal colocalization, Part 12).</p>
+</section>
+<section id="tissue-specificity" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="tissue-specificity"><span class="header-section-number">10.4</span> Tissue Specificity</h2>
+<p>A variant may be an eQTL in brain but not in blood or liver. For schizophrenia, relevant tissues include prefrontal cortex, hippocampus, and neurons — brain eQTLs are typically far more informative than blood eQTLs for a brain-relevant trait. A standard psychiatric-genomics workflow: <span class="math inline">\(\text{Schizophrenia GWAS} \rightarrow \text{Fine-Mapping} \rightarrow \text{PsychENCODE eQTLs} \rightarrow \text{Candidate Gene}\)</span>.</p>
+</section>
+<section id="fine-mapping-eqtl-gene-prioritization" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="fine-mapping-eqtl-gene-prioritization"><span class="header-section-number">10.5</span> Fine-Mapping + eQTL = Gene Prioritization</h2>
+<p>Fine-mapping answers “which SNP?”; eQTL analysis answers “which gene?” Together they give <strong>gene prioritization</strong> — but even when a GWAS SNP and an eQTL SNP look similar, that alone doesn’t prove they’re the <em>same</em> causal variant, because LD can create misleading overlap. That gap is exactly what <strong>colocalization</strong> (Part 12) formally resolves.</p>
+<p><span class="math display">\[\text{GWAS} \rightarrow \text{Fine-Mapping} \rightarrow \text{Credible Set} \rightarrow \text{eQTL Lookup} \rightarrow \text{Candidate Gene} \rightarrow \text{Colocalization} \rightarrow \text{Shared Causal Variant?} \rightarrow \text{Biological Mechanism}\]</span></p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> Fine-mapping identifies likely causal variants but not the affected gene. eQTL analysis fills that gap by linking variants to gene expression. Intersecting fine-mapped GWAS credible sets with eQTL results prioritizes candidate genes and generates mechanistic hypotheses — but overlap alone doesn’t prove a shared causal variant, since LD can create misleading co-occurrence. That limitation motivates formal colocalization methods.</p>
+</blockquote>
+</section>
+</section>
+<section id="colocalization-does-a-gwas-signal-share-a-causal-variant-with-an-eqtl-signal" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Colocalization — Does a GWAS Signal Share a Causal Variant With an eQTL Signal?</h1>
+<p>A GWAS signal and an eQTL signal overlapping in the same region doesn’t necessarily mean the same variant drives both. <strong>Colocalization</strong> is the formal statistical test for whether two association signals are driven by the same underlying causal variant.</p>
+<p><strong>The ambiguity:</strong> suppose a schizophrenia GWAS implicates rs39, and an eQTL study implicates rs40 for Gene A expression, with <span class="math inline">\(r^2(\text{rs39}, \text{rs40}) = 0.95\)</span>. Two explanations are equally consistent with strong LD alone:</p>
+<ul>
+<li><strong>Shared causal variant</strong> (true colocalization): rs39 drives both Gene A expression <em>and</em> disease risk directly.</li>
+<li><strong>Distinct variants</strong> (not colocalization): rs39 drives disease risk, rs40 (a different variant) drives Gene A expression — strong LD just makes them look similar.</li>
+</ul>
+<section id="the-five-colocalization-hypotheses" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="the-five-colocalization-hypotheses"><span class="header-section-number">11.1</span> The Five Colocalization Hypotheses</h2>
+<p>The <code>coloc</code> framework evaluates five mutually exclusive hypotheses, with posterior probabilities PP.H0–PP.H4 summing to 1:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hypothesis</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>H0</td>
+<td>No association with either trait</td>
+</tr>
+<tr class="even">
+<td>H1</td>
+<td>Association with Trait 1 (GWAS) only</td>
+</tr>
+<tr class="odd">
+<td>H2</td>
+<td>Association with Trait 2 (eQTL) only</td>
+</tr>
+<tr class="even">
+<td>H3</td>
+<td>Both traits associated, but <strong>different</strong> causal variants (“linkage”)</td>
+</tr>
+<tr class="odd">
+<td>H4</td>
+<td>Both traits associated, <strong>one shared</strong> causal variant — the result most researchers hope for</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong> PP.H0=0.00, PP.H1=0.00, PP.H2=0.01, PP.H3=0.05, PP.H4=0.94 → 94% probability of a shared causal variant, strong evidence for colocalization.</p>
+<p><strong>Interpreting PP.H4:</strong> &gt;0.80 strong evidence, &gt;0.90 very strong, &gt;0.95 extremely strong. Conversely, PP.H3 = 0.95 means both traits are genuinely associated, but through <em>different</em> variants — a very different biological conclusion.</p>
+</section>
+<section id="coloc.abf" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="coloc.abf"><span class="header-section-number">11.2</span> <code>coloc.abf</code></h2>
+<p>The original method — summary-statistics only, no LD matrix required. Inputs: beta, SE, and sample size for both traits. <strong>Major assumption:</strong> one causal variant per locus — the same limitation as ABF fine-mapping. This becomes a real problem when a locus genuinely has multiple signals: in one demonstration, a GWAS causal variant (39) overlapped an eQTL locus with <em>two</em> signals (39, shared, and 20, private) — <code>coloc.abf</code> strongly favored H3 (different variants) even though a shared variant truly existed, because it could only test one variant at a time.</p>
+</section>
+<section id="coloc.susie" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="coloc.susie"><span class="header-section-number">11.3</span> <code>coloc.susie</code></h2>
+<p>Built to fix exactly this: instead of comparing one signal against one signal, it compares credible set against credible set (CS1 vs CS1, CS2 vs CS2, …), using SuSiE fine-mapping results from both traits. Workflow: <span class="math inline">\(\text{GWAS} \rightarrow \text{SuSiE} \rightarrow \text{Credible Sets}\)</span> and <span class="math inline">\(\text{eQTL} \rightarrow \text{SuSiE} \rightarrow \text{Credible Sets}\)</span>, both feeding into <code>coloc.susie</code>. In the same multi-signal example, <code>coloc.susie</code> correctly recovers PP.H4 ≈ 1.0 for the shared signal — advantages: handles multiple causal variants, is credible-set aware, and works on complex loci. This makes it the modern preferred choice whenever reliable LD is available.</p>
+</section>
+<section id="biological-interpretation-and-its-limits" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="biological-interpretation-and-its-limits"><span class="header-section-number">11.4</span> Biological Interpretation and Its Limits</h2>
+<p>If a GWAS colocalizes with brain eQTL data for <em>CACNA1C</em> at PP.H4 = 0.97, that’s strong evidence the same variant influences both <em>CACNA1C</em> expression and disease risk — a compelling mechanistic hypothesis. But even PP.H4 = 0.99 does <strong>not</strong> prove causality — it only means the data are consistent with one shared variant. Confirming the mechanism still requires functional studies, CRISPR experiments, or animal models.</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> Colocalization formally tests whether two association signals share a causal variant, via five posterior probabilities (H0–H4), with H4 = shared variant and H3 = distinct variants. <code>coloc.abf</code> needs only summary statistics but assumes one causal variant per locus; <code>coloc.susie</code> overcomes this by comparing fine-mapped credible sets and is now the preferred default when good LD is available. Colocalization bridges GWAS findings to gene regulatory mechanisms — but even strong PP.H4 is evidence, not proof, of a causal mechanism.</p>
+</blockquote>
+</section>
+</section>
+<section id="practical-interpretation-of-colocalization-results" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Practical Interpretation of Colocalization Results</h1>
+<p>Running a colocalization analysis is easy; interpreting it correctly is much harder. Seeing PP.H4 = 0.85 and immediately concluding “gene identified!” skips several important checks.</p>
+<section id="worked-examples-1" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="worked-examples-1"><span class="header-section-number">12.1</span> Worked Examples</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>PP.H0</th>
+<th>PP.H1</th>
+<th>PP.H2</th>
+<th>PP.H3</th>
+<th>PP.H4</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Strong colocalization</td>
+<td>0.00</td>
+<td>0.01</td>
+<td>0.02</td>
+<td>0.03</td>
+<td>0.94</td>
+<td>Very strong evidence for a shared causal variant — textbook success</td>
+</tr>
+<tr class="even">
+<td>Strong evidence <em>against</em> colocalization</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.96</td>
+<td>0.04</td>
+<td>Both traits associated, but different variants — one of the most common real-world outcomes</td>
+</tr>
+<tr class="odd">
+<td>Ambiguous region</td>
+<td>0.05</td>
+<td>0.10</td>
+<td>0.10</td>
+<td>0.35</td>
+<td>0.40</td>
+<td>Inconclusive — neither H3 nor H4 dominates; more data needed</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="conventional-thresholds" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="conventional-thresholds"><span class="header-section-number">12.2</span> Conventional Thresholds</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>PP.H4</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&lt; 0.50</td>
+<td>Weak</td>
+</tr>
+<tr class="even">
+<td>0.50–0.80</td>
+<td>Moderate</td>
+</tr>
+<tr class="odd">
+<td>≥ 0.80</td>
+<td>Strong</td>
+</tr>
+<tr class="even">
+<td>≥ 0.90</td>
+<td>Very strong</td>
+</tr>
+<tr class="odd">
+<td>≥ 0.95</td>
+<td>Exceptional</td>
+</tr>
+</tbody>
+</table>
+<p>These are conventions, not strict rules — context matters.</p>
+</section>
+<section id="look-beyond-pp.h4-alone" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="look-beyond-pp.h4-alone"><span class="header-section-number">12.3</span> Look Beyond PP.H4 Alone</h2>
+<p>Focusing only on PP.H4 is risky: PP.H3 = 0.45 and PP.H4 = 0.50 technically makes H4 the largest single probability, but there’s nearly as much support for “different variants” — the result is genuinely uncertain. A useful diagnostic is the ratio <span class="math inline">\(\text{PP.H4} / (\text{PP.H3} + \text{PP.H4})\)</span>: for PP.H3=0.10, PP.H4=0.90, this gives 0.90 — excellent support for sharing. Low ratios flag ambiguous H3-vs-H4 competition even when PP.H4 looks superficially high.</p>
+</section>
+<section id="fine-mapping-quality-drives-colocalization-quality" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="fine-mapping-quality-drives-colocalization-quality"><span class="header-section-number">12.4</span> Fine-Mapping Quality Drives Colocalization Quality</h2>
+<p>A GWAS credible set of 50 SNPs and an eQTL credible set of 60 SNPs create enormous combined uncertainty — colocalization may be inconclusive no matter how it’s run. By contrast, GWAS = {rs39} and eQTL = {rs39} makes colocalization almost trivially easy to interpret (PP.H4 ≈ 1). Poor fine-mapping upstream directly degrades colocalization downstream.</p>
+</section>
+<section id="four-common-mistakes" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="four-common-mistakes"><span class="header-section-number">12.5</span> Four Common Mistakes</h2>
+<ol type="1">
+<li><strong>Assuming visual overlap = colocalization.</strong> A GWAS peak and an eQTL peak sitting in the same region doesn’t mean “same signal” — strong LD alone can create that appearance. This is exactly why formal colocalization methods exist.</li>
+<li><strong>Ignoring LD mismatch.</strong> If the GWAS uses European samples and the eQTL uses African samples, differing LD can yield different credible sets even when the underlying biology is identical. Always consider ancestry.</li>
+<li><strong>Treating colocalization as proof of causality.</strong> Even PP.H4 = 0.99 only suggests shared genetic regulation, not that “Gene A causes disease” — that claim needs functional studies, CRISPR experiments, animal models, or perturbation experiments.</li>
+<li><strong>Ignoring tissue context.</strong> A brain eQTL colocalization (PP.H4 = 0.95) is far more biologically relevant for schizophrenia than a blood eQTL colocalization (PP.H4 = 0.05) for the same locus — tissue selection matters enormously.</li>
+</ol>
+</section>
+<section id="sensitivity-analysis" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="sensitivity-analysis"><span class="header-section-number">12.6</span> Sensitivity Analysis</h2>
+<p>Because coloc’s Bayesian priors (<span class="math inline">\(p_1\)</span>, <span class="math inline">\(p_2\)</span>, <span class="math inline">\(p_{12}\)</span> — beliefs about how likely a SNP affects trait 1, trait 2, or both) influence the posterior, a good study tests multiple prior settings:</p>
+<p><em>Illustrative syntax – <code>dataset1</code>/<code>dataset2</code> are placeholders for your own formatted summary-statistics lists; see the</em> <a href="https://chr1swallace.github.io/coloc/">coloc package documentation</a> <em>for the exact list format each expects.</em></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coloc.abf</span>(dataset1, dataset2, <span class="at">p1 =</span> <span class="fl">1e-4</span>, <span class="at">p2 =</span> <span class="fl">1e-4</span>, <span class="at">p12 =</span> <span class="fl">1e-5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If PP.H4 = 0.82 under one prior but 0.35 under another, the result is unstable and should be reported cautiously.</p>
+</section>
+<section id="a-complete-worked-example" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="a-complete-worked-example"><span class="header-section-number">12.7</span> A Complete Worked Example</h2>
+<p><span class="math display">\[\text{Depression GWAS} \rightarrow \text{Fine-Mapping} \rightarrow \text{Credible Sets}\]</span> <span class="math display">\[\text{Brain eQTL} \rightarrow \text{Fine-Mapping} \rightarrow \text{Credible Sets}\]</span> <span class="math display">\[\downarrow \text{coloc.susie} \rightarrow \text{PP.H4} = 0.92\]</span></p>
+<p>Strong evidence that the same variant influences both gene expression and depression risk — a biologically meaningful hypothesis. A publication should report: gene, tissue, PP.H4, PP.H3, method used, and both credible set sizes — e.g.&nbsp;<em>CACNA1C</em>, prefrontal cortex, <code>coloc.susie</code>, PP.H4 = 0.96, GWAS CS size 2, eQTL CS size 1.</p>
+</section>
+<section id="hierarchy-of-evidence-and-practical-checklist" class="level2" data-number="12.8">
+<h2 data-number="12.8" class="anchored" data-anchor-id="hierarchy-of-evidence-and-practical-checklist"><span class="header-section-number">12.8</span> Hierarchy of Evidence and Practical Checklist</h2>
+<p><span class="math display">\[\text{GWAS Association} \rightarrow \text{Fine-Mapping} \rightarrow \text{eQTL Association} \rightarrow \text{Colocalization} \rightarrow \text{Functional Validation}\]</span></p>
+<p>Before trusting a result, check: are both traits genuinely associated (H1/H2/H3/H4)? Is PP.H4 high (preferably &gt;0.8)? Is PP.H3 correspondingly low? Were the credible sets small? Was LD properly ancestry-matched? Is the tissue biologically relevant? Were sensitivity analyses performed across priors?</p>
+<blockquote class="blockquote">
+<p><strong>Key takeaways.</strong> Interpret colocalization using the full set of posterior probabilities, not PP.H4 in isolation — a high PP.H4 alongside a non-trivial PP.H3 is genuinely ambiguous. Fine-mapping quality directly limits colocalization quality: poorly resolved credible sets create irreducible uncertainty. Colocalization is strong evidence, not proof, of a shared mechanism — and proper interpretation requires attention to ancestry matching, tissue relevance, and prior sensitivity.</p>
+</blockquote>
+</section>
+</section>
+<section id="end-to-end-statistical-genetics-pipeline-from-gwas-to-biological-discovery" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> End-to-End Statistical Genetics Pipeline — From GWAS to Biological Discovery</h1>
+<p>GWAS, fine-mapping, eQTL analysis, and colocalization were each covered individually — but in practice they’re chained into a single integrated pipeline whose goal is to move from <strong>association</strong> to <strong>biological mechanism</strong>.</p>
+<section id="the-fundamental-problem" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="the-fundamental-problem"><span class="header-section-number">13.1</span> The Fundamental Problem</h2>
+<p>A GWAS hit on chromosome 6 for schizophrenia tells us <em>something important is here</em> — but not which variant, which gene, or which mechanism. That gap is what the modern post-GWAS pipeline exists to close.</p>
+</section>
+<section id="the-complete-workflow" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="the-complete-workflow"><span class="header-section-number">13.2</span> The Complete Workflow</h2>
+<p><span class="math display">\[\text{Genotypes} \rightarrow \text{GWAS} \rightarrow \text{Significant Locus} \rightarrow \text{Fine-Mapping} \rightarrow \text{Credible Sets} \rightarrow \text{eQTL Integration} \rightarrow \text{Colocalization} \rightarrow \text{Target Gene} \rightarrow \text{Functional Validation} \rightarrow \text{Biological Mechanism}\]</span></p>
+<p>This framework underlies studies from UK Biobank, FinnGen, the Psychiatric Genomics Consortium, GTEx, and PsychENCODE.</p>
+<p><strong>Step by step, with a running example (rs39, schizophrenia):</strong></p>
+<ol type="1">
+<li><strong>GWAS</strong> — 500,000 individuals, 10 million SNPs, model <span class="math inline">\(\text{Phenotype} = \text{SNP} + \text{Covariates} + \text{Error}\)</span>, output beta/SE/p-value per SNP. rs39 at <span class="math inline">\(p=1\times10^{-12}\)</span> — strong association, not yet causality. Because of LD, rs39–rs42 may all look significant; GWAS alone can’t say which is causal.</li>
+<li><strong>Fine-mapping</strong> — SuSiE/FINEMAP/CARMA/ABF, using GWAS summary stats + LD matrix, narrow this down: rs39, PIP = 0.94, 95% credible set = {rs39, rs40}. What started as ~100 candidate SNPs is now 2 — a dramatic improvement in tractability.</li>
+<li><strong>Gene prioritization</strong> — the nearest gene is often <em>not</em> the causal gene, so functional genomics data must be integrated.</li>
+<li><strong>eQTL analysis</strong> — rs39 influences <em>CACNA1C</em> expression in brain tissue, giving a testable hypothesis: <span class="math inline">\(\text{rs39} \rightarrow \textit{CACNA1C} \text{ Expression} \rightarrow \text{Disease Risk}\)</span>. Fine-mapping answers “which SNP?”; eQTL answers “which gene?”</li>
+<li><strong>Fine-mapping the eQTL</strong> — independently fine-map the eQTL signal too: GWAS CS = {rs39}, eQTL CS = {rs39}. Highly suggestive, but still not proof.</li>
+<li><strong>Colocalization</strong> — <code>coloc.abf</code> or <code>coloc.susie</code> formally test whether both signals share a causal variant across the five hypotheses (H0: no association; H1: trait 1 only; H2: trait 2 only; H3: different variants; H4: shared variant). PP.H4 = 0.96 → strong evidence for a shared causal variant, often the key result of the whole study.</li>
+</ol>
+<p><strong>Putting it together:</strong> GWAS finds rs39 → fine-mapping gives PIP = 0.98 → eQTL analysis links rs39 to <em>CACNA1C</em> → colocalization gives PP.H4 = 0.97. This supports <span class="math inline">\(\text{rs39} \rightarrow \textit{CACNA1C} \text{ Expression} \rightarrow \text{Schizophrenia Risk}\)</span> — a biologically meaningful hypothesis distilled from an initial 10 million tested SNPs down to 1 variant, 1 gene, 1 mechanism.</p>
+</section>
+<section id="real-example-psychiatric-genetics" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="real-example-psychiatric-genetics"><span class="header-section-number">13.3</span> Real Example: Psychiatric Genetics</h2>
+<p><span class="math display">\[\text{Schizophrenia GWAS} \rightarrow \text{Fine-Mapping} \rightarrow \text{Brain eQTL Data} \rightarrow \text{Colocalization} \rightarrow \text{Candidate Gene} \rightarrow \text{Functional Validation}\]</span></p>
+<p>using resources like PsychENCODE, GTEx, and CommonMind.</p>
+</section>
+<section id="beyond-eqtls-multi-omics-integration" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="beyond-eqtls-multi-omics-integration"><span class="header-section-number">13.4</span> Beyond eQTLs: Multi-Omics Integration</h2>
+<p>The same fine-mapping + colocalization framework extends to other molecular QTLs: <strong>sQTLs</strong> (splicing), <strong>pQTLs</strong> (protein), <strong>mQTLs</strong> (methylation), <strong>caQTLs</strong> (chromatin accessibility). A modern multi-omics workflow:</p>
+<p><span class="math display">\[\text{GWAS} \rightarrow \text{Fine-Mapping} \rightarrow \text{eQTL Colocalization} \rightarrow \text{pQTL Colocalization} \rightarrow \text{Single-Cell Expression} \rightarrow \text{Pathway Analysis} \rightarrow \text{Drug Target Discovery}\]</span></p>
+<p><strong>Single-cell data</strong> identifies <em>which cell types</em> express the target gene (e.g.&nbsp;Gene A highly expressed in excitatory neurons but not microglia), adding biological context. <strong>TWAS</strong> (transcriptome-wide association) complements this: <span class="math inline">\(\text{GWAS} \rightarrow \text{Predicted Expression} \rightarrow \text{Gene-Level Association}\)</span>. <strong>Mendelian Randomization</strong> goes a step further, testing whether altered expression is <em>causally</em> related to disease (<span class="math inline">\(\text{eQTL} \rightarrow \text{Gene Expression} \rightarrow \text{Disease}\)</span>) — stronger evidence than colocalization alone.</p>
+</section>
+<section id="hierarchy-of-evidence" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="hierarchy-of-evidence"><span class="header-section-number">13.5</span> Hierarchy of Evidence</h2>
+<p><span class="math display">\[\text{GWAS} \rightarrow \text{Fine-Mapping} \rightarrow \text{eQTL Association} \rightarrow \text{Colocalization} \rightarrow \text{TWAS} \rightarrow \text{Mendelian Randomization} \rightarrow \text{Functional Validation}\]</span></p>
+<p>Each layer adds evidence toward the ultimate chain: <span class="math inline">\(\text{Variant} \rightarrow \text{Gene} \rightarrow \text{Cell Type} \rightarrow \text{Pathway} \rightarrow \text{Disease}\)</span>.</p>
+<p><strong>Common beginner misconception:</strong> stopping after GWAS. GWAS is usually just the starting point — the real biological discoveries typically emerge during fine-mapping, eQTL integration, colocalization, and functional interpretation. A modern statistical geneticist’s typical project: <span class="math inline">\(\text{GWAS} \rightarrow \text{SuSiE Fine-Mapping} \rightarrow \text{GTEx eQTL Lookup} \rightarrow \text{coloc.susie} \rightarrow \text{TWAS} \rightarrow \text{Single-Cell Annotation} \rightarrow \text{Experimental Validation}\)</span>.</p>
+<blockquote class="blockquote">
+<p><strong>Final key takeaways.</strong> The journey from GWAS to biological discovery is a chain of interconnected steps: GWAS identifies associated regions, fine-mapping narrows them to likely causal variants, eQTL analysis links variants to gene expression, and colocalization tests whether the same variant drives both expression and disease risk. Modern statistical genetics increasingly layers in single-cell genomics, TWAS, Mendelian Randomization, and multi-omics data to build a fuller mechanistic picture. The ultimate objective is to move from a significant SNP to a causal gene, a relevant cell type, a biological pathway, and eventually therapeutic insight.</p>
+</blockquote>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

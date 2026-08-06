@@ -9,8 +9,14 @@ listing:
   grid-columns: 2
   image-height: "180px"
   feed: true
+  exclude:
+    title: "Tutorials"
 ---
 
 <p class="hero-text" style="max-width: 640px;">
-Walkthroughs and code notebooks on statistical genetics, computational modeling, and applied machine learning — written to be run, not just read.
+I write these while I'm learning the topic myself — something from work, something I picked up for fun, or notes from a talk, conference, or course I want to revisit later. Writing it out in detail, the way I actually worked through it, is how I make sure it sticks. If it ends up useful to you too, that's a bonus. I'm still learning, so cross-check anything before you rely on it — I can get things wrong.
+</p>
+
+<p class="hero-text" style="max-width: 640px;">
+Whether the problem involves physical systems, genomic data, or text, my approach stays the same: define the question precisely, work out its structure, build a reproducible computational model, and check it carefully against data. This page collects that work — statistical genetics, machine learning, natural language processing, high-performance computing, and scientific programming — from the math behind a method to the pipeline, the debugging, and the code that actually runs.
 </p>

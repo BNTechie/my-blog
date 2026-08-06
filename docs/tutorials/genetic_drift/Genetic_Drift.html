@@ -1,0 +1,2767 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-06-02">
+
+<title>Genetic Drift and Fixation: Understanding Evolution Through Randomness – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6388ad00bb6ecaefa25b9a98db1edf18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">0.1</span> Learning Objectives</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites"><span class="header-section-number">0.2</span> Prerequisites</a></li>
+  <li><a href="#what-is-an-allele" id="toc-what-is-an-allele" class="nav-link" data-scroll-target="#what-is-an-allele"><span class="header-section-number">0.3</span> What is an Allele?</a></li>
+  <li><a href="#infinite-vs-finite-populations" id="toc-infinite-vs-finite-populations" class="nav-link" data-scroll-target="#infinite-vs-finite-populations"><span class="header-section-number">0.4</span> Infinite vs Finite Populations</a></li>
+  <li><a href="#an-intuitive-example" id="toc-an-intuitive-example" class="nav-link" data-scroll-target="#an-intuitive-example"><span class="header-section-number">0.5</span> An Intuitive Example</a></li>
+  <li><a href="#what-is-fixation" id="toc-what-is-fixation" class="nav-link" data-scroll-target="#what-is-fixation"><span class="header-section-number">0.6</span> What is Fixation?</a></li>
+  <li><a href="#what-is-allele-loss" id="toc-what-is-allele-loss" class="nav-link" data-scroll-target="#what-is-allele-loss"><span class="header-section-number">0.7</span> What is Allele Loss?</a></li>
+  <li><a href="#the-wright-fisher-model" id="toc-the-wright-fisher-model" class="nav-link" data-scroll-target="#the-wright-fisher-model"><span class="header-section-number">0.8</span> The Wright-Fisher Model</a></li>
+  <li><a href="#sampling-the-next-generation" id="toc-sampling-the-next-generation" class="nav-link" data-scroll-target="#sampling-the-next-generation"><span class="header-section-number">0.9</span> Sampling the Next Generation</a></li>
+  <li><a href="#important-theorem-1-drift-has-no-direction" id="toc-important-theorem-1-drift-has-no-direction" class="nav-link" data-scroll-target="#important-theorem-1-drift-has-no-direction"><span class="header-section-number">0.10</span> Important Theorem 1: Drift Has No Direction</a></li>
+  <li><a href="#important-theorem-2-variance-of-drift" id="toc-important-theorem-2-variance-of-drift" class="nav-link" data-scroll-target="#important-theorem-2-variance-of-drift"><span class="header-section-number">0.11</span> Important Theorem 2: Variance of Drift</a></li>
+  <li><a href="#why-small-populations-drift-faster" id="toc-why-small-populations-drift-faster" class="nav-link" data-scroll-target="#why-small-populations-drift-faster"><span class="header-section-number">0.12</span> Why Small Populations Drift Faster</a></li>
+  <li><a href="#important-theorem-3-fixation-probability" id="toc-important-theorem-3-fixation-probability" class="nav-link" data-scroll-target="#important-theorem-3-fixation-probability"><span class="header-section-number">0.13</span> Important Theorem 3: Fixation Probability</a></li>
+  <li><a href="#new-mutations" id="toc-new-mutations" class="nav-link" data-scroll-target="#new-mutations"><span class="header-section-number">0.14</span> New Mutations</a></li>
+  <li><a href="#important-theorem-4-heterozygosity-decay" id="toc-important-theorem-4-heterozygosity-decay" class="nav-link" data-scroll-target="#important-theorem-4-heterozygosity-decay"><span class="header-section-number">0.15</span> Important Theorem 4: Heterozygosity Decay</a></li>
+  <li><a href="#simulating-the-wright-fisher-model" id="toc-simulating-the-wright-fisher-model" class="nav-link" data-scroll-target="#simulating-the-wright-fisher-model"><span class="header-section-number">0.16</span> Simulating the Wright-Fisher Model</a></li>
+  <li><a href="#interpreting-the-plot" id="toc-interpreting-the-plot" class="nav-link" data-scroll-target="#interpreting-the-plot"><span class="header-section-number">0.17</span> Interpreting the Plot</a></li>
+  <li><a href="#simulating-multiple-populations" id="toc-simulating-multiple-populations" class="nav-link" data-scroll-target="#simulating-multiple-populations"><span class="header-section-number">0.18</span> Simulating Multiple Populations</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">0.19</span> Interpretation</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">0.20</span> Summary</a></li>
+  <li><a href="#experimental-exploration-of-genetic-drift" id="toc-experimental-exploration-of-genetic-drift" class="nav-link" data-scroll-target="#experimental-exploration-of-genetic-drift"><span class="header-section-number">0.21</span> Experimental Exploration of Genetic Drift</a></li>
+  <li><a href="#experiment-1-effect-of-population-size" id="toc-experiment-1-effect-of-population-size" class="nav-link" data-scroll-target="#experiment-1-effect-of-population-size"><span class="header-section-number">0.22</span> Experiment 1: Effect of Population Size</a></li>
+  <li><a href="#simulating-different-population-sizes" id="toc-simulating-different-population-sizes" class="nav-link" data-scroll-target="#simulating-different-population-sizes"><span class="header-section-number">0.23</span> Simulating Different Population Sizes</a></li>
+  <li><a href="#interpretation-1" id="toc-interpretation-1" class="nav-link" data-scroll-target="#interpretation-1"><span class="header-section-number">0.24</span> Interpretation</a></li>
+  <li><a href="#quantifying-drift-variability" id="toc-quantifying-drift-variability" class="nav-link" data-scroll-target="#quantifying-drift-variability"><span class="header-section-number">0.25</span> Quantifying Drift Variability</a></li>
+  <li><a href="#experiment-2-initial-allele-frequency" id="toc-experiment-2-initial-allele-frequency" class="nav-link" data-scroll-target="#experiment-2-initial-allele-frequency"><span class="header-section-number">0.26</span> Experiment 2: Initial Allele Frequency</a></li>
+  <li><a href="#interpretation-2" id="toc-interpretation-2" class="nav-link" data-scroll-target="#interpretation-2"><span class="header-section-number">0.27</span> Interpretation</a></li>
+  <li><a href="#experiment-3-verifying-the-fixation-theorem" id="toc-experiment-3-verifying-the-fixation-theorem" class="nav-link" data-scroll-target="#experiment-3-verifying-the-fixation-theorem"><span class="header-section-number">0.28</span> Experiment 3: Verifying the Fixation Theorem</a></li>
+  <li><a href="#interpretation-3" id="toc-interpretation-3" class="nav-link" data-scroll-target="#interpretation-3"><span class="header-section-number">0.29</span> Interpretation</a></li>
+  <li><a href="#experiment-4-multiple-snp-simulation" id="toc-experiment-4-multiple-snp-simulation" class="nav-link" data-scroll-target="#experiment-4-multiple-snp-simulation"><span class="header-section-number">0.30</span> Experiment 4: Multiple SNP Simulation</a></li>
+  <li><a href="#interpretation-4" id="toc-interpretation-4" class="nav-link" data-scroll-target="#interpretation-4"><span class="header-section-number">0.31</span> Interpretation</a></li>
+  <li><a href="#experiment-5-snp-loss-and-fixation" id="toc-experiment-5-snp-loss-and-fixation" class="nav-link" data-scroll-target="#experiment-5-snp-loss-and-fixation"><span class="header-section-number">0.32</span> Experiment 5: SNP Loss and Fixation</a></li>
+  <li><a href="#experiment-6-number-of-snps-matters" id="toc-experiment-6-number-of-snps-matters" class="nav-link" data-scroll-target="#experiment-6-number-of-snps-matters"><span class="header-section-number">0.33</span> Experiment 6: Number of SNPs Matters</a></li>
+  <li><a href="#interpretation-5" id="toc-interpretation-5" class="nav-link" data-scroll-target="#interpretation-5"><span class="header-section-number">0.34</span> Interpretation</a></li>
+  <li><a href="#experiment-7-sampling-error-versus-genetic-drift" id="toc-experiment-7-sampling-error-versus-genetic-drift" class="nav-link" data-scroll-target="#experiment-7-sampling-error-versus-genetic-drift"><span class="header-section-number">0.35</span> Experiment 7: Sampling Error Versus Genetic Drift</a></li>
+  <li><a href="#simulating-sampling-error" id="toc-simulating-sampling-error" class="nav-link" data-scroll-target="#simulating-sampling-error"><span class="header-section-number">0.36</span> Simulating Sampling Error</a></li>
+  <li><a href="#interpretation-6" id="toc-interpretation-6" class="nav-link" data-scroll-target="#interpretation-6"><span class="header-section-number">0.37</span> Interpretation</a></li>
+  <li><a href="#genetic-drift-vs-sampling-error" id="toc-genetic-drift-vs-sampling-error" class="nav-link" data-scroll-target="#genetic-drift-vs-sampling-error"><span class="header-section-number">0.38</span> Genetic Drift vs Sampling Error</a></li>
+  <li><a href="#experiment-8-distribution-of-frequency-estimates" id="toc-experiment-8-distribution-of-frequency-estimates" class="nav-link" data-scroll-target="#experiment-8-distribution-of-frequency-estimates"><span class="header-section-number">0.39</span> Experiment 8: Distribution of Frequency Estimates</a></li>
+  <li><a href="#interpretation-7" id="toc-interpretation-7" class="nav-link" data-scroll-target="#interpretation-7"><span class="header-section-number">0.40</span> Interpretation</a></li>
+  <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1"><span class="header-section-number">0.41</span> Summary</a></li>
+  <li><a href="#genome-wide-consequences-of-genetic-drift" id="toc-genome-wide-consequences-of-genetic-drift" class="nav-link" data-scroll-target="#genome-wide-consequences-of-genetic-drift"><span class="header-section-number">0.42</span> Genome-Wide Consequences of Genetic Drift</a></li>
+  <li><a href="#heterozygosity" id="toc-heterozygosity" class="nav-link" data-scroll-target="#heterozygosity"><span class="header-section-number">0.43</span> Heterozygosity</a></li>
+  <li><a href="#maximum-heterozygosity" id="toc-maximum-heterozygosity" class="nav-link" data-scroll-target="#maximum-heterozygosity"><span class="header-section-number">0.44</span> Maximum Heterozygosity</a></li>
+  <li><a href="#theoretical-decay-of-heterozygosity" id="toc-theoretical-decay-of-heterozygosity" class="nav-link" data-scroll-target="#theoretical-decay-of-heterozygosity"><span class="header-section-number">0.45</span> Theoretical Decay of Heterozygosity</a></li>
+  <li><a href="#simulating-heterozygosity-decay" id="toc-simulating-heterozygosity-decay" class="nav-link" data-scroll-target="#simulating-heterozygosity-decay"><span class="header-section-number">0.46</span> Simulating Heterozygosity Decay</a></li>
+  <li><a href="#interpretation-8" id="toc-interpretation-8" class="nav-link" data-scroll-target="#interpretation-8"><span class="header-section-number">0.47</span> Interpretation</a></li>
+  <li><a href="#effective-population-size" id="toc-effective-population-size" class="nav-link" data-scroll-target="#effective-population-size"><span class="header-section-number">0.48</span> Effective Population Size</a></li>
+  <li><a href="#why-is-effective-population-size-smaller" id="toc-why-is-effective-population-size-smaller" class="nav-link" data-scroll-target="#why-is-effective-population-size-smaller"><span class="header-section-number">0.49</span> Why is Effective Population Size Smaller?</a></li>
+  <li><a href="#why-statistical-geneticists-care-about-ne" id="toc-why-statistical-geneticists-care-about-ne" class="nav-link" data-scroll-target="#why-statistical-geneticists-care-about-ne"><span class="header-section-number">0.50</span> Why Statistical Geneticists Care About Ne</a></li>
+  <li><a href="#population-bottlenecks" id="toc-population-bottlenecks" class="nav-link" data-scroll-target="#population-bottlenecks"><span class="header-section-number">0.51</span> Population Bottlenecks</a></li>
+  <li><a href="#bottleneck-simulation" id="toc-bottleneck-simulation" class="nav-link" data-scroll-target="#bottleneck-simulation"><span class="header-section-number">0.52</span> Bottleneck Simulation</a></li>
+  <li><a href="#interpretation-9" id="toc-interpretation-9" class="nav-link" data-scroll-target="#interpretation-9"><span class="header-section-number">0.53</span> Interpretation</a></li>
+  <li><a href="#interpretation-10" id="toc-interpretation-10" class="nav-link" data-scroll-target="#interpretation-10"><span class="header-section-number">0.54</span> Interpretation</a></li>
+  <li><a href="#drift-across-an-entire-genome" id="toc-drift-across-an-entire-genome" class="nav-link" data-scroll-target="#drift-across-an-entire-genome"><span class="header-section-number">0.55</span> Drift Across an Entire Genome</a></li>
+  <li><a href="#interpretation-11" id="toc-interpretation-11" class="nav-link" data-scroll-target="#interpretation-11"><span class="header-section-number">0.56</span> Interpretation</a></li>
+  <li><a href="#genetic-drift-and-population-structure" id="toc-genetic-drift-and-population-structure" class="nav-link" data-scroll-target="#genetic-drift-and-population-structure"><span class="header-section-number">0.57</span> Genetic Drift and Population Structure</a></li>
+  <li><a href="#simulating-divergence" id="toc-simulating-divergence" class="nav-link" data-scroll-target="#simulating-divergence"><span class="header-section-number">0.58</span> Simulating Divergence</a></li>
+  <li><a href="#interpretation-12" id="toc-interpretation-12" class="nav-link" data-scroll-target="#interpretation-12"><span class="header-section-number">0.59</span> Interpretation</a></li>
+  <li><a href="#connection-to-fst" id="toc-connection-to-fst" class="nav-link" data-scroll-target="#connection-to-fst"><span class="header-section-number">0.60</span> Connection to FST</a></li>
+  <li><a href="#why-gwas-researchers-care-about-drift" id="toc-why-gwas-researchers-care-about-drift" class="nav-link" data-scroll-target="#why-gwas-researchers-care-about-drift"><span class="header-section-number">0.61</span> Why GWAS Researchers Care About Drift</a></li>
+  <li><a href="#how-gwas-controls-drift-effects" id="toc-how-gwas-controls-drift-effects" class="nav-link" data-scroll-target="#how-gwas-controls-drift-effects"><span class="header-section-number">0.62</span> How GWAS Controls Drift Effects</a></li>
+  <li><a href="#connection-to-finngen" id="toc-connection-to-finngen" class="nav-link" data-scroll-target="#connection-to-finngen"><span class="header-section-number">0.63</span> Connection to FinnGen</a></li>
+  <li><a href="#connection-to-uk-biobank" id="toc-connection-to-uk-biobank" class="nav-link" data-scroll-target="#connection-to-uk-biobank"><span class="header-section-number">0.64</span> Connection to UK Biobank</a></li>
+  <li><a href="#connection-to-polygenic-scores" id="toc-connection-to-polygenic-scores" class="nav-link" data-scroll-target="#connection-to-polygenic-scores"><span class="header-section-number">0.65</span> Connection to Polygenic Scores</a></li>
+  <li><a href="#summary-2" id="toc-summary-2" class="nav-link" data-scroll-target="#summary-2"><span class="header-section-number">0.66</span> Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Genetic Drift and Fixation: Understanding Evolution Through Randomness</h1>
+<p class="subtitle lead">A Simulation-Based Tutorial Using the Wright-Fisher Model</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Tutorial</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 2, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>When people think about evolution, they often think about <strong>natural selection</strong>.</p>
+<p>Natural selection explains how advantageous genetic variants become more common because they improve survival or reproduction.</p>
+<p>However, natural selection is not the only force driving evolution.</p>
+<p>Even in the complete absence of selection, allele frequencies can change over time simply because populations are finite.</p>
+<p>This phenomenon is called <strong>genetic drift</strong>.</p>
+<p>Genetic drift is one of the most fundamental concepts in population genetics because it explains:</p>
+<ul>
+<li>Random changes in allele frequencies</li>
+<li>Loss of genetic diversity</li>
+<li>Founder effects</li>
+<li>Population bottlenecks</li>
+<li>Neutral evolution</li>
+<li>Fixation and extinction of alleles</li>
+</ul>
+<p>Understanding drift is essential for modern genomics, GWAS, evolutionary biology, conservation genetics, and statistical genetics.</p>
+<p>In this tutorial we will study:</p>
+<ol type="1">
+<li>What genetic drift is</li>
+<li>Why fixation occurs</li>
+<li>The Wright-Fisher model</li>
+<li>Important theoretical results</li>
+<li>Simulation of allele-frequency trajectories</li>
+<li>Verification of classical population genetics theorems</li>
+</ol>
+<section id="learning-objectives" class="level3" data-number="0.1">
+<h3 data-number="0.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">0.1</span> Learning Objectives</h3>
+<p>By the end of this tutorial you should be able to:</p>
+<ul>
+<li>Explain genetic drift intuitively</li>
+<li>Derive the Wright-Fisher model</li>
+<li>Understand fixation and extinction</li>
+<li>Simulate neutral evolution</li>
+<li>Interpret allele frequency trajectories</li>
+<li>Understand why small populations drift faster than large populations</li>
+<li>Connect drift to modern genomic studies</li>
+</ul>
+</section>
+<section id="prerequisites" class="level3" data-number="0.2">
+<h3 data-number="0.2" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">0.2</span> Prerequisites</h3>
+<p>This tutorial assumes familiarity with:</p>
+<ul>
+<li>Basic probability</li>
+<li>Binomial distributions</li>
+<li>Python programming</li>
+<li>Elementary genetics</li>
+</ul>
+<p>No prior knowledge of population genetics is required.</p>
+</section>
+<section id="what-is-an-allele" class="level3" data-number="0.3">
+<h3 data-number="0.3" class="anchored" data-anchor-id="what-is-an-allele"><span class="header-section-number">0.3</span> What is an Allele?</h3>
+<p>A gene can exist in different versions called alleles.</p>
+<p>For example:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Gene</th>
+<th>Alleles</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Eye color gene</td>
+<td>Blue, Brown</td>
+</tr>
+<tr class="even">
+<td>SNP rs12345</td>
+<td>A, G</td>
+</tr>
+</tbody>
+</table>
+<p>Suppose a locus contains two alleles:</p>
+<p><span class="math display">\[
+A
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+a
+\]</span></p>
+<p>Let <span class="math inline">\(p\)</span> denote the frequency of allele A.</p>
+<p>Then</p>
+<p><span class="math display">\[
+1-p
+\]</span></p>
+<p>is the frequency of allele a.</p>
+<p>For example:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Allele</th>
+<th>Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>0.7</td>
+</tr>
+<tr class="even">
+<td>a</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+<p>The frequencies always sum to one.</p>
+<p><span class="math display">\[
+p + (1-p)=1
+\]</span></p>
+</section>
+<section id="infinite-vs-finite-populations" class="level3" data-number="0.4">
+<h3 data-number="0.4" class="anchored" data-anchor-id="infinite-vs-finite-populations"><span class="header-section-number">0.4</span> Infinite vs Finite Populations</h3>
+<p>Imagine an infinitely large population.</p>
+<p>If:</p>
+<ul>
+<li>No mutation</li>
+<li>No migration</li>
+<li>No selection</li>
+<li>Random mating</li>
+</ul>
+<p>then allele frequencies remain constant forever.</p>
+<p>This idealized situation is the basis of the Hardy-Weinberg equilibrium.</p>
+<p>Real populations are never infinite.</p>
+<p>Because populations are finite, each generation represents a random sample from the previous generation.</p>
+<p>This sampling introduces randomness.</p>
+<p>That randomness is genetic drift.</p>
+</section>
+<section id="an-intuitive-example" class="level3" data-number="0.5">
+<h3 data-number="0.5" class="anchored" data-anchor-id="an-intuitive-example"><span class="header-section-number">0.5</span> An Intuitive Example</h3>
+<p>Imagine a population containing:</p>
+<ul>
+<li>50 copies of allele A</li>
+<li>50 copies of allele a</li>
+</ul>
+<p>The allele frequency is:</p>
+<p><span class="math display">\[
+p=0.5
+\]</span></p>
+<p>Now imagine forming the next generation by randomly selecting individuals.</p>
+<p>By chance you may obtain:</p>
+<ul>
+<li>55 copies of A</li>
+<li>45 copies of a</li>
+</ul>
+<p>Now:</p>
+<p><span class="math display">\[
+p=0.55
+\]</span></p>
+<p>Nothing biological happened.</p>
+<p>No selection occurred.</p>
+<p>The change is purely due to chance.</p>
+<p>This is genetic drift.</p>
+<section id="formal-definition" class="level4" data-number="0.5.1">
+<h4 data-number="0.5.1" class="anchored" data-anchor-id="formal-definition"><span class="header-section-number">0.5.1</span> Formal Definition</h4>
+<p>Genetic drift is the random fluctuation of allele frequencies due to finite population sampling.</p>
+<p>Unlike natural selection:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Genetic Drift</th>
+<th>Natural Selection</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Random</td>
+<td>Non-random</td>
+</tr>
+<tr class="even">
+<td>Stronger in small populations</td>
+<td>Can operate in any population</td>
+</tr>
+<tr class="odd">
+<td>Does not require fitness differences</td>
+<td>Requires fitness differences</td>
+</tr>
+<tr class="even">
+<td>Can fix harmful alleles</td>
+<td>Favors beneficial alleles</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="what-is-fixation" class="level3" data-number="0.6">
+<h3 data-number="0.6" class="anchored" data-anchor-id="what-is-fixation"><span class="header-section-number">0.6</span> What is Fixation?</h3>
+<p>An allele is fixed when its frequency becomes:</p>
+<p><span class="math display">\[
+p=1
+\]</span></p>
+<p>This means every chromosome in the population carries that allele.</p>
+<p>Example:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Allele</th>
+<th>Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td>a</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<p>At this point:</p>
+<ul>
+<li>Genetic variation disappears</li>
+<li>No alternative allele remains</li>
+</ul>
+</section>
+<section id="what-is-allele-loss" class="level3" data-number="0.7">
+<h3 data-number="0.7" class="anchored" data-anchor-id="what-is-allele-loss"><span class="header-section-number">0.7</span> What is Allele Loss?</h3>
+<p>The opposite situation occurs when:</p>
+<p><span class="math display">\[
+p=0
+\]</span></p>
+<p>The allele disappears entirely from the population.</p>
+<p>Example:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Allele</th>
+<th>Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>a</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>In a drift-only model:</p>
+<ul>
+<li>fixation is absorbing</li>
+<li>extinction is absorbing</li>
+</ul>
+<p>Once reached, these states remain forever.</p>
+</section>
+<section id="the-wright-fisher-model" class="level3" data-number="0.8">
+<h3 data-number="0.8" class="anchored" data-anchor-id="the-wright-fisher-model"><span class="header-section-number">0.8</span> The Wright-Fisher Model</h3>
+<p>The Wright-Fisher model is the classical mathematical model of genetic drift.</p>
+<p>Assumptions:</p>
+<ol type="1">
+<li>Constant population size</li>
+<li>Diploid individuals</li>
+<li>Random mating</li>
+<li>No mutation</li>
+<li>No migration</li>
+<li>No selection</li>
+<li>Non-overlapping generations</li>
+</ol>
+<p>Suppose:</p>
+<p><span class="math display">\[
+N
+\]</span></p>
+<p>is the number of diploid individuals.</p>
+<p>There are:</p>
+<p><span class="math display">\[
+2N
+\]</span></p>
+<p>gene copies.</p>
+</section>
+<section id="sampling-the-next-generation" class="level3" data-number="0.9">
+<h3 data-number="0.9" class="anchored" data-anchor-id="sampling-the-next-generation"><span class="header-section-number">0.9</span> Sampling the Next Generation</h3>
+<p>Suppose allele A has frequency:</p>
+<p><span class="math display">\[
+p_t
+\]</span></p>
+<p>in generation:</p>
+<p><span class="math display">\[
+t
+\]</span></p>
+<p>The number of copies of allele A in the next generation follows:</p>
+<p><span class="math display">\[
+X_{t+1}
+\sim
+Binomial(2N,p_t)
+\]</span></p>
+<p>The allele frequency becomes:</p>
+<p><span class="math display">\[
+p_{t+1}
+=
+\frac{X_{t+1}}{2N}
+\]</span></p>
+<p>This simple equation forms the foundation of modern population genetics.</p>
+</section>
+<section id="important-theorem-1-drift-has-no-direction" class="level3" data-number="0.10">
+<h3 data-number="0.10" class="anchored" data-anchor-id="important-theorem-1-drift-has-no-direction"><span class="header-section-number">0.10</span> Important Theorem 1: Drift Has No Direction</h3>
+<p>For a neutral allele:</p>
+<p><span class="math display">\[
+E[p_{t+1}\mid p_t]
+=
+p_t
+\]</span></p>
+<p>Interpretation:</p>
+<p>On average, allele frequencies do not systematically increase or decrease.</p>
+<p>Drift is unbiased.</p>
+<p>However, individual populations may behave very differently.</p>
+</section>
+<section id="important-theorem-2-variance-of-drift" class="level3" data-number="0.11">
+<h3 data-number="0.11" class="anchored" data-anchor-id="important-theorem-2-variance-of-drift"><span class="header-section-number">0.11</span> Important Theorem 2: Variance of Drift</h3>
+<p>The variance is:</p>
+<p><span class="math display">\[
+Var(p_{t+1}\mid p_t)
+=
+\frac{p_t(1-p_t)}{2N}
+\]</span></p>
+<p>This equation reveals an important biological fact:</p>
+<p>Drift becomes stronger as population size decreases.</p>
+</section>
+<section id="why-small-populations-drift-faster" class="level3" data-number="0.12">
+<h3 data-number="0.12" class="anchored" data-anchor-id="why-small-populations-drift-faster"><span class="header-section-number">0.12</span> Why Small Populations Drift Faster</h3>
+<p>Suppose:</p>
+<p><span class="math display">\[
+p_t=0.5
+\]</span></p>
+<p>For</p>
+<p><span class="math display">\[
+N=20
+\]</span></p>
+<p>the variance becomes:</p>
+<p><span class="math display">\[
+\frac{0.5\times0.5}{40}
+=
+0.00625
+\]</span></p>
+<p>For</p>
+<p><span class="math display">\[
+N=1000
+\]</span></p>
+<p>the variance becomes:</p>
+<p><span class="math display">\[
+\frac{0.5\times0.5}{2000}
+=
+0.000125
+\]</span></p>
+<p>The smaller population experiences much larger fluctuations.</p>
+</section>
+<section id="important-theorem-3-fixation-probability" class="level3" data-number="0.13">
+<h3 data-number="0.13" class="anchored" data-anchor-id="important-theorem-3-fixation-probability"><span class="header-section-number">0.13</span> Important Theorem 3: Fixation Probability</h3>
+<p>One of the most beautiful results in population genetics states:</p>
+<p>For a neutral allele:</p>
+<p><span class="math display">\[
+P(Fixation)=p_0
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+p_0
+\]</span></p>
+<p>is the starting frequency.</p>
+<p>Examples:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Initial Frequency</th>
+<th>Fixation Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.1</td>
+<td>10%</td>
+</tr>
+<tr class="even">
+<td>0.2</td>
+<td>20%</td>
+</tr>
+<tr class="odd">
+<td>0.5</td>
+<td>50%</td>
+</tr>
+<tr class="even">
+<td>0.8</td>
+<td>80%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="new-mutations" class="level3" data-number="0.14">
+<h3 data-number="0.14" class="anchored" data-anchor-id="new-mutations"><span class="header-section-number">0.14</span> New Mutations</h3>
+<p>A new mutation begins as a single copy.</p>
+<p>In a diploid population:</p>
+<p><span class="math display">\[
+p_0
+=
+\frac{1}{2N}
+\]</span></p>
+<p>Therefore:</p>
+<p><span class="math display">\[
+P(Fixation)
+=
+\frac{1}{2N}
+\]</span></p>
+<p>Example:</p>
+<p>For</p>
+<p><span class="math display">\[
+N=1000
+\]</span></p>
+<p><span class="math display">\[
+P(Fixation)
+=
+0.0005
+\]</span></p>
+<p>Only 0.05%.</p>
+<p>Most neutral mutations disappear.</p>
+</section>
+<section id="important-theorem-4-heterozygosity-decay" class="level3" data-number="0.15">
+<h3 data-number="0.15" class="anchored" data-anchor-id="important-theorem-4-heterozygosity-decay"><span class="header-section-number">0.15</span> Important Theorem 4: Heterozygosity Decay</h3>
+<p>Drift reduces genetic diversity.</p>
+<p>Expected heterozygosity after t generations:</p>
+<p><span class="math display">\[
+H_t
+=
+H_0
+\left(
+1-\frac{1}{2N}
+\right)^t
+\]</span></p>
+<p>This explains why isolated populations lose diversity over time.</p>
+<div id="98f9bf54-ae8d-4483-ac09-79929e89e13e" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting Up Python</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="simulating-the-wright-fisher-model" class="level3" data-number="0.16">
+<h3 data-number="0.16" class="anchored" data-anchor-id="simulating-the-wright-fisher-model"><span class="header-section-number">0.16</span> Simulating the Wright-Fisher Model</h3>
+<p>We now implement the model directly.</p>
+<div id="7b6205e2-9a2b-42ba-b168-a5c65d2056d2" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_drift(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    generations<span class="op">=</span><span class="dv">100</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> p0</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    trajectory <span class="op">=</span> [p]</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(generations):</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        count_A <span class="op">=</span> np.random.binomial(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="dv">2</span><span class="op">*</span>N,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>            p</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> count_A<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>N)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        trajectory.append(p)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> p <span class="op">==</span> <span class="dv">0</span> <span class="kw">or</span> p <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>            trajectory.extend(</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                [p]<span class="op">*</span>(generations<span class="op">-</span><span class="bu">len</span>(trajectory)<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(trajectory)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulating One Population</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>trajectory <span class="op">=</span> simulate_drift(</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    generations<span class="op">=</span><span class="dv">200</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="98ecd89f-3d5d-4710-aa4a-434d89d8e7d4" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizing Drift</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    trajectory,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>plt.axhline(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    linestyle<span class="op">=</span><span class="st">"--"</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.axhline(</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    linestyle<span class="op">=</span><span class="st">"--"</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Generation"</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Allele Frequency"</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Single Wright-Fisher Trajectory"</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>plt.ylim(</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span><span class="fl">0.05</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.05</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpreting-the-plot" class="level3" data-number="0.17">
+<h3 data-number="0.17" class="anchored" data-anchor-id="interpreting-the-plot"><span class="header-section-number">0.17</span> Interpreting the Plot</h3>
+<p>Notice:</p>
+<ul>
+<li>Frequency fluctuates randomly</li>
+<li>No directional trend exists</li>
+<li>Changes occur despite no selection</li>
+<li>Eventually fixation or extinction may occur</li>
+</ul>
+<p>This randomness is the hallmark of genetic drift.</p>
+</section>
+<section id="simulating-multiple-populations" class="level3" data-number="0.18">
+<h3 data-number="0.18" class="anchored" data-anchor-id="simulating-multiple-populations"><span class="header-section-number">0.18</span> Simulating Multiple Populations</h3>
+<p>The true power of drift appears when we simulate many populations with identical starting conditions.</p>
+<div id="2e404d71-a89b-4b60-be4c-0bbe9ed91cea" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_many_populations(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    generations<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    n_replicates<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    trajectories<span class="op">=</span>[]</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_replicates):</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        traj <span class="op">=</span> simulate_drift(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>            N,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>            p0,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            generations</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        trajectories.append(traj)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(trajectories)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>trajectories <span class="op">=</span> simulate_many_populations(</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    generations<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    n_replicates<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">7</span>))</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> traj <span class="kw">in</span> trajectories:</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    plt.plot(</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        traj,</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        alpha<span class="op">=</span><span class="fl">0.3</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Generation"</span>)</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Allele Frequency"</span>)</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"50 Independent Populations Starting at p=0.5"</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>plt.ylim(</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span><span class="fl">0.05</span>,</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.05</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation" class="level3" data-number="0.19">
+<h3 data-number="0.19" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">0.19</span> Interpretation</h3>
+<p>All populations began with: <span class="math inline">\(p_0=0.5\)</span>.</p>
+<p>Yet they diverged dramatically.</p>
+<p>Some populations moved upward.</p>
+<p>Some moved downward.</p>
+<p>Some approached fixation.</p>
+<p>Some approached extinction.</p>
+<p>This illustrates a central lesson:</p>
+<blockquote class="blockquote">
+<p>Evolutionary outcomes can differ substantially even when populations start under identical conditions.</p>
+</blockquote>
+</section>
+<section id="summary" class="level3" data-number="0.20">
+<h3 data-number="0.20" class="anchored" data-anchor-id="summary"><span class="header-section-number">0.20</span> Summary</h3>
+<p>In this first part we learned:</p>
+<ul>
+<li>What genetic drift is</li>
+<li>Why finite populations matter</li>
+<li>What fixation means</li>
+<li>The Wright-Fisher model</li>
+<li>Classical theorems of drift</li>
+<li>Why small populations drift faster</li>
+<li>How to simulate allele-frequency trajectories</li>
+</ul>
+<p>In Part 2 we will move beyond a single SNP and systematically investigate:</p>
+<ul>
+<li>Population size effects</li>
+<li>Initial allele frequency effects</li>
+<li>Fixation probability verification</li>
+<li>Multiple SNP simulations</li>
+<li>Sample size effects</li>
+<li>Allele frequency spectra</li>
+</ul>
+</section>
+<section id="experimental-exploration-of-genetic-drift" class="level3" data-number="0.21">
+<h3 data-number="0.21" class="anchored" data-anchor-id="experimental-exploration-of-genetic-drift"><span class="header-section-number">0.21</span> Experimental Exploration of Genetic Drift</h3>
+<p>In Part 1, we simulated a single SNP evolving under neutral genetic drift.</p>
+<p>Now we move toward a more realistic population genetics framework by asking:</p>
+<ul>
+<li>What happens when population size changes?</li>
+<li>What happens when initial allele frequency changes?</li>
+<li>Can we experimentally verify the fixation theorem?</li>
+<li>What happens when thousands of SNPs evolve simultaneously?</li>
+<li>How does sample size affect allele frequency estimates?</li>
+<li>How does drift reshape the allele frequency spectrum?</li>
+</ul>
+<p>These experiments mirror questions encountered in modern statistical genetics and genomics.</p>
+</section>
+<section id="experiment-1-effect-of-population-size" class="level3" data-number="0.22">
+<h3 data-number="0.22" class="anchored" data-anchor-id="experiment-1-effect-of-population-size"><span class="header-section-number">0.22</span> Experiment 1: Effect of Population Size</h3>
+<p>Recall the variance theorem:</p>
+<p><span class="math display">\[
+Var(p_{t+1}|p_t)
+=
+\frac{p_t(1-p_t)}{2N}
+\]</span></p>
+<p>The denominator contains population size:</p>
+<p><span class="math display">\[
+N
+\]</span></p>
+<p>Therefore:</p>
+<ul>
+<li>Small populations should drift rapidly.</li>
+<li>Large populations should drift slowly.</li>
+</ul>
+</section>
+<section id="simulating-different-population-sizes" class="level3" data-number="0.23">
+<h3 data-number="0.23" class="anchored" data-anchor-id="simulating-different-population-sizes"><span class="header-section-number">0.23</span> Simulating Different Population Sizes</h3>
+<div id="71845885-4ec0-46ed-acf2-f35c5c4f9be7" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>population_sizes <span class="op">=</span> [</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">20</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">50</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">500</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">7</span>))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> population_sizes:</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    traj <span class="op">=</span> simulate_drift(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        N<span class="op">=</span>N,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        p0<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        generations<span class="op">=</span><span class="dv">200</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    plt.plot(</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        traj,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="ss">f"N=</span><span class="sc">{</span>N<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Generation"</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Allele Frequency"</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Effect of Population Size on Genetic Drift"</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>plt.ylim(</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span><span class="fl">0.05</span>,</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.05</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-1" class="level3" data-number="0.24">
+<h3 data-number="0.24" class="anchored" data-anchor-id="interpretation-1"><span class="header-section-number">0.24</span> Interpretation</h3>
+<p>Notice the dramatic difference.</p>
+<p>For:</p>
+<p><span class="math display">\[
+N=20
+\]</span></p>
+<p>the allele frequency may rapidly reach fixation or extinction.</p>
+<p>For:</p>
+<p><span class="math display">\[
+N=1000
+\]</span></p>
+<p>the frequency remains close to its initial value.</p>
+<p>This directly verifies the variance theorem.</p>
+</section>
+<section id="quantifying-drift-variability" class="level3" data-number="0.25">
+<h3 data-number="0.25" class="anchored" data-anchor-id="quantifying-drift-variability"><span class="header-section-number">0.25</span> Quantifying Drift Variability</h3>
+<p>Instead of looking at one trajectory, we can measure variance across many replicate populations.</p>
+<div id="5c138c1c-c267-4b47-a7a3-1bbd05545b86" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>population_sizes <span class="op">=</span> [</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">20</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">50</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">500</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>variances<span class="op">=</span>[]</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> population_sizes:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    final_freqs<span class="op">=</span>[]</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        traj <span class="op">=</span> simulate_drift(</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            N<span class="op">=</span>N,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            p0<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>            generations<span class="op">=</span><span class="dv">100</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        final_freqs.append(</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>            traj[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    variances.append(</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        np.var(final_freqs)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="9babecb3-1afe-429f-850b-73bb190a60cf" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    population_sizes,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    variances,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">3</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Population Size"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Variance of Final Allele Frequency"</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Drift Variance Decreases With Population Size"</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="experiment-2-initial-allele-frequency" class="level3" data-number="0.26">
+<h3 data-number="0.26" class="anchored" data-anchor-id="experiment-2-initial-allele-frequency"><span class="header-section-number">0.26</span> Experiment 2: Initial Allele Frequency</h3>
+<p>The fixation theorem states:</p>
+<p><span class="math display">\[
+P(Fixation)=p_0
+\]</span></p>
+<p>where, <span class="math inline">\(p_0\)</span> is the initial allele frequency.</p>
+<p>We first visualize trajectories starting from different frequencies.</p>
+<div id="0cfc7639-8c33-4f21-a5d1-e7dceb0ff64c" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>starting_frequencies <span class="op">=</span> [</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.1</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.3</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.5</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.7</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.9</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">7</span>))</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p0 <span class="kw">in</span> starting_frequencies:</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    traj <span class="op">=</span> simulate_drift(</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        p0<span class="op">=</span>p0,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        generations<span class="op">=</span><span class="dv">200</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    plt.plot(</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        traj,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="ss">f"p0=</span><span class="sc">{</span>p0<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Generation"</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Allele Frequency"</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Effect of Initial Allele Frequency"</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-2" class="level3" data-number="0.27">
+<h3 data-number="0.27" class="anchored" data-anchor-id="interpretation-2"><span class="header-section-number">0.27</span> Interpretation</h3>
+<p>Alleles beginning near <span class="math inline">\(p=1\)</span> have a much greater chance of fixation.</p>
+<p>Alleles beginning near <span class="math inline">\(p=0\)</span></p>
+<p>have a much greater chance of loss.</p>
+</section>
+<section id="experiment-3-verifying-the-fixation-theorem" class="level3" data-number="0.28">
+<h3 data-number="0.28" class="anchored" data-anchor-id="experiment-3-verifying-the-fixation-theorem"><span class="header-section-number">0.28</span> Experiment 3: Verifying the Fixation Theorem</h3>
+<p>One of the most elegant results in population genetics states <span class="math inline">\(P(Fixation)=p_0\)</span> .</p>
+<p>We now verify this experimentally.</p>
+<div id="4787396c-735a-4b04-ab1d-046262f1bb04" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> estimate_fixation_probability(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    p0,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    generations<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    n_replicates<span class="op">=</span><span class="dv">1000</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    fixation_count<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_replicates):</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        traj <span class="op">=</span> simulate_drift(</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>            N<span class="op">=</span>N,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            p0<span class="op">=</span>p0,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>            generations<span class="op">=</span>generations</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> traj[<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>            fixation_count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fixation_count<span class="op">/</span>n_replicates</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>p0_values <span class="op">=</span> np.arange(</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.05</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    <span class="fl">1.0</span>,</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.05</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>estimated_probs<span class="op">=</span>[]</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p0 <span class="kw">in</span> p0_values:</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    estimated_probs.append(</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>        estimate_fixation_probability(</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>            p0<span class="op">=</span>p0,</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>            N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>            generations<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>            n_replicates<span class="op">=</span><span class="dv">500</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="941f40c0-4650-418f-a93d-019beaf7559d" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    p0_values,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    p0_values,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Theory"</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>plt.scatter(</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    p0_values,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    estimated_probs,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    s<span class="op">=</span><span class="dv">70</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Simulation"</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Initial Frequency"</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Fixation Probability"</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Experimental Verification of the Fixation Theorem"</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-3" class="level3" data-number="0.29">
+<h3 data-number="0.29" class="anchored" data-anchor-id="interpretation-3"><span class="header-section-number">0.29</span> Interpretation</h3>
+<p>The simulation closely follows the theoretical prediction:</p>
+<p><span class="math display">\[
+P(Fixation)=p_0
+\]</span></p>
+<p>This is one of the most important theorems in neutral evolution.</p>
+</section>
+<section id="experiment-4-multiple-snp-simulation" class="level3" data-number="0.30">
+<h3 data-number="0.30" class="anchored" data-anchor-id="experiment-4-multiple-snp-simulation"><span class="header-section-number">0.30</span> Experiment 4: Multiple SNP Simulation</h3>
+<p>Real genomes contain millions of SNPs.</p>
+<p>Instead of tracking a single locus, we simulate many SNPs simultaneously.</p>
+<div id="403c7a6a-50f1-4d67-8845-0de2e730bd3b" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating 1,000 Independent SNPs</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>n_snps <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>initial_freqs <span class="op">=</span> np.random.uniform(</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.05</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.95</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    n_snps</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>final_freqs<span class="op">=</span>[]</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p0 <span class="kw">in</span> initial_freqs:</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    traj <span class="op">=</span> simulate_drift(</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        p0<span class="op">=</span>p0,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        generations<span class="op">=</span><span class="dv">200</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    final_freqs.append(</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        traj[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizing Frequency Changes</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>plt.hist(</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    initial_freqs,</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    bins<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Initial Frequencies"</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>plt.hist(</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    final_freqs,</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    bins<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Final Frequencies"</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Allele Frequency"</span>)</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Number of SNPs"</span>)</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Genetic Drift Reshapes the Frequency Spectrum"</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-4" class="level3" data-number="0.31">
+<h3 data-number="0.31" class="anchored" data-anchor-id="interpretation-4"><span class="header-section-number">0.31</span> Interpretation</h3>
+<p>Initially, frequencies were nearly uniform.</p>
+<p>After drift:</p>
+<ul>
+<li>More SNPs accumulate near 0</li>
+<li>More SNPs accumulate near 1</li>
+<li>Intermediate frequencies become less common</li>
+</ul>
+<p>This is a hallmark of neutral evolution.</p>
+</section>
+<section id="experiment-5-snp-loss-and-fixation" class="level3" data-number="0.32">
+<h3 data-number="0.32" class="anchored" data-anchor-id="experiment-5-snp-loss-and-fixation"><span class="header-section-number">0.32</span> Experiment 5: SNP Loss and Fixation</h3>
+<p>How many SNPs become fixed or lost?</p>
+<div id="ba39feea-b0a1-433e-afe6-dce75f7ca5ce" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>lost<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fixed<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> final_freqs:</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        lost <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> p <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        fixed <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Lost SNPs:"</span>, lost)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Fixed SNPs:"</span>, fixed)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>categories <span class="op">=</span> [</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Lost"</span>,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fixed"</span>,</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Segregating"</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> [</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    lost,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    fixed,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">len</span>(final_freqs)<span class="op">-</span>lost<span class="op">-</span>fixed</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>plt.bar(</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    categories,</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>    counts</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Number of SNPs"</span>)</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fate of SNPs After Drift"</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Lost SNPs: 313
+Fixed SNPs: 285</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="experiment-6-number-of-snps-matters" class="level3" data-number="0.33">
+<h3 data-number="0.33" class="anchored" data-anchor-id="experiment-6-number-of-snps-matters"><span class="header-section-number">0.33</span> Experiment 6: Number of SNPs Matters</h3>
+<p>Now repeat the experiment using increasingly larger numbers of SNPs.</p>
+<div id="39c5f58e-038b-4dcc-a4a0-d6d6adb0f488" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>snp_counts <span class="op">=</span> [</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">500</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5000</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>fixed_counts<span class="op">=</span>[]</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>lost_counts<span class="op">=</span>[]</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n_snps <span class="kw">in</span> snp_counts:</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    fixed<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    lost<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    freqs<span class="op">=</span>np.random.uniform(</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.05</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.95</span>,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        n_snps</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p0 <span class="kw">in</span> freqs:</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>        traj<span class="op">=</span>simulate_drift(</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>            N<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>            p0<span class="op">=</span>p0,</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>            generations<span class="op">=</span><span class="dv">300</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> traj[<span class="op">-</span><span class="dv">1</span>]<span class="op">==</span><span class="dv">1</span>:</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>            fixed <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> traj[<span class="op">-</span><span class="dv">1</span>]<span class="op">==</span><span class="dv">0</span>:</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>            lost <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>    fixed_counts.append(fixed)</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>    lost_counts.append(lost)</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    snp_counts,</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    fixed_counts,</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span>,</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Fixed"</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>    snp_counts,</span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>    lost_counts,</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span>,</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Lost"</span></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of SNPs"</span>)</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Count"</span>)</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Genome-Wide Consequences of Drift"</span></span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-5" class="level3" data-number="0.34">
+<h3 data-number="0.34" class="anchored" data-anchor-id="interpretation-5"><span class="header-section-number">0.34</span> Interpretation</h3>
+<p>As the number of SNPs increases:</p>
+<ul>
+<li>More variants become fixed</li>
+<li>More variants become lost</li>
+<li>Overall diversity declines</li>
+</ul>
+</section>
+<section id="experiment-7-sampling-error-versus-genetic-drift" class="level3" data-number="0.35">
+<h3 data-number="0.35" class="anchored" data-anchor-id="experiment-7-sampling-error-versus-genetic-drift"><span class="header-section-number">0.35</span> Experiment 7: Sampling Error Versus Genetic Drift</h3>
+<p>In GWAS we rarely observe the entire population.</p>
+<p>Instead we estimate allele frequencies from samples.</p>
+<p>Suppose the true frequency is <span class="math inline">\(p=0.30\)</span>.</p>
+</section>
+<section id="simulating-sampling-error" class="level3" data-number="0.36">
+<h3 data-number="0.36" class="anchored" data-anchor-id="simulating-sampling-error"><span class="header-section-number">0.36</span> Simulating Sampling Error</h3>
+<div id="c55ee867-bfc0-41bd-a650-e556f491fa4f" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>true_frequency <span class="op">=</span> <span class="fl">0.30</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="op">=</span> [</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">20</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">50</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">500</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5000</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>sampling_std<span class="op">=</span>[]</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> sample_sizes:</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    estimates<span class="op">=</span>[]</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5000</span>):</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        count <span class="op">=</span> np.random.binomial(</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>            n,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>            true_frequency</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>        estimates.append(</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>            count<span class="op">/</span>n</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    sampling_std.append(</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>        np.std(estimates)</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    sample_sizes,</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>    sampling_std,</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span>,</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">3</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Sample Size"</span>)</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Standard Deviation"</span>)</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sampling Error Decreases With Sample Size"</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-6" class="level3" data-number="0.37">
+<h3 data-number="0.37" class="anchored" data-anchor-id="interpretation-6"><span class="header-section-number">0.37</span> Interpretation</h3>
+<p>Larger studies produce more precise allele frequency estimates.</p>
+<p>This randomness is not genetic drift.</p>
+<p>Instead it is statistical sampling error.</p>
+</section>
+<section id="genetic-drift-vs-sampling-error" class="level3" data-number="0.38">
+<h3 data-number="0.38" class="anchored" data-anchor-id="genetic-drift-vs-sampling-error"><span class="header-section-number">0.38</span> Genetic Drift vs Sampling Error</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Genetic Drift</th>
+<th>Sampling Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Biological process</td>
+<td>Measurement process</td>
+</tr>
+<tr class="even">
+<td>Occurs across generations</td>
+<td>Occurs during data collection</td>
+</tr>
+<tr class="odd">
+<td>Changes true frequency</td>
+<td>Changes estimated frequency</td>
+</tr>
+<tr class="even">
+<td>Evolutionary phenomenon</td>
+<td>Statistical phenomenon</td>
+</tr>
+</tbody>
+</table>
+<p>Understanding this distinction is essential in GWAS and population genetics.</p>
+</section>
+<section id="experiment-8-distribution-of-frequency-estimates" class="level3" data-number="0.39">
+<h3 data-number="0.39" class="anchored" data-anchor-id="experiment-8-distribution-of-frequency-estimates"><span class="header-section-number">0.39</span> Experiment 8: Distribution of Frequency Estimates</h3>
+<div id="090175a5-6ec4-4226-8081-388f92084faa" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sample_size <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>estimates<span class="op">=</span>[]</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10000</span>):</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    count<span class="op">=</span>np.random.binomial(</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        sample_size,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        true_frequency</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    estimates.append(</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        count<span class="op">/</span>sample_size</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>plt.hist(</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    estimates,</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    bins<span class="op">=</span><span class="dv">40</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>plt.axvline(</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    true_frequency,</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    linestyle<span class="op">=</span><span class="st">"--"</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Estimated Frequency"</span>)</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Count"</span>)</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sampling Distribution of Allele Frequency Estimates"</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-7" class="level3" data-number="0.40">
+<h3 data-number="0.40" class="anchored" data-anchor-id="interpretation-7"><span class="header-section-number">0.40</span> Interpretation</h3>
+<p>Even though the true frequency remains fixed at:</p>
+<p><span class="math display">\[
+p=0.30
+\]</span></p>
+<p>individual samples produce different estimates.</p>
+<p>This is exactly why larger cohorts improve statistical power.</p>
+</section>
+<section id="summary-1" class="level3" data-number="0.41">
+<h3 data-number="0.41" class="anchored" data-anchor-id="summary-1"><span class="header-section-number">0.41</span> Summary</h3>
+<p>In this section we experimentally demonstrated:</p>
+<ol type="1">
+<li>Small populations drift faster.</li>
+<li>Large populations are more stable.</li>
+<li>Fixation probability equals starting frequency.</li>
+<li>Drift pushes SNPs toward fixation and extinction.</li>
+<li>Diversity decreases across the genome.</li>
+<li>Sample size affects precision of allele-frequency estimation.</li>
+<li>Sampling error and genetic drift are fundamentally different processes.</li>
+</ol>
+<p>In Part 3 we will move to:</p>
+<ul>
+<li>Genome-wide simulations</li>
+<li>Heterozygosity decay</li>
+<li>Effective population size</li>
+<li>Bottlenecks</li>
+<li>Founder effects</li>
+<li>Population structure</li>
+<li>GWAS implications</li>
+<li>Modern statistical genetics applications</li>
+</ul>
+</section>
+<section id="genome-wide-consequences-of-genetic-drift" class="level3" data-number="0.42">
+<h3 data-number="0.42" class="anchored" data-anchor-id="genome-wide-consequences-of-genetic-drift"><span class="header-section-number">0.42</span> Genome-Wide Consequences of Genetic Drift</h3>
+<p>So far we have studied drift at the level of individual SNPs.</p>
+<p>Real genomes contain millions of variants.</p>
+<p>Over evolutionary time, drift acts simultaneously on all of them.</p>
+<p>The cumulative effect produces:</p>
+<ul>
+<li>Loss of genetic diversity</li>
+<li>Population differentiation</li>
+<li>Founder effects</li>
+<li>Population bottlenecks</li>
+<li>Changes in allele frequency spectra</li>
+</ul>
+<p>Many patterns observed in modern genomics can be understood through drift alone.</p>
+</section>
+<section id="heterozygosity" class="level3" data-number="0.43">
+<h3 data-number="0.43" class="anchored" data-anchor-id="heterozygosity"><span class="header-section-number">0.43</span> Heterozygosity</h3>
+<p>One of the most important measures of genetic diversity is heterozygosity.</p>
+<p>For a biallelic SNP:</p>
+<p><span class="math display">\[
+H = 2p(1-p)
+\]</span></p>
+<p>where:</p>
+<ul>
+<li>(p) = frequency of allele A</li>
+<li>(1-p) = frequency of allele a</li>
+</ul>
+</section>
+<section id="maximum-heterozygosity" class="level3" data-number="0.44">
+<h3 data-number="0.44" class="anchored" data-anchor-id="maximum-heterozygosity"><span class="header-section-number">0.44</span> Maximum Heterozygosity</h3>
+<p>The maximum occurs when:</p>
+<p><span class="math display">\[
+p=0.5
+\]</span></p>
+<p>because:</p>
+<p><span class="math display">\[
+H=2(0.5)(0.5)=0.5
+\]</span></p>
+<p>The minimum occurs when:</p>
+<p><span class="math display">\[
+p=0
+\]</span></p>
+<p>or</p>
+<p><span class="math display">\[
+p=1
+\]</span></p>
+<p>because:</p>
+<p><span class="math display">\[
+H=0
+\]</span></p>
+<p>At fixation, all diversity disappears.</p>
+</section>
+<section id="theoretical-decay-of-heterozygosity" class="level3" data-number="0.45">
+<h3 data-number="0.45" class="anchored" data-anchor-id="theoretical-decay-of-heterozygosity"><span class="header-section-number">0.45</span> Theoretical Decay of Heterozygosity</h3>
+<p>One of the classical results of population genetics is:</p>
+<p><span class="math display">\[
+H_t
+=
+H_0
+\left(
+1-\frac{1}{2N}
+\right)^t
+\]</span></p>
+<p>where:</p>
+<ul>
+<li>(H_0) = initial heterozygosity</li>
+<li>(N) = population size</li>
+<li>(t) = generations</li>
+</ul>
+</section>
+<section id="simulating-heterozygosity-decay" class="level3" data-number="0.46">
+<h3 data-number="0.46" class="anchored" data-anchor-id="simulating-heterozygosity-decay"><span class="header-section-number">0.46</span> Simulating Heterozygosity Decay</h3>
+<div id="8d93f388-d905-4781-9ef8-56329c284dad" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> heterozygosity_decay(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    H0,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    N,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    generations</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> np.arange(</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        generations<span class="op">+</span><span class="dv">1</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    Ht <span class="op">=</span> H0 <span class="op">*</span> (</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="op">-</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>N)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    )<span class="op">**</span>t</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> t, Ht</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>population_sizes <span class="op">=</span> [</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="dv">20</span>,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span>,</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="dv">500</span>,</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> N <span class="kw">in</span> population_sizes:</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    t,Ht <span class="op">=</span> heterozygosity_decay(</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>        H0<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>        N<span class="op">=</span>N,</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>        generations<span class="op">=</span><span class="dv">500</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    plt.plot(</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>        t,</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>        Ht,</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>        linewidth<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="ss">f"N=</span><span class="sc">{</span>N<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Generation"</span>)</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Expected Heterozygosity"</span>)</span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Loss of Genetic Diversity Through Drift"</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-8" class="level3" data-number="0.47">
+<h3 data-number="0.47" class="anchored" data-anchor-id="interpretation-8"><span class="header-section-number">0.47</span> Interpretation</h3>
+<p>Small populations lose diversity rapidly.</p>
+<p>Large populations retain diversity for much longer periods.</p>
+<p>This is one reason conservation biologists worry about endangered populations.</p>
+</section>
+<section id="effective-population-size" class="level3" data-number="0.48">
+<h3 data-number="0.48" class="anchored" data-anchor-id="effective-population-size"><span class="header-section-number">0.48</span> Effective Population Size</h3>
+<p>A critical concept in population genetics is:</p>
+<p><span class="math display">\[
+N_e
+\]</span></p>
+<p>the effective population size.</p>
+<section id="census-size-vs-effective-size" class="level4" data-number="0.48.1">
+<h4 data-number="0.48.1" class="anchored" data-anchor-id="census-size-vs-effective-size"><span class="header-section-number">0.48.1</span> Census Size vs Effective Size</h4>
+<p>Census size:</p>
+<p><span class="math display">\[
+N
+\]</span></p>
+<p>represents the number of individuals.</p>
+<p>Effective population size:</p>
+<p><span class="math display">\[
+N_e
+\]</span></p>
+<p>represents the size of an ideal population that experiences the same amount of drift.</p>
+<p>Usually:</p>
+<p><span class="math display">\[
+N_e &lt; N
+\]</span></p>
+</section>
+</section>
+<section id="why-is-effective-population-size-smaller" class="level3" data-number="0.49">
+<h3 data-number="0.49" class="anchored" data-anchor-id="why-is-effective-population-size-smaller"><span class="header-section-number">0.49</span> Why is Effective Population Size Smaller?</h3>
+<p>Real populations violate Wright-Fisher assumptions:</p>
+<ul>
+<li>Unequal family sizes</li>
+<li>Population structure</li>
+<li>Sex imbalance</li>
+<li>Bottlenecks</li>
+<li>Selection</li>
+</ul>
+<p>All of these increase drift.</p>
+</section>
+<section id="why-statistical-geneticists-care-about-ne" class="level3" data-number="0.50">
+<h3 data-number="0.50" class="anchored" data-anchor-id="why-statistical-geneticists-care-about-ne"><span class="header-section-number">0.50</span> Why Statistical Geneticists Care About Ne</h3>
+<p>Many quantities depend on:</p>
+<p><span class="math display">\[
+N_e
+\]</span></p>
+<p>including:</p>
+<ul>
+<li>LD decay</li>
+<li>Drift strength</li>
+<li>Coalescent times</li>
+<li>Polygenic adaptation</li>
+<li>Demographic inference</li>
+</ul>
+</section>
+<section id="population-bottlenecks" class="level3" data-number="0.51">
+<h3 data-number="0.51" class="anchored" data-anchor-id="population-bottlenecks"><span class="header-section-number">0.51</span> Population Bottlenecks</h3>
+<p>A bottleneck occurs when population size suddenly decreases.</p>
+<p>Examples include:</p>
+<ul>
+<li>Natural disasters</li>
+<li>Famine</li>
+<li>Disease outbreaks</li>
+<li>Founder migrations</li>
+</ul>
+</section>
+<section id="bottleneck-simulation" class="level3" data-number="0.52">
+<h3 data-number="0.52" class="anchored" data-anchor-id="bottleneck-simulation"><span class="header-section-number">0.52</span> Bottleneck Simulation</h3>
+<div id="e486cf2d-f4be-487b-ac46-451480eddd28" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_bottleneck(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    generations_before<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    generations_bottleneck<span class="op">=</span><span class="dv">20</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    generations_after<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    N_before<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    N_bottleneck<span class="op">=</span><span class="dv">20</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    N_after<span class="op">=</span><span class="dv">1000</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> p0</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    trajectory<span class="op">=</span>[p]</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    schedule <span class="op">=</span> (</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        [N_before]<span class="op">*</span>generations_before <span class="op">+</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>        [N_bottleneck]<span class="op">*</span>generations_bottleneck <span class="op">+</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        [N_after]<span class="op">*</span>generations_after</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> N <span class="kw">in</span> schedule:</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>        count<span class="op">=</span>np.random.binomial(</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>            <span class="dv">2</span><span class="op">*</span>N,</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>            p</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>        p<span class="op">=</span>count<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>N)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        trajectory.append(p)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(trajectory)</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>traj <span class="op">=</span> simulate_bottleneck()</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>    traj,</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">3</span></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>plt.axvspan(</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>    <span class="dv">50</span>,</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>    <span class="dv">70</span>,</span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.3</span>,</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Bottleneck"</span></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Generation"</span>)</span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Allele Frequency"</span>)</span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Population Bottleneck"</span></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-9" class="level3" data-number="0.53">
+<h3 data-number="0.53" class="anchored" data-anchor-id="interpretation-9"><span class="header-section-number">0.53</span> Interpretation</h3>
+<p>Most frequency changes occur during the bottleneck period.</p>
+<p>This happens because:</p>
+<p><span class="math display">\[
+N
+\]</span></p>
+<p>temporarily becomes very small.</p>
+<section id="founder-effects" class="level4" data-number="0.53.1">
+<h4 data-number="0.53.1" class="anchored" data-anchor-id="founder-effects"><span class="header-section-number">0.53.1</span> Founder Effects</h4>
+<p>A founder effect is a special case of drift.</p>
+<p>A small group leaves a large population and establishes a new population.</p>
+<p>The new population contains only a subset of the original genetic variation.</p>
+</section>
+<section id="founder-effect-simulation" class="level4" data-number="0.53.2">
+<h4 data-number="0.53.2" class="anchored" data-anchor-id="founder-effect-simulation"><span class="header-section-number">0.53.2</span> Founder Effect Simulation</h4>
+<div id="4fcbd79b-45c3-4497-ab37-4d715cb4b805" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>source_population <span class="op">=</span> np.random.uniform(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.05</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.95</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5000</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>founder_population <span class="op">=</span> np.random.choice(</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    source_population,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    replace<span class="op">=</span><span class="va">False</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>plt.hist(</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    source_population,</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    bins<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Source Population"</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>plt.hist(</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    founder_population,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>    bins<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Founder Population"</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Allele Frequency"</span>)</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Count"</span>)</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Founder Effect"</span></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="interpretation-10" class="level3" data-number="0.54">
+<h3 data-number="0.54" class="anchored" data-anchor-id="interpretation-10"><span class="header-section-number">0.54</span> Interpretation</h3>
+<p>Even before evolution occurs, the founder population already differs genetically.</p>
+<p>This is purely due to sampling.</p>
+</section>
+<section id="drift-across-an-entire-genome" class="level3" data-number="0.55">
+<h3 data-number="0.55" class="anchored" data-anchor-id="drift-across-an-entire-genome"><span class="header-section-number">0.55</span> Drift Across an Entire Genome</h3>
+<p>Now simulate:</p>
+<ul>
+<li>10,000 SNPs</li>
+<li>500 generations</li>
+</ul>
+<div id="c1638d50-d73a-4d59-9b62-91611819c25a" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>n_snps <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>initial_freqs <span class="op">=</span> np.random.uniform(</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.01</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.99</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    n_snps</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>final_freqs<span class="op">=</span>[]</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p0 <span class="kw">in</span> initial_freqs:</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    traj <span class="op">=</span> simulate_drift(</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>        N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>        p0<span class="op">=</span>p0,</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>        generations<span class="op">=</span><span class="dv">500</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    final_freqs.append(</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>        traj[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Fate of Variants</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>fixed <span class="op">=</span> np.<span class="bu">sum</span>(</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>    np.array(final_freqs)<span class="op">==</span><span class="dv">1</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>lost <span class="op">=</span> np.<span class="bu">sum</span>(</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>    np.array(final_freqs)<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>segregating <span class="op">=</span> (</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>    n_snps<span class="op">-</span>fixed<span class="op">-</span>lost</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Fixed:"</span>, fixed)</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Lost:"</span>, lost)</span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Segregating:"</span>, segregating)</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>plt.bar(</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Lost"</span>,<span class="st">"Fixed"</span>,<span class="st">"Segregating"</span>],</span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>    [lost,fixed,segregating]</span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Number of SNPs"</span>)</span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Genome-Wide Fate of Variants"</span></span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fixed: 4523
+Lost: 4665
+Segregating: 812</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-20-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-11" class="level3" data-number="0.56">
+<h3 data-number="0.56" class="anchored" data-anchor-id="interpretation-11"><span class="header-section-number">0.56</span> Interpretation</h3>
+<p>After sufficient evolutionary time:</p>
+<ul>
+<li>Many variants disappear</li>
+<li>Many become fixed</li>
+<li>Only a subset remain polymorphic</li>
+</ul>
+</section>
+<section id="genetic-drift-and-population-structure" class="level3" data-number="0.57">
+<h3 data-number="0.57" class="anchored" data-anchor-id="genetic-drift-and-population-structure"><span class="header-section-number">0.57</span> Genetic Drift and Population Structure</h3>
+<p>Different populations experience different drift histories.</p>
+<p>Suppose two populations split.</p>
+<p>Each evolves independently.</p>
+<p>Their allele frequencies diverge over time.</p>
+</section>
+<section id="simulating-divergence" class="level3" data-number="0.58">
+<h3 data-number="0.58" class="anchored" data-anchor-id="simulating-divergence"><span class="header-section-number">0.58</span> Simulating Divergence</h3>
+<div id="3f80abb5-d72e-4912-92e7-503b0f13509e" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>shared_freqs <span class="op">=</span> np.random.uniform(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.05</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.95</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>population_A<span class="op">=</span>[]</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>population_B<span class="op">=</span>[]</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p0 <span class="kw">in</span> shared_freqs:</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    trajA <span class="op">=</span> simulate_drift(</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        p0<span class="op">=</span>p0,</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        generations<span class="op">=</span><span class="dv">100</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    trajB <span class="op">=</span> simulate_drift(</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        N<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>        p0<span class="op">=</span>p0,</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        generations<span class="op">=</span><span class="dv">100</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    population_A.append(</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>        trajA[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>    population_B.append(</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>        trajB[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>plt.scatter(</span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>    population_A,</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>    population_B,</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.5</span></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Population A"</span>)</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Population B"</span>)</span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Population Divergence Through Drift"</span></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Genetic_Drift_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-12" class="level3" data-number="0.59">
+<h3 data-number="0.59" class="anchored" data-anchor-id="interpretation-12"><span class="header-section-number">0.59</span> Interpretation</h3>
+<p>The populations began identically.</p>
+<p>Drift alone created differences.</p>
+<p>This is the foundation of population structure.</p>
+</section>
+<section id="connection-to-fst" class="level3" data-number="0.60">
+<h3 data-number="0.60" class="anchored" data-anchor-id="connection-to-fst"><span class="header-section-number">0.60</span> Connection to FST</h3>
+<p>Population differentiation is often measured using:</p>
+<p><span class="math display">\[
+F_{ST}
+\]</span></p>
+<p>which quantifies how much allele frequencies differ between populations.</p>
+<p>Drift increases:</p>
+<p><span class="math display">\[
+F_{ST}
+\]</span></p>
+<p>over time.</p>
+</section>
+<section id="why-gwas-researchers-care-about-drift" class="level3" data-number="0.61">
+<h3 data-number="0.61" class="anchored" data-anchor-id="why-gwas-researchers-care-about-drift"><span class="header-section-number">0.61</span> Why GWAS Researchers Care About Drift</h3>
+<p>Modern GWAS datasets contain individuals from populations with different demographic histories.</p>
+<p>Drift can create allele-frequency differences unrelated to disease.</p>
+<section id="example" class="level4" data-number="0.61.1">
+<h4 data-number="0.61.1" class="anchored" data-anchor-id="example"><span class="header-section-number">0.61.1</span> Example</h4>
+<p>Suppose:</p>
+<p>Population A:</p>
+<p><span class="math display">\[
+p=0.7
+\]</span></p>
+<p>Population B:</p>
+<p><span class="math display">\[
+p=0.3
+\]</span></p>
+<p>for a SNP.</p>
+<p>If disease prevalence also differs between populations, a naive GWAS may falsely associate the SNP with disease.</p>
+</section>
+<section id="confounding" class="level4" data-number="0.61.2">
+<h4 data-number="0.61.2" class="anchored" data-anchor-id="confounding"><span class="header-section-number">0.61.2</span> Confounding</h4>
+<p>This phenomenon is called:</p>
+<p>Population stratification.</p>
+<p>Drift is one of its major causes.</p>
+</section>
+</section>
+<section id="how-gwas-controls-drift-effects" class="level3" data-number="0.62">
+<h3 data-number="0.62" class="anchored" data-anchor-id="how-gwas-controls-drift-effects"><span class="header-section-number">0.62</span> How GWAS Controls Drift Effects</h3>
+<p>Modern studies use:</p>
+<ul>
+<li>Principal Components Analysis (PCA)</li>
+<li>Linear Mixed Models</li>
+<li>Genetic Relationship Matrices</li>
+<li>Ancestry Adjustment</li>
+</ul>
+<p>to account for population structure.</p>
+</section>
+<section id="connection-to-finngen" class="level3" data-number="0.63">
+<h3 data-number="0.63" class="anchored" data-anchor-id="connection-to-finngen"><span class="header-section-number">0.63</span> Connection to FinnGen</h3>
+<p>Finnish populations experienced:</p>
+<ul>
+<li>Founder events</li>
+<li>Bottlenecks</li>
+<li>Relative isolation</li>
+</ul>
+<p>Consequently:</p>
+<ul>
+<li>Some rare variants became common</li>
+<li>Certain disease alleles increased in frequency</li>
+</ul>
+<p>This is known as the Finnish Disease Heritage.</p>
+</section>
+<section id="connection-to-uk-biobank" class="level3" data-number="0.64">
+<h3 data-number="0.64" class="anchored" data-anchor-id="connection-to-uk-biobank"><span class="header-section-number">0.64</span> Connection to UK Biobank</h3>
+<p>UK Biobank contains:</p>
+<ul>
+<li>Multiple ancestry groups</li>
+<li>Geographic structure</li>
+<li>Historical demographic differences</li>
+</ul>
+<p>These produce subtle allele-frequency differences caused partly by drift.</p>
+</section>
+<section id="connection-to-polygenic-scores" class="level3" data-number="0.65">
+<h3 data-number="0.65" class="anchored" data-anchor-id="connection-to-polygenic-scores"><span class="header-section-number">0.65</span> Connection to Polygenic Scores</h3>
+<p>Polygenic scores depend on allele frequencies.</p>
+<p>Since drift changes frequencies:</p>
+<ul>
+<li>Prediction accuracy changes across populations</li>
+<li>Transferability decreases</li>
+<li>Ancestry matching becomes important</li>
+</ul>
+<ol type="1">
+<li><p>Genetic drift is random evolution caused by finite populations.</p></li>
+<li><p>Drift eventually causes fixation or extinction.</p></li>
+<li><p>Small populations drift faster than large populations.</p></li>
+<li><p>Heterozygosity decreases through time.</p></li>
+<li><p>Effective population size determines drift strength.</p></li>
+<li><p>Bottlenecks accelerate drift.</p></li>
+<li><p>Founder effects reshape genetic variation.</p></li>
+<li><p>Drift creates population structure.</p></li>
+<li><p>Drift contributes to FST.</p></li>
+<li><p>Drift influences GWAS, polygenic scores, and demographic inference.</p></li>
+</ol>
+</section>
+<section id="summary-2" class="level3" data-number="0.66">
+<h3 data-number="0.66" class="anchored" data-anchor-id="summary-2"><span class="header-section-number">0.66</span> Summary</h3>
+<p>One of the most surprising lessons in population genetics is that evolution does not always require selection.</p>
+<p>Randomness alone can dramatically reshape genomes.</p>
+<p>Given enough time, drift can:</p>
+<ul>
+<li>Eliminate variants</li>
+<li>Fix variants</li>
+<li>Reduce diversity</li>
+<li>Differentiate populations</li>
+</ul>
+<p>Many genomic patterns observed today arise not because some variants were better than others, but simply because finite populations are subject to chance.</p>
+<p>Understanding genetic drift is therefore essential for evolutionary biology, statistical genetics, genomics, and modern precision medicine.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -144,7 +144,7 @@ window.Quarto = {
 <link rel="stylesheet" href="../../style.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -204,70 +204,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#what-is-variability" id="toc-what-is-variability" class="nav-link active" data-scroll-target="#what-is-variability"><span class="header-section-number">1</span> What is Variability?</a></li>
-  <li><a href="#what-is-covariance" id="toc-what-is-covariance" class="nav-link" data-scroll-target="#what-is-covariance"><span class="header-section-number">2</span> What is Covariance?</a>
-  <ul class="collapse">
-  <li><a href="#covariance-formula" id="toc-covariance-formula" class="nav-link" data-scroll-target="#covariance-formula"><span class="header-section-number">2.1</span> Covariance Formula</a></li>
-  <li><a href="#intuition-behind-covariance" id="toc-intuition-behind-covariance" class="nav-link" data-scroll-target="#intuition-behind-covariance"><span class="header-section-number">2.2</span> Intuition Behind Covariance</a></li>
-  </ul></li>
-  <li><a href="#case-1-both-variables-increase-together" id="toc-case-1-both-variables-increase-together" class="nav-link" data-scroll-target="#case-1-both-variables-increase-together"><span class="header-section-number">3</span> Case 1: Both Variables Increase Together</a></li>
-  <li><a href="#case-2-variables-move-oppositely" id="toc-case-2-variables-move-oppositely" class="nav-link" data-scroll-target="#case-2-variables-move-oppositely"><span class="header-section-number">4</span> Case 2: Variables Move Oppositely</a></li>
-  <li><a href="#interpretation-of-covariance" id="toc-interpretation-of-covariance" class="nav-link" data-scroll-target="#interpretation-of-covariance"><span class="header-section-number">5</span> Interpretation of Covariance</a></li>
-  <li><a href="#important-limitation-of-covariance" id="toc-important-limitation-of-covariance" class="nav-link" data-scroll-target="#important-limitation-of-covariance"><span class="header-section-number">6</span> Important Limitation of Covariance</a></li>
-  <li><a href="#what-is-correlation" id="toc-what-is-correlation" class="nav-link" data-scroll-target="#what-is-correlation"><span class="header-section-number">7</span> What is Correlation?</a>
-  <ul class="collapse">
-  <li><a href="#correlation-formula" id="toc-correlation-formula" class="nav-link" data-scroll-target="#correlation-formula"><span class="header-section-number">7.1</span> Correlation Formula</a></li>
-  </ul></li>
-  <li><a href="#why-standardization-matters" id="toc-why-standardization-matters" class="nav-link" data-scroll-target="#why-standardization-matters"><span class="header-section-number">8</span> Why Standardization Matters</a></li>
-  <li><a href="#range-of-correlation" id="toc-range-of-correlation" class="nav-link" data-scroll-target="#range-of-correlation"><span class="header-section-number">9</span> Range of Correlation</a>
-  <ul class="collapse">
-  <li><a href="#interpretation-of-correlation" id="toc-interpretation-of-correlation" class="nav-link" data-scroll-target="#interpretation-of-correlation"><span class="header-section-number">9.1</span> Interpretation of Correlation</a></li>
-  </ul></li>
-  <li><a href="#positive-correlation" id="toc-positive-correlation" class="nav-link" data-scroll-target="#positive-correlation"><span class="header-section-number">10</span> Positive Correlation</a></li>
-  <li><a href="#negative-correlation" id="toc-negative-correlation" class="nav-link" data-scroll-target="#negative-correlation"><span class="header-section-number">11</span> Negative Correlation</a></li>
-  <li><a href="#zero-correlation" id="toc-zero-correlation" class="nav-link" data-scroll-target="#zero-correlation"><span class="header-section-number">12</span> Zero Correlation</a></li>
-  <li><a href="#correlation-does-not-imply-causation" id="toc-correlation-does-not-imply-causation" class="nav-link" data-scroll-target="#correlation-does-not-imply-causation"><span class="header-section-number">13</span> Correlation Does Not Imply Causation</a></li>
-  <li><a href="#example-of-confounding" id="toc-example-of-confounding" class="nav-link" data-scroll-target="#example-of-confounding"><span class="header-section-number">14</span> Example of Confounding</a></li>
-  <li><a href="#covariance-matrix" id="toc-covariance-matrix" class="nav-link" data-scroll-target="#covariance-matrix"><span class="header-section-number">15</span> Covariance Matrix</a></li>
-  <li><a href="#correlation-matrix" id="toc-correlation-matrix" class="nav-link" data-scroll-target="#correlation-matrix"><span class="header-section-number">16</span> Correlation Matrix</a></li>
-  <li><a href="#covariance-vs-correlation" id="toc-covariance-vs-correlation" class="nav-link" data-scroll-target="#covariance-vs-correlation"><span class="header-section-number">17</span> Covariance vs Correlation</a></li>
-  <li><a href="#covariance-and-correlation-in-genetics" id="toc-covariance-and-correlation-in-genetics" class="nav-link" data-scroll-target="#covariance-and-correlation-in-genetics"><span class="header-section-number">18</span> Covariance and Correlation in Genetics</a></li>
-  <li><a href="#covariance-in-pca" id="toc-covariance-in-pca" class="nav-link" data-scroll-target="#covariance-in-pca"><span class="header-section-number">19</span> Covariance in PCA</a>
-  <ul class="collapse">
-  <li><a href="#why-covariance-matrices-are-so-common-in-statistical-genetics" id="toc-why-covariance-matrices-are-so-common-in-statistical-genetics" class="nav-link" data-scroll-target="#why-covariance-matrices-are-so-common-in-statistical-genetics"><span class="header-section-number">19.1</span> Why Covariance Matrices Are So Common in Statistical Genetics</a></li>
-  </ul></li>
-  <li><a href="#variance-vs-covariance" id="toc-variance-vs-covariance" class="nav-link" data-scroll-target="#variance-vs-covariance"><span class="header-section-number">20</span> Variance vs Covariance</a>
-  <ul class="collapse">
-  <li><a href="#genetics-is-naturally-correlated" id="toc-genetics-is-naturally-correlated" class="nav-link" data-scroll-target="#genetics-is-naturally-correlated"><span class="header-section-number">20.1</span> Genetics Is Naturally Correlated</a></li>
-  </ul></li>
-  <li><a href="#genetic-relationship-matrix-grm" id="toc-genetic-relationship-matrix-grm" class="nav-link" data-scroll-target="#genetic-relationship-matrix-grm"><span class="header-section-number">21</span> 1. Genetic Relationship Matrix (GRM)</a>
-  <ul class="collapse">
-  <li><a href="#why-the-grm-matters" id="toc-why-the-grm-matters" class="nav-link" data-scroll-target="#why-the-grm-matters"><span class="header-section-number">21.1</span> Why the GRM Matters</a></li>
-  </ul></li>
-  <li><a href="#covariance-structure-in-linear-mixed-models" id="toc-covariance-structure-in-linear-mixed-models" class="nav-link" data-scroll-target="#covariance-structure-in-linear-mixed-models"><span class="header-section-number">22</span> 2. Covariance Structure in Linear Mixed Models</a></li>
-  <li><a href="#snp-heritability-estimation" id="toc-snp-heritability-estimation" class="nav-link" data-scroll-target="#snp-heritability-estimation"><span class="header-section-number">23</span> 3. SNP Heritability Estimation</a></li>
-  <li><a href="#linkage-disequilibrium-ld" id="toc-linkage-disequilibrium-ld" class="nav-link" data-scroll-target="#linkage-disequilibrium-ld"><span class="header-section-number">24</span> 4. Linkage Disequilibrium (LD)</a></li>
-  <li><a href="#principal-component-analysis-pca" id="toc-principal-component-analysis-pca" class="nav-link" data-scroll-target="#principal-component-analysis-pca"><span class="header-section-number">25</span> 5. Principal Component Analysis (PCA)</a></li>
-  <li><a href="#genetic-correlation-between-traits" id="toc-genetic-correlation-between-traits" class="nav-link" data-scroll-target="#genetic-correlation-between-traits"><span class="header-section-number">26</span> 6. Genetic Correlation Between Traits</a></li>
-  <li><a href="#multivariate-genetics" id="toc-multivariate-genetics" class="nav-link" data-scroll-target="#multivariate-genetics"><span class="header-section-number">27</span> 7. Multivariate Genetics</a></li>
-  <li><a href="#bayesian-statistical-genetics" id="toc-bayesian-statistical-genetics" class="nav-link" data-scroll-target="#bayesian-statistical-genetics"><span class="header-section-number">28</span> 8. Bayesian Statistical Genetics</a></li>
-  <li><a href="#omics-data-are-high-dimensional" id="toc-omics-data-are-high-dimensional" class="nav-link" data-scroll-target="#omics-data-are-high-dimensional"><span class="header-section-number">29</span> 9. Omics Data Are High-Dimensional</a></li>
-  <li><a href="#biological-systems-are-networked" id="toc-biological-systems-are-networked" class="nav-link" data-scroll-target="#biological-systems-are-networked"><span class="header-section-number">30</span> 10. Biological Systems Are Networked</a>
-  <ul class="collapse">
-  <li><a href="#why-covariance-is-more-important-than-mean-effects" id="toc-why-covariance-is-more-important-than-mean-effects" class="nav-link" data-scroll-target="#why-covariance-is-more-important-than-mean-effects"><span class="header-section-number">30.1</span> Why Covariance Is More Important Than Mean Effects</a></li>
-  </ul></li>
-  <li><a href="#a-deep-conceptual-point" id="toc-a-deep-conceptual-point" class="nav-link" data-scroll-target="#a-deep-conceptual-point"><span class="header-section-number">31</span> A Deep Conceptual Point</a></li>
-  <li><a href="#covariance-matrices-in-practice" id="toc-covariance-matrices-in-practice" class="nav-link" data-scroll-target="#covariance-matrices-in-practice"><span class="header-section-number">32</span> Covariance Matrices in Practice</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">33</span> Summary</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">34</span> References</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 

@@ -733,6 +733,7 @@ The process had no write permission</code></pre>
 <p>This launches 10 jobs, each with a different seed.</p>
 <p>This is where HPC becomes powerful: not just running one big model, but running many controlled experiments reproducibly.</p>
 <hr>
+<p><strong><em>Another very important command :</em></strong> sinfo -o “%P %l %D %c %m” on your cluster — it’ll list every partition with its max wall-time, node count, CPUs per node, and memory per node in one table.</p>
 </section>
 <section id="a-practical-debugging-checklist-before-submitting" class="level2" data-number="15">
 <h2 data-number="15" class="anchored" data-anchor-id="a-practical-debugging-checklist-before-submitting"><span class="header-section-number">15</span> A Practical Debugging Checklist Before Submitting</h2>

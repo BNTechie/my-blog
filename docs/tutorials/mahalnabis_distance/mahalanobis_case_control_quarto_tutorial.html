@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nivedita Bhadra">
+<meta name="dcterms.date" content="2026-09-04">
+
+<title>Mahalanobis Distance for Correlated Case-Control Data – Nivedita Bhadra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nivedita Bhadra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nivedita-bhadra-b5149130/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BNTechie"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Mahalanobis Distance for Correlated Case-Control Data</h1>
+<p class="subtitle lead">Understanding multivariate separation, covariance, decorrelation and denoising</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nivedita Bhadra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 4, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In a univariate problem, comparing two groups is relatively straightforward. We can compare means, standard deviations, or visualize the distributions directly.</p>
+<p>In a multivariate problem, the situation is different. A case and a control may differ only slightly in each individual predictor, but the <strong>joint pattern across several correlated predictors</strong> may still be informative.</p>
+<p>Mahalanobis distance is useful in this setting because it measures distance while accounting for:</p>
+<ul>
+<li>the variance of each predictor,</li>
+<li>the covariance between predictors,</li>
+<li>and the overall multivariate structure of the data.</li>
+</ul>
+<p>This tutorial develops the idea step by step using a synthetic case-control dataset with correlated predictors. It also shows what PCA whitening, PCA dimensionality reduction, Ledoit-Wolf covariance regularization, and autoencoder-based denoising actually do.</p>
+<p>A few important points are worth stating at the beginning:</p>
+<ol type="1">
+<li><strong>Class imbalance by itself does not create a bimodal Mahalanobis-distance distribution.</strong> Bimodality can appear when cases and controls have different multivariate distributions.</li>
+<li><strong>Mahalanobis distance already accounts for linear correlation through the covariance matrix.</strong></li>
+<li><strong>PCA whitening with all components retained is a re-expression of the same geometry.</strong> It decorrelates the variables, but it does not automatically improve separation or denoise the data.</li>
+<li><strong>Denoising requires removing or shrinking some component of the data.</strong> Examples include PCA truncation, covariance regularization, or a denoising autoencoder trained to reconstruct clean signal from noisy input.</li>
+</ol>
+<section id="mathematical-definition" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-definition">Mathematical definition</h2>
+<p>For an observation <span class="math inline">\(\mathbf{x}\)</span>, mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span>, and covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, the Mahalanobis distance is</p>
+<p><span class="math display">\[
+D_M(\mathbf{x}) =
+\sqrt{
+(\mathbf{x} - \boldsymbol{\mu})^T
+\boldsymbol{\Sigma}^{-1}
+(\mathbf{x} - \boldsymbol{\mu})
+}.
+\]</span></p>
+<p>Compare this with Euclidean distance:</p>
+<p><span class="math display">\[
+D_E(\mathbf{x}) =
+\sqrt{
+\sum_j (x_j - \mu_j)^2
+}.
+\]</span></p>
+<p>Euclidean distance treats all directions equally.</p>
+<p>Mahalanobis distance does not. A deviation along a direction with large natural variance is treated as less unusual than the same numerical deviation along a direction with small variance. Correlation is also incorporated through the inverse covariance matrix.</p>
+<p>Conceptually, Mahalanobis distance asks:</p>
+<blockquote class="blockquote">
+<p><em>How unusual is this multivariate profile relative to the covariance structure of the reference population?</em></p>
+</blockquote>
+</section>
+<section id="imports" class="level2">
+<h2 class="anchored" data-anchor-id="imports">Imports</h2>
+<div id="ef0c7d65" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.covariance <span class="im">import</span> LedoitWolf</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neural_network <span class="im">import</span> MLPRegressor</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="create-a-synthetic-correlated-case-control-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-synthetic-correlated-case-control-dataset">Create a synthetic correlated case-control dataset</h2>
+<p>We will create five correlated predictors.</p>
+<p>The control group will have a mean close to zero. The case group will have a modest shift across several predictors.</p>
+<p>The predictors are deliberately correlated so that a simple Euclidean interpretation is not ideal.</p>
+<div id="beda18d9" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n_controls <span class="op">=</span> <span class="dv">600</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n_cases <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n_features <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>cov <span class="op">=</span> np.array([</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">1.00</span>, <span class="fl">0.80</span>, <span class="fl">0.60</span>, <span class="fl">0.40</span>, <span class="fl">0.30</span>],</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0.80</span>, <span class="fl">1.00</span>, <span class="fl">0.70</span>, <span class="fl">0.50</span>, <span class="fl">0.40</span>],</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0.60</span>, <span class="fl">0.70</span>, <span class="fl">1.00</span>, <span class="fl">0.60</span>, <span class="fl">0.50</span>],</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0.40</span>, <span class="fl">0.50</span>, <span class="fl">0.60</span>, <span class="fl">1.00</span>, <span class="fl">0.60</span>],</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0.30</span>, <span class="fl">0.40</span>, <span class="fl">0.50</span>, <span class="fl">0.60</span>, <span class="fl">1.00</span>]</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>control_mean <span class="op">=</span> np.zeros(n_features)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>case_mean <span class="op">=</span> np.array([<span class="fl">0.8</span>, <span class="fl">0.6</span>, <span class="fl">0.5</span>, <span class="fl">0.4</span>, <span class="fl">0.3</span>])</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>controls <span class="op">=</span> np.random.multivariate_normal(</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span>control_mean,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    cov<span class="op">=</span>cov,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span>n_controls</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>cases <span class="op">=</span> np.random.multivariate_normal(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span>case_mean,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    cov<span class="op">=</span>cov,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span>n_cases</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.vstack([controls, cases])</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array([<span class="dv">0</span>] <span class="op">*</span> n_controls <span class="op">+</span> [<span class="dv">1</span>] <span class="op">*</span> n_cases)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    X,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    columns<span class="op">=</span>[<span class="ss">f"Feature_</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_features)]</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"Group"</span>] <span class="op">=</span> np.where(y <span class="op">==</span> <span class="dv">0</span>, <span class="st">"Control"</span>, <span class="st">"Case"</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Feature_1</th>
+<th data-quarto-table-cell-role="th">Feature_2</th>
+<th data-quarto-table-cell-role="th">Feature_3</th>
+<th data-quarto-table-cell-role="th">Feature_4</th>
+<th data-quarto-table-cell-role="th">Feature_5</th>
+<th data-quarto-table-cell-role="th">Group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>-0.802644</td>
+<td>-0.670422</td>
+<td>0.406093</td>
+<td>-0.491523</td>
+<td>-0.493302</td>
+<td>Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>0.817060</td>
+<td>0.918237</td>
+<td>0.131868</td>
+<td>-0.062497</td>
+<td>-1.128952</td>
+<td>Control</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>0.925333</td>
+<td>-0.267855</td>
+<td>-0.297533</td>
+<td>1.192945</td>
+<td>0.462326</td>
+<td>Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>0.438576</td>
+<td>-0.323829</td>
+<td>0.219740</td>
+<td>1.247100</td>
+<td>0.844891</td>
+<td>Control</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>-0.855830</td>
+<td>-1.476189</td>
+<td>-1.866599</td>
+<td>-0.605574</td>
+<td>-0.916277</td>
+<td>Control</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="inspect-the-correlation-structure" class="level2">
+<h2 class="anchored" data-anchor-id="inspect-the-correlation-structure">Inspect the correlation structure</h2>
+<p>Before calculating any multivariate distance, it is useful to inspect the correlation matrix.</p>
+<p>If predictors are strongly correlated, several variables may partly carry the same information.</p>
+<div id="5f250db3" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> df.drop(columns<span class="op">=</span><span class="st">"Group"</span>).corr()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(corr.values, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(<span class="bu">range</span>(n_features))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ax.set_yticks(<span class="bu">range</span>(n_features))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels(corr.columns, rotation<span class="op">=</span><span class="dv">45</span>, ha<span class="op">=</span><span class="st">"right"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(corr.columns)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_features):</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_features):</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        ax.text(j, i, <span class="ss">f"</span><span class="sc">{</span>corr<span class="sc">.</span>iloc[i, j]<span class="sc">:.2f}</span><span class="ss">"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                ha<span class="op">=</span><span class="st">"center"</span>, va<span class="op">=</span><span class="st">"center"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Correlation"</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Correlation matrix of predictors"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mahalanobis_case_control_quarto_tutorial_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="why-not-simply-use-euclidean-distance" class="level2">
+<h2 class="anchored" data-anchor-id="why-not-simply-use-euclidean-distance">Why not simply use Euclidean distance?</h2>
+<p>Suppose Feature 1 and Feature 2 are strongly correlated.</p>
+<p>A subject who is high on both variables may not be particularly unusual because those variables usually move together.</p>
+<p>Euclidean distance ignores this. Mahalanobis distance uses the covariance matrix to recognize that such joint movement is expected.</p>
+<p>This is why Mahalanobis distance is sometimes described as a <strong>covariance-adjusted multivariate distance</strong>.</p>
+</section>
+<section id="standardize-the-predictors" class="level2">
+<h2 class="anchored" data-anchor-id="standardize-the-predictors">Standardize the predictors</h2>
+<p>Mahalanobis distance already incorporates scale through the covariance matrix, so standardization is not mathematically required in every case.</p>
+<p>However, standardization is often convenient in applied workflows, especially when predictors have very different units.</p>
+<div id="4f1c8c8b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>X_scaled <span class="op">=</span> scaler.fit_transform(X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="a-stable-mahalanobis-distance-function" class="level2">
+<h2 class="anchored" data-anchor-id="a-stable-mahalanobis-distance-function">A stable Mahalanobis distance function</h2>
+<p>Directly inverting the empirical covariance matrix can be unstable when predictors are highly correlated, or when the number of predictors is large relative to the sample size.</p>
+<p>Instead of using a raw inverse covariance matrix, we will often use <strong>Ledoit-Wolf shrinkage covariance</strong>.</p>
+<p>Ledoit-Wolf estimates a covariance matrix that is pulled slightly toward a better-conditioned structure. This usually makes the precision matrix (^{-1}) more stable.</p>
+<div id="9d79ea57" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mahalanobis_from_precision(X, mean, precision):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    diff <span class="op">=</span> X <span class="op">-</span> mean</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    d2 <span class="op">=</span> np.einsum(<span class="st">"ij,jk,ik-&gt;i"</span>, diff, precision, diff)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    d2 <span class="op">=</span> np.maximum(d2, <span class="dv">0</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.sqrt(d2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="pooled-mahalanobis-distance" class="level2">
+<h2 class="anchored" data-anchor-id="pooled-mahalanobis-distance">Pooled Mahalanobis distance</h2>
+<p>We first estimate one mean and covariance matrix from the entire sample.</p>
+<p>This gives the distance of each subject from the <strong>overall multivariate center</strong>.</p>
+<p>This can be useful descriptively, but in a case-control problem it is not always the most interpretable reference because the overall center contains both cases and controls.</p>
+<div id="05073c44" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lw_global <span class="op">=</span> LedoitWolf().fit(X_scaled)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>global_mean <span class="op">=</span> X_scaled.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>global_precision <span class="op">=</span> lw_global.precision_</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>md_global <span class="op">=</span> mahalanobis_from_precision(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    X_scaled,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    global_mean,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    global_precision</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"MD_global"</span>] <span class="op">=</span> md_global</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="f6cc8f3e" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>control_md <span class="op">=</span> df.loc[df[<span class="st">"Group"</span>] <span class="op">==</span> <span class="st">"Control"</span>, <span class="st">"MD_global"</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>case_md <span class="op">=</span> df.loc[df[<span class="st">"Group"</span>] <span class="op">==</span> <span class="st">"Case"</span>, <span class="st">"MD_global"</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>mean_control <span class="op">=</span> control_md.mean()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>mean_case <span class="op">=</span> case_md.mean()</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.hist(control_md, bins<span class="op">=</span><span class="dv">35</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.55</span>, label<span class="op">=</span><span class="st">"Control"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>plt.hist(case_md, bins<span class="op">=</span><span class="dv">35</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.55</span>, label<span class="op">=</span><span class="st">"Case"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.axvline(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    mean_control,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    linestyle<span class="op">=</span><span class="st">"--"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="ss">f"Control mean = </span><span class="sc">{</span>mean_control<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>plt.axvline(</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    mean_case,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    linestyle<span class="op">=</span><span class="st">"--"</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="ss">f"Case mean = </span><span class="sc">{</span>mean_case<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Mahalanobis distance"</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Density"</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Pooled Mahalanobis distance"</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Control mean MD: </span><span class="sc">{</span>mean_control<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Case mean MD:    </span><span class="sc">{</span>mean_case<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Difference:      </span><span class="sc">{</span>mean_case <span class="op">-</span> mean_control<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mahalanobis_case_control_quarto_tutorial_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Control mean MD: 2.073
+Case mean MD:    2.246
+Difference:      0.173</code></pre>
+</div>
+</div>
+</section>
+<section id="interpreting-the-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="interpreting-the-distribution">Interpreting the distribution</h2>
+<p>If the case and control distributions overlap strongly, Mahalanobis distance alone does not separate the groups well.</p>
+<p>If cases tend to occupy a different region of multivariate space, their distances may shift to the right.</p>
+<p>A visibly bimodal distribution is possible, but <strong>imbalance itself is not the cause</strong>. The important issue is whether the two groups have different means, covariance structures, or latent subgroups.</p>
+</section>
+<section id="a-more-useful-case-control-formulation-distance-from-the-control-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="a-more-useful-case-control-formulation-distance-from-the-control-distribution">A more useful case-control formulation: distance from the control distribution</h2>
+<p>For many biomedical problems, a more interpretable question is:</p>
+<blockquote class="blockquote">
+<p>How far is each subject from the multivariate profile of the controls?</p>
+</blockquote>
+<p>We can therefore estimate the mean and covariance matrix <strong>using controls only</strong>, and then calculate the Mahalanobis distance of both controls and cases relative to that reference.</p>
+<p>This changes the interpretation.</p>
+<p>A high value now means that the subject has an unusual multivariate profile relative to the control population.</p>
+<div id="a0b2517d" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X_control <span class="op">=</span> X_scaled[y <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>lw_control <span class="op">=</span> LedoitWolf().fit(X_control)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>control_mean_ref <span class="op">=</span> X_control.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>control_precision_ref <span class="op">=</span> lw_control.precision_</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>md_to_control <span class="op">=</span> mahalanobis_from_precision(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    X_scaled,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    control_mean_ref,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    control_precision_ref</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"MD_to_control"</span>] <span class="op">=</span> md_to_control</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="9295d605" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>control_md <span class="op">=</span> df.loc[df[<span class="st">"Group"</span>] <span class="op">==</span> <span class="st">"Control"</span>, <span class="st">"MD_to_control"</span>]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>case_md <span class="op">=</span> df.loc[df[<span class="st">"Group"</span>] <span class="op">==</span> <span class="st">"Case"</span>, <span class="st">"MD_to_control"</span>]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>mean_control <span class="op">=</span> control_md.mean()</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>mean_case <span class="op">=</span> case_md.mean()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>plt.hist(control_md, bins<span class="op">=</span><span class="dv">35</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.55</span>, label<span class="op">=</span><span class="st">"Control"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>plt.hist(case_md, bins<span class="op">=</span><span class="dv">35</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.55</span>, label<span class="op">=</span><span class="st">"Case"</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>plt.axvline(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    mean_control,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    linestyle<span class="op">=</span><span class="st">"--"</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="ss">f"Control mean = </span><span class="sc">{</span>mean_control<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>plt.axvline(</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    mean_case,</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    linestyle<span class="op">=</span><span class="st">"--"</span>,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="ss">f"Case mean = </span><span class="sc">{</span>mean_case<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Mahalanobis distance from control distribution"</span>)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Density"</span>)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distance from the control multivariate profile"</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Control mean MD: </span><span class="sc">{</span>mean_control<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Case mean MD:    </span><span class="sc">{</span>mean_case<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Difference:      </span><span class="sc">{</span>mean_case <span class="op">-</span> mean_control<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mahalanobis_case_control_quarto_tutorial_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Control mean MD: 2.109
+Case mean MD:    2.386
+Difference:      0.277</code></pre>
+</div>
+</div>
+</section>
+<section id="quantifying-separation-with-auc" class="level2">
+<h2 class="anchored" data-anchor-id="quantifying-separation-with-auc">Quantifying separation with AUC</h2>
+<p>A Mahalanobis distance can be treated as a <strong>continuous score</strong>: subjects farther from the control distribution receive larger values.</p>
+<p>We can summarize how well that score ranks cases above controls using the ROC AUC.</p>
+<p><span class="math display">\[
+AUC = P(\text{score of a random case} &gt; \text{score of a random control})
+\]</span></p>
+<p>Important: this does <strong>not</strong> automatically turn Mahalanobis distance into a validated predictive model.</p>
+<p>If the same dataset is used to estimate the covariance structure and evaluate AUC, the result is mainly descriptive. For prediction, the preprocessing and covariance estimation should be fitted inside a training set and evaluated on held-out data.</p>
+<div id="4c1b4a82" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>auc_control_reference <span class="op">=</span> roc_auc_score(y, md_to_control)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AUC using distance from control distribution:"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">round</span>(auc_control_reference, <span class="dv">3</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AUC using distance from control distribution: 0.612</code></pre>
+</div>
+</div>
+</section>
+<section id="pca-decorrelation-versus-denoising" class="level2">
+<h2 class="anchored" data-anchor-id="pca-decorrelation-versus-denoising">PCA: decorrelation versus denoising</h2>
+<p>PCA is often described as a way to remove correlation.</p>
+<p>That statement is correct, but we need to distinguish two different uses of PCA.</p>
+<section id="pca-with-all-components-retained" class="level3">
+<h3 class="anchored" data-anchor-id="pca-with-all-components-retained">PCA with all components retained</h3>
+<p>If all principal components are retained, PCA is simply an invertible linear transformation.</p>
+<p>The components are uncorrelated, but no information has been removed.</p>
+<p>If whitening is also applied, the components are additionally scaled to unit variance.</p>
+<p>For an invertible transformation, Mahalanobis geometry is unchanged. Therefore, full PCA whitening should give essentially the same Mahalanobis distances as the original space, apart from numerical differences.</p>
+<p>This is an important point: <strong>decorrelation is not the same thing as denoising</strong>.</p>
+<div id="52e1d460" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pca_white <span class="op">=</span> PCA(n_components<span class="op">=</span>n_features, whiten<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>X_white <span class="op">=</span> pca_white.fit_transform(X_scaled)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>white_cov <span class="op">=</span> np.cov(X_white, rowvar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Covariance matrix after whitening:"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(white_cov, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Covariance matrix after whitening:
+[[ 1.  0.  0. -0.  0.]
+ [ 0.  1.  0.  0.  0.]
+ [ 0.  0.  1. -0. -0.]
+ [-0.  0. -0.  1. -0.]
+ [ 0.  0. -0. -0.  1.]]</code></pre>
+</div>
+</div>
+<div id="747a6939" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mahalanobis distance in whitened space</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>white_mean <span class="op">=</span> X_white.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance is approximately identity, but we estimate it explicitly here</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>lw_white <span class="op">=</span> LedoitWolf().fit(X_white)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>md_white <span class="op">=</span> mahalanobis_from_precision(</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    X_white,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    white_mean,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    lw_white.precision_</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Correlation between global MD and whitened-space MD:"</span>,</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">round</span>(np.corrcoef(md_global, md_white)[<span class="dv">0</span>, <span class="dv">1</span>], <span class="dv">6</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Correlation between global MD and whitened-space MD: 0.999931</code></pre>
+</div>
+</div>
+<p>The correlation should be extremely high.</p>
+<p>If all components are retained, whitening is useful for interpretation or numerical convenience, but it should not be presented as a method that creates new case-control separation.</p>
+</section>
+</section>
+<section id="pca-dimensionality-reduction-as-denoising" class="level2">
+<h2 class="anchored" data-anchor-id="pca-dimensionality-reduction-as-denoising">PCA dimensionality reduction as denoising</h2>
+<p>PCA can become a denoising method when we <strong>discard some components</strong>.</p>
+<p>The idea is that high-variance components may capture stable structure, while some low-variance components may contain measurement noise.</p>
+<p>This assumption is not guaranteed to be correct. A biologically important signal can also live in a low-variance component.</p>
+<p>Therefore, PCA truncation should be treated as a modeling choice and ideally validated out of sample.</p>
+<div id="330df85b" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pca_full <span class="op">=</span> PCA().fit(X_scaled)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>cum_var <span class="op">=</span> np.cumsum(pca_full.explained_variance_ratio_)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">5</span>))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    np.arange(<span class="dv">1</span>, n_features <span class="op">+</span> <span class="dv">1</span>),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    cum_var,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="fl">0.90</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of principal components"</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Cumulative explained variance"</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"PCA cumulative explained variance"</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Explained variance ratio:"</span>)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(pca_full.explained_variance_ratio_, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mahalanobis_case_control_quarto_tutorial_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Explained variance ratio:
+[0.649 0.183 0.075 0.058 0.035]</code></pre>
+</div>
+</div>
+<div id="420c7cab" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep enough PCs to explain at least 90% of the variance</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>n_keep <span class="op">=</span> np.argmax(cum_var <span class="op">&gt;=</span> <span class="fl">0.90</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>pca_reduced <span class="op">=</span> PCA(n_components<span class="op">=</span>n_keep)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>X_pca_reduced <span class="op">=</span> pca_reduced.fit_transform(X_scaled)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of retained PCs:"</span>, n_keep)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of retained PCs: 3</code></pre>
+</div>
+</div>
+<p>To preserve the same case-control interpretation, we again estimate the reference distribution using the controls only, but now in the reduced PCA space.</p>
+<div id="3d7dac0a" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>X_pca_control <span class="op">=</span> X_pca_reduced[y <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>lw_pca <span class="op">=</span> LedoitWolf().fit(X_pca_control)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>pca_control_mean <span class="op">=</span> X_pca_control.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>md_pca_reduced <span class="op">=</span> mahalanobis_from_precision(</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    X_pca_reduced,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    pca_control_mean,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    lw_pca.precision_</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>auc_pca_reduced <span class="op">=</span> roc_auc_score(y, md_pca_reduced)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"AUC after PCA dimensionality reduction:"</span>, <span class="bu">round</span>(auc_pca_reduced, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AUC after PCA dimensionality reduction: 0.603</code></pre>
+</div>
+</div>
+</section>
+<section id="ledoit-wolf-regularization" class="level2">
+<h2 class="anchored" data-anchor-id="ledoit-wolf-regularization">Ledoit-Wolf regularization</h2>
+<p>Mahalanobis distance requires the inverse covariance matrix.</p>
+<p>This can be problematic when:</p>
+<ul>
+<li>predictors are strongly correlated,</li>
+<li>the number of predictors is large,</li>
+<li>the sample size is limited,</li>
+<li>or the covariance matrix is close to singular.</li>
+</ul>
+<p>Ledoit-Wolf shrinkage is useful because it stabilizes the covariance estimate.</p>
+<p>It is important to understand what it does: <strong>Ledoit-Wolf is primarily a covariance-estimation method, not a general-purpose denoising transformation of individual observations.</strong></p>
+<p>It makes Mahalanobis distance more numerically reliable.</p>
+<div id="544846a5" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare condition number of ordinary covariance and Ledoit-Wolf covariance</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>sample_cov <span class="op">=</span> np.cov(X_control, rowvar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>lw_cov <span class="op">=</span> lw_control.covariance_</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>cond_sample <span class="op">=</span> np.linalg.cond(sample_cov)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>cond_lw <span class="op">=</span> np.linalg.cond(lw_cov)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Condition number, sample covariance: </span><span class="sc">{</span>cond_sample<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Condition number, Ledoit-Wolf:       </span><span class="sc">{</span>cond_lw<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Condition number, sample covariance: 17.43
+Condition number, Ledoit-Wolf:       16.51</code></pre>
+</div>
+</div>
+<p>A smaller condition number generally indicates a matrix that is easier and safer to invert numerically.</p>
+</section>
+<section id="what-is-a-real-denoising-autoencoder" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-real-denoising-autoencoder">What is a real denoising autoencoder?</h2>
+<p>An ordinary autoencoder trained with</p>
+<p><span class="math display">\[
+X \rightarrow X
+\]</span></p>
+<p>is a reconstruction model. A bottleneck may force compression, but reconstruction alone does not guarantee denoising.</p>
+<p>A <strong>denoising autoencoder</strong> is trained differently:</p>
+<p><span class="math display">\[
+X_{\text{noisy}} \rightarrow X_{\text{clean}}
+\]</span></p>
+<p>The model is deliberately given corrupted input and asked to recover the cleaner version.</p>
+<p>This encourages the network to learn stable structure rather than reproduce every perturbation.</p>
+<p>For a synthetic example, we know the clean data because we generated it ourselves. We can therefore add noise deliberately and train a denoising model.</p>
+<div id="2ce490c7" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardized data will serve as the clean target</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>X_clean <span class="op">=</span> X_scaled.copy()</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Gaussian noise</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>noise_sd <span class="op">=</span> <span class="fl">0.50</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>X_noisy <span class="op">=</span> X_clean <span class="op">+</span> np.random.normal(</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    loc<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    scale<span class="op">=</span>noise_sd,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span>X_clean.shape</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a small denoising autoencoder-like network</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>dae <span class="op">=</span> MLPRegressor(</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    hidden_layer_sizes<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">3</span>, <span class="dv">8</span>),</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    activation<span class="op">=</span><span class="st">"relu"</span>,</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    max_iter<span class="op">=</span><span class="dv">3000</span>,</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>dae.fit(X_noisy, X_clean)</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>X_denoised <span class="op">=</span> dae.predict(X_noisy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Because we know the clean synthetic data, we can directly compare reconstruction error before and after denoising.</p>
+<div id="8053dfa8" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mse_noisy <span class="op">=</span> np.mean((X_noisy <span class="op">-</span> X_clean) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>mse_denoised <span class="op">=</span> np.mean((X_denoised <span class="op">-</span> X_clean) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MSE of noisy data:    </span><span class="sc">{</span>mse_noisy<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MSE after denoising:  </span><span class="sc">{</span>mse_denoised<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MSE of noisy data:    0.2586
+MSE after denoising:  0.2589</code></pre>
+</div>
+</div>
+<p>Now we can compute control-referenced Mahalanobis distance in the denoised representation.</p>
+<div id="00587596" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>X_denoised_control <span class="op">=</span> X_denoised[y <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>lw_dae <span class="op">=</span> LedoitWolf().fit(X_denoised_control)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>dae_control_mean <span class="op">=</span> X_denoised_control.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>md_dae <span class="op">=</span> mahalanobis_from_precision(</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    X_denoised,</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    dae_control_mean,</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    lw_dae.precision_</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>auc_dae <span class="op">=</span> roc_auc_score(y, md_dae)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"AUC after denoising autoencoder:"</span>, <span class="bu">round</span>(auc_dae, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AUC after denoising autoencoder: 0.594</code></pre>
+</div>
+</div>
+</section>
+<section id="compare-the-methods" class="level2">
+<h2 class="anchored" data-anchor-id="compare-the-methods">Compare the methods</h2>
+<p>We will compare three scores:</p>
+<ol type="1">
+<li><strong>Ledoit-Wolf control-reference Mahalanobis distance</strong></li>
+<li><strong>PCA-reduced control-reference Mahalanobis distance</strong></li>
+<li><strong>Denoising-autoencoder control-reference Mahalanobis distance</strong></li>
+</ol>
+<p>I leave full PCA whitening out of this comparison because retaining all components does not remove information and should not be interpreted as denoising.</p>
+<div id="63b9e569" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Method"</span>: [</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Ledoit-Wolf"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"PCA reduction"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Denoising autoencoder"</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AUC"</span>: [</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>        auc_control_reference,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>        auc_pca_reduced,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>        auc_dae</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Method</th>
+<th data-quarto-table-cell-role="th">AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Ledoit-Wolf</td>
+<td>0.611767</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>PCA reduction</td>
+<td>0.602892</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Denoising autoencoder</td>
+<td>0.594025</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="5e8a0dc5" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">5</span>))</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.bar(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    results[<span class="st">"Method"</span>],</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    results[<span class="st">"AUC"</span>]</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="fl">0.5</span>, <span class="fl">1.0</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"ROC AUC"</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Case-control separation using Mahalanobis-based scores"</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>ax.tick_params(axis<span class="op">=</span><span class="st">"x"</span>, rotation<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Write values on the bars</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>ax.bar_label(</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    bars,</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.3f}</span><span class="ss">"</span> <span class="cf">for</span> x <span class="kw">in</span> results[<span class="st">"AUC"</span>]],</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    padding<span class="op">=</span><span class="dv">3</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mahalanobis_case_control_quarto_tutorial_files/figure-html/cell-22-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-the-mean-separation-for-each-method" class="level2">
+<h2 class="anchored" data-anchor-id="plot-the-mean-separation-for-each-method">Plot the mean separation for each method</h2>
+<p>AUC summarizes ranking performance, but the distributions are still important.</p>
+<p>Below, the dashed vertical lines indicate the mean Mahalanobis distance for controls and cases.</p>
+<div id="f0850da2" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_group_md(md_values, title):</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    control_vals <span class="op">=</span> md_values[y <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    case_vals <span class="op">=</span> md_values[y <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    control_mean <span class="op">=</span> control_vals.mean()</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    case_mean <span class="op">=</span> case_vals.mean()</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    plt.hist(</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>        control_vals,</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>        bins<span class="op">=</span><span class="dv">35</span>,</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>        density<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>        alpha<span class="op">=</span><span class="fl">0.55</span>,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"Control"</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    plt.hist(</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>        case_vals,</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>        bins<span class="op">=</span><span class="dv">35</span>,</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>        density<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>        alpha<span class="op">=</span><span class="fl">0.55</span>,</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"Case"</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    plt.axvline(</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>        control_mean,</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>        linestyle<span class="op">=</span><span class="st">"--"</span>,</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>        linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="ss">f"Control mean = </span><span class="sc">{</span>control_mean<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>    plt.axvline(</span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>        case_mean,</span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>        linestyle<span class="op">=</span><span class="st">"--"</span>,</span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>        linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="ss">f"Case mean = </span><span class="sc">{</span>case_mean<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"Mahalanobis distance"</span>)</span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Density"</span>)</span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a>    plt.title(title)</span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a>plot_group_md(</span>
+<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a>    md_to_control,</span>
+<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Ledoit-Wolf: distance from control distribution"</span></span>
+<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-53"><a href="#cb33-53" aria-hidden="true" tabindex="-1"></a>plot_group_md(</span>
+<span id="cb33-54"><a href="#cb33-54" aria-hidden="true" tabindex="-1"></a>    md_pca_reduced,</span>
+<span id="cb33-55"><a href="#cb33-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PCA reduction: distance from control distribution"</span></span>
+<span id="cb33-56"><a href="#cb33-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-57"><a href="#cb33-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-58"><a href="#cb33-58" aria-hidden="true" tabindex="-1"></a>plot_group_md(</span>
+<span id="cb33-59"><a href="#cb33-59" aria-hidden="true" tabindex="-1"></a>    md_dae,</span>
+<span id="cb33-60"><a href="#cb33-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Denoising autoencoder: distance from control distribution"</span></span>
+<span id="cb33-61"><a href="#cb33-61" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mahalanobis_case_control_quarto_tutorial_files/figure-html/cell-23-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mahalanobis_case_control_quarto_tutorial_files/figure-html/cell-23-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mahalanobis_case_control_quarto_tutorial_files/figure-html/cell-23-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="what-does-a-larger-mean-distance-in-cases-actually-mean" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-a-larger-mean-distance-in-cases-actually-mean">What does a larger mean distance in cases actually mean?</h2>
+<p>Suppose the control mean Mahalanobis distance is 2.0 and the case mean is 2.6.</p>
+<p>This does <strong>not</strong> mean that cases are “2.6 units diseased.”</p>
+<p>It means that, on average, the multivariate predictor profiles of cases lie farther from the reference control distribution after accounting for covariance.</p>
+<p>The interpretation depends completely on the variables included in the analysis.</p>
+<p>For example, if the predictors are biomarkers, the distance summarizes how unusual a subject’s biomarker profile is relative to controls.</p>
+<p>If the predictors are polygenic scores, the distance summarizes deviation in a multivariate genetic-score profile.</p>
+<p>If the predictors are imaging measurements, it summarizes deviation in the joint imaging pattern.</p>
+</section>
+<section id="does-class-imbalance-cause-bimodality" class="level2">
+<h2 class="anchored" data-anchor-id="does-class-imbalance-cause-bimodality">Does class imbalance cause bimodality?</h2>
+<p>No.</p>
+<p>Suppose there are 10,000 controls and 1,000 cases.</p>
+<p>If cases and controls are generated from the same multivariate distribution, the Mahalanobis distance distribution should not become bimodal merely because one group is larger.</p>
+<p>Imbalance changes the <strong>relative height or density contribution</strong> of the groups and can influence a pooled mean/covariance estimate. But a second mode requires some form of distributional difference or latent mixture structure.</p>
+<p>Possible causes of multimodality include:</p>
+<ul>
+<li>different case and control means,</li>
+<li>different covariance structures,</li>
+<li>population stratification,</li>
+<li>batch effects,</li>
+<li>hidden subtypes,</li>
+<li>measurement artifacts,</li>
+<li>or genuinely distinct biological subgroups.</li>
+</ul>
+</section>
+<section id="why-a-control-reference-covariance-is-often-preferable" class="level2">
+<h2 class="anchored" data-anchor-id="why-a-control-reference-covariance-is-often-preferable">Why a control-reference covariance is often preferable</h2>
+<p>When the scientific question is whether cases depart from a healthy or baseline distribution, estimating the reference mean and covariance from controls has a natural interpretation.</p>
+<p>However, this approach also has assumptions.</p>
+<p>The control covariance estimate should be sufficiently stable. If there are many predictors relative to controls, regularization becomes important.</p>
+<p>Also, if controls themselves contain strong substructure, one covariance matrix may be too simple.</p>
+</section>
+<section id="high-dimensional-data-when-p-approaches-or-exceeds-n" class="level2">
+<h2 class="anchored" data-anchor-id="high-dimensional-data-when-p-approaches-or-exceeds-n">High-dimensional data: when <span class="math inline">\(p\)</span> approaches or exceeds <span class="math inline">\(n\)</span></h2>
+<p>If the number of predictors <span class="math inline">\(p\)</span> is similar to or larger than the number of subjects <span class="math inline">\(n\)</span>, the ordinary covariance matrix may be singular.</p>
+<p>Then <span class="math inline">\(\Sigma^{-1}\)</span> cannot be estimated reliably using the naive sample covariance.</p>
+<p>Possible strategies include:</p>
+<ul>
+<li>Ledoit-Wolf or another shrinkage covariance estimator,</li>
+<li>PCA followed by Mahalanobis distance in a lower-dimensional space,</li>
+<li>sparse precision-matrix estimation,</li>
+<li>robust covariance estimation,</li>
+<li>or domain-specific feature selection.</li>
+</ul>
+<p>For omics data, this issue is especially important because the number of features can be extremely large.</p>
+</section>
+<section id="outlier-detection-using-the-chi-square-connection" class="level2">
+<h2 class="anchored" data-anchor-id="outlier-detection-using-the-chi-square-connection">Outlier detection using the chi-square connection</h2>
+<p>Under an ideal multivariate normal model with <span class="math inline">\(p\)</span> variables,</p>
+<p><span class="math display">\[
+D_M^2 \sim \chi^2_p
+\]</span></p>
+<p>approximately.</p>
+<p>This gives a theoretical way to flag unusually large distances.</p>
+<p>For example:</p>
+<div id="eee61345" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> chi2</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.99</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>threshold_squared <span class="op">=</span> chi2.ppf(alpha, df<span class="op">=</span>n_features)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>threshold <span class="op">=</span> np.sqrt(threshold_squared)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Approximate </span><span class="sc">{</span>alpha<span class="sc">:.0%}</span><span class="ss"> Mahalanobis-distance threshold:"</span>,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">round</span>(threshold, <span class="dv">3</span>)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Approximate 99% Mahalanobis-distance threshold: 3.884</code></pre>
+</div>
+</div>
+<p>In real biomedical data, however, multivariate normality may be imperfect. I would therefore use this threshold cautiously and inspect empirical distributions as well.</p>
+</section>
+<section id="a-simple-train-test-version-for-predictive-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-train-test-version-for-predictive-evaluation">A simple train-test version for predictive evaluation</h2>
+<p>If the goal is prediction rather than exploratory analysis, preprocessing must be estimated on the training data only.</p>
+<p>Otherwise information from the test set leaks into the score.</p>
+<p>Below is a minimal example.</p>
+<div id="e0949bd1" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    X,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    y,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    test_size<span class="op">=</span><span class="fl">0.30</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    stratify<span class="op">=</span>y,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit scaling on training data only</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>X_train_scaled <span class="op">=</span> scaler.fit_transform(X_train)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>X_test_scaled <span class="op">=</span> scaler.transform(X_test)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate control reference from TRAINING controls only</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>X_train_controls <span class="op">=</span> X_train_scaled[y_train <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>lw_train <span class="op">=</span> LedoitWolf().fit(X_train_controls)</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>train_control_mean <span class="op">=</span> X_train_controls.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Score held-out test subjects</span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>md_test <span class="op">=</span> mahalanobis_from_precision(</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>    X_test_scaled,</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>    train_control_mean,</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>    lw_train.precision_</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>test_auc <span class="op">=</span> roc_auc_score(y_test, md_test)</span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Held-out test AUC:"</span>, <span class="bu">round</span>(test_auc, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Held-out test AUC: 0.584</code></pre>
+</div>
+</div>
+</section>
+<section id="when-should-i-use-each-method" class="level2">
+<h2 class="anchored" data-anchor-id="when-should-i-use-each-method">When should I use each method?</h2>
+<section id="mahalanobis-distance-with-ordinary-covariance" class="level3">
+<h3 class="anchored" data-anchor-id="mahalanobis-distance-with-ordinary-covariance">Mahalanobis distance with ordinary covariance</h3>
+<p>Use it when the dataset is low-dimensional, reasonably large, and the covariance matrix is well-conditioned.</p>
+</section>
+<section id="ledoit-wolf-mahalanobis-distance" class="level3">
+<h3 class="anchored" data-anchor-id="ledoit-wolf-mahalanobis-distance">Ledoit-Wolf Mahalanobis distance</h3>
+<p>A strong default when predictors are correlated and covariance inversion may be unstable.</p>
+</section>
+<section id="pca-whitening" class="level3">
+<h3 class="anchored" data-anchor-id="pca-whitening">PCA whitening</h3>
+<p>Useful for producing uncorrelated, unit-variance coordinates.</p>
+<p>If all components are retained, it changes the coordinate system but does not inherently denoise the data.</p>
+</section>
+<section id="pca-dimensionality-reduction" class="level3">
+<h3 class="anchored" data-anchor-id="pca-dimensionality-reduction">PCA dimensionality reduction</h3>
+<p>Useful when many predictors contain redundant structure and you have a defensible reason to discard lower-variance components.</p>
+<p>Validate the number of retained components.</p>
+</section>
+<section id="denoising-autoencoder" class="level3">
+<h3 class="anchored" data-anchor-id="denoising-autoencoder">Denoising autoencoder</h3>
+<p>Potentially useful when the signal is nonlinear and enough data are available.</p>
+<p>It should be evaluated carefully with held-out data. A neural network that reconstructs its own input is not automatically a denoising model.</p>
+</section>
+</section>
+<section id="practical-workflow-for-a-real-case-control-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="practical-workflow-for-a-real-case-control-dataset">Practical workflow for a real case-control dataset</h2>
+<p>For a real project, I would use the following sequence:</p>
+<ol type="1">
+<li>Check missingness, scaling, extreme values, and data quality.</li>
+<li>Inspect predictor correlations.</li>
+<li>Visualize cases and controls using a lower-dimensional method such as PCA.</li>
+<li>Decide what the reference distribution should be.</li>
+<li>If the goal is deviation from controls, estimate the mean and covariance from controls.</li>
+<li>Use covariance shrinkage when predictors are strongly correlated or covariance inversion is unstable.</li>
+<li>Calculate Mahalanobis distance.</li>
+<li>Plot the case and control distributions separately.</li>
+<li>Add group mean lines.</li>
+<li>Quantify separation using effect sizes or AUC if appropriate.</li>
+<li>If trying PCA reduction or autoencoder denoising, compare them in held-out data.</li>
+<li>Investigate extreme-distance subjects for batch effects, ancestry structure, hidden subgroups, or biologically interesting profiles.</li>
+</ol>
+</section>
+<section id="final-interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="final-interpretation">Final interpretation</h2>
+<p>Mahalanobis distance is useful because it converts a multivariate profile into a single quantity while preserving information about covariance.</p>
+<p>Its main strength is not that it “removes correlation.” Rather, it <strong>uses correlation correctly when defining distance</strong>.</p>
+<p>For case-control data, the most useful version is often the distance of each subject from a control reference distribution.</p>
+<p>Regularized covariance can make this calculation stable. PCA can help simplify the feature space, but full whitening is not itself denoising. PCA truncation removes dimensions and therefore may denoise. A denoising autoencoder can model nonlinear structure, but it requires a more careful training and validation strategy.</p>
+<p>The important question is therefore not simply:</p>
+<blockquote class="blockquote">
+<p>Which denoising method gives the highest AUC?</p>
+</blockquote>
+<p>A better question is:</p>
+<blockquote class="blockquote">
+<p>Which representation captures reproducible structure in the data without removing biologically meaningful information?</p>
+</blockquote>
+<p>That distinction becomes especially important in high-dimensional biomedical datasets.</p>
+</section>
+<section id="reproducibility" class="level2">
+<h2 class="anchored" data-anchor-id="reproducibility">Reproducibility</h2>
+<p>The examples in this tutorial use synthetic data and a fixed random seed.</p>
+<p>Package versions can be checked with:</p>
+<div id="467b98aa" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NumPy:"</span>, np.__version__)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Pandas:"</span>, pd.__version__)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"scikit-learn:"</span>, sklearn.__version__)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"SciPy:"</span>, scipy.__version__)</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Matplotlib:"</span>, matplotlib.__version__)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NumPy: 2.5.1
+Pandas: 3.0.5
+scikit-learn: 1.9.0
+SciPy: 1.18.0
+Matplotlib: 3.11.1</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bntechie\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

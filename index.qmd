@@ -1,10 +1,10 @@
 ---
-title: "Nivedita Bhadra, PhD<br><span class='title-role' style='display:block; font-size:1.8rem; font-weight:400; margin-top:0.3rem; color:#555;'>Computational Scientist</span>"
-subtitle: "Modeling complex systems, from physics to the genome"
+title: "Nivedita Bhadra, PhD"
+pagetitle: "Computational Scientist"
 page-layout: full
 aliases:
   - /about.html
-description: "Practical notes on statistical genetics, machine learning, and computational modeling, from mathematical formulation to reproducible code."
+description-meta: "Practical notes on statistical genetics, machine learning, and computational modeling, from mathematical formulation to reproducible code."
 format:
   html:
     toc: false
@@ -19,6 +19,13 @@ listing:
   exclude:
     filename: "index.qmd"
 ---
+
+```{=html}
+<style>
+/* The name is already in the navbar. Keep the title as a screen-reader-only h1. */
+#title-block-header { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+</style>
+```
 
 ::: {.hero-top-grid}
 
@@ -54,7 +61,7 @@ listing:
 ::: {.hero-image}
 ![](image/nivedita.jpeg){width=220 fig-alt="Portrait of Nivedita Bhadra"}
 
-*Computational Scientist*
+*Computational Scientist, PhD*
 :::
 
 ::: {.hero-actions}
@@ -100,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 ## Background
 
-She trained as a physicist and carried that quantitative foundation into biomedical research and statistical genetics, building models that have to hold up against real, messy, large-scale data.
+Nivedita Bhadra trained as a physicist and carried that quantitative foundation into biomedical research and statistical genetics, building models that have to hold up against real, messy, large-scale data.
 
 She is currently at the Institute of Biological Psychiatry in Denmark, where she builds statistical genetics models for risk prediction on large-scale cohort data. The work covers liability-scale modeling, polygenic risk scores, and related quantitative genetics methods. Before that, she spent several years at the Translational Genomics Research Institute (TGen), applying high-dimensional statistical modeling to biomedical and clinical data.
 

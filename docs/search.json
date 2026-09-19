@@ -2767,56 +2767,56 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Nivedita Bhadra, PhDComputational Scientist",
+    "title": "Nivedita Bhadra, PhD",
     "section": "",
-    "text": "Signal → sequence: from physical modeling to the genome\n\n\n\n\nComputational Scientist\n\n\nExplore Tutorials Connect on LinkedIn\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFactor Loading\n\nStatistics\n\nData Science\n\n\n\n\n\n\nSep 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSep 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAug 4, 2026\n\n\n\n\n\nNo matching items\n\n\nBrowse all tutorials →"
+    "text": "Signal → sequence: from physical modeling to the genome\n\n\n\n\nComputational Scientist, PhD\n\n\nExplore Tutorials Connect on LinkedIn\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFactor Loading\n\nStatistics\n\nData Science\n\n\n\n\n\n\nSep 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSep 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAug 4, 2026\n\n\n\n\n\nNo matching items\n\n\nBrowse all tutorials →"
   },
   {
     "objectID": "index.html#latest-articles",
     "href": "index.html#latest-articles",
-    "title": "Nivedita Bhadra, PhDComputational Scientist",
+    "title": "Nivedita Bhadra, PhD",
     "section": "",
     "text": "Factor Loading\n\nStatistics\n\nData Science\n\n\n\n\n\n\nSep 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSep 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAug 4, 2026\n\n\n\n\n\nNo matching items\n\n\nBrowse all tutorials →"
   },
   {
     "objectID": "index.html#background",
     "href": "index.html#background",
-    "title": "Nivedita Bhadra, PhDComputational Scientist",
+    "title": "Nivedita Bhadra, PhD",
     "section": "Background",
-    "text": "Background\nShe trained as a physicist and carried that quantitative foundation into biomedical research and statistical genetics, building models that have to hold up against real, messy, large-scale data.\nShe is currently at the Institute of Biological Psychiatry in Denmark, where she builds statistical genetics models for risk prediction on large-scale cohort data. The work covers liability-scale modeling, polygenic risk scores, and related quantitative genetics methods. Before that, she spent several years at the Translational Genomics Research Institute (TGen), applying high-dimensional statistical modeling to biomedical and clinical data.\nHer path into this work started in physics: an M.Sc. from IIT Delhi, followed by a PhD in Computational Physics from IISER Kolkata, where she built numerical models of complex physical systems. Simulation, statistical inference, and large-scale computation connect everything since, whether the system is physical, genomic, or textual.\nHer core focus is population genomics and statistical genetics. She computes polygenic risk scores at scale using SBayesR via GCTB, including a large-scale analysis of iPSYCH2015 (N=105,477) that generated roughly 10,000 PGS from FinnGen and UK Biobank summary statistics. She also works on causal inference in pharmacogenomics, using genetic variants as instruments in Mendelian randomization, and has built Martingale residual transformations to convert Cox models into linear GWAS.\nOutside genomics, she applies predictive modeling (LASSO, random forest, XGBoost, ensemble and Super Learner methods) to clinical trial and biomedical data. She has also worked with phylogenetic comparative methods (PGLS, MDMR), leading transcriptome-lifespan association analyses across species while controlling for phylogenetic non-independence.\nDay to day, she works in Python, R, and SQL. She uses scikit-learn and XGBoost for predictive modeling, and Hugging Face’s pipeline API (BERT, DistilBERT, Sentence-BERT, BERTopic) with PyTorch for GPU-accelerated inference on HPC systems. She builds reproducible pipelines with Snakemake, Docker, and Singularity on Linux/HPC, and has built and deployed end-to-end ML pipelines, from model training through FastAPI, documented in technical write-ups on Medium."
+    "text": "Background\nNivedita Bhadra trained as a physicist and carried that quantitative foundation into biomedical research and statistical genetics, building models that have to hold up against real, messy, large-scale data.\nShe is currently at the Institute of Biological Psychiatry in Denmark, where she builds statistical genetics models for risk prediction on large-scale cohort data. The work covers liability-scale modeling, polygenic risk scores, and related quantitative genetics methods. Before that, she spent several years at the Translational Genomics Research Institute (TGen), applying high-dimensional statistical modeling to biomedical and clinical data.\nHer path into this work started in physics: an M.Sc. from IIT Delhi, followed by a PhD in Computational Physics from IISER Kolkata, where she built numerical models of complex physical systems. Simulation, statistical inference, and large-scale computation connect everything since, whether the system is physical, genomic, or textual.\nHer core focus is population genomics and statistical genetics. She computes polygenic risk scores at scale using SBayesR via GCTB, including a large-scale analysis of iPSYCH2015 (N=105,477) that generated roughly 10,000 PGS from FinnGen and UK Biobank summary statistics. She also works on causal inference in pharmacogenomics, using genetic variants as instruments in Mendelian randomization, and has built Martingale residual transformations to convert Cox models into linear GWAS.\nOutside genomics, she applies predictive modeling (LASSO, random forest, XGBoost, ensemble and Super Learner methods) to clinical trial and biomedical data. She has also worked with phylogenetic comparative methods (PGLS, MDMR), leading transcriptome-lifespan association analyses across species while controlling for phylogenetic non-independence.\nDay to day, she works in Python, R, and SQL. She uses scikit-learn and XGBoost for predictive modeling, and Hugging Face’s pipeline API (BERT, DistilBERT, Sentence-BERT, BERTopic) with PyTorch for GPU-accelerated inference on HPC systems. She builds reproducible pipelines with Snakemake, Docker, and Singularity on Linux/HPC, and has built and deployed end-to-end ML pipelines, from model training through FastAPI, documented in technical write-ups on Medium."
   },
   {
     "objectID": "index.html#education",
     "href": "index.html#education",
-    "title": "Nivedita Bhadra, PhDComputational Scientist",
+    "title": "Nivedita Bhadra, PhD",
     "section": "Education",
     "text": "Education\nPhD, Computational Physics\nIndian Institute of Science Education and Research (IISER), Kolkata, India, 2012–2018\nRead a summary of the doctoral research →\nM.Sc., Physics\nIndian Institute of Technology (IIT), Delhi, India, 2009–2011\nM.Eng., Big Data Analytics\nArcada University of Applied Sciences, Finland, 2024–2025\nRead a summary of the Master’s research →"
   },
   {
     "objectID": "index.html#areas-i-write-about",
     "href": "index.html#areas-i-write-about",
-    "title": "Nivedita Bhadra, PhDComputational Scientist",
+    "title": "Nivedita Bhadra, PhD",
     "section": "Areas I Write About",
     "text": "Areas I Write About\n\n\nStatistical Genetics & Computational Biology\nLiability-scale models, GWAS, polygenic scores, heritability, and large-scale cohort modeling.\n\n\nComputational Modeling & Simulation\nNumerical methods, statistical inference, and simulation techniques carried over from computational physics.\n\n\nMachine Learning & NLP\nModel evaluation, transformers, local LLMs, and applied text analytics for scientific data.\n\n\nHigh-Performance & Reproducible Computing\nHPC workflows, Snakemake pipelines, Dask, and reproducible research practices."
   },
   {
     "objectID": "index.html#publications",
     "href": "index.html#publications",
-    "title": "Nivedita Bhadra, PhDComputational Scientist",
+    "title": "Nivedita Bhadra, PhD",
     "section": "Publications",
     "text": "Publications\nPeer-reviewed papers and theses, covering biomedical data science and computational physics, are listed on the Publications page and on Google Scholar."
   },
   {
     "objectID": "index.html#technical-skills",
     "href": "index.html#technical-skills",
-    "title": "Nivedita Bhadra, PhDComputational Scientist",
+    "title": "Nivedita Bhadra, PhD",
     "section": "Technical Skills",
     "text": "Technical Skills\n\nProgramming & Tools\n\nPython R SQL Bash / awk Git & GitHub Quarto\n\n\n\nStatistical & Quantitative Methods\n\nGWAS Polygenic Risk Scores Liability-Scale Modeling REML SEM SVD Mendelian Randomization Colocalization Hypothesis Testing\n\n\n\nMachine Learning & NLP\n\nModel Evaluation Transformers Local LLMs Sentiment Analysis Topic Modeling\n\n\n\nHigh-Performance & Reproducible Computing\n\nHPC / Cluster Computing Snakemake Dask Reproducible Pipelines"
   },
   {
     "objectID": "index.html#follow-and-connect",
     "href": "index.html#follow-and-connect",
-    "title": "Nivedita Bhadra, PhDComputational Scientist",
+    "title": "Nivedita Bhadra, PhD",
     "section": "Follow and Connect",
     "text": "Follow and Connect\nI’m still setting up a formal subscription option. For now, you can follow or connect here:\n\nGitHub: BNTechie\nLinkedIn: Nivedita Bhadra\nMedium: @nivedita.home\nEmail: nivedita.home@gmail.com\n\nSend an Email\n\nIf something helped you, feel free to share, comment, or connect.\n\n\n\nJust a quick heads-up: while I am a tech professional at IBP here in Copenhagen, this blog is my personal playground. The ideas, tutorials, and opinions shared here are 100% mine and have not been reviewed or approved by my employer. Treat the code snippets and guides as educational resources. Always test things in a safe sandbox environment before using them in production!"
   },

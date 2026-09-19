@@ -754,3 +754,17 @@ img {
     transition: none;
   }
 }
+
+/* Photo and buttons under the helix (left column of the top grid) */
+.hero-left .hero-image {
+  max-width: 320px;
+  margin: 1.5rem auto 0;
+}
+
+.hero-actions {
+  text-align: center;
+}
+
+.hero-actions .btn {
+  margin: 1.2rem 0.3rem 0;
+}

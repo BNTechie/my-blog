@@ -53,8 +53,8 @@
   {
     "listing": "/index.html",
     "items": [
-      "/tutorials/factor_loading/Factor_loading.html",
       "/tutorials/LLM_API/llm-api-tutorial.html",
+      "/tutorials/factor_loading/Factor_loading.html",
       "/tutorials/mahalnabis_distance/mahalanobis_case_control_quarto_tutorial.html",
       "/tutorials/ttest_ANOVA/t-test-vs-anova-before-after-treatment.html",
       "/tutorials/promt_engineering/genai-prompt-engineering-tutorial.html",

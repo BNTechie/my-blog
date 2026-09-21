@@ -329,97 +329,66 @@ img {
 }
 
 /* =========================================================
-   SIGNAL → HELIX ANIMATED GRAPHIC
+   HOME: BACKGROUND TEXT WITH SMALL PORTRAIT ON THE RIGHT
    ========================================================= */
 
-.hero-top-grid {
+.intro-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) 210px;
   gap: 3rem;
   align-items: start;
   margin-top: 1rem;
 }
 
-.latest-articles-col h2 {
+.intro-text h2 {
   margin-top: 0;
-  padding-bottom: 0.4rem;
+}
+
+.intro-side .hero-image {
+  padding: 1rem 1rem 0.9rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.intro-side .hero-image img {
+  width: 100%;
+  margin-bottom: 0.6rem;
+}
+
+.intro-side .hero-image p {
+  margin: 0;
+}
+
+/* Quarto wraps the two links in a <p>, so the flex column goes on the paragraph */
+.intro-side .hero-actions {
+  margin-top: 1.2rem;
+}
+
+.intro-side .hero-actions p {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.intro-side .hero-actions .btn {
+  margin: 0;
+  padding: 0.65rem 0.5rem;
+  font-size: 0.8rem;
+  text-align: center;
+  white-space: nowrap;
 }
 
 @media (max-width: 900px) {
-  .hero-top-grid {
+  .intro-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-}
 
-.signal-helix-wrap {
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  padding: 1rem 0 0.5rem;
-}
-
-.signal-helix {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.signal-helix .strand {
-  fill: none;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-}
-
-.signal-helix .strand-a {
-  stroke: var(--signal);
-}
-
-.signal-helix .strand-b {
-  stroke: var(--amber);
-  opacity: 0;
-  animation: helix-fade-in 1.5s ease-out 0.3s forwards;
-}
-
-.signal-helix .helix-rung {
-  stroke: var(--ink-soft);
-  stroke-width: 1.5;
-  opacity: 0.25;
-  animation: rung-pulse 3s ease-in-out infinite;
-}
-
-.signal-helix .pulse {
-  fill: var(--amber);
-}
-
-@keyframes helix-fade-in {
-  to { opacity: 1; }
-}
-
-@keyframes rung-pulse {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.7; }
-}
-
-.signal-helix-caption {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-  text-align: right;
-  margin-top: 0.3rem;
-  letter-spacing: 0.02em;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .signal-helix .strand-b {
-    animation: none;
-    opacity: 1;
-  }
-  .signal-helix .helix-rung {
-    animation: none;
-    opacity: 0.5;
-  }
-  .signal-helix .pulse {
-    display: none;
+  /* Portrait first on narrow screens, capped so it stays small */
+  .intro-side {
+    order: -1;
+    max-width: 210px;
   }
 }
 
@@ -580,48 +549,110 @@ img {
 }
 
 /* =========================================================
-   LATEST TUTORIALS FEED (home page, auto-scrolling ticker)
+   HOME: EDUCATION ROWS WITH INSTITUTION LOGOS
    ========================================================= */
 
-.tutorials-ticker {
-  position: relative;
-  height: 260px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background-color: var(--paper-raised);
-  background-image: radial-gradient(var(--line) 1px, transparent 1px);
-  background-size: 18px 18px;
-  padding: 0.75rem;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 94%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 6%, #000 94%, transparent 100%);
+.edu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: 1rem;
 }
 
-.ticker-track {
-  animation: ticker-scroll 26s linear infinite;
+.edu-item {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 1.4rem;
+  align-items: center;
 }
 
-.tutorials-ticker:hover .ticker-track {
-  animation-play-state: paused;
+/* Every logo sits in the same box so the text columns line up */
+.edu-item .edu-logo {
+  display: block;
+  width: 88px;
+  height: 64px;
+  margin: 0;
+  object-fit: contain;
 }
 
-@keyframes ticker-scroll {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-50%); }
+.edu-item p {
+  margin: 0;
+}
+
+.edu-text {
+  line-height: 1.55;
+}
+
+@media (max-width: 600px) {
+  .edu-item {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .edu-item .edu-logo {
+    width: 64px;
+    height: 52px;
+  }
+}
+
+/* =========================================================
+   HOME: LATEST ARTICLES AND AREAS SIDE BY SIDE
+   ========================================================= */
+
+.two-col-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3rem;
+  align-items: start;
+}
+
+.two-col-item h2 {
+  margin-top: 0;
+}
+
+/* The area cards stack in a single column inside the half-width column */
+.two-col-item .grid {
+  grid-template-columns: 1fr;
+  margin-top: 0.8rem;
+}
+
+@media (max-width: 900px) {
+  .two-col-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* =========================================================
+   LATEST ARTICLES (home page, static list below the background)
+   ========================================================= */
+
+#latest-tutorials .list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 #latest-tutorials .quarto-post {
-  display: flex;
-  gap: 0.9rem;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-areas:
+    "thumb body"
+    "thumb meta";
+  column-gap: 0.9rem;
+  row-gap: 0.2rem;
+  align-items: start;
   border: 1px solid var(--line);
   border-left: 3px solid var(--signal);
   border-radius: 3px;
   padding: 0.8rem 1rem;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0;
   background-color: var(--paper);
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
+
+#latest-tutorials .body     { grid-area: body; }
+#latest-tutorials .metadata { grid-area: meta; }
 
 #latest-tutorials .quarto-post:nth-child(3n+2) {
   border-left-color: var(--amber);
@@ -633,7 +664,7 @@ img {
 }
 
 #latest-tutorials .thumbnail {
-  flex: none;
+  grid-area: thumb;
   width: 64px;
   height: 64px;
   border-radius: 3px;
@@ -649,12 +680,7 @@ img {
 }
 
 #latest-tutorials .body {
-  flex: 1 1 auto;
-  min-width: 0; /* allow title to wrap instead of overflowing the flex row */
-}
-
-#latest-tutorials .metadata {
-  flex: none;
+  min-width: 0; /* allow title to wrap instead of overflowing the grid cell */
 }
 
 #latest-tutorials .metadata {
@@ -705,18 +731,6 @@ img {
   display: none; /* keep cards compact — title + eyebrow only */
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tutorials-ticker {
-    height: auto;
-    overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .ticker-track {
-    animation: none;
-  }
-}
-
 /* =========================================================
    MOBILE
    ========================================================= */
@@ -755,16 +769,69 @@ img {
   }
 }
 
-/* Photo and buttons under the helix (left column of the top grid) */
-.hero-left .hero-image {
-  max-width: 320px;
-  margin: 1.5rem auto 0;
+/* =========================================================
+   HOME: BACKGROUND TEXT (lead paragraph)
+   ========================================================= */
+
+.intro-text h2 + p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--ink);
 }
 
-.hero-actions {
-  text-align: center;
-}
+/* =========================================================
+   MOTION (home page)
+   Every rule here is CSS only, and each sits behind a
+   no-preference check so reduced-motion visitors get a static page.
+   ========================================================= */
 
-.hero-actions .btn {
-  margin: 1.2rem 0.3rem 0;
+@media (prefers-reduced-motion: no-preference) {
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Portrait and buttons stay in view while the background text scrolls */
+  @media (min-width: 901px) {
+    .intro-side {
+      position: sticky;
+      top: 5.5rem;
+    }
+  }
+
+  /* Thumbnails zoom slightly when the card is hovered */
+  #latest-tutorials .thumbnail img {
+    transition: transform 0.35s ease;
+  }
+
+  #latest-tutorials .quarto-post:hover .thumbnail img {
+    transform: scale(1.08);
+  }
+
+  /* Section headings, cards and article rows ease in as they scroll into view.
+     The animation uses the separate `translate` property so the hover
+     `transform` rules on cards keep working. Browsers without scroll-driven
+     animations skip this block and show everything immediately. */
+  @supports (animation-timeline: view()) {
+    main.content h2,
+    .intro-text p,
+    .card,
+    #latest-tutorials .quarto-post,
+    .skills-group {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+
+    @keyframes reveal-up {
+      from {
+        opacity: 0;
+        translate: 0 18px;
+      }
+      to {
+        opacity: 1;
+        translate: 0 0;
+      }
+    }
+  }
 }

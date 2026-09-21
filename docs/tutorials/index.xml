@@ -10,7 +10,7 @@
 <atom:link href="https://bntechie.github.io/tutorials/index.xml" rel="self" type="application/rss+xml"/>
 <description>Senior Computational Scientist. Statistical genetics, computational modeling, and simulation.</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Fri, 18 Sep 2026 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 20 Sep 2026 21:00:00 GMT</lastBuildDate>
 <item>
   <title>Large Language Models and Working with LLM APIs</title>
   <dc:creator>Nivedita </dc:creator>
@@ -1586,7 +1586,7 @@ Response:    pizza for dinner
 
  ]]></description>
   <guid>https://bntechie.github.io/tutorials/LLM_API/llm-api-tutorial.html</guid>
-  <pubDate>Fri, 18 Sep 2026 21:00:00 GMT</pubDate>
+  <pubDate>Sun, 20 Sep 2026 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Factor Loadings</title>
